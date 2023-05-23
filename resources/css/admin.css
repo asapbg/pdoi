@@ -1,0 +1,14 @@
+:root {
+
+}
+
+a.btn-sm i {
+    font-size: 0.675rem !important;
+}
+
+table thead.fix-border tr,
+table thead.fix-border th,
+table tfoot.fix-border tr,
+table tfoot.fix-border th{
+    border:none !important;
+}
