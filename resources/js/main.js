@@ -485,6 +485,18 @@ $(document).ready(function (e) {
             toastr.error('Грешка', 'Възникна грешка, моля опитайте по-късно');
             $(this).prop('disabled', false);
         })
-    })
+    });
+
+    $('input.user_permission').on('change', function (){
+        if( parseInt($(this).data('full')) === 1 && $(this).is(':checked') ) {
+            $("input.user_permission[data-full='0']").prop('checked', false);
+        } else if( parseInt($(this).data('main')) === 1 && $(this).is(':checked') ) {
+            $("input.user_permission[data-full='1']").prop('checked', false);
+            $("input.user_permission[data-group='"+ $(this).data('group') +"'][data-main='0']").prop('checked', false);
+        } else{
+            $("input.user_permission[data-full='1']").prop('checked', false);
+            $("input.user_permission[data-group='"+ $(this).data('group') +"'][data-main='1']").prop('checked', false);
+        }
+    });
 
 })

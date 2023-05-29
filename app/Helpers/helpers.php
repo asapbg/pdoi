@@ -184,18 +184,18 @@ if (!function_exists('l_trans')) {
     }
 }
 
-if (!function_exists('group_permissions')) {
+if (!function_exists('groupPermissions')) {
 
     /**
      * Group all permissions
      *
-     * @method group_permissions
+     * @method groupPermissions
      *
      * @param $permissions
      * @param bool $onlyGroups returns only main permissions as groups
      * @return array
      */
-    function group_permissions($permissions, bool $onlyGroups = false): array
+    function groupPermissions($permissions, bool $onlyGroups = false): array
     {
         $permsGrouped = array();
         if( $permissions->count() ) {
@@ -220,5 +220,81 @@ if (!function_exists('group_permissions')) {
             }
         }
         return $permsGrouped;
+    }
+}
+
+if (!function_exists('optionsUserStatuses')) {
+
+    /**
+     * Get all users statuses and return options
+     *
+     * @method optionsUserStatuses
+     *
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function optionsUserStatuses(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
+    {
+        $options = User::getUserStatuses();
+        if( $any ) {
+            $options[$anyValue] = $anyName;
+            ksort($options);
+        }
+        return $options;
+    }
+}
+
+if (!function_exists('optionsUserTypes')) {
+
+    /**
+     * Get all users types and return options
+     *
+     * @method optionsUserTypes
+     *
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function optionsUserTypes(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
+    {
+        $options = User::getUserTypes();
+        if( $any ) {
+            $options[$anyValue] = $anyName;
+            ksort($options);
+        }
+        return $options;
+    }
+}
+
+if (!function_exists('optionsLanguages')) {
+
+    /**
+     * Get all available languages and return options
+     *
+     * @method optionsLanguages
+     *
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function optionsLanguages(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
+    {
+        $options = [];
+        $availableLanguages = config('available_languages');
+        if( sizeof($availableLanguages) ) {
+            foreach ($availableLanguages as $id => $lang) {
+                $options[$id] = $lang['name'];
+            }
+        }
+
+        if( $any ) {
+            $options[$anyValue] = $anyName;
+            ksort($options);
+        }
+        return $options;
     }
 }

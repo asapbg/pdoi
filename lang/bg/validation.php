@@ -164,8 +164,8 @@ return [
         'alias'                    => 'Псевдоним',
         'name'                     => 'Наименование',
         'display_name'             => 'Наименование',
-        'username'                 => 'Потребител',
-        'email'                    => 'E-mail',
+        'username'                 => 'Потребителско име',
+        'email'                    => 'Електр.поща',
         'first_name'               => 'Име',
         'middle_name'              => 'Презиме',
         'last_name'                => 'Фамилия',
@@ -226,6 +226,10 @@ return [
         'model'                     => 'Модел',
 
         //
-        'permission_group'          => 'Нова група права'
+        'permission_group'          => 'Нова група права',
+        'names'                     => 'Имена',
+        'user_type'                 => 'Тип потребител',
+        'administrative_unit'       => 'Адм. звено',
+        'lang'                  => 'Език за работа',
     ],
 ];

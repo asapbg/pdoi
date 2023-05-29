@@ -6,6 +6,7 @@ use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
+use App\Models\CustomRole;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\UsersChangePassword;
@@ -36,7 +38,7 @@ class  UsersController extends Controller
             return back()->with('danger', __('messages.no_rights_to_view_content'));
         }
 
-        $name = ($request->filled('name')) ? $request->get('name') : null;
+        $name = ($request->filled('names')) ? $request->get('names') : null;
         $username = ($request->filled('username')) ? $request->get('username') : null;
         $email = ($request->filled('email')) ? $request->get('email') : null;
         $role_id = ($request->filled('role_id')) ? $request->get('role_id') : null;
@@ -44,6 +46,7 @@ class  UsersController extends Controller
         $paginate = $request->filled('paginate') ? $request->get('paginate') : User::PAGINATE;
 
         $roles = Role::whereActive(true)
+            ->where('name', '<>', CustomRole::SUPER_USER_ROLE)
             ->orderBy('display_name', 'asc')
             ->get(['id','display_name']);
 
@@ -55,7 +58,7 @@ class  UsersController extends Controller
                 });
             })
             ->when($name, function ($query, $name) {
-                return $query->where('first_name', 'ILIKE', "%$name%")->orWhere('last_name', 'ILIKE', "%$name%");
+                return $query->where('names', 'ILIKE', "%$name%");
             })
             ->when($username, function ($query, $username) {
                 return $query->where('username', 'ILIKE', "%$username%");
@@ -63,9 +66,8 @@ class  UsersController extends Controller
             ->when($email, function ($query, $email) {
                 return $query->where('email', 'ILIKE', "%$email%");
             })
-            ->where('active', $active)
-            ->orderBy('first_name', 'asc')
-            ->orderBy('last_name', 'asc')
+            ->ByActiveState($active)
+            ->orderBy('names', 'asc')
             ->paginate($paginate);
         //dd(\DB::getQueryLog());
 
@@ -106,9 +108,14 @@ class  UsersController extends Controller
             return back()->with('danger', __('messages.no_rights_to_view_content'));
         }
 
-        $roles = Role::whereActive(true)->orderBy('display_name', 'asc')->get();
+        $roles = Role::whereActive(true)
+            ->where('name', '<>', CustomRole::SUPER_USER_ROLE)
+            ->orderBy('display_name', 'asc')->get();
 
-        return $this->view('admin.users.create', compact('roles'));
+        $perms = Permission::orderBy('id', 'asc')->get();
+        $perms = groupPermissions($perms);
+
+        return $this->view('admin.users.create', compact('roles', 'perms'));
     }
 
     /**
@@ -120,8 +127,15 @@ class  UsersController extends Controller
     public function store(StoreUsersRequest $request)
     {
         $must_change_password = ($request->filled('must_change_password')) ? true : null;
-        $data = $request->except(['_token','password_confirmation','roles']);
-        $roles = $request->offsetGet('roles');
+        $data = $request->validated();
+//        $data = $request->except(['_token','password_confirmation','roles', 'permissions']);
+        $roles = $data['roles'] ?? [];
+        $permissions = $data['permissions'] ?? [];
+        foreach (['_token','password_confirmation','roles', 'permissions'] as $key){
+            unset($data[$key]);
+            //TODO add to data when units are ready
+            unset($data['administrative_unit']);
+        }
 
         DB::beginTransaction();
 
@@ -134,13 +148,14 @@ class  UsersController extends Controller
             } else {
                 $message = trans_choice('custom.users', 1)." {$data['username']} ".__('messages.created_successfully_m');
                 $user->password = bcrypt($data['password']);
-                $user->email_verified_at = Carbon::now();
-                $user->password_changed_at = Carbon::now();
+                $user->pass_last_change = Carbon::now();
+                $user->pass_is_new = 1;
             }
 
             $user->save();
 
-            $user->assignRole($roles);
+            $user->syncRoles($roles);
+            $user->syncPermissions($permissions);
 
             DB::commit();
 
@@ -169,9 +184,13 @@ class  UsersController extends Controller
             return back()->with('danger', __('messages.no_rights_to_view_content'));
         }
 
-        $roles = Role::whereActive(true)->orderBy('display_name', 'asc')->get();
-
-        return $this->view('admin.users.edit', compact('user', 'roles'));
+        $roles = Role::whereActive(true)
+            ->where('name', '<>', CustomRole::SUPER_USER_ROLE)
+            ->orderBy('display_name', 'asc')->get();
+        $perms = Permission::orderBy('id', 'asc')->get();
+        $perms = groupPermissions($perms);
+        $item = $user;
+        return $this->view('admin.users.edit', compact('item', 'roles', 'perms'));
     }
 
     /**

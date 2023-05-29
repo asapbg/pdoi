@@ -51,6 +51,7 @@ return new class extends Migration
             $table->timestamp('pass_last_change')->nullable();
             $table->tinyInteger('pass_is_new')->default(0);
             $table->timestamp('last_login_at')->nullable();
+            $table->tinyInteger('active')->default(1);
 
             $table->timestamps();
             $table->softDeletes();

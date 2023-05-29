@@ -27,11 +27,16 @@ class StoreUsersRequest extends FormRequest
         $must_change_password = $this->offsetGet('must_change_password');
 
         $rules = [
-            'username'              => ['required', 'unique:users', 'string', 'max:255'],
-            'first_name'            => ['required', 'string', 'max:255'],
-            'last_name'             => ['required', 'string', 'max:255'],
-            'email'                 => ['nullable', 'string', 'email', 'max:255'],
+            'username'              => ['required', 'unique:users', 'string', 'max:50'],
+            'names'                 => ['required', 'string', 'max:255'],
+            'email'                 => ['required', 'string', 'email', 'max:255'],
             'roles'                 => ['required' ,'array', 'min:1'],
+            'permissions'           => ['nullable' ,'array'],
+            'user_type'             => ['required' ,'numeric', 'gt:0'],
+            'status'                => ['required' ,'numeric', 'gt:0'],
+            'phone'                 => ['nullable' ,'string', 'max:50'],
+//            'administrative_unit'   => ['nullable' ,'numeric'],
+            'lang'                  => ['required' ,'string'],
         ];
         if(!$must_change_password) {
             $rules = array_merge($rules, self::passwordRequestValidationRules());

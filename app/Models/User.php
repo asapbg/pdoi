@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -85,13 +86,26 @@ class User extends Authenticatable
      *
      * @return array
      */
-    public static function getUserStatuses()
+    public static function getUserStatuses(): array
     {
         return [
             self::STATUS_ACTIVE     => __('custom.active_m'),
             self::STATUS_INACTIVE   => __('custom.inactive_m'),
             self::STATUS_BLOCKED    => __('custom.blocked'),
             self::STATUS_REG_IN_PROCESS    => __('custom.in_reg_process')
+        ];
+    }
+
+    /**
+     * Get user types
+     *
+     * @return array
+     */
+    public static function getUserTypes(): array
+    {
+        return [
+            self::USER_TYPE_INTERNAL     => __('custom.users.type.'.self::USER_TYPE_INTERNAL),
+            self::USER_TYPE_EXTERNAL   => __('custom.users.type.'.self::USER_TYPE_EXTERNAL),
         ];
     }
 
@@ -132,9 +146,32 @@ class User extends Authenticatable
         return $this->username;
     }
 
+    protected function active(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => !($this->status == self::STATUS_INACTIVE),
+        );
+    }
+
     public function scopeIsActive($query)
     {
-        $query->where('users.status', self::STATUS_ACTIVE);
+        $query->where('users.status', '<>', self::STATUS_INACTIVE)
+            ->where('active', 1);
+    }
+
+    public function scopeIsInActive($query)
+    {
+        $query->where('users.status', self::STATUS_INACTIVE)
+            ->where('active', 0);
+    }
+
+    public function scopeByActiveState($query, $active)
+    {
+        if( $active ) {
+            $query->IsActive();
+        } else{
+            $query->IsInActive();
+        }
     }
 
 }

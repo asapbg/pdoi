@@ -215,6 +215,7 @@ return [
     //
     'in_reg_process' => 'В процес на регистрация',
     'council_ministers' => 'Министрески съвет',
+    'app_full_name' => 'Платформа за достъп до обществена информация',
     //roles and permissions
     'permissions.group_permission' => 'Група (права)',
     'permissions.as_new_group' => 'Нова група права',
@@ -223,4 +224,10 @@ return [
     'administration.' => 'Администриране',
     'users.' => 'Потребители',
     'roles_permissions.' => 'Роли и права',
+    //users
+    'users.type.1' => 'Вътрешен',
+    'users.type.2' => 'Външен',
+    'users.individual_permissions' => 'Индивидуални права за достъп',
+    'users.general_info' => 'Обща информация',
+    'users.work_language' => 'Език за работа',
 ];

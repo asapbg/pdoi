@@ -38,9 +38,9 @@
 
                         <div class="row">
                             <div class="col-xs-12 col-md-3 mb-2">
-                                <input type="text" name="name" placeholder="{{__('validation.attributes.first_name')}}"
+                                <input type="text" name="names" placeholder="{{__('validation.attributes.names')}}"
                                        class="form-control"
-                                       value="{{request()->get('name')}}">
+                                       value="{{request()->get('names')}}">
                             </div>
 
                             <div class="col-xs-12 col-md-3 mb-2">
@@ -49,7 +49,7 @@
                                        value="{{request()->get('username')}}">
                             </div>
 
-                            <div class="col-xs-12 col-md-3 mb-2 d-none">
+                            <div class="col-xs-12 col-md-3 mb-2">
                                 <input type="text" name="email" placeholder="{{__('validation.attributes.email')}}"
                                        class="form-control"
                                        value="{{request()->get('email')}}">
@@ -94,14 +94,15 @@
                         </a>
                     </div>
 
-                    <table class="table table-hover table-bordered" width="100%" cellspacing="0">
+                    <table class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th>ID</th>
                             <th>{{__('validation.attributes.first_name')}}</th>
                             <th>{{__('validation.attributes.username')}}</th>
-                            <th class="d-none">{{__('validation.attributes.email')}}</th>
+                            <th>{{__('validation.attributes.email')}}</th>
                             <th>{{__('validation.attributes.role')}}</th>
+                            <th>{{__('validation.attributes.user_type')}}</th>
                             <th>{{__('custom.active_m')}}</th>
                             <th>{{__('custom.actions')}}</th>
                         </tr>
@@ -113,8 +114,9 @@
                                     <td>{{$user->id}}</td>
                                     <td>{{$user->fullname()}}</td>
                                     <td>{{$user->username}}</td>
-                                    <td class="d-none">{{$user->email}}</td>
+                                    <td>{{$user->email}}</td>
                                     <td>{!! implode('<br>',$user->roles->pluck('display_name')->toArray()) !!}</td>
+                                    <td>{{ __('custom.users.type.'.$user->user_type) }}</td>
                                     <td>
                                         @includeIf('partials.toggle-boolean', ['object' => $user, 'model' => 'User'])
                                     </td>

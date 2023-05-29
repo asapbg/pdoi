@@ -27,7 +27,7 @@ class PermissionsController extends Controller
             ->where('name', '<>', CustomRole::SUPER_USER_ROLE)
             ->get();
         $perms = Permission::with('roles')->orderBy('id', 'asc')->get();
-        $perms = group_permissions($perms);
+        $perms = groupPermissions($perms);
 
         return $this->view('admin.permissions.index', compact('roles', 'perms'));
     }
@@ -41,7 +41,7 @@ class PermissionsController extends Controller
         if(!auth()->user()->can('manage.roles-permissions')) {
             return back()->with('danger', 'Нямате достъп до тази функционалност. Моля свържете се с администратор.');
         }
-        $groups = group_permissions(Permission::get(), true);
+        $groups = groupPermissions(Permission::get(), true);
         return $this->view('admin.permissions.create', compact('groups'));
     }
 
@@ -101,7 +101,7 @@ class PermissionsController extends Controller
         if(!auth()->user()->can('manage.roles-permissions')) {
             //return back()->with('danger', 'Нямате достъп до тази функционалност. Моля свържете се с администратор.');
         }
-        $groups = group_permissions(Permission::get(), true);
+        $groups = groupPermissions(Permission::get(), true);
         return $this->view('admin.permissions.edit', compact('permission', 'groups'));
     }
 

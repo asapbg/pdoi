@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => true]);
 
-Route::get('/admin', [AdminHomeController::class, 'index'])->name('admin.home');
 Route::match(['get'],'/admin/logout', [AdminLoginControllerAlias::class, 'logout'])->name('admin.logout');
 // Common routes
 Route::group(['middleware' => ['auth', 'administration']], function() {
 
+    Route::get('/admin', [AdminHomeController::class, 'index'])->name('admin.home');
 //    Route::get('/admin', [AdminHomeController::class, 'index'])->name('admin.home');
 //    Route::match(['get'],'/logout', [LoginController::class, 'logout'])->name('logout');
 //    Route::match(['get', 'post'],'/logout', [LoginController::class, 'logout'])->name('logout');

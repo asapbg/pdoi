@@ -3,7 +3,11 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <span class="h1">{{ env('APP_NAME') }} <span class="fs-6 font-italic d-block">({{ __('auth.administration') }})</span></span>
+            <div class="d-flex flex-row">
+                <img src="{{ asset('img/logo.png') }}" width="60" height="auto">
+                <span class="align-self-center ml-2 text-left font-weight-bold">{{ mb_strtoupper(__('custom.council_ministers')) }}<br>{{ config('app.name') }}</span>
+            </div>
+            <span class="fs-6 font-italic d-block mt-4">{{ __('auth.administration') }}</span>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('login.admin.submit') }}">
@@ -70,9 +74,9 @@
                     <div class="col-md-8 col-12 text-md-left text-center ">
                         <a href="#">{{ __('auth.with_cert') }}</a>
                     </div>
-                    <div class="col-md-4 col-12 text-md-left text-center ">
-                        <a href="#">{{ __('auth.registration') }}</a>
-                    </div>
+{{--                    <div class="col-md-4 col-12 text-md-left text-center ">--}}
+{{--                        <a href="#">{{ __('auth.registration') }}</a>--}}
+{{--                    </div>--}}
                 </div>
 
             </form>

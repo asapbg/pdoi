@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -41,7 +42,13 @@ class CommonController extends Controller
         $status = $request->get('status');
 
         $entity = $model::find($entityId);
-        $entity->$booleanType = $status;
+
+        if( $request->get('model') === 'User' ) {
+            $entity->status = $status ? User::STATUS_ACTIVE : User::STATUS_INACTIVE;
+        } else{
+            $entity->$booleanType = $status;
+        }
+
         $entity->save();
     }
 
