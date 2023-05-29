@@ -202,26 +202,31 @@ class  UsersController extends Controller
      */
     public function update(User $user, UpdateUsersRequest $request)
     {
-        $data = $request->except(['_token','roles']);
-        $roles = $request->offsetGet('roles');
+        $validated = $request->validated();
+        $roles = $validated['roles'];
+
+        $permissions = $validated['permissions'] ?? [];
+        foreach (['_token','password_confirmation','roles', 'permissions'] as $key){
+            unset($validated[$key]);
+            //TODO add to data when units are ready
+            unset($validated['administrative_unit']);
+        }
 
         DB::beginTransaction();
 
         try {
 
-            $user->username = mb_strtoupper($data['username']);
-            $user->first_name = $data['first_name'];
-            $user->middle_name = $data['middle_name'];
-            $user->last_name = $data['last_name'];
-            $user->email = $data['email'];
-            $user->active = $data['active'];
-            $user->status = $data['activity_status'];
+            $user->username = $validated['username'];
+            $user->names = $validated['names'];
+            $user->email = $validated['email'];
 
             $user->syncRoles($roles);
+            $user->syncPermissions($permissions);
 
-            if (!is_null($data['password'])) {
-                $user->password = bcrypt($data['password']);
-                $user->password_changed_at = Carbon::now();
+            if (isset($validated['password']) && !is_null($validated['password'])) {
+                $user->password = bcrypt($validated['password']);
+                $user->pass_last_change = Carbon::now();
+                $user->pass_is_new = 1;
             }
 
             $user->save();

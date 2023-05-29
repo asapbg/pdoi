@@ -46,6 +46,9 @@ class CommonController extends Controller
         if( $request->get('model') === 'User' ) {
             $entity->status = $status ? User::STATUS_ACTIVE : User::STATUS_INACTIVE;
         } else{
+            if( $request->get('model') === 'Role' && !$status) {
+                $entity->syncPermissions([]);
+            }
             $entity->$booleanType = $status;
         }
 

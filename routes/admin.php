@@ -55,7 +55,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/users/create',         'create')->name('users.create');
         Route::post('/users/store',         'store')->name('users.store');
         Route::get('/users/{user}/edit',    'edit')->name('users.edit');
-        Route::get('/users/{user}/update',  'update')->name('users.update');
+        Route::match(['post', 'put'], '/users/{user}/update', 'update')->name('users.update');
         Route::get('/users/{user}/delete',  'destroy')->name('users.delete');
         Route::get('/users/export',         'export')->name('users.export');
     });
