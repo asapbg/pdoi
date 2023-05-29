@@ -230,4 +230,13 @@ return [
     'users.individual_permissions' => 'Индивидуални права за достъп',
     'users.general_info' => 'Обща информация',
     'users.work_language' => 'Език за работа',
+    'users.cant_find_available_permissions' => 'Не са открити права, които можете да предоставите на потребителя.',
+    //roles
+    'roles.general_info' => 'Обща информация',
+    'roles.add.users' => 'Добавяне на участници',
+    'roles.users_in_group' => 'Участници в групата',
+    'roles.cant_find_available_users' => 'Не са открити потребители, които можете да добавите към групата/ролята.',
+    'roles.not_assigned' => 'Не са открити потребители, с тази група/роля.',
+    'roles.validation.users' => 'Изберете поне един потребител.',
+    'roles.success_update' => 'Групата/Ролята е обновена успешно.',
 ];

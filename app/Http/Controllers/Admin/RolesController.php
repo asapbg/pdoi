@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomRole;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -94,8 +95,12 @@ class RolesController extends Controller
     {
         //dd($role->users->count());
         $guards = array_keys(config('auth.guards'));
-
-        return $this->view('admin.roles.edit', compact('role','guards'));
+        $usersToAdd = User::whereDoesntHave('roles', function ($query) use($role) {
+                        return $query->where('name',$role->name);
+                        })
+                        ->orderBy('names')->get();
+        $roleUsers = $role->users()->get();
+        return $this->view('admin.roles.edit', compact('role','guards', 'usersToAdd', 'roleUsers'));
     }
 
     /**
@@ -152,5 +157,30 @@ class RolesController extends Controller
             return redirect()->back()->withInput(request()->all())->with('danger', __('messages.system_error'));
 
         }
+    }
+
+    public function addUsers(CustomRole $role, Request $request)
+    {
+        if( !$request->filled('add_users') || !is_array($request->get('add_users')) || !sizeof($request->get('add_users')) ) {
+            return back()->with('danger', __('custom.roles.validation.users'));
+        }
+        $users = $request->get('add_users');
+        $role->users()->attach($users);
+
+        return to_route('admin.roles.edit', ['role' => $role->id])
+            ->with('success', __('custom.roles.success_update'));
+    }
+
+    public function removeUsers(CustomRole $role, Request $request)
+    {
+        if( !$request->filled('remove_users') || !is_array($request->get('remove_users')) || !sizeof($request->get('remove_users')) ) {
+            return back()->with('danger', __('custom.roles.validation.users'));
+        }
+
+        $users = $request->get('remove_users');
+        $role->users()->detach($users);
+
+        return to_route('admin.roles.edit', ['role' => $role->id])
+            ->with('success', __('custom.roles.success_update'));
     }
 }

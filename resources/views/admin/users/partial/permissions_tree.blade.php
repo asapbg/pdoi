@@ -29,6 +29,6 @@
             @endif
         @endforeach
     @else
-        <tr class="text-danger">Не са открити права, които можете да предоставите на потребителя.</tr>
+        <tr class="text-danger">{{ __('custom.users.cant_find_available_permissions') }}</tr>
     @endif
 </table>

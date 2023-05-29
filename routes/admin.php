@@ -67,6 +67,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/roles/{role}/edit',    'edit')->name('roles.edit');
         Route::post('/roles/{role}/update',  'update')->name('roles.update');
         Route::post('/roles/{role}/delete',  'destroy')->name('roles.delete');
+        Route::post('/roles/{role}/add-users',  'addUsers')->name('roles.users.add');
+        Route::post('/roles/{role}/remove-users',  'removeUsers')->name('roles.users.remove');
     });
 
     Route::controller(PermissionsController::class)->group(function () {
