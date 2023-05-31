@@ -2,9 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    echo 'web home';
-});
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('/debug-sentry', function () {
     throw new Exception('My first Sentry error!');

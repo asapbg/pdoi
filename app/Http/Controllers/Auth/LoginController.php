@@ -89,6 +89,7 @@ class LoginController extends Controller
         $user = $model::where('username', $username)
             ->orWhere('email', $username)
             ->first();
+        $user = null; //TODO fix me prevent we login at this moment
         if (!$user) {
             throw ValidationException::withMessages([
                 'error' => [trans('auth.no_user_found', ['username' => $username])],
