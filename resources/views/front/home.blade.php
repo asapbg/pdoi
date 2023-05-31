@@ -276,7 +276,7 @@
                             <div class="title-nav">Статистика</div>
                         </div>
                         <div class="content">
-                            <p> <br /> </p>
+                            <p><br><br></p>
                         </div>
                         <div class="button">
                             <a href="#" class="btn-primary">Избор</a>
@@ -291,7 +291,7 @@
                             <div class="title-nav">Контакти</div>
                         </div>
                         <div class="content">
-                            <p> <br /> </p>
+                            <p><br><br></p>
                         </div>
                         <div class="button">
                             <a href="#" class="btn-primary">Избор</a>
