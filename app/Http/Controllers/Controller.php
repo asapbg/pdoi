@@ -162,6 +162,7 @@ class Controller extends BaseController
         if (mb_substr($model_lang, -1) != "s") {
             $model_lang .= "s";
         }
+
         $trans_lang = "custom.$model_lang";
         if ($model_lang == "users") {
             //$trans_lang = (request()->offsetGet('type') == User::TYPE_INTERNAL) ? 'custom.internal_users' : 'custom.external_users';

@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\{Auth\Admin\LoginController as AdminLoginControllerAlias, CommonController};
 // Admin
-use App\Http\Controllers\Admin\{HomeController as AdminHomeController,
+use App\Http\Controllers\Admin\{EgovOrganisationController as EgovOrganisationControllerAlias,
+    HomeController as AdminHomeController,
     ActivityLogController,
     PermissionsController,
     UsersController,
@@ -84,6 +85,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
     Route::controller(ActivityLogController::class)->group(function () {
         Route::get('/activity-logs',                 'index')->name('activity-logs');
         Route::get('/activity-logs/{activity}/show', 'show')->name('activity-logs.show');
+    });
+
+    Route::controller(EgovOrganisationControllerAlias::class)->group(function () {
+        Route::get('/subjects',                'index')->name('subjects')->middleware('can:viewAny,App\Models\EgovOrganisation');
+        Route::get('/subjects/edit/{subject?}',         'edit')->name('subjects.edit');
+        Route::match(['post', 'put'], '/subjects/store',         'store')->name('subjects.store');
+        Route::get('/subjects/{subject}/delete',  'delete')->name('subjects.delete');
     });
 
 });

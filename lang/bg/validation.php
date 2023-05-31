@@ -230,6 +230,8 @@ return [
         'names'                     => 'Имена',
         'user_type'                 => 'Тип потребител',
         'administrative_unit'       => 'Адм. звено',
-        'lang'                  => 'Език за работа',
+        'lang'                      => 'Език за работа',
+        'eik'                       => 'ЕИК',
+        'subject_parent'            => 'Ниво',
     ],
 ];

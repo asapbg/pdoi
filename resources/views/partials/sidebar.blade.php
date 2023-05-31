@@ -25,6 +25,13 @@
                 <!-- Admin -->
                 @canany(['manage.*', 'administration.*', 'administration.system_classification'])
                     <li class="nav-header">{{ trans_choice('custom.nomenclatures', 2) }}</li>
+                    <li class="nav-item">
+                        <a href="{{route('admin.subjects')}}"
+                           class="nav-link @if(strstr(url()->current(), 'subjects')) active @endif">
+                            <i class="far fa-registered"></i>
+                            <p>{{ trans_choice('custom.subjects', 2) }}</p>
+                        </a>
+                    </li>
                 @endcanany
                 @canany(['manage.*', 'users.*', 'roles_permissions.*'])
                     <li class="nav-header">{{ trans_choice('custom.users', 2) }}</li>
