@@ -74,10 +74,10 @@
                         </div>
                     @endforeach
                     <div class="col-xs-12 col-md-3 col-sm-4 mb-2">
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-sm btn-success">
                             <i class="fa fa-search"></i> {{__('custom.search')}}
                         </button>
-                        <a href="{{route('admin.users')}}" class="btn btn-default">
+                        <a href="{{route('admin.users')}}" class="btn btn-sm btn-default">
                             <i class="fas fa-eraser"></i> {{__('custom.clear')}}
                         </a>
                     </div>

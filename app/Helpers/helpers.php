@@ -298,3 +298,29 @@ if (!function_exists('optionsLanguages')) {
         return $options;
     }
 }
+
+if (!function_exists('optionsStatuses')) {
+
+    /**
+     * return regular status options
+     *
+     * @method optionsStatuses
+     *
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function optionsStatuses(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
+    {
+        $options = array(
+            1 => __('custom.active'),
+            0 => __('custom.inactive'),
+        );
+        if( $any ) {
+            $options[$anyValue] = $anyName;
+            ksort($options);
+        }
+        return $options;
+    }
+}

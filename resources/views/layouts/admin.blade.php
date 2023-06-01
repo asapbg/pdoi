@@ -50,7 +50,7 @@
                     @endif
                 @endforeach
                 @if($errors->any())
-                    <div class="alert-danger mt-1" role="alert">Моля проверете за грешки
+                    <div class="alert-danger mt-1 px-2" role="alert">Моля проверете за грешки
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

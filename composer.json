@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "astrotomic/laravel-translatable": "^11.12",
         "barryvdh/laravel-dompdf": "^1.0",
         "doctrine/dbal": "^3.3",
         "guzzlehttp/guzzle": "^7.2",
@@ -14,9 +15,9 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
-        "psr/simple-cache": "2",
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^9.0",
+        "psr/simple-cache": "2",
         "sentry/sentry-laravel": "^2.11",
         "spatie/laravel-activitylog": "^4.4",
         "spatie/laravel-permission": "^5.5"

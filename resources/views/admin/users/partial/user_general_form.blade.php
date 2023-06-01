@@ -1,4 +1,4 @@
-<h5 class="bg-primary py-1 px-2 mb-4">{{ __('custom.users.general_info') }}</h5>
+<h5 class="bg-primary py-1 px-2 mb-4">{{ __('custom.general_info') }}</h5>
 <div class="form-group">
     <label class="col-sm-12 control-label" for="user_type">
         {{ __('validation.attributes.user_type') }}<span class="required">*</span>

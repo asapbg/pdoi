@@ -26,10 +26,10 @@
                 @canany(['manage.*', 'administration.*', 'administration.system_classification'])
                     <li class="nav-header">{{ trans_choice('custom.nomenclatures', 2) }}</li>
                     <li class="nav-item">
-                        <a href="{{route('admin.subjects')}}"
-                           class="nav-link @if(strstr(url()->current(), 'subjects')) active @endif">
+                        <a href="{{route('admin.pdo_subjects')}}"
+                           class="nav-link @if(strstr(url()->current(), 'pdo-subjects')) active @endif">
                             <i class="far fa-registered"></i>
-                            <p>{{ trans_choice('custom.subjects', 2) }}</p>
+                            <p>{{ trans_choice('custom.pdoi_response_subjects', 2) }}</p>
                         </a>
                     </li>
                 @endcanany

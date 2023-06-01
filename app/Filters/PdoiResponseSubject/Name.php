@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filters\EgovOrganisation;
+namespace App\Filters\PdoiResponseSubject;
 
 use App\Filters\FilterContract;
 use App\Filters\QueryFilter;

@@ -12,9 +12,9 @@
 
                     <div class="mb-3">
 
-                        @includeIf('partials.status', ['action' => 'App\Http\Controllers\Admin\EgovOrganisationController@index'])
+                        @includeIf('partials.status', ['action' => 'App\Http\Controllers\Admin\PdoiResponseSubjectController@index'])
 
-                        <a href="{{ $editRouteName }}" class="btn btn-sm btn-success">
+                        <a href="{{ route($editRouteName) }}" class="btn btn-sm btn-success">
                             <i class="fas fa-plus-circle"></i> {{ __('custom.add') }} {{ $title_singular }}
                         </a>
                     </div>
@@ -47,7 +47,7 @@
                                     </td>
                                     <td class="text-center">
                                         @can('update', $item)
-                                            <a href="{{ route( $editRouteName , $item->id) }}"
+                                            <a href="{{ route( $editRouteName , [$item->id]) }}"
                                                class="btn btn-sm btn-info"
                                                data-toggle="tooltip"
                                                title="{{ __('custom.edit') }}">
@@ -60,7 +60,7 @@
                                                    data-target="#modal-delete-resource"
                                                    data-resource-id="{{ $item->id }}"
                                                    data-resource-name="{{ "$item->name" }}"
-                                                   data-resource-delete-url="{{ route($deleteRouteName,$item->id) }}"
+                                                   data-resource-delete-url="{{ route($deleteRouteName,[$item->id]) }}"
                                                    data-toggle="tooltip"
                                                    title="{{ __('custom.deletion') }}">
                                                     <i class="fa fa-trash"></i>

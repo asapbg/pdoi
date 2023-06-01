@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="bg-primary py-1 px-2 mb-4">{{ __('custom.roles.general_info') }}</h5>
+                    <h5 class="bg-primary py-1 px-2 mb-4">{{ __('custom.general_info') }}</h5>
                     <form class="row" action="{{ route('admin.roles.update',$role->id) }}" method="post" name="form" id="form">
                             @csrf
                             <div class="form-group row col-12 col-md-6">

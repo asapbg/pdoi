@@ -213,6 +213,7 @@ return [
     'altitude'                         => 'altitude',
 
     //
+    'general_info' => 'Основна информация',
     'in_reg_process' => 'В процес на регистрация',
     'council_ministers' => 'Министрески съвет',
     'app_full_name' => 'Платформа за достъп до обществена информация',
@@ -228,11 +229,9 @@ return [
     'users.type.1' => 'Вътрешен',
     'users.type.2' => 'Външен',
     'users.individual_permissions' => 'Индивидуални права за достъп',
-    'users.general_info' => 'Обща информация',
     'users.work_language' => 'Език за работа',
     'users.cant_find_available_permissions' => 'Не са открити права, които можете да предоставите на потребителя.',
     //roles
-    'roles.general_info' => 'Обща информация',
     'roles.add.users' => 'Добавяне на участници',
     'roles.users_in_group' => 'Участници в групата',
     'roles.cant_find_available_users' => 'Не са открити потребители, които можете да добавите към групата/ролята.',
@@ -240,6 +239,7 @@ return [
     'roles.validation.users' => 'Изберете поне един потребител.',
     'roles.success_update' => 'Групата/Ролята е обновена успешно.',
     //subjects
-    'egov_organisations' => 'Задължен субект|Задължени субекти',
-    'subjects' => 'Задължен субект|Задължени субекти',
+//    'egov_organisations' => 'Задължен субект|Задължени субекти',
+    'pdoi_response_subjects' => 'Задължен субект|Задължени субекти',
+    'pdoi_subjects.address_section' => 'Адрес за кореспондениця'
 ];

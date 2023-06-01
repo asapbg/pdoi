@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\{Auth\Admin\LoginController as AdminLoginControllerAlias, CommonController};
 // Admin
-use App\Http\Controllers\Admin\{EgovOrganisationController as EgovOrganisationControllerAlias,
+use App\Http\Controllers\Admin\{PdoiResponseSubjectController as PdoiResponseSubjectControllerAlias,
     HomeController as AdminHomeController,
     ActivityLogController,
     PermissionsController,
@@ -87,11 +87,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/activity-logs/{activity}/show', 'show')->name('activity-logs.show');
     });
 
-    Route::controller(EgovOrganisationControllerAlias::class)->group(function () {
-        Route::get('/subjects',                'index')->name('subjects')->middleware('can:viewAny,App\Models\EgovOrganisation');
-        Route::get('/subjects/edit/{subject?}',         'edit')->name('subjects.edit');
-        Route::match(['post', 'put'], '/subjects/store',         'store')->name('subjects.store');
-        Route::get('/subjects/{subject}/delete',  'delete')->name('subjects.delete');
+    Route::controller(PdoiResponseSubjectControllerAlias::class)->group(function () {
+        Route::get('/pdoi-subjects',                'index')->name('pdo_subjects')->middleware('can:viewAny,App\Models\PdoiResponseSubject');
+        Route::get('/pdoi-subjects/edit/{subject?}',         'edit')->name('pdo_subjects.edit');
+        Route::match(['post', 'put'], '/pdoi-subjects/store/{id}',         'store')->name('pdo_subjects.store');
+        Route::get('/pdoi-subjects/{subject}/delete',  'delete')->name('pdo_subjects.delete');
     });
 
 });
