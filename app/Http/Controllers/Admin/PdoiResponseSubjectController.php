@@ -58,6 +58,8 @@ class PdoiResponseSubjectController extends AdminController
             if( $request->isMethod('post') ) {
                 $fillable['adm_register'] = 1;
             }
+            $fillable['redirect_only'] = $fillable['redirect_only'] ?? 0;
+
             $item->fill($fillable);
             $item->save();
             $this->storeTranslateOrNew($item->getFillable(), $item, $validated);

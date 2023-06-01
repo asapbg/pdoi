@@ -25,7 +25,7 @@
                             <th>ID</th>
                             <th>{{__('validation.attributes.eik')}}</th>
                             <th>{{__('validation.attributes.name')}}</th>
-                            <th>{{__('validation.attributes.subject_parent')}}</th>
+                            <th>{{__('validation.attributes.adm_level')}}</th>
                             <th>{{__('validation.attributes.address')}}</th>
                             <th>{{__('custom.active_m')}}</th>
                             <th>{{__('custom.actions')}}</th>
@@ -39,7 +39,7 @@
                                     <td>{{ $item->eik }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->parent ? $item->parent->name : '' }}</td>
-                                    <td>{{ $item->postal_address }}</td>
+                                    <td>{{ $item->address }}</td>
                                     <td>
                                         @if(isset($toggleBooleanModel))
                                             @includeIf('partials.toggle-boolean', ['object' => $item, 'model' => $toggleBooleanModel])

@@ -21,7 +21,8 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     //activity
     protected string $logName = "subjects";
 
-    protected $fillable = ['eik', 'region', 'municipality', 'town', 'phone', 'fax', 'email', 'date_from', 'date_to', 'adm_register', 'adm_level', 'zip_code', 'nomer_register', 'active'];
+    protected $fillable = ['eik', 'region', 'municipality', 'town', 'phone', 'fax', 'email', 'date_from'
+        , 'date_to', 'adm_register', 'redirect_only', 'adm_level', 'zip_code', 'nomer_register', 'active'];
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public function scopeIsActive($query)

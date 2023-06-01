@@ -39,6 +39,7 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
             'email' => ['nullable', 'string', 'max:255'],
 
 
+            'redirect_only' => ['nullable', 'numeric'],
             'active' => ['required', 'numeric', 'gt:0'],
             'manual' => ['required', 'numeric', 'gt:0'],
         ];

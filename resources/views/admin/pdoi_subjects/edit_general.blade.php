@@ -56,4 +56,14 @@
             </div>
         </div>
     </div>
+    <div class="col-12"></div>
+    <div class="col-md-4 col-12 ps-md-3 pt-4">
+        <div class="form-group">
+            <label for="direct_addressing">
+                <input class="pe-2" type="checkbox" name="direct_addressing" id="direct_addressing" value="1" @if(old('direct_addressing', ($item->id ? $item->direct_addressing : 0))) checked @endif>
+                {{ __('validation.attributes.redirect_only') }}
+                <i class="fas fa-info-circle text-info" data-toggle="tooltip" title="{{ __('custom.pdoi_subjects.redirect_only.tooltip') }}"></i>
+            </label>
+        </div>
+    </div>
 </div>

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->date('date_from');
             $table->date('date_to')->nullable();
             $table->tinyInteger('adm_register')->default(1);
+            $table->tinyInteger('redirect_only');
 
             $table->unsignedBigInteger('adm_level')->nullable();
             $table->foreign('adm_level')
