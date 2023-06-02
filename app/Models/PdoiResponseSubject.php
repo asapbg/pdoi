@@ -14,6 +14,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
 {
     use SoftDeletes, FilterSort, LogsActivity, CausesActivity, Translatable;
 
+    const PAGINATE = 20;
     const TRANSLATABLE_FIELDS = ['subject_name', 'address', 'add_info'];
     public $timestamps = true;
 
@@ -47,7 +48,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
                 'rules' => ['required', 'string', 'max:255']
             ],
             'add_info' => [
-                'type' => 'text',
+                'type' => 'textarea',
                 'rules' => ['nullable', 'string', 'max:500']
             ],
         );

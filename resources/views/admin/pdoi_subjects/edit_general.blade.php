@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    @include('admin.pdoi_subjects.edit_field_translate', ['field' => 'subject_name', 'required' => true])
+    @include('admin.partial.edit_field_translate', ['field' => 'subject_name', 'required' => true])
 
     <div class="col-md-3 col-12">
         <div class="form-group">

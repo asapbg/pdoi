@@ -75,11 +75,13 @@
                     @endforeach
                     <div class="col-xs-12 col-md-3 col-sm-4 mb-2">
                         <button type="submit" class="btn btn-sm btn-success">
-                            <i class="fa fa-search"></i> {{__('custom.search')}}
+                            <i class="fa fa-search"></i> {{ __('custom.search') }}
                         </button>
-                        <a href="{{route('admin.users')}}" class="btn btn-sm btn-default">
-                            <i class="fas fa-eraser"></i> {{__('custom.clear')}}
-                        </a>
+                        @if(isset($listRouteName))
+                            <a href="{{ route($listRouteName) }}" class="btn btn-sm btn-default">
+                                <i class="fas fa-eraser"></i> {{ __('custom.clear') }}
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

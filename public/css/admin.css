@@ -54852,3 +54852,8 @@ table tfoot.fix-border tr,
 table tfoot.fix-border th{
     border:none !important;
 }
+
+/*sidebar sub icons*/
+.nav-item-sub-icon {
+    font-size: 8px !important;
+}

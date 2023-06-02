@@ -238,9 +238,16 @@ return [
     'roles.not_assigned' => 'Не са открити потребители, с тази група/роля.',
     'roles.validation.users' => 'Изберете поне един потребител.',
     'roles.success_update' => 'Групата/Ролята е обновена успешно.',
-    //subjects
-//    'egov_organisations' => 'Задължен субект|Задължени субекти',
+    //pdoi subjects
+    'pdoi_response_subjects_short' => 'РЗС',
     'pdoi_response_subjects' => 'Задължен субект|Задължени субекти',
     'pdoi_subjects.address_section' => 'Адрес за кореспондениця',
-    'pdoi_subjects.redirect_only.tooltip' => 'Субект ще е достъпен само за служебно пренасочване по компетентност от страна на администратори-модератори . Директно адресиране на заявления от страна на потребители няма да е достъпно'
+    'pdoi_subjects.redirect_only.tooltip' => 'Субект ще е достъпен само за служебно пренасочване по компетентност от страна на администратори-модератори . Директно адресиране на заявления от страна на потребители няма да е достъпно',
+    //nomenclatures
+    'ekatte_areas'                            => 'Области',
+    'ekatte_municipalities'                   => 'Общини',
+    'ekatte_settlements'                       => 'Населени мяста',
+    'nomenclature.areas'                      => 'Област|Области',
+    'nomenclature.municipalities'             => 'Община|Общини',
+    'nomenclature.settlements'                => 'Населено място|Населени мяста',
 ];

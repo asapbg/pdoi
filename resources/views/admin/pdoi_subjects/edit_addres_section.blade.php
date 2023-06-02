@@ -2,7 +2,7 @@
     <h5 class="bg-primary py-1 px-2 mb-4">{{ __('custom.pdoi_subjects.address_section') }}</h5>
     <div class="col-md-3 col-12">
         <div class="form-group">
-            <label class="col-sm-12 control-label" for="adm_level">{{ __('validation.attributes.region') }}<span class="required">*</span></label>
+            <label class="col-sm-12 control-label" for="adm_level">{{ __('validation.attributes.area') }}<span class="required">*</span></label>
             <div class="col-12">
                 <select id="region" name="region"  class="form-control form-control-sm @error('region'){{ 'is-invalid' }}@enderror">
                     @if(!$item->id)
@@ -44,7 +44,7 @@
 
     <div class="col-md-3 col-12">
         <div class="form-group">
-            <label class="col-sm-12 control-label" for="municipality">{{ __('validation.attributes.town') }}<span class="required">*</span></label>
+            <label class="col-sm-12 control-label" for="municipality">{{ __('validation.attributes.settlement') }}<span class="required">*</span></label>
             <div class="col-12">
                 <select id="town" name="town"  class="form-control form-control-sm @error('municipality'){{ 'is-invalid' }}@enderror">
                     @if(!$item->id)
@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    @include('admin.pdoi_subjects.edit_field_translate', ['field' => 'address', 'required' => true])
+    @include('admin.partial.edit_field_translate', ['field' => 'address', 'required' => true])
 
     <div class="col-md-3 col-12">
         <div class="form-group">
@@ -110,7 +110,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-12">
+
+    <div class="col-md-3 col-12 mt-4">
         <div class="form-group">
             <label class="col-sm-12 control-label" for="active">
                 {{ __('validation.attributes.status') }}
@@ -127,4 +128,7 @@
             </div>
         </div>
     </div>
+
+    <div class="col-12"></div>
+    @include('admin.partial.edit_field_translate', ['field' => 'add_info'])
 </div>

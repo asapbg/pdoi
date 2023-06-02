@@ -46,9 +46,9 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
 
         if( $this->isMethod('put') ) {
             $rules['id'] = ['required', 'numeric', 'exists:pdoi_response_subject'];
-            $rules['eik'][] = 'unique:pdoi_response_subject';
+            $rules['eik'][] = Rule::unique('pdoi_response_subject')->ignore($this->input('id'));
         } else {
-            $rules['eik'][] = Rule::unique('pdoi_response_subject')->ignore($this->input('eik'));
+            $rules['eik'][] = 'unique:pdoi_response_subject';
         }
 
         foreach (config('available_languages') as $lang) {

@@ -2,12 +2,17 @@
 
 use App\Http\Controllers\{Auth\Admin\LoginController as AdminLoginControllerAlias, CommonController};
 // Admin
+use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\{PdoiResponseSubjectController as PdoiResponseSubjectControllerAlias,
     HomeController as AdminHomeController,
     ActivityLogController,
     PermissionsController,
     UsersController,
     RolesController};
+
+use App\Http\Controllers\Admin\Nomenclature\EkatteAreaController;
+use App\Http\Controllers\Admin\Nomenclature\EkatteMunicipalityController;
+use App\Http\Controllers\Admin\Nomenclature\EkatteSettlementController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -92,6 +97,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/pdoi-subjects/edit/{subject?}',         'edit')->name('pdo_subjects.edit');
         Route::match(['post', 'put'], '/pdoi-subjects/store/{id}',         'store')->name('pdo_subjects.store');
         Route::get('/pdoi-subjects/{subject}/delete',  'delete')->name('pdo_subjects.delete');
+    });
+
+    //Nomenclature
+    Route::controller(EkatteAreaController::class)->group(function () {
+        Route::get('/ekatte/area',                'index')->name('nomenclature.ekatte.area')->middleware('can:viewAny,App\Models\EkatteArea');
+        Route::get('/ekatte/area/edit/{item?}',         'edit')->name('nomenclature.ekatte.area.edit');
+        Route::match(['post', 'put'], '/ekatte/area/store/{item?}',         'store')->name('nomenclature.ekatte.area.store');
+    });
+
+    Route::controller(EkatteMunicipalityController::class)->group(function () {
+        Route::get('/ekatte/municipality',                'index')->name('nomenclature.ekatte.municipality')->middleware('can:viewAny,App\Models\EkatteMunicipality');
+        Route::get('/ekatte/municipality/edit/{item?}',         'edit')->name('nomenclature.ekatte.municipality.edit');
+        Route::match(['post', 'put'], '/ekatte/municipality/store/{item?}',         'store')->name('nomenclature.ekatte.municipality.store');
+    });
+
+    Route::controller(EkatteSettlementController::class)->group(function () {
+        Route::get('/ekatte/settlement',                'index')->name('nomenclature.ekatte.settlement')->middleware('can:viewAny,App\Models\EkatteSettlement');
+        Route::get('/ekatte/settlement/edit/{item?}',         'edit')->name('nomenclature.ekatte.settlement.edit');
+        Route::match(['post', 'put'], '/ekatte/settlement/store/{item?}',         'store')->name('nomenclature.ekatte.settlement.store');
     });
 
 });

@@ -11,17 +11,31 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PdoiResponseSubjectController extends AdminController
 {
+    const LIST_ROUTE = 'admin.pdo_subjects';
+    const EDIT_ROUTE = 'admin.pdo_subjects.edit';
+    const DELETE_ROUTE = 'admin.pdo_subjects.delete';
+    const STORE_ROUTE = 'admin.pdo_subjects.store';
+    const LIST_VIEW = 'admin.pdoi_subjects.index';
+    const EDIT_VIEW = 'admin.pdoi_subjects.edit';
+
     public function index(Request $request)
     {
+        $requestFilter = $request->all();
         $filter = $this->filters($request);
+        $paginate = $filter['paginate'] ?? PdoiResponseSubject::PAGINATE;
+
+        if( !isset($requestFilter['active']) ) {
+            $requestFilter['active'] = 1;
+        }
         $items = PdoiResponseSubject::with(['translation', 'parent'])
-            ->IsActive()
-            ->FilterBy($request->all())
-            ->get();
-        $toggleBooleanModel = 'EgovOrganisation';
-        $deleteRouteName = 'admin.pdo_subjects.delete';
-        $editRouteName = 'admin.pdo_subjects.edit';
-        return $this->view('admin.pdoi_subjects.index', compact('filter', 'items', 'toggleBooleanModel', 'deleteRouteName', 'editRouteName'));
+            ->FilterBy($requestFilter)
+            ->paginate($paginate);
+        $toggleBooleanModel = 'PdoiResponseSubject';
+        $deleteRouteName = self::DELETE_ROUTE;
+        $editRouteName = self::EDIT_ROUTE;
+        $listRouteName = self::LIST_ROUTE;
+
+        return $this->view(self::LIST_VIEW, compact('filter', 'items', 'toggleBooleanModel', 'deleteRouteName', 'editRouteName', 'listRouteName'));
     }
 
     /**
@@ -35,9 +49,10 @@ class PdoiResponseSubjectController extends AdminController
             return back()->with('warning', __('messages.unauthorized'));
         }
         $subjects = PdoiResponseSubject::optionsList();
-        $storeRouteName = 'admin.pdo_subjects.store';
-        $listRouteName = 'admin.pdo_subjects';
-        return $this->view('admin.pdoi_subjects.edit', compact('item', 'storeRouteName', 'listRouteName', 'subjects'));
+        $storeRouteName = self::STORE_ROUTE;
+        $listRouteName = self::LIST_ROUTE;
+        $translatableFields = PdoiResponseSubject::translationFieldsProperties();
+        return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName', 'listRouteName', 'subjects', 'translatableFields'));
     }
 
     public function store(PdoiResponseSubjectStoreRequest $request)
@@ -62,14 +77,14 @@ class PdoiResponseSubjectController extends AdminController
 
             $item->fill($fillable);
             $item->save();
-            $this->storeTranslateOrNew($item->getFillable(), $item, $validated);
+            $this->storeTranslateOrNew(PdoiResponseSubject::TRANSLATABLE_FIELDS, $item, $validated);
 
             if( $request->isMethod('put') ) {
-                return redirect(route('admin.pdo_subjects.edit', $item) )
+                return redirect(route(self::EDIT_ROUTE, $item) )
                     ->with('success', trans_choice('custom.pdo_subjects', 1)." ".__('messages.updated_successfully_m'));
             }
 
-            return to_route('admin.pdo_subjects')
+            return to_route(self::LIST_ROUTE)
                 ->with('success', trans_choice('custom.pdo_subjects', 1)." ".__('messages.created_successfully_m'));
         } catch (\Exception $e) {
             Log::error($e);
@@ -88,7 +103,7 @@ class PdoiResponseSubjectController extends AdminController
             $item->save();
             $item->delete();
 
-            return to_route('admin.pdo_subjects')
+            return to_route(self::LIST_ROUTE)
                 ->with('success', trans_choice('custom.pdo_subjects', 1)." ".__('messages.deleted_successfully_m'));
         }
         catch (\Exception $e) {

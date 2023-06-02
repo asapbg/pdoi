@@ -15,12 +15,12 @@ class AdminController extends Controller
      */
     protected function storeTranslateOrNew($fields, $item, $validated)
     {
-        $fields = $item->getFillable();
         foreach (config('available_languages') as $locale) {
-            foreach ($fields as $v => $field) {
-                $field = $v."_".$locale['code'];
-                if(array_key_exists($field, $validated)) {
-                    $item->translateOrNew($locale['code'])->{$v} = $validated[$field];
+            foreach ($fields as $field) {
+                $fieldName = $field."_".$locale['code'];
+//                dd($fields, $field, $fieldName, $validated);
+                if(array_key_exists($fieldName, $validated)) {
+                    $item->translateOrNew($locale['code'])->{$field} = $validated[$fieldName];
                 }
             }
         }

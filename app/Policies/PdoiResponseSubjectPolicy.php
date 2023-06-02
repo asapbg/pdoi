@@ -18,7 +18,7 @@ class PdoiResponseSubjectPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.system_classification']);
+        return $user->canAny(['manage.*','administration.*', 'administration.pdoi_subjects']);
     }
 
     /**
@@ -30,7 +30,7 @@ class PdoiResponseSubjectPolicy
      */
     public function view(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.system_classification']);
+        return $user->canAny(['manage.*','administration.*', 'administration.pdoi_subjects']);
     }
 
     /**
@@ -41,7 +41,7 @@ class PdoiResponseSubjectPolicy
      */
     public function create(User $user)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.system_classification']);
+        return $user->canAny(['manage.*','administration.*', 'administration.pdoi_subjects']);
     }
 
     /**
@@ -53,7 +53,7 @@ class PdoiResponseSubjectPolicy
      */
     public function update(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.system_classification']) && !$pdoiResponseSubject->adm_register;
+        return $user->canAny(['manage.*','administration.*', 'administration.pdoi_subjects']) && !$pdoiResponseSubject->adm_register;
     }
 
     /**
@@ -65,7 +65,7 @@ class PdoiResponseSubjectPolicy
      */
     public function delete(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.system_classification'])
+        return $user->canAny(['manage.*','administration.*', 'administration.pdoi_subjects'])
             && !$pdoiResponseSubject->adm_register && !$pdoiResponseSubject->trashed();
     }
 
@@ -78,7 +78,7 @@ class PdoiResponseSubjectPolicy
      */
     public function restore(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.system_classification'])
+        return $user->canAny(['manage.*','administration.*', 'administration.pdoi_subjects'])
             && $pdoiResponseSubject->manual && $pdoiResponseSubject->trashed();
     }
 

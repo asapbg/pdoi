@@ -12,7 +12,7 @@
 
                     <div class="mb-3">
 
-                        @includeIf('partials.status', ['action' => 'App\Http\Controllers\Admin\PdoiResponseSubjectController@index'])
+                        @includeIf('partials.status', ['action' => 'App\Http\Controllers\Admin\Nomenclature\EkatteMunicipalityController@index'])
 
                         <a href="{{ route($editRouteName) }}" class="btn btn-sm btn-success">
                             <i class="fas fa-plus-circle"></i> {{ __('custom.add') }} {{ $title_singular }}
@@ -23,10 +23,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>{{__('validation.attributes.eik')}}</th>
                             <th>{{__('validation.attributes.name')}}</th>
-                            <th>{{__('validation.attributes.adm_level')}}</th>
-                            <th>{{__('validation.attributes.address')}}</th>
                             <th>{{__('custom.active_m')}}</th>
                             <th>{{__('custom.actions')}}</th>
                         </tr>
@@ -36,10 +33,7 @@
                             @foreach($items as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->eik }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->parent ? $item->parent->name : '' }}</td>
-                                    <td>{{ $item->address }}</td>
+                                    <td>{{ $item->ime }}</td>
                                     <td>
                                         @if(isset($toggleBooleanModel))
                                             @includeIf('partials.toggle-boolean', ['object' => $item, 'model' => $toggleBooleanModel])
@@ -53,18 +47,6 @@
                                                title="{{ __('custom.edit') }}">
                                                 <i class="fa fa-edit"></i>
                                             </a>
-                                        @endcan
-                                        @can('delete', $item)
-                                                <a href="javascript:;"
-                                                   class="btn btn-sm btn-danger js-toggle-delete-resource-modal hidden"
-                                                   data-target="#modal-delete-resource"
-                                                   data-resource-id="{{ $item->id }}"
-                                                   data-resource-name="{{ "$item->name" }}"
-                                                   data-resource-delete-url="{{ route($deleteRouteName,[$item->id]) }}"
-                                                   data-toggle="tooltip"
-                                                   title="{{ __('custom.deletion') }}">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
                                         @endcan
                                     </td>
                                 </tr>

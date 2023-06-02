@@ -23,14 +23,45 @@
                 </li>
 
                 <!-- Admin -->
-                @canany(['manage.*', 'administration.*', 'administration.system_classification'])
-                    <li class="nav-header">{{ trans_choice('custom.nomenclatures', 2) }}</li>
+                @canany(['manage.*', 'administration.*', 'administration.pdoi_subjects'])
                     <li class="nav-item">
                         <a href="{{route('admin.pdo_subjects')}}"
                            class="nav-link @if(strstr(url()->current(), 'pdo-subjects')) active @endif">
                             <i class="far fa-registered"></i>
-                            <p>{{ trans_choice('custom.pdoi_response_subjects', 2) }}</p>
+                            <p>{{ __('custom.pdoi_response_subjects_short') }}</p>
                         </a>
+                    </li>
+                @endcanany
+                @canany(['manage.*', 'administration.*', 'administration.system_classification'])
+                    <li class="nav-header">{{ trans_choice('custom.nomenclatures', 2) }}</li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link @if(strstr(url()->current(), 'ekatte')) active @endif">
+                            <i class="nav-icon fas fa-layer-group"></i>
+                            <p>EKATTE<i class="fas fa-angle-left right"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.ekatte.area') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'ekatte/area')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.areas', 2) }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.ekatte.municipality') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'ekatte/municipality')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.municipalities', 2) }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.ekatte.settlement') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'ekatte/settlement')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.settlements', 2) }}</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endcanany
                 @canany(['manage.*', 'users.*', 'roles_permissions.*'])
