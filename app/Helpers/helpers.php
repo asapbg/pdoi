@@ -314,8 +314,8 @@ if (!function_exists('optionsStatuses')) {
     function optionsStatuses(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
     {
         $options = array(
-            1 => __('custom.active'),
-            0 => __('custom.inactive'),
+            1 => trans_choice('custom.active', 1),
+            0 => trans_choice('custom.inactive', 1),
         );
         if( $any ) {
             $options[$anyValue] = $anyName;

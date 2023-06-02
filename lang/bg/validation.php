@@ -42,7 +42,7 @@ return [
     'distinct'       => 'Данните в полето :attribute се дублират.',
     'email'          => 'Полето :attribute е в невалиден формат.',
     'ends_with'      => 'The :attribute must end with one of the following: :values.',
-    'exists'         => 'Избранато поле :attribute вече съществува.',
+    'exists'         => 'Избранато поле :attribute не съществува.',
     'file'           => 'Полето :attribute трябва да бъде файл.',
     'filled'         => 'Полето :attribute е задължително.',
     'gt'             => [
@@ -233,7 +233,8 @@ return [
         'lang'                      => 'Език за работа',
         'eik'                       => 'ЕИК',
         'subject_name'              => 'Наименование',
-        'adm_level'                 => 'Ниво',
+        'adm_level'                 => 'Раздел',
+        'parent_id'                    => 'Ниво',
         'fax'                       => 'Факс',
         'add_info'                  => 'Допъл. информация',
         'date_from'                 => 'Дата от',
@@ -257,5 +258,6 @@ return [
         'kind'                      => 'Вид',
         'altitude'                  => 'Надморска височина',
         'tsb'                       => 'ТСБ',
+        'manual_rzs'               => 'Ръчно регистриран',
     ],
 ];

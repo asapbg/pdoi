@@ -23,13 +23,34 @@
                 </li>
 
                 <!-- Admin -->
-                @canany(['manage.*', 'administration.*', 'administration.pdoi_subjects'])
+                @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_sections', 'administration.rzs_items'])
                     <li class="nav-item">
-                        <a href="{{route('admin.pdo_subjects')}}"
-                           class="nav-link @if(strstr(url()->current(), 'pdo-subjects')) active @endif">
-                            <i class="far fa-registered"></i>
-                            <p>{{ __('custom.pdoi_response_subjects_short') }}</p>
+                        <a href="#" class="nav-link @if(strstr(url()->current(), 'rzs-')) active @endif">
+                            <i class="nav-icon far fa-registered"></i>
+                            <p>{{ __('custom.rzs_short') }}<i class="fas fa-angle-left right"></i></p>
                         </a>
+                        @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_sections'])
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.rzs.sections') }}"
+                                       class="nav-link @if(strstr(url()->current(), 'rzs-sections')) active @endif">
+                                        <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                        <p>{{ trans_choice('custom.rzs_sections', 1) }}</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endcan
+                        @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_items'])
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.rzs') }}"
+                                       class="nav-link @if(strstr(url()->current(), 'rzs-subjects')) active @endif">
+                                        <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                        <p>{{ trans_choice('custom.rzs_items', 1) }}</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endcan
                     </li>
                 @endcanany
                 @canany(['manage.*', 'administration.*', 'administration.system_classification'])

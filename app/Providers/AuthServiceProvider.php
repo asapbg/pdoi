@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\PdoiResponseSubject;
+use App\Policies\PdoiResponseSubjectPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        PdoiResponseSubject::class => PdoiResponseSubjectPolicy::class
     ];
 
     /**
@@ -27,8 +30,9 @@ class AuthServiceProvider extends ServiceProvider
 
         // Implicitly grant "Super Admin" role all permissions
         // This works in the app by using gate-related functions like auth()->user->can() and @can()
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole('super_admin') ? true : null;
-        });
+        //TODO fix me This is not good when using policy with additional model clause
+//        Gate::before(function ($user, $ability) {
+//            return $user->hasRole('super_admin') ? true : null;
+//        });
     }
 }

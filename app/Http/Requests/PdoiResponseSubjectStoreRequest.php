@@ -27,7 +27,8 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
     {
         $rules = [
             'eik' => ['required', 'string', 'max:13'],
-            'adm_level' => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
+            'adm_level' => ['required', 'numeric', 'exists:rzs_section,adm_level'],
+            'parent_id' => ['nullable'],
             'date_from' => ['required', 'date'],
             'date_to' => ['nullable', 'date'],
             'region' => ['required', 'numeric'],
@@ -41,14 +42,18 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
 
             'redirect_only' => ['nullable', 'numeric'],
             'active' => ['required', 'numeric', 'gt:0'],
-            'manual' => ['required', 'numeric', 'gt:0'],
         ];
+
+        if( (int)$this->input('parent_id') > 0 ){
+            $rules['parent_id'][] = 'exists:pdoi_response_subject,id';
+            $rules['parent_id'][] = 'numeric';
+        }
 
         if( $this->isMethod('put') ) {
             $rules['id'] = ['required', 'numeric', 'exists:pdoi_response_subject'];
-            $rules['eik'][] = Rule::unique('pdoi_response_subject')->ignore($this->input('id'));
+//            $rules['eik'][] = Rule::unique('pdoi_response_subject')->ignore($this->input('id'));
         } else {
-            $rules['eik'][] = 'unique:pdoi_response_subject';
+//            $rules['eik'][] = 'unique:pdoi_response_subject';
         }
 
         foreach (config('available_languages') as $lang) {

@@ -42,8 +42,12 @@
                                        value="{{ old($key, $field['value']) }}" >
                                 @break('datepicker')
                                 @case('checkbox')
-                                <input type="checkbox" name="{{ $key }}" @if($field['checked']) checked="checked" @endif
-                                value="{{ old($key, $field['value']) }}" >
+                                    <label>
+                                        <input type="checkbox" name="{{ $key }}" @if($field['checked']) checked @endif
+                                        value="{{ $field['value'] }}" >
+                                        {{ $field['label'] }}
+                                    </label>
+
                                 @break('checkbox')
                                 @case('select')
                                     <select class="form-control select2 @if(isset($field['class'])){{$field['class'] }}@endif" name="{{ $key }}" >

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PdoiResponseSubjectStoreRequest;
+use App\Models\EkatteArea;
+use App\Models\EkatteMunicipality;
+use App\Models\EkatteSettlement;
 use App\Models\PdoiResponseSubject;
+use App\Models\RzsSection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PdoiResponseSubjectController extends AdminController
 {
-    const LIST_ROUTE = 'admin.pdo_subjects';
-    const EDIT_ROUTE = 'admin.pdo_subjects.edit';
-    const DELETE_ROUTE = 'admin.pdo_subjects.delete';
-    const STORE_ROUTE = 'admin.pdo_subjects.store';
-    const LIST_VIEW = 'admin.pdoi_subjects.index';
-    const EDIT_VIEW = 'admin.pdoi_subjects.edit';
+    const LIST_ROUTE = 'admin.rzs';
+    const EDIT_ROUTE = 'admin.rzs.edit';
+    const DELETE_ROUTE = 'admin.rzs.delete';
+    const STORE_ROUTE = 'admin.rzs.store';
+    const LIST_VIEW = 'admin.rzs.index';
+    const EDIT_VIEW = 'admin.rzs.edit';
 
     public function index(Request $request)
     {
@@ -27,7 +31,7 @@ class PdoiResponseSubjectController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = PdoiResponseSubject::with(['translation', 'parent'])
+        $items = PdoiResponseSubject::with(['translation', 'parent.translation', 'section.translation'])
             ->FilterBy($requestFilter)
             ->paginate($paginate);
         $toggleBooleanModel = 'PdoiResponseSubject';
@@ -45,32 +49,33 @@ class PdoiResponseSubjectController extends AdminController
      */
     public function edit(Request $request, PdoiResponseSubject $item)
     {
-        if( ($item && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
+        if( ($item->id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
-        $subjects = PdoiResponseSubject::optionsList();
+        $subjects = PdoiResponseSubject::optionsList($item->id);
+        $rzsSections = RzsSection::optionsList();
+        $areas = EkatteArea::optionsList();
+        $municipalities = EkatteMunicipality::optionsList();
+        $settlement = EkatteSettlement::optionsList();
+
         $storeRouteName = self::STORE_ROUTE;
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = PdoiResponseSubject::translationFieldsProperties();
-        return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName', 'listRouteName', 'subjects', 'translatableFields'));
+        return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName',
+            'listRouteName', 'subjects', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections'));
     }
 
-    public function store(PdoiResponseSubjectStoreRequest $request)
+    public function store(PdoiResponseSubjectStoreRequest $request, PdoiResponseSubject $item)
     {
+        $id = $item->id;
         $validated = $request->validated();
-        if( $request->isMethod('put') ) {
-            $item = $this->getRecord($validated['id'], ['translation']);
-        } else {
-            $item = new PdoiResponseSubject();
-        }
-
-        if( ($request->isMethod('put') && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
+        if( ($id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
 
         try {
             $fillable = $this->getFillableValidated($validated, $item);
-            if( $request->isMethod('post') ) {
+            if( !$id ) {
                 $fillable['adm_register'] = 1;
             }
             $fillable['redirect_only'] = $fillable['redirect_only'] ?? 0;
@@ -79,13 +84,13 @@ class PdoiResponseSubjectController extends AdminController
             $item->save();
             $this->storeTranslateOrNew(PdoiResponseSubject::TRANSLATABLE_FIELDS, $item, $validated);
 
-            if( $request->isMethod('put') ) {
+            if( $id ) {
                 return redirect(route(self::EDIT_ROUTE, $item) )
-                    ->with('success', trans_choice('custom.pdo_subjects', 1)." ".__('messages.updated_successfully_m'));
+                    ->with('success', trans_choice('custom.rzs_items', 1)." ".__('messages.updated_successfully_m'));
             }
 
             return to_route(self::LIST_ROUTE)
-                ->with('success', trans_choice('custom.pdo_subjects', 1)." ".__('messages.created_successfully_m'));
+                ->with('success', trans_choice('custom.rzs_items', 1)." ".__('messages.created_successfully_m'));
         } catch (\Exception $e) {
             Log::error($e);
             return redirect()->back()->withInput(request()->all())->with('danger', __('messages.system_error'));
@@ -104,7 +109,7 @@ class PdoiResponseSubjectController extends AdminController
             $item->delete();
 
             return to_route(self::LIST_ROUTE)
-                ->with('success', trans_choice('custom.pdo_subjects', 1)." ".__('messages.deleted_successfully_m'));
+                ->with('success', trans_choice('custom.rzs_items', 1)." ".__('messages.deleted_successfully_m'));
         }
         catch (\Exception $e) {
             Log::error($e);
@@ -124,6 +129,12 @@ class PdoiResponseSubjectController extends AdminController
                 'type' => 'text',
                 'placeholder' => __('validation.attributes.eik'),
                 'value' => $request->input('eik')
+            ),
+            'manual' => array(
+                'type' => 'checkbox',
+                'label' => __('validation.attributes.manual_rzs'),
+                'value' => 1,
+                'checked' => (int)$request->input('manual')
             )
         );
     }

@@ -1,5 +1,5 @@
 <div class="row mb-4">
-    <h5 class="bg-primary py-1 px-2 mb-4">{{ __('custom.pdoi_subjects.address_section') }}</h5>
+    <h5 class="bg-primary py-1 px-2 mb-4">{{ __('custom.rzs.address_section') }}</h5>
     <div class="col-md-3 col-12">
         <div class="form-group">
             <label class="col-sm-12 control-label" for="adm_level">{{ __('validation.attributes.area') }}<span class="required">*</span></label>
@@ -8,8 +8,8 @@
                     @if(!$item->id)
                         <option value="-1">---</option>
                     @endif
-                    @if(isset($regions) && $regions->count())
-                        @foreach($regions as $row)
+                    @if(isset($areas) && $areas->count())
+                        @foreach($areas as $row)
                             <option value="{{ $row->id }}" @if(old('region', ($item->id ? $item->region : 0)) == $row->id) selected @endif>{{ $row->name }}</option>
                         @endforeach
                     @endif
@@ -50,8 +50,8 @@
                     @if(!$item->id)
                         <option value="-1">---</option>
                     @endif
-                    @if(isset($towns) && $towns->count())
-                        @foreach($towns as $row)
+                    @if(isset($settlement) && $settlement->count())
+                        @foreach($settlement as $row)
                             <option value="{{ $row->id }}" @if(old('town', ($item->id ? $item->town : 0)) == $row->id) selected @endif>{{ $row->name }}</option>
                         @endforeach
                     @endif

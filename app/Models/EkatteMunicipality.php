@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\FilterSort;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Support\Facades\DB;
 
 class EkatteMunicipality extends ModelActivityExtend implements TranslatableContract
 {
@@ -42,5 +43,16 @@ class EkatteMunicipality extends ModelActivityExtend implements TranslatableCont
                 'rules' => ['required', 'string', 'max:200']
             ],
         );
+    }
+
+    public static function optionsList()
+    {
+        return DB::table('ekatte_municipality')
+            ->select(['ekatte_municipality.id', 'ekatte_municipality_translations.ime as name'])
+            ->join('ekatte_municipality_translations', 'ekatte_municipality_translations.ekatte_municipality_id', '=', 'ekatte_municipality.id')
+            ->where('ekatte_municipality.active', '=', 1)
+            ->where('ekatte_municipality_translations.locale', '=', app()->getLocale())
+            ->orderBy('ekatte_municipality_translations.ime', 'asc')
+            ->get();
     }
 }

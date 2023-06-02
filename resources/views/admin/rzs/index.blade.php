@@ -37,8 +37,8 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->eik }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->parent ? $item->parent->name : '' }}</td>
+                                    <td>{{ $item->subject_name }}</td>
+                                    <td>{{ $item->section ? $item->section->name : '' }}</td>
                                     <td>{{ $item->address }}</td>
                                     <td>
                                         @if(isset($toggleBooleanModel))

@@ -5,6 +5,7 @@ use App\Http\Controllers\{Auth\Admin\LoginController as AdminLoginControllerAlia
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\{PdoiResponseSubjectController as PdoiResponseSubjectControllerAlias,
     HomeController as AdminHomeController,
+    RzsSectionController,
     ActivityLogController,
     PermissionsController,
     UsersController,
@@ -92,11 +93,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/activity-logs/{activity}/show', 'show')->name('activity-logs.show');
     });
 
+    Route::controller(RzsSectionController::class)->group(function () {
+        Route::get('/rzs-sections',                'index')->name('rzs.sections')->middleware('can:viewAny,App\Models\PdoiResponseSubject');
+        Route::get('/rzs-sections/edit/{item?}',         'edit')->name('rzs.sections.edit');
+        Route::match(['post', 'put'], '/rzs-sections/store/{item?}',         'store')->name('rzs.sections.store');
+    });
+
     Route::controller(PdoiResponseSubjectControllerAlias::class)->group(function () {
-        Route::get('/pdoi-subjects',                'index')->name('pdo_subjects')->middleware('can:viewAny,App\Models\PdoiResponseSubject');
-        Route::get('/pdoi-subjects/edit/{subject?}',         'edit')->name('pdo_subjects.edit');
-        Route::match(['post', 'put'], '/pdoi-subjects/store/{id}',         'store')->name('pdo_subjects.store');
-        Route::get('/pdoi-subjects/{subject}/delete',  'delete')->name('pdo_subjects.delete');
+        Route::get('/rzs-subjects',                'index')->name('rzs')->middleware('can:viewAny,App\Models\PdoiResponseSubject');
+        Route::get('/rzs-subjects/edit/{item?}',         'edit')->name('rzs.edit');
+        Route::match(['post', 'put'], '/rzs-subjects/store/{item?}',         'store')->name('rzs.store');
+        Route::get('/rzs-subjects/{subject}/delete',  'delete')->name('rzs.delete');
     });
 
     //Nomenclature
