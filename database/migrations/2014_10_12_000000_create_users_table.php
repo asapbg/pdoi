@@ -22,6 +22,7 @@ return new class extends Migration
 
             $table->tinyInteger('user_type')->default(1);//external/internal
             $table->integer('profile_type')->default(0);//profile type depending on personal or company
+            $table->unsignedBigInteger('administrative_unit')->nullable();//internal user rzs
 
             $table->string('names');
             $table->tinyInteger('lang')->default(1);

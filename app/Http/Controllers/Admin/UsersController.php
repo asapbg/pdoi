@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
 use App\Models\CustomRole;
+use App\Models\PdoiResponseSubject;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -114,8 +115,9 @@ class  UsersController extends Controller
 
         $perms = Permission::orderBy('id', 'asc')->get();
         $perms = groupPermissions($perms);
+        $rzsSubjectOptions = PdoiResponseSubject::optionsList();
 
-        return $this->view('admin.users.create', compact('roles', 'perms'));
+        return $this->view('admin.users.create', compact('roles', 'perms', 'rzsSubjectOptions'));
     }
 
     /**
@@ -133,14 +135,11 @@ class  UsersController extends Controller
         $permissions = $data['permissions'] ?? [];
         foreach (['_token','password_confirmation','roles', 'permissions'] as $key){
             unset($data[$key]);
-            //TODO add to data when units are ready
-            unset($data['administrative_unit']);
         }
 
         DB::beginTransaction();
 
         try {
-
             $user = User::make($data);
             if ($must_change_password) {
                 $message = trans_choice('custom.users', 1)." {$data['username']} ".__('messages.created_successfully_m').". ".__('messages.email_send');
@@ -190,7 +189,9 @@ class  UsersController extends Controller
         $perms = Permission::orderBy('id', 'asc')->get();
         $perms = groupPermissions($perms);
         $item = $user;
-        return $this->view('admin.users.edit', compact('item', 'roles', 'perms'));
+        $rzsSubjectOptions = PdoiResponseSubject::optionsList();
+
+        return $this->view('admin.users.edit', compact('item', 'roles', 'perms', 'rzsSubjectOptions'));
     }
 
     /**
@@ -203,34 +204,28 @@ class  UsersController extends Controller
     public function update(User $user, UpdateUsersRequest $request)
     {
         $validated = $request->validated();
-        $roles = $validated['roles'];
-
+        $roles = $validated['roles'] ?? [];
         $permissions = $validated['permissions'] ?? [];
+
         foreach (['_token','password_confirmation','roles', 'permissions'] as $key){
             unset($validated[$key]);
-            //TODO add to data when units are ready
-            unset($validated['administrative_unit']);
         }
 
         DB::beginTransaction();
 
         try {
-
-            $user->username = $validated['username'];
-            $user->names = $validated['names'];
-            $user->email = $validated['email'];
+            if (isset($validated['password']) && !is_null($validated['password'])) {
+                $validated['password'] = bcrypt($validated['password']);
+                $validated['pass_last_change'] = Carbon::now();
+                $validated['pass_is_new'] = 1;
+            }
+            $user->fill($validated);
+            $user->save();
 
             $user->syncRoles($roles);
             $user->syncPermissions($permissions);
 
-            if (isset($validated['password']) && !is_null($validated['password'])) {
-                $user->password = bcrypt($validated['password']);
-                $user->pass_last_change = Carbon::now();
-                $user->pass_is_new = 1;
-            }
-
             $user->save();
-
             DB::commit();
 
             return to_route('admin.users')

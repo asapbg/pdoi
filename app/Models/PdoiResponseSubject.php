@@ -70,7 +70,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
      * @param array|int $ignoreId
      * @return \Illuminate\Support\Collection
      */
-    public static function optionsList(array|int $ignoreId): \Illuminate\Support\Collection
+    public static function optionsList(array|int $ignoreId = []): \Illuminate\Support\Collection
     {
         $query = DB::table('pdoi_response_subject')
             ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name'])

@@ -5,7 +5,7 @@
     </label>
     <div class="col-12">
         @php($usersTypes = isset($item) ? optionsUserTypes() : optionsUserTypes(true))
-        <select id="user_type" name="user_type"  class="form-control form-control-sm">
+        <select id="user_type" name="user_type"  class="form-control form-control-sm" @if(isset($item)) disabled @endif>
             @foreach($usersTypes as $val => $name)
                 <option value="{{ $val }}" @if(old('user_type', (isset($item) ? $item->user_type : '')) == $val) selected @endif>{{ $name }}</option>
             @endforeach
@@ -84,18 +84,28 @@
     </div>
 </div>
 
-<div class="form-group">
-    <label class="col-sm-12 control-label" for="email">
-        {{ __('validation.attributes.administrative_unit') }}
-    </label>
-    <div class="col-12">
-        <input type="text" placeholder="Още не е добавена номенклатура" id="administrative_unit" name="administrative_unit" class="form-control form-control-sm"
-               value="{{ old('administrative_unit', (isset($item) ? $item->org_id : '')) }}">
-        @error('administrative_unit')
-        <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
+@if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)
+    <div class="form-group @if(old('user_type', (isset($item) ? $item->user_type : '')) != \App\Models\User::USER_TYPE_INTERNAL) d-none @endif">
+        <label class="col-sm-12 control-label" for="email">
+            {{ __('validation.attributes.administrative_unit') }} <span class="required">*</span>
+        </label>
+        <div class="col-12">
+            <select id="administrative_unit" name="administrative_unit"  class="form-control form-control-sm select2">
+                @if(!isset($item))
+                    <option value="">---</option>
+                @endif
+                @if(isset($rzsSubjectOptions) && $rzsSubjectOptions->count())
+                    @foreach($rzsSubjectOptions as $rzs)
+                        <option value="{{ $rzs->id }}" @if((isset($item) ? $item->administrative_unit : '') == $rzs->id) selected @endif>{{ $rzs->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+            @error('administrative_unit')
+            <div class="text-danger mt-1">{{ $message }}</div>
+            @enderror
+        </div>
     </div>
-</div>
+@endif
 
 <div class="form-group">
     <label class="col-sm-12 control-label" for="lang">
@@ -150,4 +160,22 @@
             @enderror
         </div>
     </div>
+@endif
+
+@if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)
+    @push('scripts')
+        <script type="text/javascript">
+            $(document).ready(function (){
+                let internalUserType = parseInt(<?php echo \App\Models\User::USER_TYPE_INTERNAL; ?>);
+                $('#user_type').on('change', function (){
+                    console.log(parseInt($('#user_type').val()), internalUserType, parseInt($('#user_type').val()) === internalUserType);
+                    if( parseInt($('#user_type').val()) === internalUserType ) {
+                        $('#administrative_unit').closest('.form-group').removeClass('d-none');
+                    } else {
+                        $('#administrative_unit').closest('.form-group').addClass('d-none');
+                    }
+                });
+            });
+        </script>
+    @endpush
 @endif
