@@ -3,34 +3,35 @@
 namespace App\Http\Controllers\Admin\Nomenclature;
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Requests\EkatteSettlementStoreRequest;
-use App\Models\EkatteSettlement;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CountryStoreRequest;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class EkatteSettlementController extends AdminController
+class CountryController extends AdminController
 {
-    const LIST_ROUTE = 'admin.nomenclature.ekatte.settlement';
-    const EDIT_ROUTE = 'admin.nomenclature.ekatte.settlement.edit';
-    const STORE_ROUTE = 'admin.nomenclature.ekatte.settlement.store';
-    const LIST_VIEW = 'admin.nomenclatures.ekatte.settlement.index';
-    const EDIT_VIEW = 'admin.nomenclatures.ekatte.settlement.edit';
+    const LIST_ROUTE = 'admin.nomenclature.ekatte.country';
+    const EDIT_ROUTE = 'admin.nomenclature.ekatte.country.edit';
+    const STORE_ROUTE = 'admin.nomenclature.ekatte.country.store';
+    const LIST_VIEW = 'admin.nomenclatures.ekatte.country.index';
+    const EDIT_VIEW = 'admin.nomenclatures.ekatte.country.edit';
 
     public function index(Request $request)
     {
         $requestFilter = $request->all();
         $filter = $this->filters($request);
-        $paginate = $filter['paginate'] ?? EkatteSettlement::PAGINATE;
+        $paginate = $filter['paginate'] ?? Country::PAGINATE;
 
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = EkatteSettlement::with(['translation'])
+        $items = Country::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('ime')
+            ->orderByTranslation('name')
             ->paginate($paginate);
-        $toggleBooleanModel = 'EkatteSettlement';
+        $toggleBooleanModel = 'Country';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;
 
@@ -39,47 +40,42 @@ class EkatteSettlementController extends AdminController
 
     /**
      * @param Request $request
-     * @param EkatteSettlement $item
+     * @param Country $item
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function edit(Request $request, EkatteSettlement $item)
+    public function edit(Request $request, Country $item)
     {
-        if( ($item && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', EkatteSettlement::class) ) {
+        if( ($item && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', Country::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
         $storeRouteName = self::STORE_ROUTE;
         $listRouteName = self::LIST_ROUTE;
-        $translatableFields = EkatteSettlement::translationFieldsProperties();
+        $translatableFields = Country::translationFieldsProperties();
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName', 'listRouteName', 'translatableFields'));
     }
 
-    public function store(EkatteSettlementStoreRequest $request, EkatteSettlement $item)
+    public function store(CountryStoreRequest $request, Country $item)
     {
         $id = $item->id;
         $validated = $request->validated();
-
         if( ($id && $request->user()->cannot('update', $item))
-            || $request->user()->cannot('create', EkatteSettlement::class) ) {
+            || $request->user()->cannot('create', Country::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
 
         try {
             $fillable = $this->getFillableValidated($validated, $item);
-
-            if( !$id ) {
-                $fillable['valid'] = 'Y';
-            }
             $item->fill($fillable);
             $item->save();
-            $this->storeTranslateOrNew(EkatteSettlement::TRANSLATABLE_FIELDS, $item, $validated);
+            $this->storeTranslateOrNew(Country::TRANSLATABLE_FIELDS, $item, $validated);
 
             if( $id ) {
                 return redirect(route(self::EDIT_ROUTE, $item) )
-                    ->with('success', trans_choice('custom.nomenclature.settlements', 1)." ".__('messages.updated_successfully_m'));
+                    ->with('success', trans_choice('custom.nomenclature.country', 1)." ".__('messages.updated_successfully_m'));
             }
 
             return to_route(self::LIST_ROUTE)
-                ->with('success', trans_choice('custom.nomenclature.settlements', 1)." ".__('messages.created_successfully_m'));
+                ->with('success', trans_choice('custom.nomenclature.country', 1)." ".__('messages.created_successfully_m'));
         } catch (\Exception $e) {
             Log::error($e);
             return redirect()->back()->withInput(request()->all())->with('danger', __('messages.system_error'));
@@ -104,7 +100,7 @@ class EkatteSettlementController extends AdminController
      */
     private function getRecord($id, array $with = []): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Builder|array|null
     {
-        $qItem = EkatteSettlement::query();
+        $qItem = Country::query();
         if( sizeof($with) ) {
             $qItem->with($with);
         }

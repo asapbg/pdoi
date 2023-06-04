@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\{PdoiResponseSubjectController as PdoiResponseSub
 use App\Http\Controllers\Admin\Nomenclature\EkatteAreaController;
 use App\Http\Controllers\Admin\Nomenclature\EkatteMunicipalityController;
 use App\Http\Controllers\Admin\Nomenclature\EkatteSettlementController;
+use App\Http\Controllers\Admin\Nomenclature\CountryController;
+use App\Http\Controllers\Admin\Nomenclature\ProfileTypeController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -107,22 +109,34 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
     });
 
     //Nomenclature
+    Route::controller(CountryController::class)->group(function () {
+        Route::get('/nomenclature/country',                'index')->name('nomenclature.ekatte.country')->middleware('can:viewAny,App\Models\Country');
+        Route::get('/nomenclature/country/edit/{item?}',         'edit')->name('nomenclature.ekatte.country.edit');
+        Route::match(['post', 'put'], '/nomenclature/country/store/{item?}',         'store')->name('nomenclature.ekatte.country.store');
+    });
+
     Route::controller(EkatteAreaController::class)->group(function () {
-        Route::get('/ekatte/area',                'index')->name('nomenclature.ekatte.area')->middleware('can:viewAny,App\Models\EkatteArea');
-        Route::get('/ekatte/area/edit/{item?}',         'edit')->name('nomenclature.ekatte.area.edit');
-        Route::match(['post', 'put'], '/ekatte/area/store/{item?}',         'store')->name('nomenclature.ekatte.area.store');
+        Route::get('/nomenclature/area',                'index')->name('nomenclature.ekatte.area')->middleware('can:viewAny,App\Models\EkatteArea');
+        Route::get('/nomenclature/area/edit/{item?}',         'edit')->name('nomenclature.ekatte.area.edit');
+        Route::match(['post', 'put'], '/nomenclature/area/store/{item?}',         'store')->name('nomenclature.ekatte.area.store');
     });
 
     Route::controller(EkatteMunicipalityController::class)->group(function () {
-        Route::get('/ekatte/municipality',                'index')->name('nomenclature.ekatte.municipality')->middleware('can:viewAny,App\Models\EkatteMunicipality');
-        Route::get('/ekatte/municipality/edit/{item?}',         'edit')->name('nomenclature.ekatte.municipality.edit');
-        Route::match(['post', 'put'], '/ekatte/municipality/store/{item?}',         'store')->name('nomenclature.ekatte.municipality.store');
+        Route::get('/nomenclature/municipality',                'index')->name('nomenclature.ekatte.municipality')->middleware('can:viewAny,App\Models\EkatteMunicipality');
+        Route::get('/nomenclature/municipality/edit/{item?}',         'edit')->name('nomenclature.ekatte.municipality.edit');
+        Route::match(['post', 'put'], '/nomenclature/municipality/store/{item?}',         'store')->name('nomenclature.ekatte.municipality.store');
     });
 
     Route::controller(EkatteSettlementController::class)->group(function () {
-        Route::get('/ekatte/settlement',                'index')->name('nomenclature.ekatte.settlement')->middleware('can:viewAny,App\Models\EkatteSettlement');
-        Route::get('/ekatte/settlement/edit/{item?}',         'edit')->name('nomenclature.ekatte.settlement.edit');
-        Route::match(['post', 'put'], '/ekatte/settlement/store/{item?}',         'store')->name('nomenclature.ekatte.settlement.store');
+        Route::get('/nomenclature/settlement',                'index')->name('nomenclature.ekatte.settlement')->middleware('can:viewAny,App\Models\EkatteSettlement');
+        Route::get('/nomenclature/settlement/edit/{item?}',         'edit')->name('nomenclature.ekatte.settlement.edit');
+        Route::match(['post', 'put'], '/nomenclature/settlement/store/{item?}',         'store')->name('nomenclature.ekatte.settlement.store');
+    });
+
+    Route::controller(ProfileTypeController::class)->group(function () {
+        Route::get('/nomenclature/profile-type',                'index')->name('nomenclature.profile_type')->middleware('can:viewAny,App\Models\ProfileType');
+        Route::get('/nomenclature/profile-type/edit/{item?}',         'edit')->name('nomenclature.profile_type.edit');
+        Route::match(['post', 'put'], '/nomenclature/profile-type/store/{item?}',         'store')->name('nomenclature.profile_type.store');
     });
 
 });

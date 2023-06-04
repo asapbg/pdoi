@@ -22,7 +22,7 @@
                     </a>
                 </li>
 
-                <!-- Admin -->
+                <!-- RZS subjects and sections -->
                 @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_sections', 'administration.rzs_items'])
                     <li class="nav-item">
                         <a href="#" class="nav-link @if(strstr(url()->current(), 'rzs-')) active @endif">
@@ -53,33 +53,56 @@
                         @endcan
                     </li>
                 @endcanany
+{{--                Nomenlatures--}}
                 @canany(['manage.*', 'administration.*', 'administration.system_classification'])
                     <li class="nav-header">{{ trans_choice('custom.nomenclatures', 2) }}</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link @if(strstr(url()->current(), 'ekatte')) active @endif">
+                        <a href="#" class="nav-link @if(Str::contains(url()->current(), ['nomenclature/country', 'nomenclature/area', 'nomenclature/municipality', 'nomenclature/settlement'])) active @endif">
                             <i class="nav-icon fas fa-layer-group"></i>
                             <p>EKATTE<i class="fas fa-angle-left right"></i></p>
                         </a>
                         <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.ekatte.country') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/country')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.country', 2) }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('admin.nomenclature.ekatte.area') }}"
-                                   class="nav-link @if(strstr(url()->current(), 'ekatte/area')) active @endif">
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/area')) active @endif">
                                     <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
                                     <p>{{ trans_choice('custom.nomenclature.areas', 2) }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('admin.nomenclature.ekatte.municipality') }}"
-                                   class="nav-link @if(strstr(url()->current(), 'ekatte/municipality')) active @endif">
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/municipality')) active @endif">
                                     <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
                                     <p>{{ trans_choice('custom.nomenclature.municipalities', 2) }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('admin.nomenclature.ekatte.settlement') }}"
-                                   class="nav-link @if(strstr(url()->current(), 'ekatte/settlement')) active @endif">
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/settlement')) active @endif">
                                     <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
                                     <p>{{ trans_choice('custom.nomenclature.settlements', 2) }}</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link @if(Str::contains(url()->current(), ['nomenclature/profile-type']))) active @endif">
+                            <i class="nav-icon fas fa-stream"></i>
+                            <p>Системни<i class="fas fa-angle-left right"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.profile_type') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/profile-type')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.profile_type', 2) }}</p>
                                 </a>
                             </li>
                         </ul>

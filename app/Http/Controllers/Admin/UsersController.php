@@ -34,7 +34,7 @@ class  UsersController extends Controller
      */
     public function index(Request $request)
     {
-        if(!auth()->user()->can('manage.users-roles')) {
+        if(!auth()->user()->canany('manage.*', 'users.*')) {
             return back()->with('danger', __('messages.no_rights_to_view_content'));
         }
 
@@ -104,7 +104,7 @@ class  UsersController extends Controller
      */
     public function create()
     {
-        if(!auth()->user()->can('manage.users-roles')) {
+        if(!auth()->user()->canany('manage.*', 'users.*')) {
             return back()->with('danger', __('messages.no_rights_to_view_content'));
         }
 
@@ -180,7 +180,7 @@ class  UsersController extends Controller
      */
     public function edit(User $user)
     {
-        if(!auth()->user()->can('manage.users-roles')) {
+        if(!auth()->user()->canany('manage.*', 'users.*')) {
             return back()->with('danger', __('messages.no_rights_to_view_content'));
         }
 

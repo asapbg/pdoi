@@ -32,6 +32,10 @@ class User extends Authenticatable
     const USER_TYPE_EXTERNAL = 2;
     const USER_TYPE_INTERNAL = 1;
 
+    //Legal form
+    const USER_TYPE_PERSON = 1;
+    const USER_TYPE_COMPANY = 2;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -106,6 +110,19 @@ class User extends Authenticatable
         return [
             self::USER_TYPE_INTERNAL     => __('custom.users.type.'.self::USER_TYPE_INTERNAL),
             self::USER_TYPE_EXTERNAL   => __('custom.users.type.'.self::USER_TYPE_EXTERNAL),
+        ];
+    }
+
+    /**
+     * Get user types
+     *
+     * @return array
+     */
+    public static function getUserLegalForms(): array
+    {
+        return [
+            self::USER_TYPE_PERSON     => __('custom.users.legal_form.'.self::USER_TYPE_INTERNAL),
+            self::USER_TYPE_COMPANY   => __('custom.users.legal_form.'.self::USER_TYPE_EXTERNAL),
         ];
     }
 

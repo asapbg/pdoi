@@ -89,6 +89,9 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('rzs_section_translations');
+        Schema::dropIfExists('rzs_section');
+        Schema::dropIfExists('pdoi_response_subject_translations');
         Schema::dropIfExists('pdoi_response_subject');
     }
 };
