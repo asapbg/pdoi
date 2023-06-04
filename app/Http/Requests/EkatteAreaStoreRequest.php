@@ -34,9 +34,9 @@ class EkatteAreaStoreRequest extends FormRequest
             'active' => ['required', 'numeric', 'gt:0'],
         ];
 
-        if( $this->isMethod('put') ) {
+        if( request()->isMethod('put') ) {
             $rules['id'] = ['required', 'numeric', 'exists:ekatte_area'];
-            $rules['oblast'][] = Rule::unique('ekatte_area')->ignore($this->input('id'));
+            $rules['oblast'][] = Rule::unique('ekatte_area')->ignore(request()->input('id'));
         } else {
             $rules['oblast'][] = 'unique:ekatte_area';
         }

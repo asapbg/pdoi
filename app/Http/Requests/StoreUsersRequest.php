@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class StoreUsersRequest extends FormRequest
@@ -43,7 +44,13 @@ class StoreUsersRequest extends FormRequest
             $rules['user_type'] = ['required' ,'numeric', 'gt:0'];
         }
 
-        if( $this->input('user_type') && $this->input('user_type') == User::USER_TYPE_INTERNAL ) {
+        if( request()->isMethod('post') ) {
+            $rules['email'][] = 'unique:users,email';
+        } else{
+            $rules['email'][] = Rule::unique('users', 'email')->ignore((int)request()->input('id'));
+        }
+
+        if( request()->input('user_type') && request()->input('user_type') == User::USER_TYPE_INTERNAL ) {
             $rules['administrative_unit'] = ['required', 'numeric', 'exists:pdoi_response_subject,id'];
         }
 

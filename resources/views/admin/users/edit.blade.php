@@ -9,7 +9,10 @@
 
                     <form action="{{ route('admin.users.update', $item->id) }}" method="post" name="form" id="form">
                         @csrf
-                        @method('PUT')
+                        @if(isset($item) && $item->id)
+                            @method('PUT')
+                        @endif
+                        <input type="hidden" name="id" value="{{ isset($item) && $item->id ? $item->id : 0 }}">
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 @include('admin.users.partial.user_general_form')

@@ -34,9 +34,9 @@ class EkatteMunicipalityStoreRequest extends FormRequest
             'active' => ['required', 'numeric', 'gt:0'],
         ];
 
-        if( $this->isMethod('put') ) {
+        if( request()->isMethod('put') ) {
             $rules['id'] = ['required', 'numeric', 'exists:ekatte_municipality'];
-            $rules['obstina'][] = Rule::unique('ekatte_municipality')->ignore($this->input('id'));
+            $rules['obstina'][] = Rule::unique('ekatte_municipality')->ignore((int)request()->input('id'));
         } else {
             $rules['obstina'][] = 'unique:ekatte_municipality';
         }

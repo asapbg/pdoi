@@ -10,6 +10,7 @@
                 <form action="{{ route('admin.users.profile.update', $user->id) }}" method="post" name="form" id="form">
                     @csrf
 
+                    <input type="hidden" name="id" value="{{ $user->id }}">
                     <input type="hidden" name="roles[]" value="{{ $user->roles()->first()->id }}">
                     <div class="form-group">
                         <div class="col-12 pt-2">
@@ -22,36 +23,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-12 control-label" for="first_name">
+                        <label class="col-sm-12 control-label" for="names">
                             {{ __('validation.attributes.first_name') }}<span class="required">*</span>
                         </label>
                         <div class="col-12">
-                            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ old('first_name') ?? $user->first_name }}">
-                            @error('first_name')
-                            <div class="text-danger mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-12 control-label" for="middle_name">
-                            {{ __('validation.attributes.middle_name') }}
-                        </label>
-                        <div class="col-12">
-                            <input type="text" id="middle_name" name="middle_name" class="form-control" value="{{ old('middle_name') ?? $user->middle_name }}">
-                            @error('middle_name')
-                            <div class="text-danger mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-12 control-label" for="last_name">
-                            {{ __('validation.attributes.last_name') }}<span class="required">*</span>
-                        </label>
-                        <div class="col-12">
-                            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ old('last_name') ?? $user->last_name }}">
-                            @error('last_name')
+                            <input type="text" id="names" name="names" class="form-control" value="{{ old('names') ?? $user->names }}">
+                            @error('names')
                             <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror
                         </div>

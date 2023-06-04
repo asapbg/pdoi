@@ -40,9 +40,9 @@ class EkatteSettlementStoreRequest extends FormRequest
             'active' => ['required', 'numeric', 'gt:0'],
         ];
 
-        if( $this->isMethod('put') ) {
+        if( request()->isMethod('put') ) {
             $rules['id'] = ['required', 'numeric', 'exists:ekatte_settlement'];
-            $rules['obstina'][] = Rule::unique('ekatte_settlement')->ignore($this->input('id'));
+            $rules['obstina'][] = Rule::unique('ekatte_settlement')->ignore((int)request()->input('id'));
         } else {
             $rules['obstina'][] = 'unique:ekatte_settlement';
         }

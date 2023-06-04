@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\StoreUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
 use App\Models\CustomRole;
@@ -260,20 +261,19 @@ class  UsersController extends Controller
      * @param UpdateUsersRequest $request
      * @return RedirectResponse
      */
-    public function updateProfile(User $user, UpdateUsersRequest $request)
+    public function updateProfile(User $user, ProfileUpdateRequest $request)
     {
         $data = $request->except(['_token']);
 
         try {
 
-            $user->first_name = $data['first_name'];
-            $user->middle_name = $data['middle_name'];
-            $user->last_name = $data['last_name'];
-            $user->email = $data['email'];
+            $user->username = $data['username'];
+            $user->names = $data['names'];
 
             if (!is_null($data['password'])) {
                 $user->password = bcrypt($data['password']);
                 $user->password_changed_at = Carbon::now();
+                $user->pass_is_new = 1;
             }
 
             $user->save();

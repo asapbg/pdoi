@@ -29,7 +29,7 @@ class CountryStoreRequest extends FormRequest
             'active' => ['required', 'numeric', 'gt:0'],
         ];
 
-        if( $this->isMethod('put') ) {
+        if( request()->isMethod('put') ) {
             $rules['id'] = ['required', 'numeric', 'exists:country'];
         }
 

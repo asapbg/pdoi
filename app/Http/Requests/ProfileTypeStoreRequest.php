@@ -31,7 +31,7 @@ class ProfileTypeStoreRequest extends FormRequest
             'user_legal_form' => ['required', 'numeric', Rule::in(array_keys(User::getUserLegalForms()))],
         ];
 
-        if( $this->isMethod('put') ) {
+        if( request()->isMethod('put') ) {
             $rules['id'] = ['required', 'numeric', 'exists:country'];
         }
 

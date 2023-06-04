@@ -44,12 +44,12 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
             'active' => ['required', 'numeric', 'gt:0'],
         ];
 
-        if( (int)$this->input('parent_id') > 0 ){
+        if( (int)request()->input('parent_id') > 0 ){
             $rules['parent_id'][] = 'exists:pdoi_response_subject,id';
             $rules['parent_id'][] = 'numeric';
         }
 
-        if( $this->isMethod('put') ) {
+        if( request()->isMethod('put') ) {
             $rules['id'] = ['required', 'numeric', 'exists:pdoi_response_subject'];
 //            $rules['eik'][] = Rule::unique('pdoi_response_subject')->ignore($this->input('id'));
         } else {
