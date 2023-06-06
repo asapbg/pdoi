@@ -32,14 +32,6 @@ Route::group(['middleware' => ['auth', 'administration']], function() {
 //    Route::match(['get'],'/logout', [LoginController::class, 'logout'])->name('logout');
 //    Route::match(['get', 'post'],'/logout', [LoginController::class, 'logout'])->name('logout');
 
-    Route::get('/locale', function (Request $request) {
-        if ($request->has('locale')) {
-            session(['locale' => $request->offsetGet('locale')]);
-            app()->setLocale($request->offsetGet('locale'));
-        }
-        return back();
-    })->name('change-locale');
-
     Route::controller(CommonController::class)->group(function () {
         Route::get('/toggle-boolean', 'toggleBoolean')->name('toggle-boolean');
         Route::get('/toggle-permissions', 'togglePermissions')->name('toggle-permissions');

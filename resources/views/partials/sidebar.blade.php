@@ -22,6 +22,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="/admin-list-application.html"
+                       class="nav-link @if(strstr(url()->current(), 'users/profile/')) active @endif">
+                        <i class="fas fa-file-alt"></i>
+                        <p>Заявления</p>
+                    </a>
+                </li>
                 <!-- RZS subjects and sections -->
                 @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_sections', 'administration.rzs_items'])
                     <li class="nav-item">

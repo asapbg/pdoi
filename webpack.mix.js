@@ -56,3 +56,15 @@ mix.styles([
     'resources/adminlte-3.2/dist/css/main.css',
     'resources/css/admin.css'
 ], 'public/css/admin.css');
+
+mix.scripts([
+    'resources/js/front/jquery-3.7.0.js',
+    // 'resources/js/front/bootstrap-5.3/bootstrap.min.js',
+    'resources/js/front/bootstrap-5.3/bootstrap.bundle.min.js',
+    'resources/js/front/app.js',
+], 'public/js/app.js');
+
+mix.styles([
+    'resources/css/front/bootstrap-5.3/bootstrap.min.css',
+    'resources/css/app.css'
+], 'public/css/app.css');
