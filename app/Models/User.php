@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
@@ -14,7 +18,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmailContract
 {
     use HasFactory;
     use SoftDeletes;
@@ -22,6 +26,7 @@ class User extends Authenticatable
     use CausesActivity;
     use Notifiable;
     use HasRoles;
+    use MustVerifyEmail;
 
     protected string $logName = "users";
 
@@ -31,6 +36,8 @@ class User extends Authenticatable
 
     const USER_TYPE_EXTERNAL = 2;
     const USER_TYPE_INTERNAL = 1;
+
+    const EXTERNAL_USER_DEFAULT_ROLE = 'external_user';
 
     //Legal form
     const USER_TYPE_PERSON = 1;
@@ -169,13 +176,26 @@ class User extends Authenticatable
     public function scopeIsActive($query)
     {
         $query->where('users.status', '<>', self::STATUS_INACTIVE)
-            ->where('active', 1);
+            ->where('users.active', 1);
     }
 
-    public function scopeIsInActive($query)
+    public function scopeIsInactive($query)
     {
         $query->where('users.status', self::STATUS_INACTIVE)
-            ->where('active', 0);
+            ->where('users.active', 0);
+    }
+
+    public function scopeNotVerified($query, $id)
+    {
+        $query->where('users.status', self::STATUS_REG_IN_PROCESS)
+            ->whereNull('users.email_verified_at')
+            ->where('users.id', '=', $id)
+            ->where('users.user_type', '=', User::USER_TYPE_EXTERNAL);
+    }
+
+    public function scopeIsInProcess($query)
+    {
+        $query->where('users.status', self::STATUS_REG_IN_PROCESS);
     }
 
     public function scopeByActiveState($query, $active)
@@ -183,7 +203,7 @@ class User extends Authenticatable
         if( $active ) {
             $query->IsActive();
         } else{
-            $query->IsInActive();
+            $query->IsInactive();
         }
     }
 

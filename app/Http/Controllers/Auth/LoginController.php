@@ -86,10 +86,12 @@ class LoginController extends Controller
 
         // First check if the user is active or
         // has entered a password after the account was created
-        $user = $model::where('username', $username)
-            ->orWhere('email', $username)
-            ->first();
-        $user = null; //TODO fix me prevent we login at this moment
+        $user = $model::where('user_type', User::USER_TYPE_EXTERNAL)
+            ->where(function ($q) use ($username){
+                $q->where('username', $username)
+                    ->orWhere('email', $username);
+            })->first();
+
         if (!$user) {
             throw ValidationException::withMessages([
                 'error' => [trans('auth.no_user_found', ['username' => $username])],
@@ -107,12 +109,12 @@ class LoginController extends Controller
             //return $this->sendLockoutResponse($request);
         }
 
-//        if ($user->active == false) {
-//            $this->incrementLoginAttempts($request);
-//            throw ValidationException::withMessages([
-//                'error' => [trans('auth.active')],
-//            ]);
-//        }
+        if ($user->status == User::STATUS_REG_IN_PROCESS) {
+            throw ValidationException::withMessages([
+                'error' => [trans('auth.verify_email')],
+            ]);
+        }
+
         if (!$user->pass_is_new) {
             $this->incrementLoginAttempts($request);
             throw ValidationException::withMessages([

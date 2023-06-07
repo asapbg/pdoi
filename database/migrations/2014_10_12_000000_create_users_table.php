@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('profile_type')->default(0);//profile type depending on personal or company
             $table->unsignedBigInteger('administrative_unit')->nullable();//internal user rzs
 
-            $table->string('names');
+            $table->string('names')->nullable();
             $table->tinyInteger('lang')->default(1);
             $table->string('email')->nullable();
             $table->string('phone', 50)->nullable();

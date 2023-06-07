@@ -2,6 +2,11 @@
 
 @section('content')
     <section class="content">
+        @if (session('verified'))
+            <div class="alert alert-success" role="alert">
+                {{ __('auth.success_verify') }}
+            </div>
+        @endif
         <div class="d-flex gap-md-4 flex-wrap justify-content-center">
             <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
                 <a href="" title="" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">

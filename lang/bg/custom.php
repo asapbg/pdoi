@@ -223,10 +223,13 @@ return [
     'altitude'                         => 'altitude',
 
     //
+    'logout'                                    => 'Изход',
+    'register'                                  => 'Регистрация',
+    'instructions'                              => 'Инструкции',
+    'options_for_blind'                         => 'Опции за незрящи',
     'general_info'                              => 'Основна информация',
     'in_reg_process'                            => 'В процес на регистрация',
     'council_ministers'                         => 'Министрески съвет',
-'app_full_name'                                 => 'Платформа за достъп до обществена информация',
     //roles and permissions
     'permissions.group_permission'              => 'Група (права)',
     'permissions.as_new_group'                  => 'Нова група права',

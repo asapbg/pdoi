@@ -20,15 +20,27 @@
                         <a href="{{ route('change-locale', ['locale' => $locale['code']]) }}" class="nav-link d-inline-block @if(app()->getLocale() == $locale['code']) fw-bold @endif">{{ mb_strtoupper($locale['code']) }}</a>
                     @endforeach
                 </li>
+                @if(auth()->user() && auth()->user()->user_type == \App\Models\User::USER_TYPE_EXTERNAL)
+                    <li class="nav-item pull-right">
+                        <a href="" class="nav-link"><i class="fa-solid fa-user text-primary me-1"></i>{{ auth()->user()->username }}</a>
+                    </li>
+                @else
+                    <li class="nav-item pull-right">
+                        <a href="{{ route('login') }}" class="nav-link d-inline-block">{{ __('custom.login') }}</a> |
+                        <a href="{{ route('register') }}" class="nav-link d-inline-block">{{ __('custom.register') }}</a>
+                    </li>
+                @endif
                 <li class="nav-item pull-right">
-                    <a href="/profile.html" class="nav-link"><i class="fa-solid fa-user text-primary me-1"></i>k.ivanov</a>
+                    <a href="" class="nav-link"><i class="fa-solid fa-circle-question text-primary me-1" data-bs-toggle="tooltip" data-bs-title="{{ __('custom.instructions') }}"></i></a>
                 </li>
                 <li class="nav-item pull-right">
-                    <a href="/register.html" class="nav-link"><i class="fa-solid fa-circle-question text-primary me-1"></i></a>
+                    <a href="" class="nav-link"><i class="fa-solid fa-eye-slash text-primary" data-bs-toggle="tooltip" data-bs-title="{{ __('custom.options_for_blind') }}"></i></a>
                 </li>
-                <li class="nav-item pull-right">
-                    <a href="/profile.html" class="nav-link"><i class="fa-solid fa-eye-slash text-primary"></i></a>
-                </li>
+                @if(auth()->user() && auth()->user()->user_type == \App\Models\User::USER_TYPE_EXTERNAL)
+                    <li class="nav-item pull-right">
+                        <a href="{{ route('front.logout') }}" class="nav-link">{{ __('custom.logout') }}</a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

@@ -25,10 +25,8 @@
     <main class="px-md-5 px-3 pt-3 pb-md-5 pb-3">
         @foreach(['success', 'warning', 'danger', 'info'] as $msgType)
             @if(Session::has($msgType))
-                <div class="alert alert-{{$msgType}} mt-1" role="alert">{!! Session::get($msgType) !!}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="alert alert-{{$msgType}} mt-1 alert-dismissible" role="alert">{!! Session::get($msgType) !!}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
         @endforeach

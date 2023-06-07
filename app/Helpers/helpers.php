@@ -324,3 +324,24 @@ if (!function_exists('optionsStatuses')) {
         return $options;
     }
 }
+
+if (!function_exists('getLocaleId')) {
+
+    /**
+     * returns id of the current locale based on configuration
+     *
+     * @method getLocaleId
+     * @param string $code
+     * @return int
+     */
+    function getLocaleId(string $code): int
+    {
+        $id = 1; //by default get first language
+        foreach (config('available_languages') as $key => $lang) {
+            if( $code == $lang['code'] ) {
+                $id = $key;
+            }
+        }
+        return $id;
+    }
+}

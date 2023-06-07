@@ -17,11 +17,8 @@ use App\Http\Controllers\Admin\Nomenclature\EkatteSettlementController;
 use App\Http\Controllers\Admin\Nomenclature\CountryController;
 use App\Http\Controllers\Admin\Nomenclature\ProfileTypeController;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-
-Auth::routes(['verify' => true]);
 
 Route::match(['get'],'/admin/logout', [AdminLoginControllerAlias::class, 'logout'])->name('admin.logout');
 // Common routes
