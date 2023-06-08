@@ -345,3 +345,18 @@ if (!function_exists('getLocaleId')) {
         return $id;
     }
 }
+
+if (!function_exists('logError')) {
+
+    /**
+     * Write to error log file
+     *
+     * @method logError
+     * @param string $method
+     * @param string $error
+     */
+    function logError(string $method, string $error): void
+    {
+        \Illuminate\Support\Facades\Log::error(\Illuminate\Support\Carbon::now().' '.$method.': '.$error );
+    }
+}

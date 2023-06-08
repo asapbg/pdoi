@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CustomRole;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Rules\AlphaSpace;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Registered;
@@ -57,6 +58,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'names' => ['required', 'string', 'max:255', new AlphaSpace()],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -71,11 +73,13 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
+            'names' => $data['names'],
             'email' => $data['email'],
             'username' => $data['email'],
             'lang' => getLocaleId(app()->getLocale()),
             'user_type' => User::USER_TYPE_EXTERNAL,
             'password' => Hash::make($data['password']),
+            'pass_is_new' => 1,
         ]);
         $respondentRole = CustomRole::where('name', User::EXTERNAL_USER_DEFAULT_ROLE)->first();
         $user->assignRole($respondentRole);

@@ -15,8 +15,17 @@
                     @csrf
                     <div class="row">
                         <div class="form-group form-group-sm col-12 mb-3">
+                            <label class="form-label fw-semibold" for="names">{{ __('validation.attributes.names') }}: <span class="required">*</span></label>
+                            <input class="form-control form-control-sm @error('names') is-invalid @enderror" type="text" value="{{ old('names', '') }}" name="names" id="names" required autocomplete="off">
+                            @error('names')
+                            <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label fw-semibold" for="email">{{ __('validation.attributes.email') }}: <span class="required">*</span></label>
-                            <input class="form-control form-control-sm @error('email') is-invalid @enderror" type="text" value="{{ old('email', '') }}" name="email" id="email" required autocomplete="off">
+                            <input class="form-control form-control-sm @error('email') is-invalid @enderror" type="email" value="{{ old('email', '') }}" name="email" id="email" required autocomplete="off">
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

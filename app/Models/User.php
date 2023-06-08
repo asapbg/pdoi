@@ -173,6 +173,13 @@ class User extends Authenticatable implements MustVerifyEmailContract
         );
     }
 
+    protected function legalForm(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => (!empty($this->person_identity) ? self::USER_TYPE_PERSON : (!empty($this->company_identity) ? self::USER_TYPE_COMPANY : 0)),
+        );
+    }
+
     public function scopeIsActive($query)
     {
         $query->where('users.status', '<>', self::STATUS_INACTIVE)

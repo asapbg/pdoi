@@ -118,6 +118,7 @@ return [
     'url'         => 'Полето :attribute е в невалиден формат.',
     'uuid'        => ':attribute трябва да бъде валиден UUID.',
 
+    'alpha_space' => ':attribute трябва да съдържа единствено букви и интервал',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -260,5 +261,12 @@ return [
         'tsb'                       => 'ТСБ',
         'manual_rzs'                => 'Ръчно регистриран',
         'user_legal_form'           => 'Правна форма',
+        'legal_form'                => 'Правна форма',
+        'profile_type'              => 'Тип профил',
+        'person_identity'           => 'ЕГН/ЛНЧ',
+        'company_identity'          => 'ЕИК/БУЛСТАТ',
+        'post_code'                 => 'Пощенски код',
+        'address_second'            => 'Адрес (втори)',
+        'delivery_method'            => 'Начин на получаване на исканата обществена информация',
     ],
 ];

@@ -25,23 +25,15 @@ Route::match(['get'],'/admin/logout', [AdminLoginControllerAlias::class, 'logout
 Route::group(['middleware' => ['auth', 'administration']], function() {
 
     Route::get('/admin', [AdminHomeController::class, 'index'])->name('admin.home');
-//    Route::get('/admin', [AdminHomeController::class, 'index'])->name('admin.home');
-//    Route::match(['get'],'/logout', [LoginController::class, 'logout'])->name('logout');
-//    Route::match(['get', 'post'],'/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::controller(CommonController::class)->group(function () {
         Route::get('/toggle-boolean', 'toggleBoolean')->name('toggle-boolean');
         Route::get('/toggle-permissions', 'togglePermissions')->name('toggle-permissions');
     });
-
-    Route::fallback(function(){
-        Log::channel('info')->info('Path not found; User ip: '.request()->ip().'; Url: '.request()->getPathInfo());
-        return response()->view('errors.404', [], 404);
-    });
 });
 
 // Admin
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'administration', 'validated']], function() {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'administration']], function() {
 
     Route::controller(UsersController::class)->group(function () {
         Route::name('users.profile.edit')->get('/users/profile/{user}/edit', 'editProfile');

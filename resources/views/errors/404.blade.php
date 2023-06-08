@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title')
     {{ __('custom.page_404_text') }}
@@ -14,9 +14,9 @@
 @section('content')
     <div class="container">
         <div class="col-xs-12 pt-4">
-            <div class="alert alert-warning">
+            <div class="alert alert-warning text-center">
                 {{ __('custom.page_404_text') }}
-                <a href="{{ url('/') }}" class="btn btn-primary">{{ __('custom.here') }}</a>
+                <a href="{{ url('/') }}" class="">{{ __('custom.here') }}</a>
             </div>
         </div>
     </div>

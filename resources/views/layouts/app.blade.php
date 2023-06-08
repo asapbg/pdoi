@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ __('custom.full_app_name') }}</title>
+    <title>{{isset($title) ? $title .' '.__('custom.full_app_name') : __('custom.full_app_name') }}</title>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -25,8 +25,8 @@
     <main class="px-md-5 px-3 pt-3 pb-md-5 pb-3">
         @foreach(['success', 'warning', 'danger', 'info'] as $msgType)
             @if(Session::has($msgType))
-                <div class="alert alert-{{$msgType}} mt-1 alert-dismissible" role="alert">{!! Session::get($msgType) !!}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="alert alert-{{$msgType}} mt-1 alert-dismissible py-2" role="alert">{!! Session::get($msgType) !!}
+                    <button type="button" class="btn-close py-2" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
         @endforeach

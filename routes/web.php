@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => true]);
@@ -18,6 +19,11 @@ Route::get('/locale', function (Request $request) {
     return back();
 })->name('change-locale');
 
+Route::group(['middleware' => ['auth', 'role:'.\App\Models\User::EXTERNAL_USER_DEFAULT_ROLE]], function() {
+    Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
+        Route::match(['get', 'put'], '/my-profile','profile')->name('profile');
+    });
+});
 
 //Admin
 Route::controller(\App\Http\Controllers\Auth\Admin\LoginController::class)->group(function () {
@@ -29,4 +35,9 @@ require_once('admin.php');
 
 Route::get('/debug-sentry', function () {
     throw new Exception('My first Sentry error!');
+});
+
+Route::fallback(function(){
+    Log::channel('info')->info('Path not found; User ip: '.request()->ip().'; Url: '.request()->getPathInfo());
+    return response()->view('errors.404', [], 404);
 });

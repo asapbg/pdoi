@@ -223,6 +223,9 @@ return [
     'altitude'                         => 'altitude',
 
     //
+    'check_for_errors'                          => 'Моля проверете за грешки',
+    'system_error'                              => 'Възникна системна грешка',
+    'success_update'                            => 'Данните са обновени успешно',
     'logout'                                    => 'Изход',
     'register'                                  => 'Регистрация',
     'instructions'                              => 'Инструкции',
@@ -271,4 +274,7 @@ return [
     'nomenclature.settlements'                => 'Населено място|Населени мяста',
     'nomenclature.country'                    => 'Държава|Държави',
     'nomenclature.profile_type'               => 'Потребителски профил|Потребителски профили',
+    //delivery_methods
+    'delivery_by.EMAIL'                       => 'Публикуване на портала и уведомяване на посочения в профила е-мейл адрес',
+    'delivery_by.SDES'                        => 'Публикуване на портала и уведомяване чрез системата за сигурно електронно връчване (ССЕВ)',
 ];

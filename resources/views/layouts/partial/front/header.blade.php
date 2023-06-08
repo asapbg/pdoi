@@ -22,7 +22,7 @@
                 </li>
                 @if(auth()->user() && auth()->user()->user_type == \App\Models\User::USER_TYPE_EXTERNAL)
                     <li class="nav-item pull-right">
-                        <a href="" class="nav-link"><i class="fa-solid fa-user text-primary me-1"></i>{{ auth()->user()->username }}</a>
+                        <a href="{{ route('profile') }}" class="nav-link"><i class="fa-solid fa-user text-primary me-1"></i>{{ auth()->user()->username }}</a>
                     </li>
                 @else
                     <li class="nav-item pull-right">

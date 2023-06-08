@@ -27,6 +27,27 @@ return new class extends Migration
             $table->string('names')->nullable();
             $table->tinyInteger('lang')->default(1);
             $table->string('email')->nullable();
+            $table->string('person_identity', 20)->nullable();
+            $table->string('company_identity', 20)->nullable();
+
+            $table->unsignedBigInteger('country_id')->nullable();
+            $table->foreign('country_id')->references('id')->on('country');
+
+            $table->unsignedBigInteger('ekatte_municipality_id')->nullable();
+            $table->foreign('ekatte_municipality_id')->references('id')->on('ekatte_municipality');
+
+            $table->unsignedBigInteger('ekatte_area_id')->nullable();
+            $table->foreign('ekatte_area_id')->references('id')->on('ekatte_area');
+
+            $table->unsignedBigInteger('ekatte_settlement_id')->nullable();
+            $table->foreign('ekatte_settlement_id')->references('id')->on('ekatte_settlement');
+
+            $table->string('post_code',20)->nullable();
+            $table->string('address')->nullable();
+            $table->string('address_second')->nullable();
+
+            $table->tinyInteger('delivery_method')->nullable();
+
             $table->string('phone', 50)->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamp('status_date')->useCurrent();
@@ -54,6 +75,7 @@ return new class extends Migration
             $table->timestamp('last_login_at')->nullable();
             $table->tinyInteger('active')->default(1);
 
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

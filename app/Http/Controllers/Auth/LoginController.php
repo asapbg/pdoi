@@ -115,12 +115,12 @@ class LoginController extends Controller
             ]);
         }
 
-        if (!$user->pass_is_new) {
-            $this->incrementLoginAttempts($request);
-            throw ValidationException::withMessages([
-                'error' => [trans('auth.password_not_changed')],
-            ]);
-        }
+//        if (!$user->pass_is_new) {
+//            $this->incrementLoginAttempts($request);
+//            throw ValidationException::withMessages([
+//                'error' => [trans('auth.password_not_changed')],
+//            ]);
+//        }
         if ($user->status != User::STATUS_ACTIVE) {
             throw ValidationException::withMessages([
                 'error' => [trans('auth.status_blocked')],
