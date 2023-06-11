@@ -242,6 +242,7 @@ return [
     'users.'                                    => 'Потребители',
     'roles_permissions.'                        => 'Роли и права',
     'administration.rzs.'                       => 'Регистър на задължените субекти',
+    'pdoi.'                                     => 'ПДОИ',
     //users
     'users.type.1'                              => 'Вътрешен',
     'users.type.2'                              => 'Външен',
@@ -277,4 +278,14 @@ return [
     //delivery_methods
     'delivery_by.EMAIL'                       => 'Публикуване на портала и уведомяване на посочения в профила е-мейл адрес',
     'delivery_by.SDES'                        => 'Публикуване на портала и уведомяване чрез системата за сигурно електронно връчване (ССЕВ)',
+
+    //delivery_methods
+    'application.status.RECEIVED'             => 'Прието на платформата',
+    'application.status.REGISTRATION_TO_SUBJECT'     => 'Очаква регистрация при задължен субект',
+    'application.status.IN_PROCESS'                  => 'Регистрирано/в процес на обработка',
+    'application.status.APPROVED'                    => 'Одобрено',
+    'application.status.PART_APPROVED'               => 'Частично одобрено',
+    'application.status.INFO_NOT_EXIST'              => 'Информацията не съществува',
+    'application.status.NO_REVIEW'                   => 'Оставено без разглеждане',
 ];
+

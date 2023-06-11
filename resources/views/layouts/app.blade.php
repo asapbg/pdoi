@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{isset($title) ? $title .' '.__('custom.full_app_name') : __('custom.full_app_name') }}</title>
+    <title>{{isset($title) ? $title .' - '.__('custom.full_app_name') : __('custom.full_app_name') }}</title>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -36,7 +36,7 @@
     @include('layouts.partial.front.footer')
 </div>
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}" defer></script>
+<script src="{{ asset('js/app.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

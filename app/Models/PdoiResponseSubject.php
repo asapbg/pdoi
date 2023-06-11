@@ -33,7 +33,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(PdoiResponseSubject::class, 'parent_id', 'id');
+        return $this->hasOne(PdoiResponseSubject::class, 'id', 'parent_id');
     }
 
     public function section(): \Illuminate\Database\Eloquent\Relations\HasOne
@@ -73,7 +73,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     public static function optionsList(array|int $ignoreId = []): \Illuminate\Support\Collection
     {
         $query = DB::table('pdoi_response_subject')
-            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name'])
+            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name', 'pdoi_response_subject.adm_level as parent'])
             ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
             ->where('pdoi_response_subject.active', '=', 1)
             ->whereNull('deleted_at')
@@ -90,6 +90,67 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
             }
         }
         return $query->get();
+    }
+
+    /**
+     * We use this to draw subjects tree template in modals and pages
+     * @return array
+     */
+    public static function getTree()
+    {
+        $tree = [];
+        $subjects = DB::table('pdoi_response_subject')
+            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name'
+                , 'pdoi_response_subject.adm_level as parent', DB::raw('1 as selectable')])
+            ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
+            ->where('pdoi_response_subject.active', '=', 1)
+            ->whereNull('pdoi_response_subject.deleted_at')
+            ->where('pdoi_response_subject_translations.locale', '=', app()->getLocale());
+
+        $allSubjects = DB::table("rzs_section")
+            ->select(['rzs_section.adm_level as id', 'rzs_section_translations.name'
+                , DB::raw('0 as parent'), DB::raw('0 as selectable')])
+            ->join('rzs_section_translations', 'rzs_section_translations.rzs_section_id', '=', 'rzs_section.id')
+            ->where('rzs_section.active', '=', 1)
+            ->whereNull('rzs_section.deleted_at')
+            ->where('rzs_section_translations.locale', '=', app()->getLocale())
+            ->union($subjects)->orderBy('name','asc')
+            ->get();
+
+        if( $allSubjects->count() ) {
+            foreach ($allSubjects as $subject) {
+                if( !$subject->selectable ) {
+                    $tree[] = array(
+                        'id' => $subject->id,
+                        'name' => $subject->name,
+                        'selectable' => $subject->selectable,
+                        'parent' => $subject->parent,
+                        'children' => self::subjectChildren($subject->id, $allSubjects)
+                    );
+                }
+            }
+        }
+
+        return $tree;
+    }
+
+    private static function subjectChildren(int $parent, $subjects): array
+    {
+        $children = [];
+        if( $subjects->count() ) {
+            foreach ($subjects as $subject) {
+                if( (int)$subject->parent == $parent ) {
+                    $children[] = array(
+                        'id' => $subject->id,
+                        'name' => $subject->name,
+                        'selectable' => $subject->selectable,
+                        'parent' => $subject->parent,
+                        'children' => self::subjectChildren($subject->id, $subjects)
+                    );
+                }
+            }
+        }
+        return $children;
     }
 
 }

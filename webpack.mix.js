@@ -58,13 +58,17 @@ mix.styles([
 ], 'public/css/admin.css');
 
 mix.scripts([
-    'resources/js/front/jquery-3.7.0.js',
+    // 'resources/js/front/jquery-3.7.0.js',
+    'resources/js/front/jquery-3.6.3.min.js',
     // 'resources/js/front/bootstrap-5.3/bootstrap.min.js',
     'resources/js/front/bootstrap-5.3/bootstrap.bundle.min.js',
+    'resources/js/front/select2.full.min.js',
     'resources/js/front/app.js',
+    'resources/js/front/apply_application.js',
 ], 'public/js/app.js');
 
 mix.styles([
     'resources/css/front/bootstrap-5.3/bootstrap.min.css',
+    'resources/css/front/select2.min.css',
     'resources/css/app.css'
 ], 'public/css/app.css');

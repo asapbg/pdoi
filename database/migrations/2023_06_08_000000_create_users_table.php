@@ -42,7 +42,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ekatte_settlement_id')->nullable();
             $table->foreign('ekatte_settlement_id')->references('id')->on('ekatte_settlement');
 
-            $table->string('post_code',20)->nullable();
+            $table->string('post_code',10)->nullable();
             $table->string('address')->nullable();
             $table->string('address_second')->nullable();
 

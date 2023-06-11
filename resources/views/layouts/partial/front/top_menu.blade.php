@@ -8,9 +8,11 @@
                 <li class="nav-item px-1">
                     <a class="nav-link @if(request()->route()->getName() == 'home') active @endif" aria-current="page" href="{{ route('home') }}">Начало</a>
                 </li>
-                <li class="nav-item px-1">
-                    <a class="nav-link" href="/application.html">Подаване на заявление</a>
-                </li>
+                @if(auth()->user())
+                    <li class="nav-item px-1">
+                        <a class="nav-link" href="{{ route('application.create') }}">Подаване на заявление</a>
+                    </li>
+                @endif
                 <li class="nav-item px-1">
                     <a class="nav-link" href="/search.html">Търсене</a>
                 </li>

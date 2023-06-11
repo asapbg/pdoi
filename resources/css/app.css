@@ -159,3 +159,22 @@ main {
     background: linear-gradient(0deg, rgba(129,126,126,1) 0%, rgba(205,204,204,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#817e7e",endColorstr="#cdcccc",GradientType=1);
 }
+
+.fsi {
+    font-size: 10px;
+    font-style: italic;
+}
+
+label.is_invalid {
+    color:red;
+}
+
+/*START MODAL*/
+.modal .modal-content{
+    padding-bottom: 20px;
+}
+.modal .modal-body{
+    max-height: 500px;
+    overflow-y: scroll;
+}
+/*END MODAL*/

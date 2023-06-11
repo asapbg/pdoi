@@ -8,4 +8,6 @@
     'administration.activity_log' => 'Обща активност',
     'users.*' => 'Всички права',
     'roles_permissions.*' => 'Всички права',
+    'pdoi.*' => 'Всички права',
+    'pdoi.web' => 'ПДОИ - Външно приложение',
 );

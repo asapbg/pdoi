@@ -35,7 +35,7 @@ class PermissionsSeeder extends Seeder
         $role->givePermissionTo('manage.*');
 
         //add permissions to our role
-        $role = Role::whereName('super_admin')->first();
+        $role = Role::whereName('service_user')->first();
         $role->givePermissionTo('manage.*');
     }
 }

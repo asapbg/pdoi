@@ -173,12 +173,6 @@ class User extends Authenticatable implements MustVerifyEmailContract
         );
     }
 
-    protected function legalForm(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => (!empty($this->person_identity) ? self::USER_TYPE_PERSON : (!empty($this->company_identity) ? self::USER_TYPE_COMPANY : 0)),
-        );
-    }
 
     public function scopeIsActive($query)
     {
@@ -214,4 +208,23 @@ class User extends Authenticatable implements MustVerifyEmailContract
         }
     }
 
+    public function country(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Country::class, 'id', 'country_id');
+    }
+
+    public function area(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EkatteArea::class, 'id', 'ekatte_area_id');
+    }
+
+    public function municipality(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EkatteMunicipality::class, 'id', 'ekatte_municipality_id');
+    }
+
+    public function settlement(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EkatteSettlement::class, 'id', 'ekatte_settlement_id');
+    }
 }

@@ -32,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
         // This works in the app by using gate-related functions like auth()->user->can() and @can()
         //TODO fix me This is not good when using policy with additional model clause
 //        Gate::before(function ($user, $ability) {
-//            return $user->hasRole('super_admin') ? true : null;
+//            return $user->hasRole('service_user') ? true : null;
 //        });
     }
 }

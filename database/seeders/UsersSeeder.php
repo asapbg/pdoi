@@ -17,13 +17,13 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        // make asap user with admin role
+        // make asap user with super user role
         $user = new User;
-        $user->username = "super_admin";
+        $user->username = "service_user";
         $user->password = bcrypt('pass123');
         $user->user_type = User::USER_TYPE_INTERNAL;
-        $user->names = 'Asap SuperAdmin';
-        $user->email = 'super_admin@asap.bg';
+        $user->names = 'Сервизен потребител';
+        $user->email = 'service_user@asap.bg';
         $user->status = User::STATUS_ACTIVE;
         $user->pass_last_change = Carbon::now();
         $user->pass_is_new = 1;
@@ -31,9 +31,27 @@ class UsersSeeder extends Seeder
 
         $this->command->info("User with email: $user->email saved");
 
-        $role = Role::where('name', 'super_admin')->first();
+        $role = Role::where('name', 'service_user')->first();
         $user->assignRole($role);
 
-        $this->command->info("Role $role->name was assigned to $user->first_name $user->last_name");
+        $this->command->info("Role $role->name was assigned to $user->names");
+
+        // make asap user with super user role
+        $user = new User;
+        $user->username = "admin";
+        $user->password = bcrypt('pass123');
+        $user->user_type = User::USER_TYPE_INTERNAL;
+        $user->names = 'Админситратор';
+        $user->email = 'admin@asap.bg';
+        $user->status = User::STATUS_ACTIVE;
+        $user->pass_last_change = Carbon::now();
+        $user->pass_is_new = 1;
+        $user->save();
+
+        $this->command->info("User with email: $user->email saved");
+
+        $role = Role::where('name', 'admin')->first();
+        $user->assignRole($role);
+        $this->command->info("Role $role->name was assigned to $user->names");
     }
 }

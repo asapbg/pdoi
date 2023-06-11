@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PdoiApplicationController as PdoiApplicationFrontController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -19,9 +20,24 @@ Route::get('/locale', function (Request $request) {
     return back();
 })->name('change-locale');
 
-Route::group(['middleware' => ['auth', 'role:'.\App\Models\User::EXTERNAL_USER_DEFAULT_ROLE]], function() {
+
+
+Route::group(['middleware' => ['auth']], function() {
+    //pdoi subjects modal
+    Route::get('/get-pdoi-subjects', [\App\Http\Controllers\CommonController::class, 'modalPdoiSubjects'])
+        ->name('modal.pdoi_subjects');
+});
+
+Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\CustomRole::WEB_ACCESS_RULE)]], function() {
     Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
         Route::match(['get', 'put'], '/my-profile','profile')->name('profile');
+    });
+
+    //application
+    Route::controller(PdoiApplicationFrontController::class)->group(function () {
+//        Route::get( '/application','index')->name('application');
+        Route::get('/application/new','create')->name('application.create');
+        Route::post('/application/store','store')->name('application.store');
     });
 });
 

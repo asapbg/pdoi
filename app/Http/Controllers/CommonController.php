@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PdoiResponseSubject;
+use App\Models\RzsSection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -113,5 +115,13 @@ class CommonController extends Controller
             $sequence_key_name = $table . '_' . $primary_key_name . '_seq';
             DB::statement("ALTER SEQUENCE $sequence_key_name RESTART WITH $next_id");
         }
+    }
+
+    public function modalPdoiSubjects(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $canSelect = (boolean)$request->input('select');
+        $multipleSelect = (boolean)$request->input('multiple');
+        $subjects = PdoiResponseSubject::getTree();
+        return view('partials.pdoi_tree.tree', compact('subjects', 'canSelect', 'multipleSelect'));
     }
 }

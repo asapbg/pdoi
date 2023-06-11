@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\CustomRole;
 use App\Providers\RouteServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -86,8 +87,7 @@ class LoginController extends Controller
 
         // First check if the user is active or
         // has entered a password after the account was created
-        $user = $model::where('user_type', User::USER_TYPE_EXTERNAL)
-            ->where(function ($q) use ($username){
+        $user = $model::where(function ($q) use ($username){
                 $q->where('username', $username)
                     ->orWhere('email', $username);
             })->first();
@@ -124,6 +124,12 @@ class LoginController extends Controller
         if ($user->status != User::STATUS_ACTIVE) {
             throw ValidationException::withMessages([
                 'error' => [trans('auth.status_blocked')],
+            ]);
+        }
+
+        if( !($user->canAny(CustomRole::WEB_ACCESS_RULE)) ) {
+            throw ValidationException::withMessages([
+                'error' => [trans('auth.no_access_to_web')],
             ]);
         }
 

@@ -20,7 +20,7 @@
                         <a href="{{ route('change-locale', ['locale' => $locale['code']]) }}" class="nav-link d-inline-block @if(app()->getLocale() == $locale['code']) fw-bold @endif">{{ mb_strtoupper($locale['code']) }}</a>
                     @endforeach
                 </li>
-                @if(auth()->user() && auth()->user()->user_type == \App\Models\User::USER_TYPE_EXTERNAL)
+                @if(auth()->user())
                     <li class="nav-item pull-right">
                         <a href="{{ route('profile') }}" class="nav-link"><i class="fa-solid fa-user text-primary me-1"></i>{{ auth()->user()->username }}</a>
                     </li>
@@ -36,7 +36,7 @@
                 <li class="nav-item pull-right">
                     <a href="" class="nav-link"><i class="fa-solid fa-eye-slash text-primary" data-bs-toggle="tooltip" data-bs-title="{{ __('custom.options_for_blind') }}"></i></a>
                 </li>
-                @if(auth()->user() && auth()->user()->user_type == \App\Models\User::USER_TYPE_EXTERNAL)
+                @if(auth()->user())
                     <li class="nav-item pull-right">
                         <a href="{{ route('front.logout') }}" class="nav-link">{{ __('custom.logout') }}</a>
                     </li>
