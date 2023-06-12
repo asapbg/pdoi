@@ -29,7 +29,7 @@ return [
     'application.step.info' => 'Попълване на завление',
     'application.step.rzs' => 'Избор на задължен субект',
     'application.step.send' => 'Изпращане',
-    'application.legend.field_update_profile' => '- Маркираните с <i class="fa-solid fa-triangle-exclamation text-warning"></i> полета, ще бъдат обновени в профилните ви данни',
+    'application.legend.field_update_profile' => '- Маркираните с <i class="fa-solid fa-user text-warning"></i> полета, ще бъдат обновени в профилните ви данни',
     'application.legend.required_fields' => '- Маркираните със символ <strong>*</strong> полета са задължителни',
     'application.address_info_section' => 'Адрес за кореспонденция',
     'application.pdoi_subject_section' => 'Задължен субект',

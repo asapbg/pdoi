@@ -1,7 +1,7 @@
 @if(isset($children) && sizeof($children))
     @foreach($children as $child)
         @if(isset($child['children']) && sizeof($child['children']))
-            <p class="mb-1" role="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $child['id'] }}" aria-expanded="false" aria-controls="collapse{{ $child['id'] }}">
+            <p class="mb-1 fw-semibold" role="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $child['id'] }}" aria-expanded="false" aria-controls="collapse{{ $child['id'] }}">
                 <label>
                     @if(isset($canSelect) && $canSelect)
                         @if(isset($multipleSelect) && $multipleSelect)
@@ -36,10 +36,6 @@
                 </label>
             </p>
         @endif
-{{--        <p>{{ isset($children['children']) && sizeof($children['children']) ? '- ' : ''}}{{ $child['name'] }} ({{ $child['id'] }})</p>--}}
-{{--        @if(isset($child['children']) && sizeof($child['children']))--}}
-{{--            @include('partials.pdoi_tree.tree_row', ['children' => $child['children']])--}}
-{{--        @endif--}}
     @endforeach
 @endif
 

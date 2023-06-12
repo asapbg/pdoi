@@ -58,28 +58,26 @@ $(function() {
                     destroyListener: true,
                     bodyLoadUrl: $(this).data('url')
                 });
+
+                $(document).on('click', '#select-subject', function (){
+                    let subjectsFormSelect = $('#subjects');
+                    let checked = $('#'+ subjectModal.id +' input[name="subjects-item"]:checked');
+                    if( checked.length ) {
+                        if( checked.length === 1 ) {
+                            subjectsFormSelect.val(checked.val());
+                        } else if( checked.length > 1 ) {
+                            let subjectValues = [];
+                            checked.each(function(){
+                                subjectValues.push($(this).val());
+                            });
+                            subjectsFormSelect.val(subjectValues);
+                        }
+                        subjectsFormSelect.trigger('change');
+                    }
+                    subjectModal.modalObj.hide();
+                });
             });
         }
-
-        $(document).on('click', '#select-subject', function (){
-            let subjectsFormSelect = $('#subjects');
-            let checked = $('#pdoiSubjectsTree input[name="subjects-item"]:checked');
-            if( checked.length ) {
-                if( checked.length === 1 ) {
-                    subjectsFormSelect.val(checked.val());
-                } else if( checked.length > 1 ) {
-                    let subjectValues = [];
-                    checked.each(function(){
-                        subjectValues.push($(this).val());
-                    });
-                    subjectsFormSelect.val(subjectValues);
-                }
-                subjectsFormSelect.trigger('change');
-            }
-            $(this).closest('.modal').remove();
-            $('.modal-backdrop.show').remove();
-        });
-
 
         //===============================
         // START MyModal
@@ -94,8 +92,8 @@ $(function() {
             _myModal.title = typeof obj.title != 'undefined' ? obj.title : '';
             _myModal.body = typeof obj.body != 'undefined' ? obj.body : '';
             _myModal.bodyLoadUrl = typeof obj.bodyLoadUrl != 'undefined' ? obj.bodyLoadUrl : null;
-            _myModal.destroyListener = typeof obj.destroy != 'undefined' ? obj.destroy : false;
-            _myModal.init(_myModal);
+            _myModal.destroyListener = typeof obj.destroyListener != 'undefined' ? obj.destroyListener : false;
+            _myModal.modalObj = _myModal.init(_myModal);
             if( _myModal.destroyListener ) {
                 _myModal.setDestroyListener(_myModal);
             }
@@ -122,18 +120,27 @@ $(function() {
                 '  </div>\n' +
                 '</div>';
             document.body.insertAdjacentHTML('beforeend', modalHtml);
+            return  new bootstrap.Modal(document.getElementById(_myModal.id), {
+                keyboard: false
+            })
         }
 
         MyModal.prototype.showModal = function (_myModal){
-            $('#' + _myModal.id).modal('show');
+            _myModal.modalObj.show();
         }
 
         MyModal.prototype.setDestroyListener = function (_myModal){
-            $(document).on('hidden.bs.modal', '#' + _myModal.id, function (e) {
-                console.log('ok');
+            console.log('set destroy');
+            // let myModalEl = document.getElementById(_myModal.id)
+            // myModalEl.addEventListener('hidden.bs.modal', function (event) {
+            //     _myModal.modalObj.dispose();
+            //     $('#' + _myModal.id).remove();
+            // });
+            $('#' + _myModal.id).on('hidden.bs.modal', function(){
+                console.log('destroy');
+                _myModal.modalObj.dispose();
                 $('#' + _myModal.id).remove();
-                $('.modal-backdrop.show').remove();
-            })
+            });
         }
 
         MyModal.prototype.loadModalBody = function (_myModal) {
