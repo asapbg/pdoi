@@ -337,11 +337,10 @@
                                 {{ __('front.search_by_name_or_pick_from_list') }}
                                 <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject"
                                         data-title="{{ trans_choice('custom.pdoi_response_subjects',2) }}"
-                                        data-url="{{ route('modal.pdoi_subjects').'?redirect_only=1&select=1&multiple=1' }}">
+                                        data-url="{{ route('modal.pdoi_subjects').'?redirect_only=0&select=1&multiple=1' }}">
                                     <i class="fa-solid fa-list"></i>
                                 </button> :
                                 <span class="required">*</span>
-                                @if(!$user->delivery_method) <i class="fa-solid fa-user text-warning"></i> @endif
                             </label>
                             <select name="subjects[]" id="subjects" multiple="multiple" placeholder="{{ __('front.search_by_name') }}" style="width:100%;" class="form-control form-control-sm select2 @error('subjects') is-invalid @endif">
                                 @if(isset($rzs) && $rzs->count())

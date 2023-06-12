@@ -62,6 +62,12 @@ return new class extends Migration
             $table->string('nomer_register', 25)->index()->nullable();
             $table->tinyInteger('active')->default(1);
 
+            $table->tinyInteger('delivery_method')->default(\App\Enums\PdoiSubjectDeliveryMethodsEnum::EMAIL->value);
+            $table->unsignedBigInteger('court_id')->nullable();
+            $table->foreign('court_id')
+                ->references('id')
+                ->on('pdoi_response_subject');
+
             $table->timestamps();
             $table->softDeletes();
         });
@@ -78,6 +84,7 @@ return new class extends Migration
             $table->string('subject_name');
             $table->string('address')->nullable();
             $table->string('add_info', 500)->nullable();
+            $table->string('court_text')->nullable();
 
         });
     }

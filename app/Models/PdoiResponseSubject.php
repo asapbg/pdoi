@@ -15,7 +15,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     use SoftDeletes, FilterSort, LogsActivity, CausesActivity, Translatable;
 
     const PAGINATE = 20;
-    const TRANSLATABLE_FIELDS = ['subject_name', 'address', 'add_info'];
+    const TRANSLATABLE_FIELDS = ['subject_name', 'address', 'add_info', 'court_text'];
     public $timestamps = true;
 
     protected $table = 'pdoi_response_subject';
@@ -23,7 +23,8 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     protected string $logName = "subjects";
 
     protected $fillable = ['eik', 'region', 'municipality', 'town', 'phone', 'fax', 'email', 'date_from'
-        , 'date_to', 'adm_register', 'redirect_only', 'adm_level', 'parent_id', 'zip_code', 'nomer_register', 'active'];
+        , 'date_to', 'adm_register', 'redirect_only', 'adm_level', 'parent_id', 'zip_code', 'nomer_register'
+        , 'active', 'court_id', 'delivery_method'];
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public function scopeIsActive($query)
@@ -41,6 +42,11 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return $this->hasOne(RzsSection::class, 'adm_level', 'adm_level');
     }
 
+    public function court(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiResponseSubject::class, 'id', 'court_id');
+    }
+
     public static function translationFieldsProperties(): array
     {
         return array(
@@ -56,6 +62,10 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
                 'type' => 'textarea',
                 'rules' => ['nullable', 'string', 'max:500']
             ],
+            'court_text' => [
+                'type' => 'text',
+                'rules' => ['nullable', 'required_without:court', 'string', 'max:255']
+            ]
         );
     }
 

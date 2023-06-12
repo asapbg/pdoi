@@ -1,7 +1,7 @@
 @if(isset($children) && sizeof($children))
     @foreach($children as $child)
         @if(isset($child['children']) && sizeof($child['children']))
-            <p class="mb-1 fw-semibold" role="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $child['id'] }}" aria-expanded="false" aria-controls="collapse{{ $child['id'] }}">
+            <p class="mb-1 @if($oldBootstrap){{ 'fw-bold' }}@else{{ 'fw-semibold' }}@endif" role="button" {{ $bootstrapDataPrefix }}-toggle="collapse" {{ $bootstrapDataPrefix }}-target="#collapse{{ $child['id'] }}" aria-expanded="false" aria-controls="collapse{{ $child['id'] }}">
                 <label>
                     @if(isset($canSelect) && $canSelect)
                         @if(isset($multipleSelect) && $multipleSelect)
@@ -16,7 +16,7 @@
                 </label>
             </p>
             <div class="collapse multi-collapse" id="collapse{{ $child['id'] }}">
-                <div class="card card-body ps-4  border-0">
+                <div class="ps-4">
                     @include('partials.pdoi_tree.tree_row', ['children' => $subject['children']])
                 </div>
             </div>

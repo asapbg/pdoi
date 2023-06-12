@@ -130,14 +130,7 @@ $(function() {
         }
 
         MyModal.prototype.setDestroyListener = function (_myModal){
-            console.log('set destroy');
-            // let myModalEl = document.getElementById(_myModal.id)
-            // myModalEl.addEventListener('hidden.bs.modal', function (event) {
-            //     _myModal.modalObj.dispose();
-            //     $('#' + _myModal.id).remove();
-            // });
             $('#' + _myModal.id).on('hidden.bs.modal', function(){
-                console.log('destroy');
                 _myModal.modalObj.dispose();
                 $('#' + _myModal.id).remove();
             });

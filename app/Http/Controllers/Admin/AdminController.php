@@ -37,6 +37,10 @@ class AdminController extends Controller
      */
     protected function getFillableValidated($validated, $item)
     {
+        $validated['delivery_method'] = $validated['rzs_delivery_method'];
+        $validated['court_id'] = $validated['court'];
+        unset($validated['rzs_delivery_method'], $validated['court']);
+
         $modelFillable = $item->getFillable();
         $validatedFillable = $validated;
         foreach ($validatedFillable as $field => $value) {

@@ -96,7 +96,7 @@ if (!function_exists('displayDate')) {
         if (!$datetime) {
             return "";
         }
-        return date('d-m-Y', strtotime($datetime));
+        return date('d.m.Y', strtotime($datetime));
     }
 }
 
@@ -113,7 +113,7 @@ if (!function_exists('displayDateTime')) {
         if (!$datetime) {
             return "";
         }
-        return date('d-m-Y H:i', strtotime($datetime));
+        return date('d.m.Y H:i', strtotime($datetime));
     }
 }
 

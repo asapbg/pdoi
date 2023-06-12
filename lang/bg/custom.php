@@ -265,7 +265,13 @@ return [
     'pdoi_response_subjects'             => 'Задължен субект|Задължени субекти',
     'rzs_items'                                 => 'Задължен субект|Задължени субекти',
     'rzs.address_section'                       => 'Адрес за кореспондениця',
+    'rzs.settings_section'                       => 'Натройки',
     'rzs.redirect_only.tooltip'                 => 'Субект ще е достъпен само за служебно пренасочване по компетентност от страна на администратори-модератори . Директно адресиране на заявления от страна на потребители няма да е достъпно',
+    'rzs.court.label'                            => 'Съдебен орган, който е компетентен да разглежда жалби на заявители по ЗДОИ (<span class="fw-normal fst-italic" style="font-size:12px;">Посочете от списъка на РЗС или въведете свободен текст.</span>)',
+    //delivery_method
+    'rzs.delivery_by.EMAIL'                       => 'Чрез електронна поща за нотифициране на задължения субект',
+    'rzs.delivery_by.SDES'                        => 'Чрез профила на задължения субект в Системата за сигурно електронно връчване (ССЕВ)',
+    'rzs.delivery_by.RKS'                        => 'Чрез деловодната система на добавения задължен субект',
     //nomenclatures
     'ekatte_areas'                            => 'Области',
     'ekatte_municipalities'                   => 'Общини',
@@ -278,8 +284,7 @@ return [
     //delivery_methods
     'delivery_by.EMAIL'                       => 'Публикуване на портала и уведомяване на посочения в профила е-мейл адрес',
     'delivery_by.SDES'                        => 'Публикуване на портала и уведомяване чрез системата за сигурно електронно връчване (ССЕВ)',
-
-    //delivery_methods
+    //application statuses
     'application.status.RECEIVED'             => 'Прието на платформата',
     'application.status.REGISTRATION_TO_SUBJECT'     => 'Очаква регистрация при задължен субект',
     'application.status.IN_PROCESS'                  => 'Регистрирано/в процес на обработка',

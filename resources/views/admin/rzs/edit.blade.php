@@ -16,6 +16,7 @@
                         <input type="hidden" name="id" value="{{ $item->id ?? 0 }}">
                             @include('admin.rzs.edit_general')
                             @include('admin.rzs.edit_addres_section')
+                            @include('admin.rzs.edit_settings_section')
                         <div class="form-group row">
                             <div class="col-md-6 col-md-offset-3">
                                 <button id="save" type="submit" class="btn btn-success">{{ __('custom.save') }}</button>

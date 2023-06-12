@@ -4,7 +4,7 @@
         <div class="form-group">
             <label class="col-sm-12 control-label" for="adm_level">{{ __('validation.attributes.area') }}<span class="required">*</span></label>
             <div class="col-12">
-                <select id="region" name="region"  class="form-control form-control-sm @error('region'){{ 'is-invalid' }}@enderror">
+                <select id="region" name="region"  class="form-control form-control-sm select2 @error('region'){{ 'is-invalid' }}@enderror">
                     @if(!$item->id)
                         <option value="-1">---</option>
                     @endif
@@ -25,7 +25,7 @@
         <div class="form-group">
             <label class="col-sm-12 control-label" for="municipality">{{ __('validation.attributes.municipality') }}<span class="required">*</span></label>
             <div class="col-12">
-                <select id="municipality" name="municipality"  class="form-control form-control-sm @error('municipality'){{ 'is-invalid' }}@enderror">
+                <select id="municipality" name="municipality"  class="form-control form-control-sm select2 @error('municipality'){{ 'is-invalid' }}@enderror">
                     @if(!$item->id)
                         <option value="-1">---</option>
                     @endif
@@ -46,7 +46,7 @@
         <div class="form-group">
             <label class="col-sm-12 control-label" for="municipality">{{ __('validation.attributes.settlement') }}<span class="required">*</span></label>
             <div class="col-12">
-                <select id="town" name="town"  class="form-control form-control-sm @error('municipality'){{ 'is-invalid' }}@enderror">
+                <select id="town" name="town"  class="form-control form-control-sm select2 @error('municipality'){{ 'is-invalid' }}@enderror">
                     @if(!$item->id)
                         <option value="-1">---</option>
                     @endif

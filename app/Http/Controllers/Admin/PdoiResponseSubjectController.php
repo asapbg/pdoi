@@ -8,8 +8,10 @@ use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
 use App\Models\PdoiResponseSubject;
 use App\Models\RzsSection;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -67,13 +69,16 @@ class PdoiResponseSubjectController extends AdminController
 
     public function store(PdoiResponseSubjectStoreRequest $request, PdoiResponseSubject $item)
     {
+//        $r = new PdoiResponseSubjectStoreRequest();
+//        $validator = Validator::make($request->all(), $r->rules());
+//        dd($validator->errors());
         $id = $item->id;
         $validated = $request->validated();
         if( ($id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
-
         try {
+            $validated['date_from'] = Carbon::now();//for now
             $fillable = $this->getFillableValidated($validated, $item);
             if( !$id ) {
                 $fillable['adm_register'] = 1;

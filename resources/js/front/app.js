@@ -118,9 +118,7 @@ $(function() {
         }
 
         MyModal.prototype.setDestroyListener = function (_myModal){
-            console.log('set destroy');
             $('#' + _myModal.id).on('hidden.bs.modal', function(){
-                console.log('destroy');
                 _myModal.modalObj.dispose();
                 $('#' + _myModal.id).remove();
             });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Models\PdoiResponseSubject;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -29,8 +30,8 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
             'eik' => ['required', 'string', 'max:13'],
             'adm_level' => ['required', 'numeric', 'exists:rzs_section,adm_level'],
             'parent_id' => ['nullable'],
-            'date_from' => ['required', 'date'],
-            'date_to' => ['nullable', 'date'],
+//            'date_from' => ['required', 'date'],
+//            'date_to' => ['nullable', 'date'],
             'region' => ['required', 'numeric'],
             'municipality' => ['required', 'numeric'],
             'town' => ['required', 'numeric'],
@@ -39,8 +40,9 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
             'fax' => ['nullable', 'string', 'max:1000'],
             'email' => ['nullable', 'string', 'max:255'],
 
-
             'redirect_only' => ['nullable', 'numeric'],
+            'rzs_delivery_method' => ['required', 'numeric', Rule::in(PdoiSubjectDeliveryMethodsEnum::values())],
+            'court' => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
             'active' => ['required', 'numeric', 'gt:0'],
         ];
 
