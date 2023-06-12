@@ -11,6 +11,7 @@ use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PdoiApplicationController extends Controller
@@ -58,14 +59,25 @@ class PdoiApplicationController extends Controller
 
         try {
             $validated = $validator->validated();
+            try {
+                $this->updateProfile($validated);
             return response()->json(['applicationInfo' => $validated], 200);
-            $user->fill($validated);
-            $user->save();
-            return response()->json(['applicationInfo' => []], 200);
+                return response()->json(['applicationInfo' => []], 200);
+            } catch (\Exception $e) {
+                logError('Save application', $e->getMessage());
+                return response()->json(['errors' => __('custom.system_error')], 200);
+            }
 
         } catch (\Exception $e) {
             logError('Apply application (front)', $e->getMessage());
             return back()->withInput()->with('danger', __('custom.system_error'));
         }
+    }
+
+    private function updateProfile($validatedFields) {
+        $fields = User::prepareModelFields($validatedFields, true);
+        $user = auth()->user();
+        $user->fill($fields);
+        $user->save();
     }
 }

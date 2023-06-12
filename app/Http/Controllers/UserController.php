@@ -8,6 +8,7 @@ use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
 use App\Models\ProfileType;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +29,7 @@ class UserController extends Controller
             }
 
             try {
-                $validated = $this->replaceRequestFields($validator->validated());
+                $validated = User::prepareModelFields($validator->validated());
                 $user->fill($validated);
                 $user->save();
                 session()->flash('success', __('custom.success_update'));
@@ -46,21 +47,5 @@ class UserController extends Controller
         $settlements = EkatteSettlement::optionsList();
         return view('front.edit_profile', compact('title', 'user', 'profileTypes'
             , 'countries', 'areas', 'municipalities', 'settlements'));
-    }
-
-    private function replaceRequestFields($fields = []){
-        if (isset($fields['country'])) {
-            $fields['country_id'] = $fields['country'];
-            unset($fields['country']);
-        }
-
-        foreach (['area', 'municipality', 'settlement'] as $f) {
-            if (isset($f)) {
-                $fields['ekatte_'.$f.'_id'] = $fields[$f];
-                unset($fields[$f]);
-            }
-        }
-
-        return $fields;
     }
 }

@@ -43,6 +43,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
     const USER_TYPE_PERSON = 1;
     const USER_TYPE_COMPANY = 2;
 
+    //
+    const ALLOWED_UPDATE_FROM_APPLICATION = ['legal_form', 'names', 'email', 'address', 'address_second', 'delivery_method'
+        , 'person_identity', 'company_identity', 'phone', 'post_code', 'country_id', 'ekatte_area_id'
+        , 'ekatte_municipality_id', 'ekatte_settlement_id'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -226,5 +231,29 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function settlement(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(EkatteSettlement::class, 'id', 'ekatte_settlement_id');
+    }
+
+    public static function prepareModelFields($validated, $checkAllowed = false) {
+        if (isset($validated['country'])) {
+            $validated['country_id'] = $validated['country'];
+            unset($validated['country']);
+        }
+
+        foreach (['area', 'municipality', 'settlement'] as $f) {
+            if (isset($f)) {
+                $validated['ekatte_'.$f.'_id'] = $validated[$f];
+                unset($validated[$f]);
+            }
+        }
+
+        if( $checkAllowed ) {
+            foreach ($validated as $key => $field) {
+                if( !in_array($key, self::ALLOWED_UPDATE_FROM_APPLICATION) ) {
+                    unset($validated[$key]);
+                }
+            }
+        }
+
+        return $validated;
     }
 }

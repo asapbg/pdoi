@@ -112,7 +112,8 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         $tree = [];
         $subjects = DB::table('pdoi_response_subject')
             ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name'
-                , 'pdoi_response_subject.adm_level as parent', DB::raw('1 as selectable')])
+                , DB::raw('case when pdoi_response_subject.parent_id is null then pdoi_response_subject.adm_level else pdoi_response_subject.parent_id end as parent')
+                , DB::raw('1 as selectable')])
             ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
             ->where('pdoi_response_subject.active', '=', 1)
             ->whereNull('pdoi_response_subject.deleted_at')
