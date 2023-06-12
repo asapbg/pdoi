@@ -96,7 +96,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
      * We use this to draw subjects tree template in modals and pages
      * @return array
      */
-    public static function getTree()
+    public static function getTree($filter)
     {
         $tree = [];
         $subjects = DB::table('pdoi_response_subject')
@@ -106,6 +106,10 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
             ->where('pdoi_response_subject.active', '=', 1)
             ->whereNull('pdoi_response_subject.deleted_at')
             ->where('pdoi_response_subject_translations.locale', '=', app()->getLocale());
+
+        if( isset($filter['redirect_only']) ) {
+            $subjects->where('pdoi_response_subject.redirect_only', '=', (int)$filter['redirect_only']);
+        }
 
         $allSubjects = DB::table("rzs_section")
             ->select(['rzs_section.adm_level as id', 'rzs_section_translations.name'

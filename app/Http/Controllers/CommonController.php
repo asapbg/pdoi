@@ -121,7 +121,7 @@ class CommonController extends Controller
     {
         $canSelect = (boolean)$request->input('select');
         $multipleSelect = (boolean)$request->input('multiple');
-        $subjects = PdoiResponseSubject::getTree();
+        $subjects = PdoiResponseSubject::getTree($request->all());
         return view('partials.pdoi_tree.tree', compact('subjects', 'canSelect', 'multipleSelect'));
     }
 }
