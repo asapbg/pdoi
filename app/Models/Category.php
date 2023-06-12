@@ -5,29 +5,28 @@ namespace App\Models;
 use App\Traits\FilterSort;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\DB;
 
-class Country extends ModelActivityExtend implements TranslatableContract
+class Category extends ModelActivityExtend implements TranslatableContract
 {
     use FilterSort, Translatable;
 
     const PAGINATE = 20;
     const TRANSLATABLE_FIELDS = ['name'];
-    const MODULE_NAME = 'custom.country';
+    const MODULE_NAME = 'custom.categories';
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public $timestamps = true;
 
-    protected $table = 'country';
+    protected $table = 'category';
     //activity
-    protected string $logName = "country";
+    protected string $logName = "category";
 
     protected $fillable = ['active'];
 
     public function scopeIsActive($query)
     {
-        $query->where('country.active', 1);
+        $query->where('category.active', 1);
     }
 
     /**
@@ -49,12 +48,12 @@ class Country extends ModelActivityExtend implements TranslatableContract
 
     public static function optionsList()
     {
-        return DB::table('country')
-            ->select(['country.id', 'country_translations.name'])
-            ->join('country_translations', 'country_translations.country_id', '=', 'country.id')
-            ->where('country.active', '=', 1)
-            ->where('country_translations.locale', '=', app()->getLocale())
-            ->orderBy('country_translations.name', 'asc')
+        return DB::table('category')
+            ->select(['category.id', 'category_translations.name'])
+            ->join('category_translations', 'category_translations.category_id', '=', 'category.id')
+            ->where('category.active', '=', 1)
+            ->where('category_translations.locale', '=', app()->getLocale())
+            ->orderBy('category_translations.name', 'asc')
             ->get();
     }
 }

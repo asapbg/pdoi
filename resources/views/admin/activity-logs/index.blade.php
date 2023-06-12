@@ -71,10 +71,10 @@
                                 <label for="subject_type">{{__('custom.activity_log_model')}}</label>
                                 <select name="subject_type" id="subject_type" class="form-control select2">
                                     <option value=""></option>
-                                    @if ($causers->count() > 0)
-                                        @foreach ($causers as $causer)
-                                            <option value="{{ $causer->id }}" @if (request()->get('causer_id') == $causer->id) selected="selected" @endif>
-                                                {{ $causer->fullName() }}
+                                    @if ($subjects->count() > 0)
+                                        @foreach ($subjects as $subject)
+                                            <option value="{{ $subject->subject_type }}" @if (request()->get('subject_type') == $subject->subject_type) selected="selected" @endif>
+                                                {{ trans_choice($subject->subject_type::MODULE_NAME, 1) }}
                                             </option>
                                         @endforeach
                                     @endif

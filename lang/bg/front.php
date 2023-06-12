@@ -33,6 +33,7 @@ return [
     'application.legend.required_fields' => '- Маркираните със символ <strong>*</strong> полета са задължителни',
     'application.address_info_section' => 'Адрес за кореспонденция',
     'application.pdoi_subject_section' => 'Задължен субект',
+    'application.answer_section' => 'Получаване на отговор',
     'application.files_section' => 'Прилагане на документи към заявлението (ако е необходимо)',
     'application.files_description' => 'Могат да бъдат прикачвани файлове от следните типове: doc, docx, xsl, xslx, pdf, rtf, txt, gif, jpg, jpeg, png, zem, p7s с максимален размер до 10MB.',
     'application.request_field.description' => 'На основание на чл.3 от закона за достъп до обществена информация, желая да ми бъде предоставена информация относно',

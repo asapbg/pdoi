@@ -5,7 +5,7 @@
         <div class="page-title mb-md-5 mb-2 px-5">
             <h3 class="b-1 text-center">{{ __('front.profile.title.my_profile') }}</h3>
         </div>
-        <form method="post" action="{{ route('profile') }}">
+        <form method="post" action="{{ route('profile') }}" id="profile-form">
             @csrf
             @method('PUT')
             <div class="card card-light mb-4">
@@ -16,9 +16,9 @@
                     <div class="row">
                         <div class="form-group form-group-sm col-12 mb-3">
                             @php($legalForm = old('legal_form', $user->legal_form ? $user->legal_form : 0))
-                            <label class="form-label me-3 fw-semibold">{{ __('validation.attributes.legal_form') }}: <span class="required">*</span></label> <br>
+                            <label class="form-label me-3 fw-semibold" for="legal_form">{{ __('validation.attributes.legal_form') }}: <span class="required">*</span></label> <br>
                             <label class="form-label me-3" role="button">
-                                <input type="radio" name="legal_form" class="identity" data-identity="{{ \App\Models\User::USER_TYPE_PERSON }}"
+                                <input type="radio" name="legal_form" class="identity @error('legal_form') is-invalid @enderror" data-identity="{{ \App\Models\User::USER_TYPE_PERSON }}"
                                        required value="{{ \App\Models\User::USER_TYPE_PERSON }}"
                                 @if($legalForm == \App\Models\User::USER_TYPE_PERSON ) checked @endif>
                                 {{ \App\Models\User::getUserLegalForms()[\App\Models\User::USER_TYPE_PERSON] }}
@@ -29,38 +29,30 @@
                                 @if($legalForm == \App\Models\User::USER_TYPE_COMPANY ) checked @endif>
                                 {{ \App\Models\User::getUserLegalForms()[\App\Models\User::USER_TYPE_COMPANY] }}
                             </label>
-                            @error('legal_form')
-                            <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-legal_form" class="text-danger d-inline-block w-100">@error('legal_form'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.names') }}: <span class="required">*</span></label>
-                            <input class="form-control form-control-sm @error('names') is-invalid @endif" type="text" name="names"
+                            <input class="form-control form-control-sm @error('names') is-invalid @enderror" type="text" name="names"
                                    value="{{ old('names', $user->names) }}" required>
-                            @error('names')
-                                <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-names" class="text-danger">@error('names'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.username') }}: <span class="required">*</span></label>
-                            <input class="form-control form-control-sm @error('username') is-invalid @endif" type="text" name="username"
+                            <input class="form-control form-control-sm @error('username') is-invalid @enderror" type="text" name="username"
                                    value="{{ old('username', $user->username) }}" required>
-                            @error('username')
-                                <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-username" class="text-danger">@error('username'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.email') }}: <span class="required">*</span></label>
-                            <input class="form-control form-control-sm @error('email') is-invalid @endif" type="text" name="email"
+                            <input class="form-control form-control-sm @error('email') is-invalid @enderror" type="text" name="email"
                                    value="{{ old('email', $user->email) }}" required>
-                            @error('email')
-                                <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-email" class="text-danger">@error('email'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.profile_type') }}: </label>
                             @php($profilType = old('profile_type', $user->profile_type))
-                            <select class="form-control form-control-sm select2 @error('profile_type') is-invalid @endif" name="profile_type">
+                            <select class="form-control form-control-sm select2 @error('profile_type') is-invalid @enderror" name="profile_type">
                                 <option value="0" @if(!$profilType) selected="selected" @endif>---</option>
                                 @if(isset($profileTypes) && $profileTypes->count())
                                     @foreach($profileTypes as $row)
@@ -68,17 +60,13 @@
                                     @endforeach
                                 @endif
                             </select>
-                            @error('profile_type')
-                                <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-profile_type" class="text-danger">@error('profile_type'){{ $message }}@enderror</span>
                         </div>
                         <div class="col-12"></div>
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.phone') }}:</label>
                             <input class="form-control form-control-sm @error('phone') is-invalid @enderror" type="text" value="{{ old('phone', $user->phone) }}" name="phone">
-                            @error('phone')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-phone" class="text-danger">@error('phone'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3 identity"
                              @if($legalForm != \App\Models\User::USER_TYPE_PERSON) style="display: none;" @enderror
@@ -90,9 +78,7 @@
                                 </i> {{ __('validation.attributes.person_identity') }}:
                             </label>
                             <input class="form-control form-control-sm @error('person_identity') is-invalid @enderror" type="text" name="person_identity" value="{{ old('person_identity', $user->person_identity) }}">
-                            @error('person_identity')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-person_identity" class="text-danger">@error('person_identity'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3 identity"
                              @if($legalForm != \App\Models\User::USER_TYPE_COMPANY) style="display: none;" @endif
@@ -103,9 +89,7 @@
                                    data-bs-title="{{ __('front.profile.company_identity_tooltip') }}">
                                 </i> {{ __('validation.attributes.company_identity') }}:</label>
                             <input class="form-control form-control-sm @error('company_identity') is-invalid @enderror" type="text" name="company_identity" value="{{ old('company_identity', $user->company_identity) }}">
-                            @error('company_identity')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-company_identity" class="text-danger">@error('company_identity'){{ $message }}@enderror</span>
                         </div>
                     </div>
                 </div>
@@ -127,9 +111,7 @@
                                     @endforeach
                                 @endif
                             </select>
-                            @error('country')
-                                <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-country" class="text-danger">@error('country'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.area') }}: <span class="required">*</span></label>
@@ -142,9 +124,7 @@
                                     @endforeach
                                 @endif
                             </select>
-                            @error('area')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-area" class="text-danger">@error('area'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.municipality') }}: <span class="required">*</span></label>
@@ -157,9 +137,7 @@
                                     @endforeach
                                 @endif
                             </select>
-                            @error('municipality')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-municipality" class="text-danger">@error('municipality'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.settlement') }}: <span class="required">*</span></label>
@@ -172,32 +150,24 @@
                                     @endforeach
                                 @endif
                             </select>
-                            @error('settlement')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-settlement" class="text-danger">@error('settlement'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.post_code') }}:</label>
                             <input class="form-control form-control-sm @error('post_code') is-invalid @enderror" type="text" name="post_code" value="{{ old('post_code', $user->post_code) }}">
-                            @error('post_code')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-post_code" class="text-danger">@error('post_code'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-6 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.address') }}: <span class="required">*</span></label>
                             <input class="form-control form-control-sm @error('address') is-invalid @enderror" type="text" name="address"
                                    value="{{ old('address', $user->address) }}" required>
-                            @error('address')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-address" class="text-danger">@error('address'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-6 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.address_second') }}: </label>
                             <input class="form-control form-control-sm @error('address_second') is-invalid @enderror" type="text" name="address_second"
                                    value="{{ old('address_second', $user->address_second) }}">
-                            @error('address_second')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-address_second" class="text-danger">@error('address_second'){{ $message }}@enderror</span>
                         </div>
                     </div>
                 </div>
@@ -215,6 +185,7 @@
                                     <input type="radio" name="delivery_method" value="{{ $val }}" @if(old('delivery_method', $user->delivery_method) == $val) checked @endif required> {{ __('custom.delivery_by.'.$name) }}
                                 </label>
                             @endforeach
+                            <span id="error-delivery_method" class="text-danger d-inline-block w-100">@error('delivery_method'){{ $message }}@enderror</span>
                         </div>
                     </div>
                 </div>
@@ -223,3 +194,7 @@
         </form>
     </section>
 @endsection
+@push('scripts')
+    <script src="{{ asset('jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('jquery-validation/localization/messages_' . app()->getLocale() . '.js') }}"></script>
+@endpush

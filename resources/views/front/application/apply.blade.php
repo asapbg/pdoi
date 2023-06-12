@@ -40,42 +40,38 @@
                                        @if($user->legal_form) disabled @endif>
                                 {{ \App\Models\User::getUserLegalForms()[\App\Models\User::USER_TYPE_COMPANY] }}
                             </label>
+                            <span id="error-legal_form" class="text-danger d-inline-block w-100">@error('legal_form'){{ $message }}@endif</span>
                         </div>
                         <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                             <label class="form-label fw-semibold w-100" for="names">
                                 {{ __('validation.attributes.names') }}: <span class="required">*</span>
-                                @if(empty($user->names)) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(empty($user->names)) <i class="fa-solid fa-user fs text-warning"></i> @endif
                                 <span class="text-primary ms-3 float-end fw-normal"><input type="checkbox" class="form-check-input" name="names_publication" value="1"> {{ __('front.public') }}</span>
                             </label>
                             <input class="form-control form-control-sm @error('names') is-invalid @endif @if(!empty($user->names)) disabled-item @endif" type="text" id="names" name="names"
                                    value="{{ old('names', $user->names) }}" required @if(!empty($user->names)) disabled @endif>
-                            @error('names')
-                                <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-names" class="text-danger">@error('names'){{ $message }}@endif</span>
                         </div>
                         <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                             <label class="form-label fw-semibold w-100">
                                 {{ __('validation.attributes.email') }}: <span class="required">*</span>
-                                @if(empty($user->email)) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(empty($user->email)) <i class="fa-solid fa-user fs text-warning"></i> @endif
                                 <span class="text-primary ms-3 float-end fw-normal"><input type="checkbox" class="form-check-input" name="email_publication" value="1"> {{ __('front.public') }}</span>
                             </label>
                             <input class="form-control form-control-sm @error('email') is-invalid @endif @if(!empty($user->email)) disabled-item @endif" type="text" name="email"
                                    value="{{ old('email', $user->email) }}" required @if(!empty($user->email)) disabled @endif>
-                            @error('email')
-                                <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-email" class="text-danger">@error('email'){{ $message }}@endif</span>
                         </div>
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold w-100" for="phone">
                                 {{ __('validation.attributes.phone') }}:
-                                @if(empty($user->phone)) <i class="fa-solid fa-user text-warning"></i> @endif
+
+                                @if(empty($user->phone)) <i class="fa-solid fa-user fs text-warning"></i> @endif
                                 <span class="text-primary ms-3 float-end fw-normal"><input type="checkbox" class="form-check-input" name="phone_publication" value="1"> {{ __('front.public') }}</span>
                             </label>
                             <input class="form-control form-control-sm @error('phone') is-invalid @enderror @if(!empty($user->phone)) disabled-item @endif" type="text"
                                    value="{{ old('phone', $user->phone) }}" id="phone" name="phone" @if(!empty($user->phone)) disabled @endif>
-                            @error('phone')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-phone" class="text-danger">@error('phone'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3 identity"
                              @if($legalForm != \App\Models\User::USER_TYPE_PERSON) style="display: none;" @enderror
@@ -85,14 +81,12 @@
                                    data-bs-toggle="tooltip" data-bs-placement="top"
                                    data-bs-title="{{ __('front.profile.person_identity_tooltip') }}">
                                 </i> {{ __('validation.attributes.person_identity') }}:
-                                @if(empty($user->person_identity)) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(empty($user->person_identity)) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             <input class="form-control form-control-sm @error('person_identity') is-invalid @enderror @if($user->person_identity) disabled-item @endif"
                                    type="text" name="person_identity" value="{{ old('person_identity', $user->person_identity) }}"
                                    @if($user->person_identity) disabled @endif>
-                            @error('person_identity')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-person_identity" class="text-danger">@error('person_identity'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3 identity"
                              @if($legalForm != \App\Models\User::USER_TYPE_COMPANY) style="display: none;" @endif
@@ -102,14 +96,12 @@
                                    data-bs-toggle="tooltip" data-bs-placement="top"
                                    data-bs-title="{{ __('front.profile.company_identity_tooltip') }}">
                                 </i> {{ __('validation.attributes.company_identity') }}:
-                                @if(empty($user->company_identity)) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(empty($user->company_identity)) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             <input class="form-control form-control-sm @error('company_identity') is-invalid @enderror"
                                    type="text" name="company_identity" value="{{ old('company_identity', $user->company_identity) }}"
                                    @if($user->person_identity) disabled @endif>
-                            @error('company_identity')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-company_identity" class="text-danger">@error('company_identity'){{ $message }}@enderror</span>
                         </div>
                     </div>
                 </div>
@@ -126,7 +118,7 @@
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold" for="country">
                                 {{ __('validation.attributes.country') }}: <span class="required">*</span>
-                                @if(!$user->country) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(!$user->country) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             <select class="form-control form-control-sm select2 @error('country') is-invalid @enderror @if($user->country) disabled-item @endif" name="country" if="country"
                                     required @if($user->country) disabled @endif>
@@ -141,14 +133,12 @@
                                     @endif
                                 @endif
                             </select>
-                            @error('country')
-                                <span class="text-danger">{{ $message }}</span>
-                            @endif
+                            <span id="error-country" class="text-danger">@error('country'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold" for="area">
                                 {{ __('validation.attributes.area') }}: <span class="required">*</span>
-                                @if(!$user->area) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(!$user->area) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             @php($area = old('area', $user->ekatte_area_id))
                             <select class="form-control form-control-sm select2 @error('area') is-invalid @enderror @if($user->area) disabled-item @endif" name="area" id="area"
@@ -164,14 +154,12 @@
                                     @endif
                                 @endif
                             </select>
-                            @error('area')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-area" class="text-danger">@error('area'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold" for="municipality">
                                 {{ __('validation.attributes.municipality') }}: <span class="required">*</span>
-                                @if(!$user->municipality) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(!$user->municipality) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             @php($municipality = old('municipality', $user->ekatte_municipality_id))
                             <select class="form-control form-control-sm select2 @error('municipality') is-invalid @enderror @if($user->municipality) disabled-item @endif" name="municipality" id="municipality"
@@ -187,14 +175,12 @@
                                     @endif
                                 @endif
                             </select>
-                            @error('municipality')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-municipality" class="text-danger">@error('municipality'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold" for="settlement">
                                 {{ __('validation.attributes.settlement') }}: <span class="required">*</span>
-                                @if(!$user->settlement) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(!$user->settlement) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             @php($settlement = old('settlement', $user->ekatte_settlement_id))
                                 <select class="form-control form-control-sm select2 @error('settlement') is-invalid @enderror @if($user->settlement) disabled-item @endif" name="settlement" id="settlement"
@@ -210,42 +196,35 @@
                                         @endif
                                     @endif
                                 </select>
-                            @error('settlement')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                                <span id="error-settlement" class="text-danger">@error('settlement'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3">
                             <label class="form-label fw-semibold" for="post_code">
                                 {{ __('validation.attributes.post_code') }}:
-                                @if(empty($user->post_code)) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(empty($user->post_code)) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             <input class="form-control form-control-sm @error('post_code') is-invalid @enderror @if(empty(!$user->post_code)) disabled-item @endif" type="text" name="post_code" id="post_code"
                                    value="{{ old('post_code', $user->post_code) }}" @if(empty(!$user->post_code)) disabled @endif>
-                            @error('post_code')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-post_code" class="text-danger">@error('post_code'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-6 col-12 mb-3">
                             <label class="form-label fw-semibold" for="address">
                                 {{ __('validation.attributes.address') }}: <span class="required">*</span>
-                                @if(empty($user->address)) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(empty($user->address)) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             <input class="form-control form-control-sm @error('address') is-invalid @enderror @if(empty(!$user->address)) disabled-item @endif" type="text" name="address" id="address"
                                    value="{{ old('address', $user->address) }}" required @if(empty(!$user->address)) disabled @endif>
-                            @error('address')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                                <span id="error-address" class="text-danger">@error('address'){{ $message }}@enderror</span>
                         </div>
                         <div class="form-group form-group-sm col-md-6 col-12 mb-3">
                             <label class="form-label fw-semibold" for="address_second">
                                 {{ __('validation.attributes.address_second') }}:
-                                @if(empty($user->address_second)) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(empty($user->address_second)) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label>
                             <input class="form-control form-control-sm @error('address_second') is-invalid @enderror @if(empty(!$user->address_second)) disabled-item @endif" type="text" name="address_second" id="address_second"
                                    value="{{ old('address_second', $user->address_second) }}" @if(empty(!$user->address_second)) disabled @endif>
-                            @error('address_second')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-address_second" class="text-danger">@error('address_second'){{ $message }}@enderror</span>
+
                         </div>
                     </div>
                 </div>
@@ -262,9 +241,8 @@
 {{--                            {{ $request }}--}}
                             <textarea class="summernote w-100" name="request_summernote" id="request_summernote">{{ $request }}</textarea>
                             <input type="hidden" class="do-not-ignore" name="request" value="{{ $request }}" id="request">
-                            @error('request')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-request" class="text-danger">@error('request'){{ $message }}@enderror</span>
+
                         </div>
                     </div>
                 </div>
@@ -303,21 +281,22 @@
             </div>
             <div class="card card-light">
                 <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-envelope me-2"></i> {{ __('front.settings') }}</h4>
+                    <h4 class="fs-5"><i class="fa-solid fa-envelope me-2"></i> {{ __('front.application.answer_section') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label me-3 fw-semibold">
                                 {{ __('validation.attributes.delivery_method') }}: <span class="required">*</span>
-                                @if(!$user->delivery_method) <i class="fa-solid fa-user text-warning"></i> @endif
+                                @if(!$user->delivery_method) <i class="fa-solid fa-user fs text-warning"></i> @endif
                             </label> <br>
                             @foreach(\App\Enums\DeliveryMethodsEnum::options() as $name => $val)
-                                <label class="form-label me-3" role="button">
-                                    <input type="radio" class="@if($user->delivery_method) disabled-item @endif" name="delivery_method" value="{{ $val }}" @if(old('delivery_method', $user->delivery_method) == $val) checked @endif
+                                <label class="form-label me-3" role="button" for="delivery_method">
+                                    <input type="radio" class="@if($user->delivery_method)  @error('delivery_method') is-invalid @enderror disabled-item @endif" name="delivery_method" value="{{ $val }}" @if(old('delivery_method', $user->delivery_method) == $val) checked @endif
                                     required @if($user->delivery_method) disabled @endif> {{ __('custom.delivery_by.'.$name) }}
                                 </label>
                             @endforeach
+                            <span id="error-delivery_method" class="text-danger d-inline-block w-100">@error('delivery_method'){{ $message }}@enderror</span>
                         </div>
                     </div>
                 </div>
@@ -349,9 +328,7 @@
                                     @endforeach
                                 @endif
                             </select>
-                            @error('subjects')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <span id="error-subjects" class="text-danger">@error('subjects'){{ $message }}@enderror</span>
                         </div>
                     </div>
                 </div>

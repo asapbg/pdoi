@@ -13,6 +13,7 @@ class EkatteMunicipality extends ModelActivityExtend implements TranslatableCont
 
     const PAGINATE = 20;
     const TRANSLATABLE_FIELDS = ['ime'];
+    const MODULE_NAME = 'custom.municipality';
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public $timestamps = true;

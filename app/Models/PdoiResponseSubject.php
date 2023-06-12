@@ -17,6 +17,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     const PAGINATE = 20;
     const TRANSLATABLE_FIELDS = ['subject_name', 'address', 'add_info', 'court_text'];
     public $timestamps = true;
+    const MODULE_NAME = 'custom.rzs_items';
 
     protected $table = 'pdoi_response_subject';
     //activity

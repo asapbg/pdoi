@@ -79,6 +79,10 @@ class PdoiResponseSubjectController extends AdminController
         }
         try {
             $validated['date_from'] = Carbon::now();//for now
+            $validated['delivery_method'] = $validated['rzs_delivery_method'];
+            $validated['court_id'] = $validated['court'];
+            unset($validated['rzs_delivery_method'], $validated['court']);
+
             $fillable = $this->getFillableValidated($validated, $item);
             if( !$id ) {
                 $fillable['adm_register'] = 1;

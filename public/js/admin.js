@@ -2914,7 +2914,6 @@ $(document).ready(function (e) {
                 let checked = $('#'+ subjectModal.id +' input[name="subjects-item"]:checked');
                 if( checked.length ) {
                     if( checked.length === 1 ) {
-                        console.log(checked.val());
                         subjectsFormSelect.val(checked.val());
                     } else if( checked.length > 1 ) {
                         let subjectValues = [];

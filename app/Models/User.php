@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     protected string $logName = "users";
 
-    const MODULE_NAME = ('custom.module_users');
+    const MODULE_NAME = 'custom.users';
 
     const PAGINATE = 20;
 

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_object');
-            $table->integer('code_object');
+            $table->integer('code_object'); // ?????
             $table->string('filename', 200)->nullable();
             $table->string('content_type', 500)->nullable();
             $table->binary('content')->nullable();
@@ -46,7 +46,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_file');
             $table->foreign('id_file')
                 ->references('id')->on('files');
-
         });
     }
 

@@ -173,6 +173,10 @@ main {
     font-style: italic;
 }
 
+.fs {
+    font-size: 10px;
+}
+
 label.is_invalid {
     color:red;
 }

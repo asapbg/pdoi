@@ -14,7 +14,7 @@ class CustomRole extends Role
 
     protected string $logName = "roles";
 
-    const MODULE_NAME = ('custom.module_roles');
+    const MODULE_NAME = 'custom.roles';
     const PAGINATE = 20;
 
     const SUPER_USER_ROLE = 'service_user';

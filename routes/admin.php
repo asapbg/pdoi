@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Nomenclature\EkatteMunicipalityController;
 use App\Http\Controllers\Admin\Nomenclature\EkatteSettlementController;
 use App\Http\Controllers\Admin\Nomenclature\CountryController;
 use App\Http\Controllers\Admin\Nomenclature\ProfileTypeController;
+use App\Http\Controllers\Admin\Nomenclature\CategoryController;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -118,6 +119,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/nomenclature/profile-type',                'index')->name('nomenclature.profile_type')->middleware('can:viewAny,App\Models\ProfileType');
         Route::get('/nomenclature/profile-type/edit/{item?}',         'edit')->name('nomenclature.profile_type.edit');
         Route::match(['post', 'put'], '/nomenclature/profile-type/store/{item?}',         'store')->name('nomenclature.profile_type.store');
+    });
+
+    //Nomenclature
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/nomenclature/category',                'index')->name('nomenclature.category')->middleware('can:viewAny,App\Models\Category');
+        Route::get('/nomenclature/category/edit/{item?}',         'edit')->name('nomenclature.category.edit');
+        Route::match(['post', 'put'], '/nomenclature/category/store/{item?}',         'store')->name('nomenclature.category.store');
     });
 
 });

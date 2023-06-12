@@ -16,6 +16,7 @@ class RzsSection  extends ModelActivityExtend implements TranslatableContract
 
     const PAGINATE = 20;
     const TRANSLATABLE_FIELDS = ['name'];
+    const MODULE_NAME = ('custom.module_rzs_section');
     public $timestamps = true;
 
     protected $table = 'rzs_section';

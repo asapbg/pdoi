@@ -13,6 +13,7 @@ class PdoiApplication extends ModelActivityExtend
 
     const PAGINATE = 20;
     public $timestamps = true;
+    const MODULE_NAME = 'custom.application';
     protected $table = 'pdoi_application';
 
     /**
@@ -57,8 +58,13 @@ class PdoiApplication extends ModelActivityExtend
         return $this->hasOne(EkatteSettlement::class, 'id', 'settlement_id');
     }
 
-    public function response_subject(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasOne(PdoiResponseSubject::class, 'id', 'response_subject_id');
+        return $this->belongsToMany(Category::class, 'pdoi_application_category', 'id', 'category_id');
     }
+
+//    public function response_subject(): \Illuminate\Database\Eloquent\Relations\HasOne
+//    {
+//        return $this->hasOne(PdoiResponseSubject::class, 'id', 'response_subject_id');
+//    }
 }

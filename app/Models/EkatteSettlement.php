@@ -13,6 +13,7 @@ class EkatteSettlement extends ModelActivityExtend implements TranslatableContra
 
     const PAGINATE = 20;
     const TRANSLATABLE_FIELDS = ['ime'];
+    const MODULE_NAME = 'custom.settlement';
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public $timestamps = true;

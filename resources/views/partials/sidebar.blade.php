@@ -100,7 +100,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link @if(Str::contains(url()->current(), ['nomenclature/profile-type']))) active @endif">
+                        <a href="#" class="nav-link @if(Str::contains(url()->current(), ['nomenclature/profile-type']) || Str::contains(url()->current(), ['nomenclature/category']))) active @endif">
                             <i class="nav-icon fas fa-stream"></i>
                             <p>Системни<i class="fas fa-angle-left right"></i></p>
                         </a>
@@ -110,6 +110,15 @@
                                    class="nav-link @if(strstr(url()->current(), 'nomenclature/profile-type')) active @endif">
                                     <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
                                     <p>{{ trans_choice('custom.nomenclature.profile_type', 2) }}</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.category') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/category')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.category', 2) }}</p>
                                 </a>
                             </li>
                         </ul>

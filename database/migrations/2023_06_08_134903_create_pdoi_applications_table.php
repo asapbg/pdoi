@@ -50,7 +50,11 @@ return new class extends Migration
 
             $table->integer('response_subject_id');
             $table->foreign('response_subject_id')
-                ->references('id')->on('pdoi_response_subject');
+                ->references('id')
+                ->on('pdoi_response_subject');
+            $table->text('response')->nullable();
+            $table->timestamp('response_date')->nullable();
+
             $table->timestamp('registration_date')->nullable();//to subject
 
             $table->text('request');
@@ -58,9 +62,6 @@ return new class extends Migration
             $table->timestamp('status_date')->useCurrent();
 
             $table->string('application_uri', 2000)->unique();
-
-            $table->text('response')->nullable();
-            $table->timestamp('response_date')->nullable();
 
             $table->integer('replay_in_time')->nullable();
             $table->bigInteger('number_of_visits')->nullable();
@@ -73,7 +74,6 @@ return new class extends Migration
             $table->tinyInteger('phone_publication')->default(0);
 
             $table->timestamp('response_end_time')->nullable();
-            $table->string('38')->nullable();
             $table->unsignedBigInteger('egov_mess_id')->nullable();
             $table->unsignedBigInteger('app_id_for_view')->nullable();
             $table->unsignedBigInteger('fw_app')->nullable();
@@ -82,6 +82,42 @@ return new class extends Migration
 
             $table->timestamps(); //date_reg, date_last_mod
             $table->softDeletes();
+        });
+
+        Schema::create('pdoi_application_event', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('pdoi_application_id');
+            $table->foreign('pdoi_application_id')
+                ->references('id')
+                ->on('pdoi_application');
+            $table->unsignedTinyInteger('event_type');
+            $table->date('event_date')->useCurrent();
+            $table->date('event_end_date')->nullable();
+            $table->text('add_text')->nullable();
+            $table->unsignedBigInteger('old_resp_subject_id')->nullable();
+            $table->foreign('old_resp_subject_id')
+                ->references('id')
+                ->on('pdoi_response_subject');
+            $table->unsignedBigInteger('new_resp_subject_id')->nullable();
+            $table->foreign('new_resp_subject_id')
+                ->references('id')
+                ->on('pdoi_response_subject');
+            $table->unsignedBigInteger('user_reg');
+            $table->foreign('user_reg')
+                ->references('id')
+                ->on('users');
+            $table->unsignedBigInteger('user_last_mod')->nullable();
+            $table->foreign('user_last_mod')
+                ->references('id')
+                ->on('users');
+
+            $table->tinyInteger('status');
+            $table->tinyInteger('event_reason')->nullable();
+            $table->tinyInteger('reason_not_approved')->nullable();
+            $table->unsignedInteger('app_id_for_view')->nullable();
+
+            $table->timestamps();//date_reg,date_last_mod
+
         });
     }
 
@@ -92,6 +128,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('pdoi_application_event');
         Schema::dropIfExists('pdoi_application');
     }
 };
