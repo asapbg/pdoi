@@ -52,7 +52,7 @@ class PdoiResponseSubjectController extends AdminController
         if( ($item->id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
-        $subjects = PdoiResponseSubject::optionsList($item->id);
+        $subjects = PdoiResponseSubject::optionsList($item->id ?? 0);
         $rzsSections = RzsSection::optionsList();
         $areas = EkatteArea::optionsList();
         $municipalities = EkatteMunicipality::optionsList();

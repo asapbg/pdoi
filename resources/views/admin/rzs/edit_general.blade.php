@@ -19,5 +19,5 @@
     </div>
 
     <div class="col-12"></div>
-    @include('admin.partial.edit_field_translate', ['field' => 'name'])
+    @include('admin.partial.edit_field_translate', ['field' => 'subject_name'])
 </div>
