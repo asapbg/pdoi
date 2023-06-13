@@ -207,6 +207,8 @@ return [
     'date_request'                     => 'Предаден на',
     'date_received'                    => 'Получен на',
     'date_created'                     => 'Дата на създаване',
+    'date_apply'                       => 'Дата на подаване',
+    'date_registration'                => 'Дата на регистрация',
     'are_you_sure_to_delete'           => 'Сигурни ли сте, че искате да изтриете',
     'are_you_sure_to_make_active'      => 'Сигурни ли сте, че искате да активирате',
     'are_you_sure_to_make_not_active'  => 'Сигурни ли сте, че искате да деактивирате',
@@ -236,6 +238,9 @@ return [
     'general_info'                              => 'Основна информация',
     'in_reg_process'                            => 'В процес на регистрация',
     'council_ministers'                         => 'Министрески съвет',
+    'address'                                   => 'Адрес',
+    'address_for_contact'                       => 'Адрес за контакти',
+    'application_uri'                          => 'УРИ',
     //roles and permissions
     'permissions.group_permission'              => 'Група (права)',
     'permissions.as_new_group'                  => 'Нова група права',
@@ -291,6 +296,7 @@ return [
     'delivery_by.SDES'                        => 'Публикуване на портала и уведомяване чрез системата за сигурно електронно връчване (ССЕВ)',
     //applications
     'application'                               => 'Заявление|Заявления',
+    'access_to_public_info'                     => 'достъп до обществена информация',
     'reg_number'                                => 'Рег. №',
     'status_date'                               => 'От дата',
     //application statuses

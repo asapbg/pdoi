@@ -28,6 +28,22 @@
 
     --app-link:#72afd2;
 }
+
+@font-face {
+    font-family: 'Fira Sans BGR';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Fira Sans BGR Regular'), local('FiraSans-Regular'),
+    url('../fonts/FiraSansBGR-Regular.otf') format('opentype'),
+    url('../fonts/FiraSansBGR-Regular.woff2') format('woff2'),
+    url('../fonts/FiraSansBGR-Regular.woff') format('woff'),
+    url('../fonts/FiraSansBGR-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: 'Fira Sans BGR', sans-serif !important;
+}
+
 /*==========================*/
 /*START TOP NAVIGATIONS*/
 /*==========================*/

@@ -6,6 +6,7 @@ use App\Enums\PdoiApplicationStatusesEnum;
 use App\Traits\FilterSort;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use phpDocumentor\Reflection\Types\Self_;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -18,8 +19,11 @@ class PdoiApplication extends ModelActivityExtend
     const MODULE_NAME = 'custom.application';
     protected $table = 'pdoi_application';
 
+    const UPLOAD_DIR = 'upload/';
+
     //END TERMS PARAMETERS
     const DAYS_AFTER_SUBJECT_REGISTRATION = 14; //14 дни от регситрацията на зявлението при ЗС
+    const CODE_OBJECT = 13; //TODO fix me I have no idea what it means
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +46,13 @@ class PdoiApplication extends ModelActivityExtend
     {
         return Attribute::make(
             get: fn () => __('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->status))
+        );
+    }
+
+    protected function fileFolder(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => self::UPLOAD_DIR.$this->id.'/'
         );
     }
 
@@ -72,11 +83,16 @@ class PdoiApplication extends ModelActivityExtend
 
     public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'pdoi_application_category', 'id', 'category_id');
+        return $this->belongsToMany(Category::class, 'pdoi_application_category', 'pdoi_application_id', 'category_id');
     }
 
     public function responseSubject(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(PdoiResponseSubject::class, 'id', 'response_subject_id');
+    }
+
+    public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(File::class, 'id_object', 'id');
     }
 }

@@ -11,14 +11,17 @@ use App\Models\Country;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
+use App\Models\File;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PdoiApplicationController extends Controller
@@ -103,7 +106,6 @@ class PdoiApplicationController extends Controller
                 $newApplication->save();
 
                 //TODO save user attached files
-                //TODO Generate application PDF file
 
                 //REGISTER APPLICATION DEPENDING ON SUBJECT DELIVERY METHOD
                 //now SUBJECTS has 3 methods for delivery (mail, SDES, RKS)
@@ -144,8 +146,9 @@ class PdoiApplicationController extends Controller
                         $newApplication->registration_date = Carbon::now();
                         $newApplication->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION);
                         $newApplication->save();
+
                         //send mail to subject
-                        Mail::to($user->email)->send(new SubjectRegisterNewApplication($newApplication));
+//                        Mail::to($user->email)->send(new SubjectRegisterNewApplication($newApplication));
 //                        Mail::to($subject->email)->send(new SubjectRegisterNewApplication($newApplication));
                 }
 
@@ -158,8 +161,21 @@ class PdoiApplicationController extends Controller
                     'response_end_time' => displayDate($newApplication->response_end_time),
                 );
                 //TODO send mail for application status to user
-                Mail::to($user->email)->send(new NotiyUserApplicationStatus($newApplication));
+//                Mail::to($user->email)->send(new NotiyUserApplicationStatus($newApplication));
 //                Mail::to($newApplication->applicant->email)->send(new NotiyUserApplicationStatus($newApplication));
+
+                //TODO Generate application PDF file
+                // When generate this file only on registration or???
+                $fileName = 'zayavlenie_ZDOI_'.displayDate($newApplication->created_at).'.pdf';
+                $pdfFile = Pdf::loadView('pdf.application_doc', ['application' => $newApplication]);
+                Storage::disk('local')->put($newApplication->fileFolder.$fileName, $pdfFile->output());
+                $newFile = new File([
+                    'code_object' => PdoiApplication::CODE_OBJECT,
+                    'filename' => $fileName,
+                    'content_type' => 'application/pdf',
+                    'path' => $newApplication->fileFolder.$fileName,
+                ]);
+                $newApplication->files()->save($newFile);
             }
 
             DB::commit();

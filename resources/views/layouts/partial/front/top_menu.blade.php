@@ -10,7 +10,7 @@
                 </li>
                 @if(auth()->user())
                     <li class="nav-item px-1">
-                        <a class="nav-link" href="{{ route('application.create') }}">Подаване на заявление</a>
+                        <a class="nav-link @if(request()->route()->getName() == 'application.create') active @endif" href="{{ route('application.create') }}">Подаване на заявление</a>
                     </li>
                 @endif
                 <li class="nav-item px-1">
