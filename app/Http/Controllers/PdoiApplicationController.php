@@ -148,7 +148,7 @@ class PdoiApplicationController extends Controller
                         $newApplication->save();
 
                         //send mail to subject
-//                        Mail::to($user->email)->send(new SubjectRegisterNewApplication($newApplication));
+                        Mail::to($user->email)->send(new SubjectRegisterNewApplication($newApplication));
 //                        Mail::to($subject->email)->send(new SubjectRegisterNewApplication($newApplication));
                 }
 
@@ -161,7 +161,7 @@ class PdoiApplicationController extends Controller
                     'response_end_time' => displayDate($newApplication->response_end_time),
                 );
                 //TODO send mail for application status to user
-//                Mail::to($user->email)->send(new NotiyUserApplicationStatus($newApplication));
+                Mail::to($user->email)->send(new NotiyUserApplicationStatus($newApplication));
 //                Mail::to($newApplication->applicant->email)->send(new NotiyUserApplicationStatus($newApplication));
 
                 //TODO Generate application PDF file
