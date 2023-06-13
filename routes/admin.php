@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Nomenclature\EkatteSettlementController;
 use App\Http\Controllers\Admin\Nomenclature\CountryController;
 use App\Http\Controllers\Admin\Nomenclature\ProfileTypeController;
 use App\Http\Controllers\Admin\Nomenclature\CategoryController;
+use App\Http\Controllers\Admin\Nomenclature\ExtendTermsReasonController;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -126,6 +127,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/nomenclature/category',                'index')->name('nomenclature.category')->middleware('can:viewAny,App\Models\Category');
         Route::get('/nomenclature/category/edit/{item?}',         'edit')->name('nomenclature.category.edit');
         Route::match(['post', 'put'], '/nomenclature/category/store/{item?}',         'store')->name('nomenclature.category.store');
+    });
+
+    //Nomenclature
+    Route::controller(ExtendTermsReasonController::class)->group(function () {
+        Route::get('/nomenclature/extend-terms',                'index')->name('nomenclature.extend_terms')->middleware('can:viewAny,App\Models\ExtendTermsReason');
+        Route::get('/nomenclature/extend-terms/edit/{item?}',         'edit')->name('nomenclature.extend_terms.edit');
+        Route::match(['post', 'put'], '/nomenclature/extend-terms/store/{item?}',         'store')->name('nomenclature.extend_terms.store');
     });
 
 });

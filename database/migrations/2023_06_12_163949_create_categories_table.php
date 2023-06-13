@@ -22,7 +22,7 @@ return new class extends Migration
         Schema::create('category_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('locale')->index();
-            $table->unsignedInteger('category_id');
+            $table->unsignedBigInteger('category_id');
             $table->unique(['category_id', 'locale']);
             $table->foreign('category_id')
                 ->references('id')

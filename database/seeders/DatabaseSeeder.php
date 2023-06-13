@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             PermissionsSeeder::class,
             UsersSeeder::class,
             RzsSectionSeeder::class,
-            CategorySeeder::class
+            CategorySeeder::class,
+            ExtendTermsReasonSeeder::class
         ]);
     }
 }

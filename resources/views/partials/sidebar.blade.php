@@ -122,6 +122,15 @@
                                 </a>
                             </li>
                         </ul>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.extend_terms') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/extend-terms')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.extend_terms_reason', 2) }}</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endcanany
                 @canany(['manage.*', 'users.*', 'roles_permissions.*'])
