@@ -146,6 +146,7 @@ return [
     'deletion'                         => 'Изтриване',
     'deleted'                          => 'Изтрит',
     'print_label'                      => 'Отпечатай етикет',
+    'print'                            => 'Принтирай',
     'update'                           => 'Обнови',
     'updated'                          => 'Обновяване',
     'save'                             => 'Запази',
@@ -289,7 +290,9 @@ return [
     'delivery_by.EMAIL'                       => 'Публикуване на портала и уведомяване на посочения в профила е-мейл адрес',
     'delivery_by.SDES'                        => 'Публикуване на портала и уведомяване чрез системата за сигурно електронно връчване (ССЕВ)',
     //applications
-    'application'                            => 'Заявление|Заявления',
+    'application'                               => 'Заявление|Заявления',
+    'reg_number'                                => 'Рег. №',
+    'status_date'                               => 'От дата',
     //application statuses
     'application.status.RECEIVED'             => 'Прието на платформата',
     'application.status.REGISTRATION_TO_SUBJECT'     => 'Очаква регистрация при задължен субект',

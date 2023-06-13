@@ -161,10 +161,10 @@ $(document).ready(function (){
                     required: true,
                     number: true
                 },
-                // names : {
-                //     required: true,
-                //     maxlength: 255 //alphaspace
-                // },
+                names : {
+                    required: true,
+                    maxlength: 255 //alphaspace
+                },
                 email: {
                     required: true,
                     email: true,
@@ -267,12 +267,12 @@ $(document).ready(function (){
                 if( typeof data.errors != 'undefined' ) {
                     console.log(data.errors)
                 } else {
-                    if (typeof data.applicationInfo != 'undefined' ) {
+                    if (typeof data.applicationsInfo != 'undefined' && data.applicationsInfo.length > 0 ) {
+                        $('div#apply').html(data.html);
                         $('form').addClass('d-none');
                         $('.form-legend').addClass('d-none');
                         $('div#apply').removeClass('d-none');
                         activateTab('apply');
-                        console.log(data.applicationInfo);
                     } else {
                         console.log('something wrong');
                     }

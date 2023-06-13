@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\PdoiApplicationStatusesEnum;
 use App\Traits\FilterSort;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -15,6 +17,9 @@ class PdoiApplication extends ModelActivityExtend
     public $timestamps = true;
     const MODULE_NAME = 'custom.application';
     protected $table = 'pdoi_application';
+
+    //END TERMS PARAMETERS
+    const DAYS_AFTER_SUBJECT_REGISTRATION = 14; //14 дни от регситрацията на зявлението при ЗС
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +36,13 @@ class PdoiApplication extends ModelActivityExtend
      */
     public function getModelName() {
         return $this->application_uri;
+    }
+
+    protected function statusName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => __('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->status))
+        );
     }
 
     public function applicant(): \Illuminate\Database\Eloquent\Relations\HasOne
@@ -63,8 +75,8 @@ class PdoiApplication extends ModelActivityExtend
         return $this->belongsToMany(Category::class, 'pdoi_application_category', 'id', 'category_id');
     }
 
-//    public function response_subject(): \Illuminate\Database\Eloquent\Relations\HasOne
-//    {
-//        return $this->hasOne(PdoiResponseSubject::class, 'id', 'response_subject_id');
-//    }
+    public function responseSubject(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiResponseSubject::class, 'id', 'response_subject_id');
+    }
 }

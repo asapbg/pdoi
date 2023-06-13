@@ -25,6 +25,7 @@ return [
     'profile.company_identity_tooltip' => 'Необходимо при уведомяване и връчване на документи чрез системата за сигурно електронно връчване (ССЕВ)',
     //application apply
     'application.title.apply' => 'Подаване на заявление',
+    'application.apply.success' => 'Заявлението е регистрирано успешно',
     'application' => 'Заявление',
     'application.step.info' => 'Попълване на завление',
     'application.step.rzs' => 'Избор на задължен субект',

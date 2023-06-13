@@ -38,7 +38,7 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
 
             'phone' => ['nullable', 'string', 'max:1000'],
             'fax' => ['nullable', 'string', 'max:1000'],
-            'email' => ['nullable', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
 
             'redirect_only' => ['nullable', 'numeric'],
             'rzs_delivery_method' => ['required', 'numeric', Rule::in(PdoiSubjectDeliveryMethodsEnum::values())],
@@ -49,6 +49,12 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
         if( (int)request()->input('parent_id') > 0 ){
             $rules['parent_id'][] = 'exists:pdoi_response_subject,id';
             $rules['parent_id'][] = 'numeric';
+        }
+
+        if( request()->input('rzs_delivery_method') ) {
+            if( (int)request()->input('rzs_delivery_method') == PdoiSubjectDeliveryMethodsEnum::EMAIL->value ) {
+                $rules['email'] = ['required', 'email', 'max:255'];
+            }
         }
 
         if( request()->isMethod('put') ) {

@@ -178,6 +178,14 @@ class User extends Authenticatable implements MustVerifyEmailContract
         );
     }
 
+    protected function identity(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => ($this->legal_form == self::USER_TYPE_PERSON ? $this->person_identity :
+                ($this->legal_form == self::USER_TYPE_COMPANY ? $this->company_identity : '' )),
+        );
+    }
+
 
     public function scopeIsActive($query)
     {

@@ -55,7 +55,7 @@ return new class extends Migration
             $table->text('response')->nullable();
             $table->timestamp('response_date')->nullable();
 
-            $table->timestamp('registration_date')->nullable();//to subject
+            $table->timestamp('registration_date')->nullable();//дата на деловодна регистрация
 
             $table->text('request');
             $table->tinyInteger('status')->default(\App\Enums\PdoiApplicationStatusesEnum::RECEIVED->value);
@@ -72,6 +72,8 @@ return new class extends Migration
             $table->tinyInteger('address_publication')->default(0);
             $table->tinyInteger('headoffice_publication')->default(0);
             $table->tinyInteger('phone_publication')->default(0);
+
+            $table->tinyInteger('user_attached_files')->default(0);
 
             $table->timestamp('response_end_time')->nullable();
             $table->unsignedBigInteger('egov_mess_id')->nullable();
