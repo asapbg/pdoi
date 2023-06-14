@@ -1,68 +1,4 @@
 $(document).ready(function (){
-    if( $('#profile-form').length ) {
-        $('#profile-form').validate({
-            errorClass: 'is_invalid',
-            errorPlacement: function (error, element) {
-                $("#error-" + element.attr("name")).html(error);
-            },
-            rules : {
-                legal_form : {
-                    required: true,
-                    number: true
-                },
-                names : {
-                    required: true,
-                    maxlength: 255 //alphaspace
-                },
-                email: {
-                    required: true,
-                    email: true,
-                    maxlength: 255
-                },
-                phone : {
-                    maxlength: 50
-                },
-                country : {
-                    required: true,
-                    number: true
-                },
-                area : {
-                    required: true,
-                    number: true
-                },
-                municipality : {
-                    required: true,
-                    number: true
-                },
-                settlement : {
-                    required: true,
-                    number: true
-                },
-                post_code : {
-                    maxlength: 10
-                },
-                address : {
-                    required: true,
-                    maxlength: 255
-                },
-                address_second : {
-                    maxlength: 255,
-                },
-                delivery_method : {
-                    required: true,
-                    number: true
-                },
-            },
-            // errorPlacement: function (error, element) {
-            //     $("#error-" + element.attr("name")).html(error);
-            // },
-            invalidHandler: function(e, validation){
-                console.log("invalidHandler : event", e);
-                console.log("invalidHandler : validation", validation);
-            }
-        });
-    }
-
     $('button.nav-application').on('click', function (){
         let lastFormId = 'rzs';
         let currentBtn = $(this);
@@ -82,10 +18,10 @@ $(document).ready(function (){
                     errorPlacement: function (error, element) {
                         $("#error-" + element.attr("name")).html(error);
                     },
-                    // invalidHandler: function(e, validation){
-                    //     console.log("invalidHandler : event", e);
-                    //     console.log("invalidHandler : validation", validation);
-                    // }
+                    invalidHandler: function(e, validation){
+                        console.log("invalidHandler : event", e);
+                        console.log("invalidHandler : validation", validation);
+                    }
                 });
                 $('.disabled-item').prop('disabled', false);
                 if (formToValidate.valid()) {
@@ -108,13 +44,22 @@ $(document).ready(function (){
     function submitApplication(){
         let navBtns = $('.nav-application');
         navBtns.prop('disable', true);
+        //merge forms
+        let formData = new FormData($('#info')[0]); //use this to catch file inputs
+        //merge two forms
+        let rzsForm = $('#rzs').serializeArray();
+        for (let i=0; i < rzsForm.length; i++) {
+            formData.append(rzsForm[i].name, rzsForm[i].value);
+        }
         $.ajax({
             url  : $('#applicationUrl').val(),
             type : 'POST',
-            data : $('#info, #rzs').serialize(),
+            data : formData,
+            processData: false,
+            contentType: false,
             success : function(data) {
                 if( typeof data.errors != 'undefined' ) {
-                    console.log(data.errors)
+                    console.log(data.errors);
                 } else {
                     if (typeof data.applicationsInfo != 'undefined' && data.applicationsInfo.length > 0 ) {
                         $('div#apply').html(data.html);
@@ -157,6 +102,10 @@ $(document).ready(function (){
     function formRules(formId){
         let rules = {
             info: {
+                tmpFile: {
+                    // extension: 'doc|docx|xsl|xslx|pdf|rtf|txt|gif|jpg|jpeg|png|zem|p7s'
+                    extension: 'doc'
+                },
                 legal_form : {
                     required: true,
                     number: true

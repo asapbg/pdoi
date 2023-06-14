@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\DeliveryMethodsEnum;
+use App\Models\PdoiApplication;
 use App\Models\User;
 use App\Rules\AlphaSpace;
 use Illuminate\Foundation\Http\FormRequest;
@@ -49,6 +50,10 @@ class PdoiApplicationApplyRequest extends FormRequest
             'subjects' => ['required', 'array'],
             'person_identity' => ['nullable', 'string', 'max:20'],
             'company_identity' => ['nullable', 'string', 'max:20'],
+            'file_description' => ['array'],
+            'file_description.*' => ['nullable', 'string', 'max:255'],
+            'files' => ['array'],
+            'files.*' => ['file', 'max:'.PdoiApplication::MAX_FILE_SIZE, 'mimes:'.implode(',', PdoiApplication::ALLOWED_FILE_EXTENSIONS)],
         ];
 
         if( request()->input('delivery_method') && (int)request()->input('delivery_method') === DeliveryMethodsEnum::SDES->value ) {

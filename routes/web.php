@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\Cus
 
     //application
     Route::controller(PdoiApplicationFrontController::class)->group(function () {
-//        Route::get( '/application','index')->name('application');
+        Route::get( '/my-application','myApplications')->name('application.my');
         Route::get('/application/new','create')->name('application.create');
         Route::post('/application/store','store')->name('application.store');
     });

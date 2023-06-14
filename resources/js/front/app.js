@@ -1,14 +1,6 @@
 $(function() {
-    var pdoiTreeUrl = '/get-pdoi-subjects';
-
     $(document).ready(function() {
-        $('[data-bs-toggle=tooltip]').tooltip();
-
-        $(document).on('click', 'input.identity', function (){
-            let identityId = $(this).val();
-            $('div.identity').hide();
-            $('#identity_'+identityId).show();
-        });
+        $('[data-bs-toggle="tooltip"]').tooltip();
 
         if($('.summernote').length) {
             $('.summernote').summernote({
@@ -31,6 +23,15 @@ $(function() {
                 // language: "bg"
             });
         }
+
+        //========================================================
+        //Control identity fields depending on selected legal form
+        //======================================================
+        $(document).on('click', 'input.identity', function (){
+            let identityId = $(this).val();
+            $('div.identity').hide();
+            $('#identity_'+identityId).show();
+        });
 
         //======================================
         // START PDOI SUBJECTS SELECT FROM MODAL
@@ -132,6 +133,118 @@ $(function() {
 
         //==========================
         // End MyModal
+        //==========================
+
+        // ==========================
+        // START Profile form validation
+        //==========================
+        if( $('#profile-form').length ) {
+            $('#profile-form').validate({
+                errorClass: 'is_invalid',
+                errorPlacement: function (error, element) {
+                    $("#error-" + element.attr("name")).html(error);
+                },
+                rules : {
+                    legal_form : {
+                        required: true,
+                        number: true
+                    },
+                    names : {
+                        required: true,
+                        maxlength: 255 //alphaspace
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        maxlength: 255
+                    },
+                    phone : {
+                        maxlength: 50
+                    },
+                    country : {
+                        required: true,
+                        number: true
+                    },
+                    area : {
+                        required: true,
+                        number: true
+                    },
+                    municipality : {
+                        required: true,
+                        number: true
+                    },
+                    settlement : {
+                        required: true,
+                        number: true
+                    },
+                    post_code : {
+                        maxlength: 10
+                    },
+                    address : {
+                        required: true,
+                        maxlength: 255
+                    },
+                    address_second : {
+                        maxlength: 255,
+                    },
+                    delivery_method : {
+                        required: true,
+                        number: true
+                    },
+                },
+                invalidHandler: function(e, validation){
+                    console.log("invalidHandler : event", e);
+                    console.log("invalidHandler : validation", validation);
+                }
+            });
+        }
+        // ==========================
+        // END Profile form validation
+        //==========================
+
+        // ==========================
+        // START Upload file and add in table section
+        //==========================
+        if( $('#tmpFile').length ) {
+            let uploadInput = $('#tmpFile');
+            let fileListId = $('#' + uploadInput.data('container'));
+            uploadInput.on('change', function(){
+                if( (uploadInput.val()).length > 0 ) {
+                    //validate file
+                    if( true ) {//file is validated
+                        let fileNumber = $('.file-row').length + 1;
+                        let fileName = (uploadInput.val()).replace(/.*(\/|\\)/, '');
+                        //add file row
+                        fileListId.find('tbody').append('<tr class="file-row" id="file-row-'+ fileNumber +'" style="vertical-align: middle;">\n' +
+                            '                            <td></td>\n' +
+                            '                            <td><span class="filename"></span>'+ fileName +'</td>\n' +
+                            '                            <td>\n' +
+                            '                                <input type="text" name="file_description[]" class="form-control form-control-sm" value="">\n' +
+                            '                            </td>\n' +
+                            '                            <td>\n' +
+                            // '                                <i class="fa-solid fa-download text-primary me-1" data-file="'+ fileNumber +'" role="button"></i>\n' +
+                            '                                <i class="fa-solid fa-circle-xmark text-warning me-1 remove-file" data-file="'+ fileNumber +'" role="button" data-bs-toggle="tooltip" title="Премахни"></i>\n' +
+                            // '                                <i class="fa-solid fa-trash text-danger me-1" data-file="'+ fileNumber +'" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __(\'front.remove_btn\') }}"></i>\n' +
+                            '                            </td>\n' +
+                            '                        </tr>');
+
+                        //clone input
+                        let newFileInput = uploadInput.clone(true);
+                        newFileInput.attr('name', 'files[]');
+                        newFileInput.removeAttr('id');
+                        $('#file-row-'+ fileNumber + ' td span.filename').html(newFileInput);
+                        //clear tmp input
+                        uploadInput.val('');
+                    }
+                }
+            });
+
+            $(document).on('click', '.remove-file', function(){
+                $('#file-row-'+ $(this).data('file')).remove();
+            });
+        }
+        // ==========================
+        // END Upload file and add in table section
         //==========================
     });
 });

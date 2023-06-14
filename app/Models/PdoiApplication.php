@@ -14,12 +14,14 @@ class PdoiApplication extends ModelActivityExtend
 {
     use SoftDeletes, FilterSort, LogsActivity, CausesActivity;
 
-    const PAGINATE = 20;
+    const PAGINATE = 10;
     public $timestamps = true;
     const MODULE_NAME = 'custom.application';
     protected $table = 'pdoi_application';
 
     const UPLOAD_DIR = 'upload/';
+    const MAX_FILE_SIZE = 10000; //10 mb in kilobyte
+    const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xsl', 'xslx', 'pdf', 'rtf', 'txt', 'gif', 'jpg', 'jpeg', 'png', 'zem', 'p7s'];
 
     //END TERMS PARAMETERS
     const DAYS_AFTER_SUBJECT_REGISTRATION = 14; //14 дни от регситрацията на зявлението при ЗС

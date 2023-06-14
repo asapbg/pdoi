@@ -14,7 +14,8 @@
             <p class="d-inline-block">{!! __('front.application.legend.field_update_profile') !!}</p>
             <p class="d-inline-block ms-4">{!! __('front.application.legend.required_fields') !!}</p>
         </div>
-        <form id="info">
+        <form id="info" enctype="multipart/form-data">
+            @csrf
             <div class="card card-light mb-4">
                 <div class="card-header app-card-header py-1 pb-0">
                     <h4 class="fs-5"><i class="fa-solid fa-user-large me-2"></i> {{ __('front.application') }}</h4>
@@ -253,13 +254,21 @@
                 </div>
                 <div class="card-body">
                     <p>{{ __('front.application.files_description') }}</p>
-                    <table class="table table-light table-sm table-bordered table-responsive">
+                    <span id="error-tmpFile" class="text-danger d-inline-block w-100"></span>
+                    <table class="table table-light table-sm table-bordered table-responsive" id="attachFiles">
                         <thead>
                         <tr>
                             <th></th>
                             <th>{{ __('front.file_name') }}</th>
                             <th>{{ __('front.description') }}</th>
-                            <th><i class="fa-solid fa-upload text-primary" data-bs-toggle="tooltip" title="{{ __('front.upload_btn') }}"></i></th>
+                            <th>
+                                <div>
+                                    <label for="tmpFile" class="form-label p-0 m-0">
+                                        <i class="fa-solid fa-upload text-primary p-1" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __('front.upload_btn') }}"></i>
+                                    </label>
+                                    <input class="form-control d-none" type="file" name="tmpFile" id="tmpFile" data-container="attachFiles">
+                                </div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -304,7 +313,6 @@
             <button type="button" class="btn btn-primary mt-3 nav-application apply-application" data-validate="info" data-next="rzs">{{ __('front.next_btn') }}</button>
         </form>
         <form id="rzs" class="d-none">
-            @csrf
             <div class="card card-light mb-4">
                 <div class="card-header app-card-header py-1 pb-0">
                     <h4 class="fs-5"><i class="fa-solid fa-building me-2"></i> {{ __('front.application.pdoi_subject_section') }}</h4>

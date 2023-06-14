@@ -13,6 +13,11 @@
                         <a class="nav-link @if(request()->route()->getName() == 'application.create') active @endif" href="{{ route('application.create') }}">Подаване на заявление</a>
                     </li>
                 @endif
+                @if(auth()->user())
+                    <li class="nav-item px-1">
+                        <a class="nav-link @if(request()->route()->getName() == 'application.my') active @endif" href="{{ route('application.my') }}">Моите заявления</a>
+                    </li>
+                @endif
                 <li class="nav-item px-1">
                     <a class="nav-link" href="/search.html">Търсене</a>
                 </li>

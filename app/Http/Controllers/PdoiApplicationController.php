@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Requests\PdoiApplicationApplyRequest;
+use App\Http\Resources\PdoiApplicationShortCollection;
+use App\Http\Resources\PdoiApplicationShortResource;
 use App\Mail\NotiyUserApplicationStatus;
 use App\Mail\SubjectRegisterNewApplication;
 use App\Models\Country;
@@ -19,13 +21,24 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PdoiApplicationController extends Controller
 {
+
+    public function myApplications(Request $request)
+    {
+        $paginate = $request->filled('paginate') ? $request->get('paginate') : PdoiApplication::PAGINATE;
+        $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
+            ->FilterBy($request->all())
+            ->where('user_reg', $request->user()
+                ->id);
+        $application = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
+        return view('front.my_application.list', compact('application'));
+    }
+
     public function create(Request $request)
     {
         $user = User::with(['country', 'area', 'municipality', 'settlement'])->find((int)$request->user()->id);
@@ -105,7 +118,23 @@ class PdoiApplicationController extends Controller
                 ]);
                 $newApplication->save();
 
-                //TODO save user attached files
+                //Save user attached files
+                if( isset($validated['files']) && sizeof($validated['files']) ) {
+                    foreach ($validated['files'] as $key => $file) {
+                        $fileNameToStore = $key.'_'.round(microtime(true)).'.'.$file->getClientOriginalExtension();
+                        // Upload Image
+                        $file->storeAs($newApplication->fileFolder, $fileNameToStore, 'local');
+                        $newFile = new File([
+                            'code_object' => PdoiApplication::CODE_OBJECT,
+                            'filename' => $fileNameToStore,
+                            'content_type' => $file->getClientMimeType(),
+                            'path' => $newApplication->fileFolder.$fileNameToStore,
+                            'description' => $validated['file_description'][$key],
+                            'user_reg' => $user->id,
+                        ]);
+                        $newApplication->files()->save($newFile);
+                    }
+                }
 
                 //REGISTER APPLICATION DEPENDING ON SUBJECT DELIVERY METHOD
                 //now SUBJECTS has 3 methods for delivery (mail, SDES, RKS)

@@ -241,6 +241,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasOne(EkatteSettlement::class, 'id', 'ekatte_settlement_id');
     }
 
+    public function applications(): HasMany
+    {
+        return $this->hasMany(PdoiApplication::class, 'user_reg', 'id');
+    }
+
     public static function prepareModelFields($validated, $checkAllowed = false) {
         if (isset($validated['country'])) {
             $validated['country_id'] = $validated['country'];
