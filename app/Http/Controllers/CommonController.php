@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Models\PdoiResponseSubject;
 use App\Models\RzsSection;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CommonController extends Controller
 {
@@ -124,5 +127,18 @@ class CommonController extends Controller
         $subjects = PdoiResponseSubject::getTree($request->all());
         $oldBootstrap = $request->input('admin') && $request->input('admin'); //ugly way to fix design for bootstrap
         return view('partials.pdoi_tree.tree', compact('subjects', 'canSelect', 'multipleSelect', 'oldBootstrap'));
+    }
+
+    public function downloadFile(Request $request, File $file)
+    {
+        $user = $request->user();
+        if( !$user->can('view', $file->application) ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        if (Storage::disk('local')->has($file->path)) {
+            return Storage::disk('local')->download($file->path, $file->filename);
+        } else {
+            return back()->with('warning', __('custom.record_not_found'));
+        }
     }
 }

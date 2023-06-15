@@ -6,7 +6,6 @@ use App\Enums\PdoiApplicationStatusesEnum;
 use App\Traits\FilterSort;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use phpDocumentor\Reflection\Types\Self_;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -16,7 +15,7 @@ class PdoiApplication extends ModelActivityExtend
 
     const PAGINATE = 10;
     public $timestamps = true;
-    const MODULE_NAME = 'custom.application';
+    const MODULE_NAME = 'custom.applications';
     protected $table = 'pdoi_application';
 
     const UPLOAD_DIR = 'upload/';
@@ -58,6 +57,16 @@ class PdoiApplication extends ModelActivityExtend
         );
     }
 
+    public function scopeByUserSubjects($query)
+    {
+        //if user has full permission skip else
+        //filter list by user subject(rzs)
+        $user = auth()->user();
+        if( !$user->can('manage.*') ) {
+            $query->where('response_subject_id', $user->administrative_unit);
+        }
+    }
+
     public function applicant(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_reg');
@@ -96,5 +105,10 @@ class PdoiApplication extends ModelActivityExtend
     public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(File::class, 'id_object', 'id');
+    }
+
+    public function profileType(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ProfileType::class, 'id', 'profile_type');
     }
 }

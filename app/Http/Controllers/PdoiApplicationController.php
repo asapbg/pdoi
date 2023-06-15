@@ -6,7 +6,6 @@ use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Requests\PdoiApplicationApplyRequest;
 use App\Http\Resources\PdoiApplicationShortCollection;
-use App\Http\Resources\PdoiApplicationShortResource;
 use App\Mail\NotiyUserApplicationStatus;
 use App\Mail\SubjectRegisterNewApplication;
 use App\Models\Country;
@@ -112,7 +111,8 @@ class PdoiApplicationController extends Controller
                     'names_publication' => $validated['names_publication'] ?? 0,
                     'address_publication' => $validated['address_publication'] ?? 0,
                     'user_attached_files' => isset($validated['files']) ? sizeof($validated['files']) : 0,
-                    'phone_publication' => $validated['phone_publication'] ?? 0
+                    'phone_publication' => $validated['phone_publication'] ?? 0,
+                    'profile_type' => $user->profile_type
                     //TODO ask what is this column
 //                    'headoffice_publication' => $validated['headoffice_publication'] ?? 0,
                 ]);
@@ -177,8 +177,11 @@ class PdoiApplicationController extends Controller
                         $newApplication->save();
 
                         //send mail to subject
-                        Mail::to($user->email)->send(new SubjectRegisterNewApplication($newApplication));
+                        if( env('SEND_MAILS') ) {
+                            Mail::to($user->email)->send(new SubjectRegisterNewApplication($newApplication));
+                            //TODO fix me check if subject mail
 //                        Mail::to($subject->email)->send(new SubjectRegisterNewApplication($newApplication));
+                        }
                 }
 
                 //return info for each generated application
@@ -189,12 +192,13 @@ class PdoiApplicationController extends Controller
                     'status_date' => displayDate($newApplication->status_date),
                     'response_end_time' => displayDate($newApplication->response_end_time),
                 );
-                //TODO send mail for application status to user
-                Mail::to($user->email)->send(new NotiyUserApplicationStatus($newApplication));
-//                Mail::to($newApplication->applicant->email)->send(new NotiyUserApplicationStatus($newApplication));
 
-                //TODO Generate application PDF file
-                // When generate this file only on registration or???
+                //send mail for application status to user
+                if( env('SEND_MAILS') ) {
+                    Mail::to($newApplication->applicant->email)->send(new NotiyUserApplicationStatus($newApplication));
+                }
+
+                //TODO When generate this file only on registration or???
                 $fileName = 'zayavlenie_ZDOI_'.displayDate($newApplication->created_at).'.pdf';
                 $pdfFile = Pdf::loadView('pdf.application_doc', ['application' => $newApplication]);
                 Storage::disk('local')->put($newApplication->fileFolder.$fileName, $pdfFile->output());

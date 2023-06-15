@@ -18,7 +18,7 @@ class PdoiApplicationPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->canany(['pdoi.*', 'pdoi.web']);
+        return $user->canany(['manage.*', 'application.*', 'application.view']);
     }
 
     /**
@@ -30,7 +30,9 @@ class PdoiApplicationPolicy
      */
     public function view(User $user, PdoiApplication $pdoiApplication)
     {
-        return false;
+        //TODO fix me add subject from events
+        return $user->can('manage.*') || ($user->canany(['application.*', 'application.view'])
+            && $user->administrative_unit === $pdoiApplication->responseSubject->id);
     }
 
     /**
@@ -41,7 +43,7 @@ class PdoiApplicationPolicy
      */
     public function create(User $user)
     {
-        return $user->canany(['pdoi.*', 'pdoi.web']);
+        return $user->canany(['manage.*', 'pdoi.*', 'pdoi.web']);
     }
 
     /**
@@ -53,7 +55,9 @@ class PdoiApplicationPolicy
      */
     public function update(User $user, PdoiApplication $pdoiApplication)
     {
-        return false;
+        //TODO fix me add subject from events
+        return $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
+                && $user->administrative_unit === $pdoiApplication->responseSubject->id);
     }
 
     /**

@@ -19,7 +19,7 @@ class CustomRole extends Role
 
     const SUPER_USER_ROLE = 'service_user';
     const FULL_ACCESS_RULE = 'manage.*';
-    const WEB_ACCESS_RULE = ['pdoi.*', 'pdoi.web'];
+    const WEB_ACCESS_RULE = ['manage.*', 'pdoi.*', 'pdoi.web'];
     /**
      * The attributes that are mass assignable.
      *

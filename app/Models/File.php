@@ -10,4 +10,9 @@ class File extends Model
 {
     use SoftDeletes;
     public $timestamps = true;
+
+    public function application(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiApplication::class, 'id', 'id_object');
+    }
 }

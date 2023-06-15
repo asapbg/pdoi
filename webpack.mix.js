@@ -53,6 +53,7 @@ mix.styles([
     'resources/adminlte-3.2/plugins/select2/css/select2.min.css',
     'resources/adminlte-3.2/plugins/daterangepicker/daterangepicker.css',
     'resources/adminlte-3.2/dist/css/adminlte.css',
+    'resources/adminlte-3.2/dist/css/alt/adminlte.plugins.css',
     'resources/adminlte-3.2/dist/css/main.css',
     'resources/css/admin.css'
 ], 'public/css/admin.css');

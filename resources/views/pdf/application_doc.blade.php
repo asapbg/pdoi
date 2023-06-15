@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{ trans_choice('custom.application', 1) }} - {{ $application->application_uri }}</title>
+    <title>{{ trans_choice('custom.applications', 1) }} - {{ $application->application_uri }}</title>
 </head>
 <body style="text-align: center;font-size: 34px; padding-left: 50px; padding-right: 50px;">
 <div style="font-size: 22px;">
@@ -18,7 +18,7 @@
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr><td colspan="5">&nbsp;</td></tr>
-        <tr><td colspan="5" style="text-align: center;font-size: 34px;"><strong>{{ mb_strtoupper(trans_choice('custom.application', 1)) }}</strong></td></tr>
+        <tr><td colspan="5" style="text-align: center;font-size: 34px;"><strong>{{ mb_strtoupper(trans_choice('custom.applications', 1)) }}</strong></td></tr>
         <tr><td colspan="5" style="text-align: center;">{{ __('custom.for') }} {{ __('custom.access_to_public_info') }}</td></tr>
         <tr><td colspan="5" style="text-align: center;">{{ __('custom.application_uri') }} {{ $application->application_uri }}</td></tr>
         <tr><td colspan="5">&nbsp;</td></tr>

@@ -1,5 +1,5 @@
 @if(isset($filter) && count($filter))
-    <div class="card">
+    <div class="card @if(isset($filterClass)){{ $filterClass }}@endif">
         <form method="GET">
             <div class="card-header with-border">
                 <div class="card-tools pull-right">
@@ -78,7 +78,7 @@
                         </div>
                     @endforeach
                     <div class="col-xs-12 col-md-3 col-sm-4 mb-2">
-                        <button type="submit" class="btn btn-sm btn-success">
+                        <button type="submit" name="search" value="1" class="btn btn-sm btn-success">
                             <i class="fa fa-search"></i> {{ __('custom.search') }}
                         </button>
                         @if(isset($listRouteName))

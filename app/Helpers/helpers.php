@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TimePeriodEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -358,5 +359,81 @@ if (!function_exists('logError')) {
     function logError(string $method, string $error): void
     {
         \Illuminate\Support\Facades\Log::error(\Illuminate\Support\Carbon::now().' '.$method.': '.$error );
+    }
+}
+
+if (!function_exists('optionsTimePeriod')) {
+
+    /**
+     * return time interval options
+     *
+     * @method optionsTimePeriod
+     *
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function optionsTimePeriod(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
+    {
+        $options = [];
+        if( $any ) {
+            $options[] = ['value' => $anyValue, 'name' => $anyName];
+        }
+        foreach (TimePeriodEnum::options() as $option) {
+            $options[] = ['value' => $option, 'name' => __('custom.period.'.$option)];
+        }
+        return $options;
+    }
+}
+
+if (!function_exists('optionsApplicationStatus')) {
+
+    /**
+     * return application status options
+     *
+     * @method optionsApplicationStatus
+     *
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function optionsApplicationStatus(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
+    {
+        $options = [];
+        if( $any ) {
+            $options[] = ['value' => $anyValue, 'name' => $anyName];
+        }
+        foreach (\App\Enums\PdoiApplicationStatusesEnum::options() as $key => $value) {
+            $options[] = ['value' => $value, 'name' => __('custom.application.status.').$key];
+        }
+        return $options;
+    }
+
+    if (!function_exists('optionsFromModel')) {
+
+        /**
+         * return prepared options for search form from standard model option
+         *
+         * @method optionsFromModel
+         *
+         * @param $dbOptions
+         * @param bool $any
+         * @param string|int $anyValue
+         * @param string|int $anyName
+         * @return array
+         */
+        function optionsFromModel($dbOptions, bool $any = false, string|int $anyValue = '', string|int $anyName = ''): array
+        {
+            $options = [];
+            if ($any) {
+                $options[] = ['value' => $anyValue, 'name' => $anyName];
+            }
+            foreach ($dbOptions as $option) {
+                $options[] = ['value' => $option->id, 'name' => $option->name];
+            }
+            return $options;
+        }
     }
 }

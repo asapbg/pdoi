@@ -21,14 +21,16 @@
                         <p>{{ __('custom.home')  }}</p>
                     </a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="/admin-list-application.html"
-                       class="nav-link @if(strstr(url()->current(), 'users/profile/')) active @endif">
-                        <i class="fas fa-file-alt"></i>
-                        <p>Заявления</p>
-                    </a>
-                </li>
+{{--                Applications--}}
+                @canany(['manage.*', 'application.*', 'application.view'])
+                    <li class="nav-item">
+                        <a href="{{ route('admin.application') }}"
+                           class="nav-link @if(strstr(url()->current(), 'applications/')) active @endif">
+                            <i class="fas fa-file-alt"></i>
+                            <p>{{ trans_choice('custom.applications',2) }}</p>
+                        </a>
+                    </li>
+                @endcanany
                 <!-- RZS subjects and sections -->
                 @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_sections', 'administration.rzs_items'])
                     <li class="nav-item">

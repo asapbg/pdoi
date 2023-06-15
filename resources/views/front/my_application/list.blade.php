@@ -34,6 +34,8 @@
                 </div>
             @endforeach
             {{ $application['links'] }}
+        @else
+            @include('front.partials.empty_list')
         @endif
     </section>
 @endsection

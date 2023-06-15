@@ -9,7 +9,8 @@ use App\Http\Controllers\Admin\{PdoiResponseSubjectController as PdoiResponseSub
     ActivityLogController,
     PermissionsController,
     UsersController,
-    RolesController};
+    RolesController, PdoiApplicationController as AdminPdoiApplicationController,
+};
 
 use App\Http\Controllers\Admin\Nomenclature\EkatteAreaController;
 use App\Http\Controllers\Admin\Nomenclature\EkatteMunicipalityController;
@@ -36,6 +37,10 @@ Route::group(['middleware' => ['auth', 'administration']], function() {
 
 // Admin
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'administration']], function() {
+
+    Route::controller(CommonController::class)->group(function () {
+        Route::get('/download/{file}', 'downloadFile')->name('download.file');
+    });
 
     Route::controller(UsersController::class)->group(function () {
         Route::name('users.profile.edit')->get('/users/profile/{user}/edit', 'editProfile');
@@ -134,6 +139,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/nomenclature/extend-terms',                'index')->name('nomenclature.extend_terms')->middleware('can:viewAny,App\Models\ExtendTermsReason');
         Route::get('/nomenclature/extend-terms/edit/{item?}',         'edit')->name('nomenclature.extend_terms.edit');
         Route::match(['post', 'put'], '/nomenclature/extend-terms/store/{item?}',         'store')->name('nomenclature.extend_terms.store');
+    });
+
+    //Applications
+    Route::controller(AdminPdoiApplicationController::class)->group(function () {
+        Route::get('/applications',                'index')->name('application')->middleware('can:viewAny,App\Models\PdoiApplication');
+        Route::get('/applications/view/{item?}',         'show')->name('application.view');
+        Route::post('/applications/add-category',         'addCategory')->name('application.category.add');
+        Route::post('/applications/remove-category',         'removeCategory')->name('application.category.remove');
     });
 
 });
