@@ -102,7 +102,11 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link @if(Str::contains(url()->current(), ['nomenclature/profile-type']) || Str::contains(url()->current(), ['nomenclature/category']))) active @endif">
+                        @php($systemNomenclatureIsActive = Str::contains(url()->current(), ['nomenclature/profile-type'])
+|| Str::contains(url()->current(), ['nomenclature/category'])
+|| Str::contains(url()->current(), ['nomenclature/extend-terms'])
+|| Str::contains(url()->current(), ['nomenclature/reason-refusal']) )
+                        <a href="#" class="nav-link @if($systemNomenclatureIsActive)) active @endif">
                             <i class="nav-icon fas fa-stream"></i>
                             <p>Системни<i class="fas fa-angle-left right"></i></p>
                         </a>
@@ -130,6 +134,15 @@
                                    class="nav-link @if(strstr(url()->current(), 'nomenclature/extend-terms')) active @endif">
                                     <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
                                     <p>{{ trans_choice('custom.nomenclature.extend_terms_reason', 2) }}</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.reason_refusal') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/reason-refusal')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.reason_refusal', 2) }}</p>
                                 </a>
                             </li>
                         </ul>

@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             RzsSectionSeeder::class,
             CategorySeeder::class,
-            ExtendTermsReasonSeeder::class
+            ExtendTermsReasonSeeder::class,
+            ReasonRefusalSeeder::class
         ]);
     }
 }
