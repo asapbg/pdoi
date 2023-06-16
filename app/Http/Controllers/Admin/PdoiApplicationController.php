@@ -22,7 +22,8 @@ class PdoiApplicationController extends Controller
                 ->ByUserSubjects()
                 ->paginate($paginate);
         }
-        return $this->view('admin.applications.index', compact('items', 'filter'));
+        $listRouteName = 'admin.application';
+        return $this->view('admin.applications.index', compact('items', 'filter', 'listRouteName'));
     }
 
     public function show(Request $request, int $id = 0): \Illuminate\View\View
@@ -105,6 +106,13 @@ class PdoiApplicationController extends Controller
                 'value' => $request->input('toDate'),
                 'placeholder' => __('custom.end_date'),
                 'col' => 'col-md-2'
+            ),
+            'expired' => array(
+                'type' => 'checkbox',
+                'label' => __('custom.expired_term'),
+                'value' => 1,
+                'checked' => (int)$request->input('expired'),
+                'col' => 'col-md-3'
             ),
             'status' => array(
                 'type' => 'select',

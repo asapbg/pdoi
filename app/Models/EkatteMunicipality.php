@@ -49,7 +49,7 @@ class EkatteMunicipality extends ModelActivityExtend implements TranslatableCont
     public static function optionsList()
     {
         return DB::table('ekatte_municipality')
-            ->select(['ekatte_municipality.id', 'ekatte_municipality_translations.ime as name'])
+            ->select(['ekatte_municipality.id', 'ekatte_municipality_translations.ime as name' , 'ekatte_municipality.obstina as code'])
             ->join('ekatte_municipality_translations', 'ekatte_municipality_translations.ekatte_municipality_id', '=', 'ekatte_municipality.id')
             ->where('ekatte_municipality.active', '=', 1)
             ->where('ekatte_municipality_translations.locale', '=', app()->getLocale())

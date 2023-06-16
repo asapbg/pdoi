@@ -116,11 +116,12 @@
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.area') }}: <span class="required">*</span></label>
                             @php($area = old('area', $user->ekatte_area_id))
-                            <select class="form-control form-control-sm select2 @error('area') is-invalid @enderror" name="area" required>
+                            <select class="form-control form-control-sm select2 @error('area') is-invalid @enderror" name="area" required id="area-select">
                                 <option value="" @if(!$area) selected="selected" @endif>---</option>
                                 @if(isset($areas) && $areas->count())
                                     @foreach($areas as $row)
-                                        <option value="{{ $row->id }}" @if($area == $row->id) selected="selected" @endif>{{ $row->name }}</option>
+                                        <option value="{{ $row->id }}" @if($area == $row->id) selected="selected" @endif
+                                        data-code="{{ $row->code }}">{{ $row->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -129,11 +130,12 @@
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.municipality') }}: <span class="required">*</span></label>
                             @php($municipality = old('municipality', $user->ekatte_municipality_id))
-                            <select class="form-control form-control-sm select2 @error('municipality') is-invalid @enderror" name="municipality" required>
+                            <select class="form-control form-control-sm select2 @error('municipality') is-invalid @enderror" name="municipality" required id="municipality-select">
                                 <option value="" @if(!$municipality) selected="selected" @endif>---</option>
                                 @if(isset($municipalities) && $municipalities->count())
                                     @foreach($municipalities as $row)
-                                        <option value="{{ $row->id }}" @if($municipality == $row->id) selected="selected" @endif>{{ $row->name }}</option>
+                                        <option value="{{ $row->id }}" @if($municipality == $row->id) selected="selected" @endif
+                                        data-area="{{ substr($row->code, 0, 3) }}" data-code="{{ substr($row->code, -2) }}">{{ $row->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -142,11 +144,12 @@
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.settlement') }}: <span class="required">*</span></label>
                                 @php($settlement = old('settlement', $user->ekatte_settlement_id))
-                            <select class="form-control form-control-sm select2 @error('settlement') is-invalid @enderror" name="settlement" required>
+                            <select class="form-control form-control-sm select2 @error('settlement') is-invalid @enderror" name="settlement" required id="settlement-select">
                                 <option value="" @if(!$settlement) selected="selected" @endif>---</option>
                                 @if(isset($settlements) && $settlements->count())
                                     @foreach($settlements as $row)
-                                        <option value="{{ $row->id }}" @if($settlement == $row->id) selected="selected" @endif>{{ $row->name }}</option>
+                                        <option value="{{ $row->id }}" @if($settlement == $row->id) selected="selected" @endif
+                                        data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}">{{ $row->name }}</option>
                                     @endforeach
                                 @endif
                             </select>

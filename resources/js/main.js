@@ -357,13 +357,13 @@ $(document).ready(function (e) {
         })
     }
 
-    if($('.select2').length) {
-        $('.select2').select2({
-            allowClear: true,
-            placeholder: true,
-            language: "bg"
-        });
-    }
+    // if($('.select2').length) {
+    //     $('.select2').select2({
+    //         allowClear: true,
+    //         placeholder: true,
+    //         language: "bg"
+    //     });
+    // }
 
     if ($('#investigation_year').length) {
         $('#investigation_year').datepicker({

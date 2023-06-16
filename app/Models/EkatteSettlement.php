@@ -51,7 +51,7 @@ class EkatteSettlement extends ModelActivityExtend implements TranslatableContra
     public static function optionsList()
     {
         return DB::table('ekatte_settlement')
-            ->select(['ekatte_settlement.id', 'ekatte_settlement_translations.ime as name'])
+            ->select(['ekatte_settlement.id', 'ekatte_settlement_translations.ime as name', 'ekatte_settlement.oblast as area', 'ekatte_settlement.obstina as municipality'])
             ->join('ekatte_settlement_translations', 'ekatte_settlement_translations.ekatte_settlement_id', '=', 'ekatte_settlement.id')
             ->where('ekatte_settlement.active', '=', 1)
             ->where('ekatte_settlement_translations.locale', '=', app()->getLocale())

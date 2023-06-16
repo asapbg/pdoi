@@ -232,6 +232,7 @@ return [
     'use_filter'                       => 'Използвайте критерии за търсене',
     'sort_asc'                         => 'Възходящ ред',
     'sort_desc'                        => 'Низходящ ред',
+    'expired_term'                     => 'Изтекъл срок',
 
     //controllers and breadcrumbs
     'pdoi_applications'                         => 'Заявления',

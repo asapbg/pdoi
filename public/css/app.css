@@ -77,6 +77,11 @@ label.is_invalid {
     color:#fff;
 }
 
+/*fix hidden selct 2 option by empty text*/
+li.select2-results__option:empty {
+    display: none;
+}
+
 /*==========================*/
 /*START TOP NAVIGATIONS*/
 /*==========================*/

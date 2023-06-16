@@ -16,13 +16,6 @@ $(function() {
             });
         }
 
-        if($('.select2').length) {
-            $('.select2').select2({
-                allowClear: true,
-                placeholder: true,
-                // language: "bg"
-            });
-        }
 
         if($('.datepicker').length) {
             $('.datepicker').datepicker({

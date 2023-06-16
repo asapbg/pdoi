@@ -30,4 +30,13 @@ enum PdoiApplicationStatusesEnum: int
         }
         return $keyName;
     }
+
+    public static function  notCompleted(): array
+    {
+        return [
+            self::RECEIVED,
+            self::REGISTRATION_TO_SUBJECT,
+            self::IN_PROCESS,
+        ];
+    }
 }

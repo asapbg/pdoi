@@ -34,6 +34,7 @@ mix.scripts([
     'resources/adminlte-3.2/plugins/moment/moment.min.js',
     'resources/adminlte-3.2/plugins/daterangepicker/daterangepicker.js',
     'resources/adminlte-3.2/dist/js/adminlte.min.js',
+    'resources/js/partials/select2Ekatte.js',
     'resources/js/main.js'
 ], 'public/js/admin.js');
 
@@ -67,6 +68,7 @@ mix.scripts([
     'resources/js/front/select2.full.min.js',
     'resources/js/front/app.js',
     'resources/js/front/apply_application.js',
+    'resources/js/partials/select2Ekatte.js',
 ], 'public/js/app.js');
 
 mix.styles([

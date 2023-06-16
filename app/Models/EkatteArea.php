@@ -50,7 +50,7 @@ class EkatteArea extends ModelActivityExtend implements TranslatableContract
     public static function optionsList()
     {
         return DB::table('ekatte_area')
-            ->select(['ekatte_area.id', 'ekatte_area_translations.ime as name'])
+            ->select(['ekatte_area.id', 'ekatte_area_translations.ime as name', 'ekatte_area.oblast as code'])
             ->join('ekatte_area_translations', 'ekatte_area_translations.ekatte_area_id', '=', 'ekatte_area.id')
             ->where('ekatte_area.active', '=', 1)
             ->where('ekatte_area_translations.locale', '=', app()->getLocale())
