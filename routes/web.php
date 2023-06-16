@@ -21,13 +21,9 @@ Route::get('/locale', function (Request $request) {
     return back();
 })->name('change-locale');
 
+//pdoi subjects modal
+Route::get('/get-pdoi-subjects', [CommonController::class, 'modalPdoiSubjects'])->name('modal.pdoi_subjects');
 
-
-Route::group(['middleware' => ['auth']], function() {
-    //pdoi subjects modal
-    Route::get('/get-pdoi-subjects', [CommonController::class, 'modalPdoiSubjects'])
-        ->name('modal.pdoi_subjects');
-});
 
 //application
 Route::controller(PdoiApplicationFrontController::class)->group(function () {
