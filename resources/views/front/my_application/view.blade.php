@@ -3,7 +3,7 @@
 @section('content')
     <section class="content container">
         <div class="page-title mb-md-3 mb-2 px-5">
-            <h3 class="b-1 text-center">{{ __('front.my_application.title') }}</h3>
+            <h3 class="b-1 text-center">{{ $application['my_title'] }}</h3>
         </div>
         <div class="card card-light mb-4">
             <div class="card-header app-card-header p-0 pt-1 border-bottom-0">

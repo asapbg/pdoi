@@ -27,7 +27,7 @@
             <div class="card-body">
                 <div class="row">
                     @foreach($filter as $key => $field)
-                        <div class="{{ $field['col'] ?? 'col-md-6' }} col-12 mb-2">
+                        <div class="{{ $field['col'] ?? 'col-md-6' }} col-12 mb-2  @if($field['type'] == 'subjects') d-flex @endif">
                             @switch($field['type'])
                                 @case('text')
                                 <input type="text" name="{{ $key }}" autocomplete="off"
@@ -50,7 +50,7 @@
 
                                 @break('checkbox')
                                 @case('select')
-                                    <select class="form-control select2 @if(isset($field['class'])){{$field['class'] }}@endif" name="{{ $key }}" >
+                                    <select class="form-control form-control-sm select2 @if(isset($field['class'])){{$field['class'] }}@endif" name="{{ $key }}" >
                                         {{-- select with groups--}}
                                         @if(isset($field['group']) && $field['group'])
                                             @foreach($field['options'] as $group_name => $group)
@@ -76,7 +76,7 @@
                                 @break('select')
                                 @case('subjects')
 {{--                                <div class="input-group input-group-sm d-flex">--}}
-                                    <select class="custom-select select2 @if(isset($field['class'])){{$field['class'] }}@endif"
+                                    <select class="custom-select form-control form-control-sm select2 @if(isset($field['class'])){{$field['class'] }}@endif"
                                             @if(isset($field['multiple']) && $field['multiple']) multiple="multiple" @endif name="{{ $key }}" id="subjects"
                                             data-placeholder="{{ $field['placeholder'] }}">
                                         @foreach($field['options'] as $option)

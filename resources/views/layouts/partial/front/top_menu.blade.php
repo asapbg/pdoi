@@ -19,7 +19,7 @@
                     </li>
                 @endif
                 <li class="nav-item px-1">
-                    <a class="nav-link @if(request()->route()->getName() == 'application.list') active @endif" href="{{ route('application.list') }}" >{{ __('custom.search') }}</a>
+                    <a class="nav-link @if(in_array(request()->route()->getName(), ['application.show', 'application.list'])) active @endif" href="{{ route('application.list') }}" >{{ __('custom.search') }}</a>
                 </li>
                 <li class="nav-item px-1">
                     <a class="nav-link" href="#">Документи</a>

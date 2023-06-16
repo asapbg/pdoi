@@ -62,7 +62,7 @@
                                                     <option value="{{ $option['value'] }}" @if($option['value'] == old($key, $field['value'])) selected @elseif(is_null(old($key, $field['value'])) && isset($field['default']) && $option['value'] == $field['default']) selected @endif>{{ $option['name'] }}</option>
                                                 @endforeach
                                             </select>
-                                            <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject"
+                                            <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject rounded"
                                                     data-title="{{ trans_choice('custom.pdoi_response_subjects',2) }}"
                                                     data-url="{{ route('modal.pdoi_subjects').'?redirect_only=0&select=1&multiple=0' }}">
                                                 <i class="fa-solid fa-list"></i>
