@@ -24,6 +24,15 @@ $(function() {
             });
         }
 
+        if($('.datepicker').length) {
+            $('.datepicker').datepicker({
+                format: 'dd.mm.yyyy',
+                todayHighlight: true,
+                orientation: "bottom left",
+                autoclose: true
+            });
+        }
+
         //========================================================
         //Control identity fields depending on selected legal form
         //======================================================

@@ -132,18 +132,21 @@ class PdoiResponseSubjectController extends AdminController
             'name' => array(
                 'type' => 'text',
                 'placeholder' => __('validation.attributes.name'),
-                'value' => $request->input('name')
+                'value' => $request->input('name'),
+                'col' => 'col-md-4'
             ),
             'eik' => array(
                 'type' => 'text',
                 'placeholder' => __('validation.attributes.eik'),
-                'value' => $request->input('eik')
+                'value' => $request->input('eik'),
+                'col' => 'col-md-3'
             ),
             'manual' => array(
                 'type' => 'checkbox',
                 'label' => __('validation.attributes.manual_rzs'),
                 'value' => 1,
-                'checked' => (int)$request->input('manual')
+                'checked' => (int)$request->input('manual'),
+                'col' => 'col-md-3'
             )
         );
     }

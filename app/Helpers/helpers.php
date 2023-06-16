@@ -406,7 +406,7 @@ if (!function_exists('optionsApplicationStatus')) {
             $options[] = ['value' => $anyValue, 'name' => $anyName];
         }
         foreach (\App\Enums\PdoiApplicationStatusesEnum::options() as $key => $value) {
-            $options[] = ['value' => $value, 'name' => __('custom.application.status.').$key];
+            $options[] = ['value' => $value, 'name' => __('custom.application.status.'.$key)];
         }
         return $options;
     }

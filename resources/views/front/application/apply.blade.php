@@ -2,7 +2,7 @@
 
 @section('content')
     <section class="content container">
-        <div class="page-title mb-md-5 mb-2 px-5">
+        <div class="page-title mb-md-3 mb-2 px-5">
             <h3 class="b-1 text-center">{{ __('front.application.title.apply') }}</h3>
         </div>
         <nav class="nav nav-pills flex-column flex-sm-row step-tabs mb-4">
@@ -272,18 +272,6 @@
                         </tr>
                         </thead>
                         <tbody>
-{{--                        <tr>--}}
-{{--                            <td>1</td>--}}
-{{--                            <td>description.pdf</td>--}}
-{{--                            <td>--}}
-{{--                                <input type="text" class="form-control form-control-sm" value="Описание на искането">--}}
-{{--                            </td>--}}
-{{--                            <td>--}}
-{{--                                <i class="fa-solid fa-download text-primary me-1" role="button"></i>--}}
-{{--                                <i class="fa-solid fa-circle-xmark text-warning me-1" role="button"></i>--}}
-{{--                                <i class="fa-solid fa-trash text-danger me-1" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __('front.remove_btn') }}"></i>--}}
-{{--                            </td>--}}
-{{--                        </tr>--}}
                         </tbody>
                     </table>
                 </div>
@@ -310,7 +298,7 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary mt-3 nav-application apply-application" data-validate="info" data-next="rzs">{{ __('front.next_btn') }}</button>
+            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application apply-application" data-validate="info" data-next="rzs">{{ __('front.next_btn') }}</button>
         </form>
         <form id="rzs" class="d-none">
             <div class="card card-light mb-4">
@@ -341,8 +329,8 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary mt-3 nav-application " data-prev="info">{{ __('front.back_btn') }}</button>
-            <button type="button" class="btn btn-primary mt-3 nav-application apply-application" data-validate="rzs" data-next="send">{{ __('front.next_btn') }}</button>
+            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application " data-prev="info">{{ __('front.back_btn') }}</button>
+            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application apply-application" data-validate="rzs" data-next="send">{{ __('front.next_btn') }}</button>
         </form>
         <div id="apply"></div>
         <input type="hidden" id="applicationUrl" value="{{ route('application.store') }}">

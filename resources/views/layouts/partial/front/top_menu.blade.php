@@ -15,11 +15,11 @@
                 @endif
                 @if(auth()->user())
                     <li class="nav-item px-1">
-                        <a class="nav-link @if(request()->route()->getName() == 'application.my') active @endif" href="{{ route('application.my') }}">Моите заявления</a>
+                        <a class="nav-link @if(\Illuminate\Support\Str::contains(url()->current(), ['my-application'])) active @endif" href="{{ route('application.my') }}">Моите заявления</a>
                     </li>
                 @endif
                 <li class="nav-item px-1">
-                    <a class="nav-link" href="/search.html">Търсене</a>
+                    <a class="nav-link @if(request()->route()->getName() == 'application.list') active @endif" href="{{ route('application.list') }}" >{{ __('custom.search') }}</a>
                 </li>
                 <li class="nav-item px-1">
                     <a class="nav-link" href="#">Документи</a>

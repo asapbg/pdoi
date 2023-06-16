@@ -47,11 +47,11 @@
                                     </select>
                                 </div>
                                 <div class="form-group form-group-sm col-md-4 col-12 mb-3">
-                                    <label class="form-label fw-semibold">{{ __('custom.name') }}: <span class="required">*</span></label>
+                                    <label class="form-label fw-semibold">{{ __('custom.name') }}: </label>
                                     <input class="form-control form-control-sm" type="text" value="{{ $item->names }}" disabled>
                                 </div>
                                 <div class="form-group form-group-sm col-md-4 col-12 mb-3">
-                                    <label class="form-label fw-semibold">{{ __('custom.email') }}: <span class="required">*</span></label>
+                                    <label class="form-label fw-semibold">{{ __('custom.email') }}: </label>
                                     <input class="form-control form-control-sm" type="text" value="{{ $item->email }}" disabled>
                                 </div>
                                 <div class="form-group form-group-sm col-md-2 col-12 mb-3">
@@ -60,25 +60,25 @@
                                 </div>
                                 <hr>
                                 <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                                    <label class="form-label fw-semibold">{{ trans_choice('custom.country',1) }}: <span class="required">*</span></label>
+                                    <label class="form-label fw-semibold">{{ trans_choice('custom.country',1) }}: </label>
                                     <select class="form-control form-control-sm" disabled readonly="">
                                         <option>{{ $item->country->name }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                                    <label class="form-label fw-semibold">{{ trans_choice('custom.area',1) }}: <span class="required">*</span></label>
+                                    <label class="form-label fw-semibold">{{ trans_choice('custom.area',1) }}: </label>
                                     <select class="form-control form-control-sm" disabled>
                                         <option>{{ $item->area->ime }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                                    <label class="form-label fw-semibold">{{ trans_choice('custom.municipality',1) }}: <span class="required">*</span></label>
+                                    <label class="form-label fw-semibold">{{ trans_choice('custom.municipality',1) }}: </label>
                                     <select class="form-control form-control-sm" disabled>
                                         <option>{{ $item->municipality->ime }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                                    <label class="form-label fw-semibold">{{ trans_choice('custom.settlement',1) }}: <span class="required">*</span></label>
+                                    <label class="form-label fw-semibold">{{ trans_choice('custom.settlement',1) }}: </label>
                                     <select class="form-control form-control-sm" disabled>
                                         <option>{{ $item->settlement->ime }}</option>
                                     </select>
@@ -88,7 +88,7 @@
                                     <input class="form-control form-control-sm" type="text" value="{{ $item->post_code }}" disabled>
                                 </div>
                                 <div class="form-group form-group-sm col-md-6 col-12 mb-3">
-                                    <label class="form-label fw-semibold">{{ __('custom.address') }}: <span class="required">*</span></label>
+                                    <label class="form-label fw-semibold">{{ __('custom.address') }}: </label>
                                     <input class="form-control form-control-sm" type="text" value="{{ $item->address }}" disabled>
                                 </div>
                                 <div class="form-group form-group-sm col-md-6 col-12 mb-3">

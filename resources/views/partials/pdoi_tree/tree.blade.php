@@ -4,7 +4,7 @@
         @foreach($subjects as $subject)
             @if(!$subject['selectable'])
                 <p class="mb-1 @if($oldBootstrap){{ 'fw-bold' }}@else{{ 'fw-semibold' }}@endif" role="button" {{ $bootstrapDataPrefix }}-toggle="collapse" {{ $bootstrapDataPrefix }}-target="#collapse{{ $subject['id'] }}" aria-expanded="false" aria-controls="collapse{{ $subject['id'] }}">
-                    <i class="fa-regular fa-circle me-2" style="font-size: 7px;"></i> {{ $subject['name'] }} ({{ sizeof($subject['children']) }})
+                    <i class="@if(!$oldBootstrap){{ 'fa-regular' }}@else{{ 'fa' }}@endif fa-circle me-2" style="font-size: 7px;"></i> {{ $subject['name'] }} ({{ sizeof($subject['children']) }})
                 </p>
                 @if(isset($subject['children']) && sizeof($subject['children']))
                     <div class="collapse multi-collapse" id="collapse{{ $subject['id'] }}">

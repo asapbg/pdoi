@@ -6,6 +6,7 @@ use App\Enums\PdoiApplicationStatusesEnum;
 use App\Traits\FilterSort;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -110,5 +111,16 @@ class PdoiApplication extends ModelActivityExtend
     public function profileType(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');
+    }
+
+    public static function optionsList(): \Illuminate\Support\Collection
+    {
+        return DB::table('pdoi_response_subject')
+            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name'])
+            ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
+            ->where('pdoi_response_subject.active', '=', 1)
+            ->where('pdoi_response_subject_translations.locale', '=', app()->getLocale())
+            ->orderBy('pdoi_response_subject_translations.subject_name', 'asc')
+            ->get();
     }
 }

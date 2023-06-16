@@ -89,7 +89,8 @@ class CountryController extends AdminController
             'name' => array(
                 'type' => 'text',
                 'placeholder' => __('validation.attributes.name'),
-                'value' => $request->input('name')
+                'value' => $request->input('name'),
+                'col' => 'col-md-4'
             )
         );
     }

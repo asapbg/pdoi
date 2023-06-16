@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Requests\PdoiApplicationApplyRequest;
+use App\Http\Resources\PdoiApplicationResource;
 use App\Http\Resources\PdoiApplicationShortCollection;
 use App\Mail\NotiyUserApplicationStatus;
 use App\Mail\SubjectRegisterNewApplication;
+use App\Models\Category;
 use App\Models\Country;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
@@ -19,6 +21,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -26,17 +29,57 @@ use Illuminate\Support\Facades\Validator;
 
 class PdoiApplicationController extends Controller
 {
+    //public page
+    public function index(Request $request)
+    {
+        $filter = $this->filters($request);
+        $requestFilter = $request->all();
+        $applications = null;
+        if( isset($requestFilter['search']) ) {
+            $paginate = $filter['paginate'] ?? PdoiApplication::PAGINATE;
+            $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
+                ->FilterBy($request->all())
+                ->SortedBy($request->input('sort'),$request->input('ord'));
+
+            $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
+        }
+        $titlePage =__('custom.searching');
+        return view('front.application.list', compact('applications', 'titlePage', 'filter'));
+    }
 
     public function myApplications(Request $request)
     {
         $paginate = $request->filled('paginate') ? $request->get('paginate') : PdoiApplication::PAGINATE;
         $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
             ->FilterBy($request->all())
+            ->SortedBy($request->input('sort'),$request->input('ord'))
             ->where('user_reg', $request->user()
                 ->id);
-        $application = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
-        return view('front.my_application.list', compact('application'));
+        $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
+        $sort = true;
+        $titlePage =__('front.my_application.title');
+        return view('front.application.list', compact('applications', 'sort', 'titlePage'));
     }
+
+    public function showMy(Request $request, int $id = 0)
+    {
+        $item = PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations',
+            'categories', 'categories.translations', 'profileType', 'profileType.translations', 'country',
+            'country.translations', 'area', 'area.translations', 'municipality', 'municipality.translations',
+            'settlement', 'settlement.translations'])
+            ->find((int)$id);
+        if( !$item ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        if( !$request->user()->can('viewMy', $item) ) {
+            return back()->with('warning', __('messages.unauthorized'));
+        }
+
+        $application = (new PdoiApplicationResource($item))->resolve();
+        return view('front.my_application.view', compact('application'));
+    }
+
+
 
     public function create(Request $request)
     {
@@ -227,5 +270,65 @@ class PdoiApplicationController extends Controller
         $user = auth()->user();
         $user->fill($fields);
         $user->save();
+    }
+
+    private function filters($request): array
+    {
+        return array(
+            'period' => array(
+                'type' => 'select',
+                'options' => optionsTimePeriod(true,'', __('custom.period')),
+                'default' => '',
+                'value' => $request->input('period'),
+                'col' => 'col-md-3'
+            ),
+            'formDate' => array(
+                'type' => 'datepicker',
+                'value' => $request->input('formDate'),
+                'placeholder' => __('custom.begin_date'),
+                'col' => 'col-md-2'
+            ),
+            'toDate' => array(
+                'type' => 'datepicker',
+                'value' => $request->input('toDate'),
+                'placeholder' => __('custom.end_date'),
+                'col' => 'col-md-2'
+            ),
+            'status' => array(
+                'type' => 'select',
+                'options' => optionsApplicationStatus(true, '', __('custom.status')),
+                'default' => '',
+                'value' => $request->input('status'),
+                'col' => 'col-md-4'
+            ),
+            'applicationUri' => array(
+                'type' => 'text',
+                'placeholder' => __('custom.reg_number'),
+                'value' => $request->input('applicationUri'),
+                'col' => 'col-md-4'
+            ),
+            'category' => array(
+                'type' => 'select',
+                'options' => optionsFromModel(Category::optionsList(), true,'', trans_choice('custom.categories',1)),
+                'default' => '',
+                'value' => $request->input('status'),
+                'col' => 'col-md-4'
+            ),
+            'text' => array(
+                'type' => 'text',
+                'placeholder' => __('validation.attributes.text'),
+                'value' => $request->input('text')
+            ),
+            'subjects' => array(
+                'type' => 'subjects',
+                'multiple' => false,
+                'options' => optionsFromModel(PdoiApplication::optionsList()),
+                'value' => $request->input('subjects') ?? [],
+                'default' => '',
+                'placeholder' => trans_choice('custom.pdoi_response_subjects',1),
+                'col' => 'col-md-9'
+            )
+
+        );
     }
 }

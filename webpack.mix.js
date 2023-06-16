@@ -61,6 +61,7 @@ mix.styles([
 mix.scripts([
     // 'resources/js/front/jquery-3.7.0.js',
     'resources/js/front/jquery-3.6.3.min.js',
+    'resources/js/front/jquery_ui-1.13.2.min.js',
     // 'resources/js/front/bootstrap-5.3/bootstrap.min.js',
     'resources/js/front/bootstrap-5.3/bootstrap.bundle.min.js',
     'resources/js/front/select2.full.min.js',
@@ -69,6 +70,7 @@ mix.scripts([
 ], 'public/js/app.js');
 
 mix.styles([
+    'resources/css/front/jquery_ui-1.13.2.min.css',
     'resources/css/front/bootstrap-5.3/bootstrap.min.css',
     'resources/css/front/select2.min.css',
     'resources/css/app.css'

@@ -91,40 +91,55 @@ class PdoiApplicationController extends Controller
                 'type' => 'select',
                 'options' => optionsTimePeriod(true,'', __('custom.period')),
                 'default' => '',
-                'value' => $request->input('period')
+                'value' => $request->input('period'),
+                'col' => 'col-md-3'
             ),
-            'form_date' => array(
+            'formDate' => array(
                 'type' => 'datepicker',
-                'value' => $request->input('form_date'),
-                'placeholder' => __('custom.begin_date')
+                'value' => $request->input('formDate'),
+                'placeholder' => __('custom.begin_date'),
+                'col' => 'col-md-2'
             ),
-            'to_date' => array(
+            'toDate' => array(
                 'type' => 'datepicker',
-                'value' => $request->input('to_date'),
-                'placeholder' => __('custom.end_date')
+                'value' => $request->input('toDate'),
+                'placeholder' => __('custom.end_date'),
+                'col' => 'col-md-2'
             ),
             'status' => array(
                 'type' => 'select',
                 'options' => optionsApplicationStatus(true, '', __('custom.status')),
                 'default' => '',
-                'value' => $request->input('status')
+                'value' => $request->input('status'),
+                'col' => 'col-md-4'
             ),
-            'application_uri' => array(
+            'applicationUri' => array(
                 'type' => 'text',
                 'placeholder' => __('custom.reg_number'),
-                'value' => $request->input('application_uri')
+                'value' => $request->input('applicationUri'),
+                'col' => 'col-md-4'
             ),
             'category' => array(
                 'type' => 'select',
                 'options' => optionsFromModel(Category::optionsList(), true,'', trans_choice('custom.categories',1)),
                 'default' => '',
-                'value' => $request->input('status')
+                'value' => $request->input('status'),
+                'col' => 'col-md-4'
             ),
             'text' => array(
                     'type' => 'text',
                     'placeholder' => __('validation.attributes.text'),
                     'value' => $request->input('text')
-                ),
-            );
+            ),
+            'subjects' => array(
+                'type' => 'subjects',
+                'multiple' => false,
+                'options' => optionsFromModel(PdoiApplication::optionsList(), true. '', trans_choice('custom.pdoi_response_subjects', 1)),
+                'value' => $request->input('subjects'),
+                'default' => '',
+                'placeholder' => trans_choice('custom.pdoi_response_subjects',1),
+                'col' => 'col-md-9'
+            )
+        );
     }
 }

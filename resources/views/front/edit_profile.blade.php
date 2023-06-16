@@ -2,7 +2,7 @@
 
 @section('content')
     <section class="content container">
-        <div class="page-title mb-md-5 mb-2 px-5">
+        <div class="page-title mb-md-3 mb-2 px-5">
             <h3 class="b-1 text-center">{{ __('front.profile.title.my_profile') }}</h3>
         </div>
         <form method="post" action="{{ route('profile') }}" id="profile-form">

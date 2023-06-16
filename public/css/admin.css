@@ -64003,3 +64003,16 @@ table tfoot.fix-border th{
 .nav-item-sub-icon {
     font-size: 8px !important;
 }
+
+/*START FIX SELECT2 INPUT GROUP*/
+.input-group > .select2-container--bootstrap {
+    width: auto;
+    flex: 1 1 auto;
+}
+
+.input-group > .select2-container--bootstrap .select2-selection--single {
+    height: 100%;
+    line-height: inherit;
+    padding: 0.5rem 1rem;
+}
+/*END FIX SELECT2 INPUT GROUP*/

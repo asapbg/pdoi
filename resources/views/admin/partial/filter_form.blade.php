@@ -27,7 +27,7 @@
             <div class="card-body">
                 <div class="row">
                     @foreach($filter as $key => $field)
-                        <div class="col-xs-12 col-md-3 mb-2">
+                        <div class="{{ $field['col'] ?? 'col-md-6' }} col-12 mb-2">
                             @switch($field['type'])
                                 @case('text')
                                 <input type="text" name="{{ $key }}" autocomplete="off"
@@ -74,6 +74,22 @@
                                         @endif
                                     </select>
                                 @break('select')
+                                @case('subjects')
+{{--                                <div class="input-group input-group-sm d-flex">--}}
+                                    <select class="custom-select select2 @if(isset($field['class'])){{$field['class'] }}@endif"
+                                            @if(isset($field['multiple']) && $field['multiple']) multiple="multiple" @endif name="{{ $key }}" id="subjects"
+                                            data-placeholder="{{ $field['placeholder'] }}">
+                                        @foreach($field['options'] as $option)
+                                            <option value="{{ $option['value'] }}" @if($option['value'] == old($key, $field['value'])) selected @elseif(is_null(old($key, $field['value'])) && isset($field['default']) && $option['value'] == $field['default']) selected @endif>{{ $option['name'] }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject"
+                                            data-title="{{ trans_choice('custom.pdoi_response_subjects',2) }}"
+                                            data-url="{{ route('modal.pdoi_subjects').'?redirect_only=0&select=1&multiple=0&admin=1' }}">
+                                        <i class="fa fa-list"></i>
+                                    </button>
+{{--                                </div>--}}
+                                @break('subjects')
                             @endswitch
                         </div>
                     @endforeach

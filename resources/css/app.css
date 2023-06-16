@@ -32,7 +32,7 @@
 @font-face {
     font-family: 'Fira Sans BGR';
     font-style: normal;
-    font-weight: 400;
+    font-weight: normal;
     src: local('Fira Sans BGR Regular'), local('FiraSans-Regular'),
     url('../fonts/FiraSansBGR-Regular.otf') format('opentype'),
     url('../fonts/FiraSansBGR-Regular.woff2') format('woff2'),
@@ -42,6 +42,24 @@
 
 body {
     font-family: 'Fira Sans BGR', sans-serif !important;
+}
+
+.fsi {
+    font-size: 10px;
+    font-style: italic;
+}
+
+.fs {
+    font-size: 10px;
+}
+
+label.is_invalid {
+    color:red;
+}
+
+.app-title-bg {
+    background-color: var(--app-link);
+    color:#fff;
 }
 
 /*==========================*/
@@ -136,6 +154,14 @@ main {
     color: #fff;
     font-weight: bold;
 }
+.app-card-header a, .app-card-header a:hover {
+    color: #fff;
+    font-weight: normal;
+}
+.app-card-header a.active {
+    color: var(--bs-nav-tabs-link-active-color);
+    font-weight: normal;
+}
 
 /*Accordion*/
 .app-accordion .accordion-button{
@@ -175,20 +201,6 @@ main {
     background: linear-gradient(0deg, rgba(129,126,126,1) 0%, rgba(205,204,204,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#817e7e",endColorstr="#cdcccc",GradientType=1);
 }
-
-.fsi {
-    font-size: 10px;
-    font-style: italic;
-}
-
-.fs {
-    font-size: 10px;
-}
-
-label.is_invalid {
-    color:red;
-}
-
 /*START MODAL*/
 .modal .modal-content{
     padding-bottom: 20px;

@@ -228,6 +228,8 @@ return [
     'zip_code'                         => 'Пощенски код',
     'altitude'                         => 'altitude',
     'record_not_found'                 => 'Записът не е открит',
+    'sort'                             => 'Сортиране',
+    'use_filter'                       => 'Използвайте критерии за търсене',
 
     //controllers and breadcrumbs
     'pdoi_applications'                         => 'Заявления',
@@ -254,7 +256,7 @@ return [
     'in_reg_process'                            => 'В процес на регистрация',
     'council_ministers'                         => 'Министрески съвет',
     'address'                                   => 'Адрес',
-    'address_for_contact'                       => 'Адрес за контакти',
+    'address_for_contact'                       => 'Адрес за контакт',
     'application_uri'                          => 'УРИ',
     //roles and permissions
     'permissions.group_permission'              => 'Група (права)',
@@ -327,6 +329,7 @@ return [
     'application.status.PART_APPROVED'               => 'Частично одобрено',
     'application.status.INFO_NOT_EXIST'              => 'Информацията не съществува',
     'application.status.NO_REVIEW'                   => 'Оставено без разглеждане',
+    'application.status.NOT_APPROVED'                => 'Неодобрено',
     'application.request_for_info'                   => 'Искане за достъп до обществена информация',
     'application.full_history'                   => 'Електронно досие',
     //events names
