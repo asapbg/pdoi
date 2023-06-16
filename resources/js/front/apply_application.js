@@ -1,4 +1,5 @@
 $(document).ready(function (){
+    var apllyErrorDiv = $('#error-apply');
     $('button.nav-application').on('click', function (){
         let lastFormId = 'rzs';
         let currentBtn = $(this);
@@ -10,7 +11,6 @@ $(document).ready(function (){
                 let requestTextarea = $('#request_summernote');
                 let requestValue = requestTextarea.summernote('isEmpty')? '' : requestTextarea.summernote('code');
                 $('#request').val(requestValue); //using this input to validate with jquery
-
                 formToValidate.validate({
                     ignore: ':hidden:not(.do-not-ignore)',
                     errorClass: 'is_invalid',
@@ -42,6 +42,10 @@ $(document).ready(function (){
     });
 
     function submitApplication(){
+        apllyErrorDiv.html('');
+        //disable other button actions
+        $('.disable-on-send').prop('disabled', true);
+
         let navBtns = $('.nav-application');
         navBtns.prop('disable', true);
         //merge forms
@@ -59,7 +63,7 @@ $(document).ready(function (){
             contentType: false,
             success : function(data) {
                 if( typeof data.errors != 'undefined' ) {
-                    console.log(data.errors);
+                    apllyErrorDiv.html(data.errors);
                 } else {
                     if (typeof data.applicationsInfo != 'undefined' && data.applicationsInfo.length > 0 ) {
                         $('div#apply').html(data.html);
@@ -68,12 +72,16 @@ $(document).ready(function (){
                         $('div#apply').removeClass('d-none');
                         activateTab('apply');
                     } else {
-                        console.log('something wrong');
+                        apllyErrorDiv.html('Нещо се обърка по врене на запис, заявлението не е завършено.');
                     }
                 }
+                //enable actions
+                $('.disable-on-send').prop('disabled', false);
             },
             error : function() {
-                console.log('system error');
+                apllyErrorDiv.html('Системна грешка, презаредете и опитайте отново.');
+                //enable actions
+                $('.disable-on-send').prop('disabled', false);
             }
         });
         navBtns.prop('disable', false);

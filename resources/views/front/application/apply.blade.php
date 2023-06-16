@@ -301,7 +301,7 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application apply-application" data-validate="info" data-next="rzs">{{ __('front.next_btn') }}</button>
+            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application disable-on-send apply-application" data-validate="info" data-next="rzs">{{ __('front.next_btn') }}</button>
         </form>
         <form id="rzs" class="d-none">
             <div class="card card-light mb-4">
@@ -332,8 +332,9 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application " data-prev="info">{{ __('front.back_btn') }}</button>
-            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application apply-application" data-validate="rzs" data-next="send">{{ __('front.next_btn') }}</button>
+            <div class="text-danger" id="error-apply"></div>
+            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application disable-on-send" data-prev="info">{{ __('front.back_btn') }}</button>
+            <button type="button" class="btn btn-sm btn-primary mt-3 nav-application disable-on-send apply-application" data-validate="rzs" data-next="send">{{ __('front.next_btn') }}</button>
         </form>
         <div id="apply"></div>
         <input type="hidden" id="applicationUrl" value="{{ route('application.store') }}">
