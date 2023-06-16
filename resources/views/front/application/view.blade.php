@@ -19,7 +19,7 @@
                                 {{ $application['uri'] }} | {{ $application['statusName'] }} |
                                 <strong>{{ __('custom.date_apply') }}:</strong> {{ displayDate($application['created_at'] )}} |
                                 <strong>{{ __('custom.term') }}:</strong>{{ displayDate($application['term'] ) }} |
-                                <a href=""><i class="fas fa-user text-dark fw-bold me-1"></i> {{ displayDate($application['user_name'] ) }}</a> |
+                                <a href=""><i class="fas fa-user text-dark fw-bold me-1"></i> {{ $application['user_name'] }}</a> |
                                 <a href="application-full-history.html"><i class="fas fa-history text-dark fw-bold me-1"></i>{{ __('custom.application.full_history') }}</a></p>
                         </div>
                         <div class="col-12 mb-3">
@@ -34,7 +34,7 @@
                                     <img alt="twitter" src="https://platform-cdn.sharethis.com/img/twitter.svg">
                                 </div>
                             </div>
-                            <p class="my-1 d-inline-block" style="font-size: 14px;"><i class="fas fa-eye text-primary me-1"></i>4123</p>
+                            <p class="my-1 d-inline-block" style="font-size: 14px;"><i class="fas fa-eye text-primary me-1"></i>0</p>
                         </div>
                     </div>
                 </div>
