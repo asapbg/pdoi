@@ -436,4 +436,28 @@ if (!function_exists('optionsApplicationStatus')) {
             return $options;
         }
     }
+
+    if (!function_exists('addSortToUrlQuery')) {
+
+        /**
+         * return url query with sort options
+         *
+         * @method addSortToUrlQuery
+         *
+         * @param array $requestFields
+         * @return string
+         */
+        function addSortToUrlQuery(array $requestFields, $sortBy, $sortDirection): string
+        {
+            $requestFields['sort'] = $sortBy;
+            $requestFields['ord'] = $sortDirection;
+            $urlQuery = '?';
+            $first = true;
+            foreach ($requestFields as $key => $value) {
+                $urlQuery .= (!$first ? '&' : '').$key.'='.$value;
+                $first = false;
+            }
+            return $urlQuery;
+        }
+    }
 }

@@ -123,7 +123,7 @@ class PdoiApplicationController extends Controller
                 'type' => 'select',
                 'options' => optionsFromModel(Category::optionsList(), true,'', trans_choice('custom.categories',1)),
                 'default' => '',
-                'value' => $request->input('status'),
+                'value' => $request->input('category'),
                 'col' => 'col-md-4'
             ),
             'text' => array(

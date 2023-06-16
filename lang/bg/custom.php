@@ -230,6 +230,8 @@ return [
     'record_not_found'                 => 'Записът не е открит',
     'sort'                             => 'Сортиране',
     'use_filter'                       => 'Използвайте критерии за търсене',
+    'sort_asc'                         => 'Възходящ ред',
+    'sort_desc'                        => 'Низходящ ред',
 
     //controllers and breadcrumbs
     'pdoi_applications'                         => 'Заявления',

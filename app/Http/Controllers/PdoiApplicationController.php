@@ -68,10 +68,9 @@ class PdoiApplicationController extends Controller
             ->where('user_reg', $request->user()
                 ->id);
         $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
-        $sort = true;
         $myList = true;
         $titlePage =__('front.my_application.title');
-        return view('front.application.list', compact('applications', 'sort', 'titlePage', 'myList'));
+        return view('front.application.list', compact('applications', 'titlePage', 'myList'));
     }
 
     public function showMy(Request $request, int $id = 0)
@@ -320,7 +319,7 @@ class PdoiApplicationController extends Controller
                 'type' => 'select',
                 'options' => optionsFromModel(Category::optionsList(), true,'', trans_choice('custom.categories',1)),
                 'default' => '',
-                'value' => $request->input('status'),
+                'value' => $request->input('category'),
                 'col' => 'col-md-4'
             ),
             'text' => array(
