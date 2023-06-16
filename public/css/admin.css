@@ -64003,3 +64003,8 @@ table tfoot.fix-border th{
 .nav-item-sub-icon {
     font-size: 8px !important;
 }
+
+/*fix hidden selct 2 option by empty text*/
+li.select2-results__option:empty {
+    display: none;
+}

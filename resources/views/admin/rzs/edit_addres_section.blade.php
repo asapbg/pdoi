@@ -4,13 +4,13 @@
         <div class="form-group">
             <label class="col-sm-12 control-label" for="adm_level">{{ __('validation.attributes.area') }}<span class="required">*</span></label>
             <div class="col-12">
-                <select id="region" name="region"  class="form-control form-control-sm select2 @error('region'){{ 'is-invalid' }}@enderror">
+                <select id="area-select" name="region"  class="form-control form-control-sm select2 @error('region'){{ 'is-invalid' }}@enderror">
                     @if(!$item->id)
                         <option value="-1">---</option>
                     @endif
                     @if(isset($areas) && $areas->count())
                         @foreach($areas as $row)
-                            <option value="{{ $row->id }}" @if(old('region', ($item->id ? $item->region : 0)) == $row->id) selected @endif>{{ $row->name }}</option>
+                            <option value="{{ $row->id }}" @if(old('region', ($item->id ? $item->region : 0)) == $row->id) selected @endif data-code="{{ $row->code }}">{{ $row->name }}</option>
                         @endforeach
                     @endif
                 </select>
@@ -25,13 +25,14 @@
         <div class="form-group">
             <label class="col-sm-12 control-label" for="municipality">{{ __('validation.attributes.municipality') }}<span class="required">*</span></label>
             <div class="col-12">
-                <select id="municipality" name="municipality"  class="form-control form-control-sm select2 @error('municipality'){{ 'is-invalid' }}@enderror">
+                <select id="municipality-select" name="municipality"  class="form-control form-control-sm select2 @error('municipality'){{ 'is-invalid' }}@enderror">
                     @if(!$item->id)
                         <option value="-1">---</option>
                     @endif
                     @if(isset($municipalities) && $municipalities->count())
                         @foreach($municipalities as $row)
-                            <option value="{{ $row->id }}" @if(old('municipality', ($item->id ? $item->municipality : 0)) == $row->id) selected @endif>{{ $row->name }}</option>
+                            <option value="{{ $row->id }}" @if(old('municipality', ($item->id ? $item->municipality : 0)) == $row->id) selected @endif
+                            data-area="{{ substr($row->code, 0, 3) }}" data-code="{{ substr($row->code, -2) }}">{{ $row->name }}</option>
                         @endforeach
                     @endif
                 </select>
@@ -46,13 +47,14 @@
         <div class="form-group">
             <label class="col-sm-12 control-label" for="municipality">{{ __('validation.attributes.settlement') }}<span class="required">*</span></label>
             <div class="col-12">
-                <select id="town" name="town"  class="form-control form-control-sm select2 @error('municipality'){{ 'is-invalid' }}@enderror">
+                <select id="settlement-select" name="town"  class="form-control form-control-sm select2 @error('municipality'){{ 'is-invalid' }}@enderror">
                     @if(!$item->id)
                         <option value="-1">---</option>
                     @endif
                     @if(isset($settlement) && $settlement->count())
                         @foreach($settlement as $row)
-                            <option value="{{ $row->id }}" @if(old('town', ($item->id ? $item->town : 0)) == $row->id) selected @endif>{{ $row->name }}</option>
+                            <option value="{{ $row->id }}" @if(old('town', ($item->id ? $item->town : 0)) == $row->id) selected @endif
+                            data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}">{{ $row->name }}</option>
                         @endforeach
                     @endif
                 </select>
