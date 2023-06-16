@@ -134,7 +134,7 @@ class PdoiApplicationController extends Controller
             'subjects' => array(
                 'type' => 'subjects',
                 'multiple' => false,
-                'options' => optionsFromModel(PdoiApplication::optionsList(), true. '', trans_choice('custom.pdoi_response_subjects', 1)),
+                'options' => optionsFromModel(PdoiApplication::optionsList(), true, '', trans_choice('custom.pdoi_response_subjects', 1)),
                 'value' => $request->input('subjects'),
                 'default' => '',
                 'placeholder' => trans_choice('custom.pdoi_response_subjects',1),
