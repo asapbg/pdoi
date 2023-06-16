@@ -22,6 +22,8 @@ class PdoiApplicationShortResource extends JsonResource
             'status' => $this->status,
             'statusName' => $this->statusName,
             'subject' => $this->responseSubject->subject_name,
+            'term' => $this->response_end_time,
+            'user_name' => $this->applicant->names,
         ];
     }
 }

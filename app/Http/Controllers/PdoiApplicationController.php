@@ -7,6 +7,7 @@ use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Requests\PdoiApplicationApplyRequest;
 use App\Http\Resources\PdoiApplicationResource;
 use App\Http\Resources\PdoiApplicationShortCollection;
+use App\Http\Resources\PdoiApplicationShortResource;
 use App\Mail\NotiyUserApplicationStatus;
 use App\Mail\SubjectRegisterNewApplication;
 use App\Models\Category;
@@ -47,6 +48,17 @@ class PdoiApplicationController extends Controller
         return view('front.application.list', compact('applications', 'titlePage', 'filter'));
     }
 
+    public function show(Request $request, int $id = 0)
+    {
+        $item = $this->getFullRecord((int)$id);
+        if( !$item ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $application = (new PdoiApplicationShortResource($item))->resolve();
+        return view('front.application.view', compact('application'));
+    }
+
     public function myApplications(Request $request)
     {
         $paginate = $request->filled('paginate') ? $request->get('paginate') : PdoiApplication::PAGINATE;
@@ -57,17 +69,14 @@ class PdoiApplicationController extends Controller
                 ->id);
         $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
         $sort = true;
+        $myList = true;
         $titlePage =__('front.my_application.title');
-        return view('front.application.list', compact('applications', 'sort', 'titlePage'));
+        return view('front.application.list', compact('applications', 'sort', 'titlePage', 'myList'));
     }
 
     public function showMy(Request $request, int $id = 0)
     {
-        $item = PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations',
-            'categories', 'categories.translations', 'profileType', 'profileType.translations', 'country',
-            'country.translations', 'area', 'area.translations', 'municipality', 'municipality.translations',
-            'settlement', 'settlement.translations'])
-            ->find((int)$id);
+        $item = $this->getFullRecord((int)$id);
         if( !$item ) {
             abort(Response::HTTP_NOT_FOUND);
         }
@@ -330,5 +339,14 @@ class PdoiApplicationController extends Controller
             )
 
         );
+    }
+
+    private function getFullRecord($id): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Builder|array|null
+    {
+        return PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations',
+            'categories', 'categories.translations', 'profileType', 'profileType.translations', 'country',
+            'country.translations', 'area', 'area.translations', 'municipality', 'municipality.translations',
+            'settlement', 'settlement.translations'])
+            ->find((int)$id);
     }
 }

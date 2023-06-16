@@ -2,6 +2,7 @@
 
 @section('content')
 @php($cntApplication = isset($applications) && isset($applications['data']) ? sizeof($applications['data']) : 0)
+@php($applicationRouteName = isset($myList) && $myList ? 'application.my.show' : 'application.show')
     <section class="content container">
         <div class="page-title mb-md-3 mb-2 px-5">
             <h3 class="b-1 text-center">{{ $titlePage }}</h3>
@@ -29,7 +30,7 @@
                     @if($cntApplication)
                         @foreach($applications['data'] as $item)
                             <div class="col-12 mb-4 mb-3">
-                                <a href="{{ route('application.my.show', ['id' => $item['id']]) }}" style="font-size: 16px;">
+                                <a href="{{ route($applicationRouteName, ['id' => $item['id']]) }}" style="font-size: 16px;">
                                     @php($itemContent = strip_tags(html_entity_decode($item['request'])))
                                     {{ $itemContent }}@if(strlen($itemContent) > 500){{ '...' }}@endif
                                 </a>

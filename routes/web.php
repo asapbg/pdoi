@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\Cus
         Route::get( '/my-application','myApplications')->name('application.my');
         Route::get( '/my-application/view/{id}','showMy')->name('application.my.show');
         Route::get('/application/new','create')->name('application.create');
+        Route::get('/application/view/{id}','show')->name('application.show');
         Route::post('/application/store','store')->name('application.store');
     });
 });
