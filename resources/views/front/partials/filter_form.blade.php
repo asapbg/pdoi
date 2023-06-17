@@ -8,7 +8,7 @@
             </h4>
             <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <form class="row">
+                    <form class="row form-filter">
                         @foreach($filter as $key => $field)
                             <div class="mb-3 {{ $field['col'] ?? 'col-md-6' }} col-12 mb-3">
                                 <div class="input-group">

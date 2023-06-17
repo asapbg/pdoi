@@ -288,6 +288,7 @@ class PdoiApplicationController extends Controller
                 'options' => optionsTimePeriod(true,'', __('custom.period')),
                 'default' => '',
                 'value' => $request->input('period'),
+                'placeholder' => __('custom.period'),
                 'col' => 'col-md-3'
             ),
             'formDate' => array(
@@ -307,6 +308,7 @@ class PdoiApplicationController extends Controller
                 'options' => optionsApplicationStatus(true, '', __('custom.status')),
                 'default' => '',
                 'value' => $request->input('status'),
+                'placeholder' => __('custom.status'),
                 'col' => 'col-md-4'
             ),
             'applicationUri' => array(
@@ -320,6 +322,7 @@ class PdoiApplicationController extends Controller
                 'options' => optionsFromModel(Category::optionsList(), true,'', trans_choice('custom.categories',1)),
                 'default' => '',
                 'value' => $request->input('category'),
+                'placeholder' => trans_choice('custom.categories',1),
                 'col' => 'col-md-4'
             ),
             'text' => array(

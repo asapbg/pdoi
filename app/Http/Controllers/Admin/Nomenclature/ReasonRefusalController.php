@@ -56,6 +56,7 @@ class ReasonRefusalController extends AdminController
 
     public function store(ReasonRefusalStoreRequest $request, ReasonRefusal $item)
     {
+
         $id = $item->id;
         $validated = $request->validated();
         if( ($id && $request->user()->cannot('update', $item))
