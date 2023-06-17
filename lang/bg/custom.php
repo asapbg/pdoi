@@ -329,6 +329,8 @@ return [
     'available_actions'                         => 'Възможни действия',
     'answer'                                    => 'Отговор',
     'category_not_selected'                     => 'Не сте избрали категория',
+    'forwarded'                                 => 'Препратено по компетентност',
+    'in_process'                                => 'В процес на обработка',
     //application statuses
     'application.status.RECEIVED'               => 'Прието на платформата',
     'application.status.REGISTRATION_TO_SUBJECT'     => 'Очаква регистрация при задължен субект',
@@ -338,6 +340,7 @@ return [
     'application.status.INFO_NOT_EXIST'              => 'Информацията не съществува',
     'application.status.NO_REVIEW'                   => 'Оставено без разглеждане',
     'application.status.NOT_APPROVED'                => 'Неодобрено',
+    'application.status.FORWARDED'                   => 'Препратено по компетентност',
     'application.request_for_info'                   => 'Искане за достъп до обществена информация',
     'application.full_history'                   => 'Електронно досие',
     //events names

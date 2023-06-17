@@ -64008,3 +64008,7 @@ table tfoot.fix-border th{
 li.select2-results__option:empty {
     display: none;
 }
+
+.app-f-small {
+    font-size: 12px;
+}

@@ -9,6 +9,12 @@
 
             <div class="card">
                 <div class="card-body table-responsive">
+                    <div id="legend" class="mb-3">
+                        <div class="d-inline-block app-f-small"><span class="badge badge-info ms-2 lh-1">&nbsp;</span> {{ __('custom.forwarded') }}</div>
+                        <div class="d-inline-block app-f-small"><span class="badge badge-success ms-2 lh-1">&nbsp;</span> {{ __('custom.in_process') }}</div>
+                        <div class="d-inline-block app-f-small"><span class="badge badge-warning ms-2 lh-1">&nbsp;</span> {{ __('custom.expired_term') }}</div>
+                        <div class="d-inline-block app-f-small"><span class="badge badge-danger ms-2 lh-1">&nbsp;</span> {{ __('custom.not_approved') }}</div>
+                    </div>
                     <table class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
@@ -25,7 +31,7 @@
                         @if(isset($items) && $items->count() > 0)
                             @foreach($items as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td class="bg-{{ $item->statusStyle }}">{{ $item->id }}</td>
                                     <td>{{ $item->application_uri }}</td>
                                     <td>{{ displayDate($item->created_at) }}</td>
                                     <td>{{ $item->responseSubject->subject_name }}</td>

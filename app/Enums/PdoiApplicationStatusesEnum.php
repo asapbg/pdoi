@@ -18,6 +18,7 @@ enum PdoiApplicationStatusesEnum: int
     case NOT_APPROVED = 6; //Неодобрено
     case INFO_NOT_EXIST = 7; //Информацията не съществува
     case NO_REVIEW = 8; //Оставено без разглеждане
+    case FORWARDED = 9; //Препратено по компетентност
 
     // Return enum name by value
     public static function keyByValue($searchVal): string
@@ -37,6 +38,7 @@ enum PdoiApplicationStatusesEnum: int
             self::RECEIVED,
             self::REGISTRATION_TO_SUBJECT,
             self::IN_PROCESS,
+            self::FORWARDED
         ];
     }
 }

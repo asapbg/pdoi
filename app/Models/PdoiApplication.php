@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Traits\FilterSort;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -48,6 +49,24 @@ class PdoiApplication extends ModelActivityExtend
     {
         return Attribute::make(
             get: fn () => __('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->status))
+        );
+    }
+
+    protected function statusStyle(): Attribute
+    {
+        $class = 'light';
+        if(in_array($this->status, [PdoiApplicationStatusesEnum::RECEIVED->value, PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value, PdoiApplicationStatusesEnum::IN_PROCESS->value])) {
+            $class = $this->response_end_time > Carbon::now() ? 'success' : 'warning';
+        } else {
+            if( $this->status === PdoiApplicationStatusesEnum::NOT_APPROVED->value ) {
+                $class = 'danger';
+            } elseif ( $this->status === PdoiApplicationStatusesEnum::FORWARDED->value ) {
+                $class = 'info';
+            }
+        }
+
+        return Attribute::make(
+            get: fn () => $class
         );
     }
 

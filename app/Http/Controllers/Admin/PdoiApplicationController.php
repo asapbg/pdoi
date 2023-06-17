@@ -20,6 +20,7 @@ class PdoiApplicationController extends Controller
             $items = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
                 ->FilterBy($requestFilter)
                 ->ByUserSubjects()
+                ->orderBy('id', 'desc')
                 ->paginate($paginate);
         }
         $listRouteName = 'admin.application';
