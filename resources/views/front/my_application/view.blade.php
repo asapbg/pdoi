@@ -15,7 +15,7 @@
                         <a class="nav-link" id="answer-tab" data-bs-toggle="tab" data-bs-target="#answer" role="button" aria-controls="answer" aria-selected="false">{{ __('custom.answer') }}</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="button" aria-controls="history" aria-selected="false">{{ trans_choice('custom.activity_logs',1) }}</a>
+                        <a class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="button" aria-controls="history" aria-selected="false">{{ __('custom.history') }}</a>
                     </li>
                 </ul>
             </div>
@@ -29,6 +29,10 @@
                             <div class="col-md-3 col-12 fw-bold mb-2">{{ __('custom.date_apply') }}: <span class="text-primary">{{ displayDate($application['created_at']) }}</span></div>
                             <div class="col-md-3 col-12 fw-bold mb-2">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($application['term']) }}</span></div>
                             <div class="col-md-12 col-12 fw-bold mb-2">{{ trans_choice('custom.categories', 2) }}: <span class="text-primary">@if(sizeof($application['themes'])){{ implode(';', $application['themes']) }}@else{{ '---' }}@endif</span></div>
+                            <div class="col-md-12 col-12 fw-bold mb-2">
+                                <a href="/application-full-history.html" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square fw-bold me-1"></i>{{ __('custom.application.full_history') }}</a>
+                            </div>
+
                         </div>
                         <hr>
                         <div class="row">

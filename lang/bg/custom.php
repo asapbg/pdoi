@@ -234,6 +234,7 @@ return [
     'sort_asc'                         => 'Възходящ ред',
     'sort_desc'                        => 'Низходящ ред',
     'expired_term'                     => 'Изтекъл срок',
+    'history'                          => 'История',
 
     //controllers and breadcrumbs
     'pdoi_applications'                         => 'Заявления',
