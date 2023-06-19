@@ -260,6 +260,7 @@ class PdoiApplicationController extends Controller
                     'path' => $newApplication->fileFolder.$fileName,
                 ]);
                 $newApplication->files()->save($newFile);
+                sleep(1);
             }
 
             DB::commit();

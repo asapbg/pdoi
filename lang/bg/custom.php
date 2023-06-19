@@ -275,6 +275,7 @@ return [
     'users.'                                    => 'Потребители',
     'roles_permissions.'                        => 'Роли и права',
     'administration.rzs.'                       => 'Регистър на задължените субекти',
+    'application.'                              => 'Обработка на заявления',
     'pdoi.'                                     => 'ПДОИ',
     //users
     'users.type.1'                              => 'Вътрешен',

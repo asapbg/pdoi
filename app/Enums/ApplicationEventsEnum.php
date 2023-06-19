@@ -19,4 +19,41 @@ enum ApplicationEventsEnum: int
     case EXTEND_TERM = 5; //Удължаване на срока
     case FINAL_DECISION = 6; //Крайно решение
 
+    public static function nextEvent($currentEvent)
+    {
+        $allowedEvent = [
+            self::SEND->value => [
+                self::SEND_TO_RKS->value,
+                self::FORWARD->value,
+                self::ASK_FOR_INFO->value,
+                self::EXTEND_TERM->value,
+                self::FINAL_DECISION->value,
+            ],
+            self::SEND_TO_RKS->value => [
+                self::APPROVE_BY_RKS->value,
+            ],
+            self::APPROVE_BY_RKS->value => [
+                self::FORWARD->value,
+                self::ASK_FOR_INFO->value,
+                self::EXTEND_TERM->value,
+                self::FINAL_DECISION->value,
+            ],
+            self::FORWARD->value => [
+                self::SEND_TO_RKS->value,
+            ],
+            self::ASK_FOR_INFO->value => [
+                self::GIVE_INFO->value,
+            ],
+            self::GIVE_INFO->value => [
+                self::FORWARD->value,
+                self::EXTEND_TERM->value,
+                self::FINAL_DECISION->value,
+            ]
+            ,
+            self::EXTEND_TERM->value => [
+                self::FINAL_DECISION->value,
+            ]
+        ];
+        return $allowedEvent[(int)$currentEvent];
+    }
 }

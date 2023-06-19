@@ -166,14 +166,14 @@
                                     <form class=" mb-3" action="post">
                                         @csrf
                                         <div class="input-group col-md-6 col-12">
-                                            <select class="form-select form-select-sm" aria-label="Example select with button addon">
+                                            <select class="form-select form-select-sm" aria-label="Example select with button addon" onchange="javascript:$('#apply_event').attr('href', $(this).val())">
                                                 <option>{{ __('custom.available_actions') }}</option>
-                                                <option>Искане на допълнителна информация</option>
-                                                <option>Препращане на заявление</option>
-                                                <option>Удължаване на срок</option>
-                                                <option>Крайно решение</option>
+                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => \App\Enums\ApplicationEventsEnum::ASK_FOR_INFO->value]) }}">Искане на допълнителна информация</option>
+                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => \App\Enums\ApplicationEventsEnum::FORWARD->value]) }}">Препращане на заявление</option>
+                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => \App\Enums\ApplicationEventsEnum::EXTEND_TERM->value]) }}">Удължаване на срок</option>
+                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value]) }}">Крайно решение</option>
                                             </select>
-                                            <button id="apply" type="submit" class="btn btn-sm btn-success">{{ __('custom.apply') }}</button>
+                                            <a href="" id="apply_event" role="button" class="btn btn-sm btn-success">{{ __('custom.apply') }}</a>
                                         </div>
                                     </form>
                                 @endcan

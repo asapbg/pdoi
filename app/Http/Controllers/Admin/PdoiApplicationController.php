@@ -86,6 +86,10 @@ class PdoiApplicationController extends Controller
         return response()->json(['success' => 1, Response::HTTP_OK]);
     }
 
+    public function newEvent(Request $request, $application, $event) {
+
+    }
+
     private function filters($request): array
     {
         return array(

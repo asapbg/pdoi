@@ -53,7 +53,47 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-                            История
+                            <table class="table table-sm table-bordered table-responsive">
+                                <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Процес</th>
+{{--                                    <th>Потребител</th>--}}
+                                </tr>
+                                </thead>
+                                <thead>
+                                <tr>
+                                    <td>06.04.2023</td>
+                                    <td>Регистриран в процес на обработка</td>
+{{--                                    <td><a href="">Кирил Иванов</a> <span class="fst-italic">(заявител)</span></td>--}}
+                                </tr>
+                                <tr>
+                                    <td>10.04.2023</td>
+                                    <td>Препратено по компетентсност (Общинска администрация - Сливница )</td>
+{{--                                    <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>--}}
+                                </tr>
+                                <tr>
+                                    <td>15.04.2023</td>
+                                    <td>Публикуван отказ</td>
+{{--                                    <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>--}}
+                                </tr>
+                                <tr>
+                                    <td>28.04.2023</td>
+                                    <td>Обжалвано чрез съдебно решение (№ 234234243234 / 20.04.2023)</td>
+{{--                                    <td><a href="">Кирил Иванов</a> <span class="fst-italic">(заявител)</span></td>--}}
+                                </tr>
+                                <tr>
+                                    <td>29.04.2023</td>
+                                    <td>Одобрено обжалване</td>
+{{--                                    <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>--}}
+                                </tr>
+                                <tr>
+                                    <td>30.04.2023</td>
+                                    <td>Връчен отговор</td>
+{{--                                    <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>--}}
+                                </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
 
