@@ -34,13 +34,13 @@
                         @foreach($applications['data'] as $item)
                             <div class="col-12 mb-4 mb-3">
                                 <a href="{{ route($applicationRouteName, ['id' => $item['id']]) }}" style="font-size: 16px;">@if(isset($myList) && $myList){{ $item['my_title'] }}@else{{ $item['title'] }}@endif</a>
-                                <p class="my-1" style="font-size: 14px;">{{ $item['subject'] }} | {{ __('custom.reg_number') }}: {{ $item['uri'] }}</p>
+                                <p class="my-1" style="font-size: 14px;">{{ __('custom.reg_number') }}: {{ $item['uri'] }}</p>
                                 <p class="my-1" style="font-size: 14px;">{{ __('custom.date_apply') }}: {{ displayDate($item['created_at']) }} | {{ __('custom.status') }}: {{ $item['statusName'] }} | <i class="fas fa-eye text-primary me-1"></i>0</p>
                             </div>
                         @endforeach
                         {{ $applications['links'] }}
                     @else
-                        @include('front.partials.empty_list', ['custom_message' => !request()->input('search') ? __('custom.use_filter') : null ])
+                        @include('front.partials.empty_list', ['custom_message' => !isset($myList) && !request()->input('search') ? __('custom.use_filter') : null ])
                     @endif
                 </div>
             </div>

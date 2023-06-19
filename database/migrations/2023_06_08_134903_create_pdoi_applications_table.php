@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -85,6 +86,9 @@ return new class extends Migration
             $table->timestamps(); //date_reg, date_last_mod
             $table->softDeletes();
         });
+
+        DB::statement("ALTER TABLE pdoi_application ADD COLUMN request_ts_bg tsvector GENERATED ALWAYS AS (to_tsvector('bulgarian', regexp_replace(regexp_replace(request, E'<[^>]+>', '', 'gi'), E'&nbsp;', '', 'g'))) STORED;");
+        DB::statement("CREATE INDEX request_ts_bg_idx ON pdoi_application USING GIN (request_ts_bg);");
 
         Schema::create('pdoi_application_event', function (Blueprint $table) {
             $table->bigIncrements('id');
