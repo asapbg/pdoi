@@ -23,12 +23,17 @@ class RzsSection  extends ModelActivityExtend implements TranslatableContract
     //activity
     protected string $logName = "rzs_sections";
 
-    protected $fillable = ['adm_level', 'system_name', 'active'];
+    protected $fillable = ['adm_level', 'system_name', 'parent_id', 'active'];
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public function scopeIsActive($query)
     {
         $query->where('rzs_section.active', 1);
+    }
+
+    public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(RzsSection::class, 'adm_level', 'parent_id');
     }
 
     public function subjects(): \Illuminate\Database\Eloquent\Relations\HasMany

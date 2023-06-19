@@ -41,6 +41,8 @@ class RzsSectionSeeder extends Seeder
             14 => ['Държавно-обществени консултативни комисии', 'StatePublicConsultativeCommission']
         ];
 
+        $rzsSectionsIds = array_keys($data);
+
         foreach ($data as $code => $rzsSection) {
             $item = RzsSection::create([
                 'adm_level' => $code,

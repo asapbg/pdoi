@@ -33,11 +33,6 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         $query->where('pdoi_response_subject.active', 1);
     }
 
-    public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
-    {
-        return $this->hasOne(PdoiResponseSubject::class, 'id', 'parent_id');
-    }
-
     public function section(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(RzsSection::class, 'adm_level', 'adm_level');
@@ -111,8 +106,8 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     {
         $tree = [];
         $subjects = DB::table('pdoi_response_subject')
-            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name'
-                , DB::raw('case when pdoi_response_subject.parent_id is null then pdoi_response_subject.adm_level else pdoi_response_subject.parent_id end as parent')
+            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name', 'pdoi_response_subject.adm_level as parent'
+//                , DB::raw('case when pdoi_response_subject.parent_id is null then pdoi_response_subject.adm_level else pdoi_response_subject.parent_id end as parent')
                 , DB::raw('1 as selectable')])
             ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
             ->where('pdoi_response_subject.active', '=', 1)
@@ -123,9 +118,9 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
             $subjects->where('pdoi_response_subject.redirect_only', '=', (int)$filter['redirect_only']);
         }
 
-        $allSubjects = DB::table("rzs_section")
-            ->select(['rzs_section.adm_level as id', 'rzs_section_translations.name'
-                , DB::raw('0 as parent'), DB::raw('0 as selectable')])
+        $allSubjectsAndSections = DB::table("rzs_section")
+            ->select(['rzs_section.adm_level as id', 'rzs_section_translations.name', 'rzs_section.parent_id as parent'
+                , DB::raw('0 as selectable')])
             ->join('rzs_section_translations', 'rzs_section_translations.rzs_section_id', '=', 'rzs_section.id')
             ->where('rzs_section.active', '=', 1)
             ->whereNull('rzs_section.deleted_at')
@@ -133,15 +128,15 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
             ->union($subjects)->orderBy('name','asc')
             ->get();
 
-        if( $allSubjects->count() ) {
-            foreach ($allSubjects as $subject) {
-                if( !$subject->selectable ) {
+        if( $allSubjectsAndSections->count() ) {
+            foreach ($allSubjectsAndSections as $subject) {
+                if( !$subject->selectable && !$subject->parent) {
                     $tree[] = array(
                         'id' => $subject->id,
                         'name' => $subject->name,
                         'selectable' => $subject->selectable,
                         'parent' => $subject->parent,
-                        'children' => self::subjectChildren($subject->id, $allSubjects)
+                        'children' => self::subjectChildren($subject->id, $allSubjectsAndSections)
                     );
                 }
             }
@@ -161,7 +156,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
                         'name' => $subject->name,
                         'selectable' => $subject->selectable,
                         'parent' => $subject->parent,
-                        'children' => self::subjectChildren($subject->id, $subjects)
+                        'children' => !$subject->selectable ? self::subjectChildren($subject->id, $subjects) : []
                     );
                 }
             }

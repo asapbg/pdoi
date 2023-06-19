@@ -25,9 +25,9 @@
                 </button>
             </label>
             <select name="court" id="court" style="width:100%;" class="select2 @error('court') is-invalid @endif">
-                @if(isset($subjects) && $subjects->count())
+                @if(isset($courtSubjects) && $courtSubjects->count())
                     <option value="" @if(old('court', $item->id ? $item->court_id : 0) == 0) selected @endif>Списък РЗС</option>
-                    @foreach($subjects as $row)
+                    @foreach($courtSubjects as $row)
                         <option value="{{ $row->id }}" @if(old('court', $item->id ? $item->court_id : 0) == $row->id) selected @endif>{{ $row->name }}</option>
                     @endforeach
                 @endif

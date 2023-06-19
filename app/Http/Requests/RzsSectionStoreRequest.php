@@ -26,6 +26,7 @@ class RzsSectionStoreRequest extends FormRequest
     {
         $rules = [
             'active' => ['required', 'numeric', 'gt:0'],
+            'parent_id' => ['nullable', 'numeric', 'gt:0']
         ];
 
 

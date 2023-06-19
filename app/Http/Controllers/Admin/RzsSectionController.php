@@ -49,8 +49,9 @@ class RzsSectionController extends AdminController
         $storeRouteName = self::STORE_ROUTE;
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = RzsSection::translationFieldsProperties();
+        $rzsSections = RzsSection::optionsList();
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName',
-            'listRouteName', 'translatableFields'));
+            'listRouteName', 'translatableFields', 'rzsSections'));
     }
 
     public function store(RzsSectionStoreRequest $request, RzsSection $item)

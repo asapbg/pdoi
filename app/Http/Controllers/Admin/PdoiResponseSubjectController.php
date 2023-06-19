@@ -33,7 +33,7 @@ class PdoiResponseSubjectController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = PdoiResponseSubject::with(['translation', 'parent.translation', 'section.translation'])
+        $items = PdoiResponseSubject::with(['translation', 'section.translation'])
             ->FilterBy($requestFilter)
             ->paginate($paginate);
         $toggleBooleanModel = 'PdoiResponseSubject';
@@ -54,17 +54,17 @@ class PdoiResponseSubjectController extends AdminController
         if( ($item->id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
-        $subjects = PdoiResponseSubject::optionsList($item->id ?? 0);
         $rzsSections = RzsSection::optionsList();
         $areas = EkatteArea::optionsList();
         $municipalities = EkatteMunicipality::optionsList();
         $settlement = EkatteSettlement::optionsList();
+        $courtSubjects = PdoiResponseSubject::optionsList();
 
         $storeRouteName = self::STORE_ROUTE;
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = PdoiResponseSubject::translationFieldsProperties();
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName',
-            'listRouteName', 'subjects', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections'));
+            'listRouteName', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections', 'courtSubjects'));
     }
 
     public function store(PdoiResponseSubjectStoreRequest $request, PdoiResponseSubject $item)

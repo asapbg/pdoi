@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('rzs_section', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('adm_level')->nullable();
+            $table->unsignedBigInteger('adm_level')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+
             $table->string('system_name');
             $table->tinyInteger('active')->default(1);
             $table->timestamps();
@@ -47,11 +49,6 @@ return new class extends Migration
             $table->date('date_to')->nullable();
             $table->tinyInteger('adm_register')->default(1);
             $table->tinyInteger('redirect_only')->default(0);
-
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreign('parent_id')
-                ->references('id')
-                ->on('pdoi_response_subject');
 
             $table->unsignedBigInteger('adm_level');
             $table->foreign('adm_level')
