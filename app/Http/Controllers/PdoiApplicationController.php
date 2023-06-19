@@ -155,7 +155,7 @@ class PdoiApplicationController extends Controller
                     'address_second' => $user->address_second,
                     'phone' => $user->phone,
                     'response_subject_id' => (int)$response_subject_id,
-                    'request' => htmlentities($validated['request']),
+                    'request' => htmlentities(stripHtmlTags($validated['request'])),
                     'status' => PdoiApplicationStatusesEnum::RECEIVED->value,
                     'application_uri' => round(microtime(true)).'-'. displayDate(Carbon::now()),
                     'email_publication' => $validated['email_publication'] ?? 0,
@@ -172,7 +172,7 @@ class PdoiApplicationController extends Controller
                 //Save user attached files
                 if( isset($validated['files']) && sizeof($validated['files']) ) {
                     foreach ($validated['files'] as $key => $file) {
-                        $fileNameToStore = $key.'_'.round(microtime(true)).'.'.$file->getClientOriginalExtension();
+                        $fileNameToStore = ($key + 1).'_'.round(microtime(true)).'.'.$file->getClientOriginalExtension();
                         // Upload Image
                         $file->storeAs($newApplication->fileFolder, $fileNameToStore, 'local');
                         $newFile = new File([

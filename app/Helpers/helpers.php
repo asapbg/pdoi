@@ -460,4 +460,20 @@ if (!function_exists('optionsApplicationStatus')) {
             return $urlQuery;
         }
     }
+
+    if (!function_exists('stripHtmlTags')) {
+
+        /**
+         * return striped html string
+         *
+         * @param string $html_string
+         * @param array $tags
+         * @return string
+         */
+        function stripHtmlTags(string $html_string, array $tags = [])
+        {
+            $tagsToStrip = sizeof($tags) ? $tags : ['p', 'ul', 'ol', 'b', 'i', 'u'];
+            return strip_tags($html_string, $tagsToStrip);
+        }
+    }
 }

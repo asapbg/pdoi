@@ -23,13 +23,9 @@ $(function() {
         if($('.summernote').length) {
             $('.summernote').summernote({
                 toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link']], //, 'picture', 'video'
-                    ['view', ['fullscreen', 'codeview', 'help']]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['para', ['ul', 'ol']],
+                    ['view', ['fullscreen']]
                 ]
             });
         }

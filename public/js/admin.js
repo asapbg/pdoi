@@ -2793,19 +2793,10 @@ $(document).ready(function (e) {
 
     if($('.summernote').length) {
         $('.summernote').summernote({
-            height: 80,
-            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
-            styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5'],
             toolbar: [
-                // [groupName, [list of button]]
-                ['style', ['style','bold', 'italic', 'underline', 'clear']],
-                ['font', ['superscript', 'subscript']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['view', ['fullscreen']],
-                ['table', ['table']],
-                ['insert', ['hr']]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['para', ['ul', 'ol']],
+                ['view', ['fullscreen']]
             ]
         });
     }
