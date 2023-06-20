@@ -14,7 +14,7 @@
     <td>{{ $item->responseSubject->subject_name }}</td>
     <td>
         @php($itemContent = strip_tags(html_entity_decode($item->request)))
-        {{ $itemContent }}@if(strlen($itemContent) > 500){{ '...' }}@endif
+        {{ mb_substr($itemContent, 0, 100) }}@if(strlen($itemContent) > 100){{ '...' }}@endif
     </td>
     <td>{{ $item->statusName }}</td>
     <td class="text-center">

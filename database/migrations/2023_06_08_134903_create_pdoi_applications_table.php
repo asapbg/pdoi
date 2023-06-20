@@ -60,7 +60,7 @@ return new class extends Migration
 
             $table->text('request');
             $table->tinyInteger('status')->default(\App\Enums\PdoiApplicationStatusesEnum::RECEIVED->value);
-            $table->timestamp('status_date')->useCurrent();
+            $table->timestamp('status_date')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->string('application_uri', 2000)->unique();
 
@@ -97,7 +97,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('pdoi_application');
             $table->unsignedTinyInteger('event_type');
-            $table->date('event_date')->useCurrent();
+            $table->date('event_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->date('event_end_date')->nullable();
             $table->text('add_text')->nullable();
             $table->unsignedBigInteger('old_resp_subject_id')->nullable();

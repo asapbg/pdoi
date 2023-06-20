@@ -20,6 +20,9 @@ enum PdoiApplicationStatusesEnum: int
     case NO_REVIEW = 8; //Оставено без разглеждане
     case FORWARDED = 9; //Препратено по компетентност
 
+//    case FORWARD_ТО_SUB_SUBJECT = 10; //Препратено по компетентност към подчинен субект
+//    case FORWARD_ТО_NOT_REGISTERED_SUBJECT = 11; //Препратено по компетентност на субект, нерегистриран на платформата
+
     // Return enum name by value
     public static function keyByValue($searchVal): string
     {
@@ -35,10 +38,12 @@ enum PdoiApplicationStatusesEnum: int
     public static function  notCompleted(): array
     {
         return [
-            self::RECEIVED,
-            self::REGISTRATION_TO_SUBJECT,
-            self::IN_PROCESS,
-            self::FORWARDED
+            self::RECEIVED->value,
+            self::REGISTRATION_TO_SUBJECT->value,
+            self::IN_PROCESS->value,
+            self::FORWARDED->value,
+//            self::FORWARD_ТО_SUB_SUBJECT,
+//            self::FORWARD_ТО_NOT_REGISTERED_SUBJECT
         ];
     }
 }

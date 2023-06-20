@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ApplicationEventsEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Requests\PdoiApplicationApplyRequest;
@@ -15,10 +16,12 @@ use App\Models\Country;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
+use App\Models\Event;
 use App\Models\File;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\User;
+use App\Services\ApplicationService;
 use App\Services\FileOcr;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -169,6 +172,14 @@ class PdoiApplicationController extends Controller
 //                    'headoffice_publication' => $validated['headoffice_publication'] ?? 0,
                 ]);
                 $newApplication->save();
+                $appService = new ApplicationService($newApplication);
+                //register first app event
+                $receivedEvent = $appService->registerEvent(ApplicationEventsEnum::SEND->value);
+                if ( is_null($receivedEvent) ) {
+                    DB::rollBack();
+                    logError('Apply application (front): ', 'Operation roll back because cant\'t register '.ApplicationEventsEnum::SEND->name. ' event');
+                    return response()->json(['errors' => __('custom.system_error')], 200);
+                }
 
                 //Save user attached files
                 if( isset($validated['files']) && sizeof($validated['files']) ) {
@@ -234,7 +245,7 @@ class PdoiApplicationController extends Controller
                         //send mail to subject
                         if( env('SEND_MAILS') ) {
                             Mail::to($user->email)->send(new SubjectRegisterNewApplication($newApplication));
-                            //TODO fix me check if subject mail
+                            //TODO fix me check if subject mail else send to Admin
 //                        Mail::to($subject->email)->send(new SubjectRegisterNewApplication($newApplication));
                         }
                 }
@@ -253,7 +264,6 @@ class PdoiApplicationController extends Controller
                     Mail::to($newApplication->applicant->email)->send(new NotiyUserApplicationStatus($newApplication));
                 }
 
-                //TODO When generate this file only on registration or???
                 $fileName = 'zayavlenie_ZDOI_'.displayDate($newApplication->created_at).'.pdf';
                 $pdfFile = Pdf::loadView('pdf.application_doc', ['application' => $newApplication]);
                 Storage::disk('local')->put($newApplication->fileFolder.$fileName, $pdfFile->output());

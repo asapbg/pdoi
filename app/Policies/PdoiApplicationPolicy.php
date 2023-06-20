@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\PdoiApplicationStatusesEnum;
 use App\Models\PdoiApplication;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -68,8 +69,11 @@ class PdoiApplicationPolicy
     public function update(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
     {
         //TODO fix me add subject from events
-        return $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
-                && $user->administrative_unit === $pdoiApplication->responseSubject->id);
+        return in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted())
+            && (
+                $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
+                && $user->administrative_unit === $pdoiApplication->responseSubject->id)
+            );
     }
 
     /**

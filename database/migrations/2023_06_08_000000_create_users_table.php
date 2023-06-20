@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -50,7 +51,7 @@ return new class extends Migration
 
             $table->string('phone', 50)->nullable();
             $table->tinyInteger('status')->default(1);
-            $table->timestamp('status_date')->useCurrent();
+            $table->timestamp('status_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('status_explain')->nullable();
             $table->integer('org_id')->nullable();
             $table->integer('org_code')->nullable();

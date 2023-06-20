@@ -142,6 +142,11 @@ class PdoiApplication extends ModelActivityExtend
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');
     }
 
+    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PdoiApplicationEvent::class, 'pdoi_application_id', 'id');
+    }
+
     public static function optionsList(): \Illuminate\Support\Collection
     {
         return DB::table('pdoi_response_subject')
