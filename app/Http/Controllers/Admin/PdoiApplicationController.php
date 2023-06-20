@@ -17,10 +17,11 @@ class PdoiApplicationController extends Controller
         $items = null;
         if( isset($requestFilter['search']) ) {
             $paginate = $filter['paginate'] ?? PdoiApplication::PAGINATE;
-            $items = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
+            $items = PdoiApplication::with(['responseSubject', 'responseSubject.translations', 'parent'])
                 ->FilterBy($requestFilter)
                 ->ByUserSubjects()
                 ->orderBy('id', 'desc')
+                ->orderBy('parent_id', 'asc')
                 ->paginate($paginate);
         }
         $listRouteName = 'admin.application';

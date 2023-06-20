@@ -30,33 +30,7 @@
                         <tbody>
                         @if(isset($items) && $items->count() > 0)
                             @foreach($items as $item)
-                                <tr>
-                                    <td class="bg-{{ $item->statusStyle }}">{{ $item->id }}</td>
-                                    <td>{{ $item->application_uri }}</td>
-                                    <td>{{ displayDate($item->created_at) }}</td>
-                                    <td>{{ $item->responseSubject->subject_name }}</td>
-                                    <td>
-                                        @php($itemContent = strip_tags(html_entity_decode($item->request)))
-                                        {{ $itemContent }}@if(strlen($itemContent) > 500){{ '...' }}@endif
-                                    </td>
-                                    <td>{{ $item->statusName }}</td>
-                                    <td class="text-center">
-                                        @canany(['update', 'view'], $item)
-                                            <a href="{{ route( 'admin.application.view' , [$item->id]) }}"
-                                               class="btn btn-sm btn-info"
-                                               data-toggle="tooltip"
-                                               title="{{ __('custom.edit') }}">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="/application-full-history.html"
-                                               class="btn btn-sm btn-warning"
-                                               data-toggle="tooltip" title=""
-                                               data-original-title="{{ __('custom.application.full_history') }}">
-                                                <i class="fas fa-history"></i>
-                                            </a>
-                                        @endcan
-                                    </td>
-                                </tr>
+                                @include('admin.applications.row_list')
                             @endforeach
                         @endif
                         </tbody>

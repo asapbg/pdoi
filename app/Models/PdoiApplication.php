@@ -87,6 +87,16 @@ class PdoiApplication extends ModelActivityExtend
         }
     }
 
+    public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiApplication::class, 'id', 'parent_id');
+    }
+
+    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PdoiApplication::class, 'parent_id', 'id');
+    }
+
     public function applicant(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_reg');

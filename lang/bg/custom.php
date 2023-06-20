@@ -241,6 +241,7 @@ return [
     'pdoi_applications'                         => 'Заявления',
     'applications'                              => 'Заявления',
     //
+    'to_base_application'                       => 'към основно заявление',
     'application_system_title'                  => 'Заявление от :user до :subject от :apply_date',
     'own_application_system_title'              => 'Заявление до :subject от :apply_date',
     'anonymous_applicant'                       => 'Анонимен заявител',
