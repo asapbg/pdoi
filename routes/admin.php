@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\Nomenclature\ProfileTypeController;
 use App\Http\Controllers\Admin\Nomenclature\CategoryController;
 use App\Http\Controllers\Admin\Nomenclature\ExtendTermsReasonController;
 use App\Http\Controllers\Admin\Nomenclature\ReasonRefusalController;
+use App\Http\Controllers\Admin\Nomenclature\EventController;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -144,6 +145,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/nomenclature/reason-refusal',                'index')->name('nomenclature.reason_refusal')->middleware('can:viewAny,App\Models\ReasonRefusal');
         Route::get('/nomenclature/reason-refusal/edit/{item?}',         'edit')->name('nomenclature.reason_refusal.edit');
         Route::match(['post', 'put'], '/nomenclature/reason-refusal/store/{item?}',         'store')->name('nomenclature.reason_refusal.store');
+    });
+
+    Route::controller(EventController::class)->group(function () {
+        Route::get('/nomenclature/event',                'index')->name('nomenclature.event')->middleware('can:viewAny,App\Models\Event');
+        Route::get('/nomenclature/event/edit/{item?}',         'edit')->name('nomenclature.event.edit');
+        Route::match(['post', 'put'], '/nomenclature/event/store/{item?}',         'store')->name('nomenclature.event.store');
     });
 
     //Applications

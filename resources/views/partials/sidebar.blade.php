@@ -105,6 +105,7 @@
                         @php($systemNomenclatureIsActive = Str::contains(url()->current(), ['nomenclature/profile-type'])
 || Str::contains(url()->current(), ['nomenclature/category'])
 || Str::contains(url()->current(), ['nomenclature/extend-terms'])
+|| Str::contains(url()->current(), ['nomenclature/event'])
 || Str::contains(url()->current(), ['nomenclature/reason-refusal']) )
                         <a href="#" class="nav-link @if($systemNomenclatureIsActive)) active @endif">
                             <i class="nav-icon fas fa-stream"></i>
@@ -118,8 +119,6 @@
                                     <p>{{ trans_choice('custom.nomenclature.profile_type', 2) }}</p>
                                 </a>
                             </li>
-                        </ul>
-                        <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
                                 <a href="{{ route('admin.nomenclature.category') }}"
                                    class="nav-link @if(strstr(url()->current(), 'nomenclature/category')) active @endif">
@@ -127,8 +126,6 @@
                                     <p>{{ trans_choice('custom.nomenclature.category', 2) }}</p>
                                 </a>
                             </li>
-                        </ul>
-                        <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
                                 <a href="{{ route('admin.nomenclature.extend_terms') }}"
                                    class="nav-link @if(strstr(url()->current(), 'nomenclature/extend-terms')) active @endif">
@@ -136,13 +133,18 @@
                                     <p>{{ trans_choice('custom.nomenclature.extend_terms_reason', 2) }}</p>
                                 </a>
                             </li>
-                        </ul>
-                        <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
                                 <a href="{{ route('admin.nomenclature.reason_refusal') }}"
                                    class="nav-link @if(strstr(url()->current(), 'nomenclature/reason-refusal')) active @endif">
                                     <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
                                     <p>{{ trans_choice('custom.nomenclature.reason_refusal', 2) }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.event') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/event')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.event', 2) }}</p>
                                 </a>
                             </li>
                         </ul>

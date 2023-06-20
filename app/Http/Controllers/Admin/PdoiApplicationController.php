@@ -146,7 +146,7 @@ class PdoiApplicationController extends Controller
             ),
             'fileContent' => array(
                     'type' => 'text',
-                    'placeholder' => 'В процес на добавяне',//__('custom.file_content'),
+                    'placeholder' => __('custom.file_content'),
                     'value' => $request->input('fileContent')
             ),
             'subjects' => array(

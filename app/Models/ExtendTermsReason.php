@@ -52,7 +52,7 @@ class ExtendTermsReason extends ModelActivityExtend implements TranslatableContr
     {
         return DB::table('extend_terms_reason')
             ->select(['extend_terms_reason.id', 'extend_terms_reason_translations.name'])
-            ->join('extend_terms_reason_translations', 'extend_terms_reason_translations.category_id', '=', 'extend_terms_reason.id')
+            ->join('extend_terms_reason_translations', 'extend_terms_reason_translations.extend_terms_reason_id', '=', 'extend_terms_reason.id')
             ->where('extend_terms_reason.active', '=', 1)
             ->where('extend_terms_reason_translations.locale', '=', app()->getLocale())
             ->orderBy('extend_terms_reason_translations.name', 'asc')
