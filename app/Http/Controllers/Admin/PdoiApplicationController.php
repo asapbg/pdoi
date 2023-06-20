@@ -144,6 +144,11 @@ class PdoiApplicationController extends Controller
                     'placeholder' => __('validation.attributes.text'),
                     'value' => $request->input('text')
             ),
+            'fileContent' => array(
+                    'type' => 'text',
+                    'placeholder' => 'В процес на добавяне',//__('custom.file_content'),
+                    'value' => $request->input('fileContent')
+            ),
             'subjects' => array(
                 'type' => 'subjects',
                 'multiple' => false,

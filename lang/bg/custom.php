@@ -237,6 +237,7 @@ return [
     'history'                          => 'История',
 
     //controllers and breadcrumbs
+    'file_content'                              => 'Текст във файлове',
     'pdoi_applications'                         => 'Заявления',
     'applications'                              => 'Заявления',
     //

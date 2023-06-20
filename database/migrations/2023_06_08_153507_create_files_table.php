@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('filename', 200)->nullable();
             $table->string('content_type', 500)->nullable();
             $table->binary('content')->nullable();
+            $table->text('file_text')->fullText('file_text_ts')->language('bulgarian')->nullable();
             $table->string('path')->nullable();
             $table->string('description')->nullable();
             $table->tinyInteger('visible_on_site')->default(0);

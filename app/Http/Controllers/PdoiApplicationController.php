@@ -19,6 +19,7 @@ use App\Models\File;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\User;
+use App\Services\FileOcr;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -178,12 +179,15 @@ class PdoiApplicationController extends Controller
                         $newFile = new File([
                             'code_object' => PdoiApplication::CODE_OBJECT,
                             'filename' => $fileNameToStore,
+//                            'content_type' => $file->getClientMimeType(),
                             'content_type' => $file->getClientMimeType(),
                             'path' => $newApplication->fileFolder.$fileNameToStore,
                             'description' => $validated['file_description'][$key],
                             'user_reg' => $user->id,
                         ]);
                         $newApplication->files()->save($newFile);
+                        $ocr = new FileOcr($newFile->refresh());
+                        $ocr->extractText();
                     }
                 }
 
