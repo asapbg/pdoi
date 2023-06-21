@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ApplicationEventsEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterEventRequest;
 use App\Models\Category;
+use App\Models\Event;
 use App\Models\PdoiApplication;
+use App\Services\ApplicationService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class PdoiApplicationController extends Controller
 {
@@ -33,7 +38,8 @@ class PdoiApplicationController extends Controller
         $item = PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations',
             'categories', 'categories.translations', 'profileType', 'profileType.translations', 'country',
             'country.translations', 'area', 'area.translations', 'municipality', 'municipality.translations',
-            'settlement', 'settlement.translations'])
+            'settlement', 'settlement.translations', 'currentEvent', 'currentEvent.event', 'currentEvent.event.nextEvents',
+            'currentEvent.event.nextEvents.extendTimeReason', 'currentEvent.event.nextEvents.extendTimeReason.translation'])
             ->find((int)$id);
         if( !$item ) {
             abort(Response::HTTP_NOT_FOUND);
@@ -87,7 +93,67 @@ class PdoiApplicationController extends Controller
         return response()->json(['success' => 1, Response::HTTP_OK]);
     }
 
-    public function newEvent(Request $request, $application, $event) {
+    public function newEvent(Request $request, int $applicationId = 0, int $eventId = 0)
+    {
+        $user = auth()->user();
+
+        $application = PdoiApplication::find($applicationId);
+        if( !$application || !$user->canAny(['update'], $application) ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $event = Event::find($eventId);
+        if( !$event ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if( in_array($event->app_event, ApplicationEventsEnum::userEvents()) ) {
+            $newEndDate = null;
+            if( $event->days ) {
+                $newEndDate = match ($event->app_event){
+                    ApplicationEventsEnum::ASK_FOR_INFO->value => displayDate(Carbon::now()->addDays($event->days)),
+                    ApplicationEventsEnum::EXTEND_TERM->value => displayDate(Carbon::parse($application->response_end_time)->addDays($event->days))
+                };
+            }
+
+
+            $view = match ($event->app_event) {
+                ApplicationEventsEnum::FORWARD->value => 'new_event_forward',
+                default => 'new_event',
+            };
+            $subjects = optionsFromModel(PdoiApplication::optionsList());
+            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate'));
+        }
+
+        $appService = new ApplicationService($application);
+        if( $appService->registerEvent($event->app_event) ) {
+            return redirect(route('admin.application.view', ['item' => $application->id]));
+        } else {
+            back()->with('danger', __('custom.system_error'));
+        }
+    }
+
+    public function storeNewEvent(RegisterEventRequest $request)
+    {
+        $validated = $request->validated();
+        $user = auth()->user();
+
+        $application = PdoiApplication::find($validated['application']);
+        if( !$application || !$user->canAny(['update'], $application) ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $event = Event::find($validated['event']);
+        if(!$event || !in_array($event->app_event, ApplicationEventsEnum::userEvents()) ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $appService = new ApplicationService($application);
+        if( $appService->registerEvent($event->app_event, $validated) ) {
+            return redirect(route('admin.application.view', ['item' => $application->id]));
+        } else {
+            back()->with('danger', __('custom.system_error'));
+        }
 
     }
 

@@ -21,12 +21,9 @@ class PdoiApplication extends ModelActivityExtend
     protected $table = 'pdoi_application';
 
     const UPLOAD_DIR = 'upload/';
-    const MAX_FILE_SIZE = 10000; //10 mb in kilobyte
-    const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xsl', 'xslx', 'pdf', 'rtf', 'txt', 'gif', 'jpg', 'jpeg', 'png', 'zem', 'p7s'];
 
     //END TERMS PARAMETERS
     const DAYS_AFTER_SUBJECT_REGISTRATION = 14; //14 дни от регситрацията на зявлението при ЗС
-    const CODE_OBJECT = 13; //TODO fix me I have no idea what it means
 
     /**
      * The attributes that are mass assignable.
@@ -89,12 +86,22 @@ class PdoiApplication extends ModelActivityExtend
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(PdoiApplication::class, 'id', 'parent_id');
+        return $this->hasOne(PdoiApplication::class, 'parent_id', 'id');
     }
 
     public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(PdoiApplication::class, 'parent_id', 'id');
+    }
+
+    public function currentEvent(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiApplicationEvent::class, 'pdoi_application_id','id')->latestOfMany();
+    }
+
+    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PdoiApplicationEvent::class, 'pdoi_application_id', 'id');
     }
 
     public function applicant(): \Illuminate\Database\Eloquent\Relations\HasOne
@@ -134,17 +141,12 @@ class PdoiApplication extends ModelActivityExtend
 
     public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(File::class, 'id_object', 'id');
+        return $this->hasMany(File::class, 'id_object', 'id')->where('code_object', '=', File::CODE_OBJ_APPLICATION);
     }
 
     public function profileType(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');
-    }
-
-    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(PdoiApplicationEvent::class, 'pdoi_application_id', 'id');
     }
 
     public static function optionsList(): \Illuminate\Support\Collection

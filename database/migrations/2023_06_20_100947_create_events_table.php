@@ -19,7 +19,7 @@ return new class extends Migration
             $table->tinyInteger('app_status')->nullable(); //application status after event ???
             $table->tinyInteger('extend_terms_reason_id')->nullable();
             $table->tinyInteger('days')->nullable();
-            $table->tinyInteger('date_type')->nullable(); //we do not use this
+            $table->tinyInteger('date_type')->nullable(); //{1 - event data, 2 - application registration to subject date}
             $table->tinyInteger('old_resp_subject');
             $table->tinyInteger('new_resp_subject');
             $table->tinyInteger('event_status'); // In old database{1 - Изпълнено, 2 - Неизпълнено}

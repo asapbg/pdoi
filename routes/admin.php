@@ -159,7 +159,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/applications/view/{item?}',         'show')->name('application.view');
         Route::post('/applications/add-category',         'addCategory')->name('application.category.add');
         Route::post('/applications/remove-category',         'removeCategory')->name('application.category.remove');
-        Route::match(['get', 'post'], '/applications/{item}/new-event/{event}',         'newEvent')->name('application.event.new');
+        Route::get('/applications/{item}/new-event/{event}',         'newEvent')->name('application.event.new');
+        Route::post('/applications/new-event/store',         'storeNewEvent')->name('application.event.new.store');
     });
 
 });

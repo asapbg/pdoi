@@ -458,6 +458,10 @@ $(document).ready(function (){
 
 $(function() {
     $(document).ready(function () {
+        //=================================
+        //use in admin and public
+        //===============================
+
         function select2OptionFilter(option) {
             if (typeof option.element != 'undefined' && option.element.className === 'd-none' ) {
                 return false

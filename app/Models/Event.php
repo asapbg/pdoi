@@ -5,8 +5,6 @@ namespace App\Models;
 use App\Traits\FilterSort;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Event  extends ModelActivityExtend implements TranslatableContract
@@ -16,6 +14,11 @@ class Event  extends ModelActivityExtend implements TranslatableContract
     const PAGINATE = 20;
     const TRANSLATABLE_FIELDS = ['name'];
     const MODULE_NAME = 'custom.event';
+    const DATE_TYPE_EVENT = 1;
+    const DATE_TYPE_SUBJECT_REGISTRATION = 2;
+    const EVENT_STATUS_COMPLETED = 1;
+    const EVENT_STATUS_NOT_COMPLETED = 2;
+
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public $timestamps = true;
@@ -58,6 +61,11 @@ class Event  extends ModelActivityExtend implements TranslatableContract
 
     public function nextEvents(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Event::class, 'event_next', 'event_id', 'event_app_event', 'id', 'app_event');
+        return $this->belongsToMany(Event::class, 'event_next', 'event_id', 'event_app_event', 'app_event', 'id');
+    }
+
+    public function extendTimeReason(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ExtendTermsReason::class, 'id', 'extend_terms_reason_id');
     }
 }

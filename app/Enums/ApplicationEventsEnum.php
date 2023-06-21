@@ -18,4 +18,27 @@ enum ApplicationEventsEnum: int
     case FORWARD = 4; //Препращане на заявление
     case EXTEND_TERM = 5; //Удължаване на срока
     case FINAL_DECISION = 6; //Крайно решение
+
+    public static function userEvents(): array
+    {
+        return [
+            self::ASK_FOR_INFO->value,
+            self::FORWARD->value,
+            self::EXTEND_TERM->value,
+            self::FINAL_DECISION->value,
+        ];
+    }
+
+    // Return enum name by value
+    public static function keyByValue($searchVal): string
+    {
+        $keyName = '';
+        foreach (self::options() as $key => $val) {
+            if( $val == $searchVal) {
+                $keyName = $key;
+            }
+        }
+        return $keyName;
+    }
+
 }

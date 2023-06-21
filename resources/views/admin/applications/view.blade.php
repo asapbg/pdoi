@@ -162,21 +162,21 @@
                                 @endif
 
                                 @can('update', $item)
-                                    <h5 class="bg-primary py-1 px-2 my-4">{{ __('custom.new_event') }}</h5>
-                                    <form class=" mb-3" action="post">
-                                        @csrf
-                                        <div class="input-group col-md-6 col-12">
-                                            <select class="form-select form-select-sm" id="next-event">
-                                                <option value="">{{ __('custom.available_actions') }}</option>
-                                                @if($item->)
-                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => \App\Enums\ApplicationEventsEnum::ASK_FOR_INFO->value]) }}">Искане на допълнителна информация</option>
-                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => \App\Enums\ApplicationEventsEnum::FORWARD->value]) }}">Препращане на заявление</option>
-                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => \App\Enums\ApplicationEventsEnum::EXTEND_TERM->value]) }}">Удължаване на срок</option>
-                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value]) }}">Крайно решение</option>
-                                            </select>
-                                            <a href="#" id="apply_event" role="button" class="btn btn-sm btn-success disabled">{{ __('custom.apply') }}</a>
-                                        </div>
-                                    </form>
+                                    @if($item->currentEvent->event->nextEvents->count() && in_array($item->status, \App\Enums\PdoiApplicationStatusesEnum::notCompleted()))
+                                        <h5 class="bg-primary py-1 px-2 my-4">{{ __('custom.new_event') }}</h5>
+                                        <form class=" mb-3" action="post">
+                                            @csrf
+                                            <div class="input-group col-md-6 col-12">
+                                                <select class="form-select form-select-sm" id="next-event">
+                                                    <option value="">{{ __('custom.available_actions') }}</option>
+                                                    @foreach($item->currentEvent->event->nextEvents as $event)
+                                                        <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => (int)$event->id]) }}">@if($event->extendTimeReason){{ $event->extendTimeReason->name }}@else{{ $event->name }} @endif</option>
+                                                    @endforeach
+                                                </select>
+                                                <a href="#" id="apply_event" role="button" class="btn btn-sm btn-success disabled">{{ __('custom.apply') }}</a>
+                                            </div>
+                                        </form>
+                                    @endif
                                 @endcan
                             </div>
                         </div>

@@ -37,6 +37,7 @@ class EventStoreRequest extends FormRequest
             $rules['old_resp_subject'] = ['required', 'numeric', 'in:0,1'];
             $rules['new_resp_subject'] = ['required', 'numeric', 'in:0,1'];
             $rules['event_status'] = ['required', 'numeric', 'in:1,2'];
+            $rules['date_type'] = ['nullable', 'numeric', 'in:1,2'];
             $rules['add_text'] = ['required', 'numeric', 'in:0,1'];
             $rules['files'] = ['required', 'numeric', 'in:0,1'];
             $rules['event_delete'] = ['required', 'numeric', 'in:0,1'];

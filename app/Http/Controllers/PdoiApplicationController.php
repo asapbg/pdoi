@@ -54,7 +54,7 @@ class PdoiApplicationController extends Controller
 
     public function show(Request $request, int $id = 0)
     {
-        $item = $this->getFullRecord((int)$id);
+        $item = $this->getFullRecord($id);
         if( !$item ) {
             abort(Response::HTTP_NOT_FOUND);
         }
@@ -185,12 +185,11 @@ class PdoiApplicationController extends Controller
                 if( isset($validated['files']) && sizeof($validated['files']) ) {
                     foreach ($validated['files'] as $key => $file) {
                         $fileNameToStore = ($key + 1).'_'.round(microtime(true)).'.'.$file->getClientOriginalExtension();
-                        // Upload Image
+                        // Upload File
                         $file->storeAs($newApplication->fileFolder, $fileNameToStore, 'local');
                         $newFile = new File([
-                            'code_object' => PdoiApplication::CODE_OBJECT,
+                            'code_object' => File::CODE_OBJ_APPLICATION,
                             'filename' => $fileNameToStore,
-//                            'content_type' => $file->getClientMimeType(),
                             'content_type' => $file->getClientMimeType(),
                             'path' => $newApplication->fileFolder.$fileNameToStore,
                             'description' => $validated['file_description'][$key],
@@ -268,7 +267,7 @@ class PdoiApplicationController extends Controller
                 $pdfFile = Pdf::loadView('pdf.application_doc', ['application' => $newApplication]);
                 Storage::disk('local')->put($newApplication->fileFolder.$fileName, $pdfFile->output());
                 $newFile = new File([
-                    'code_object' => PdoiApplication::CODE_OBJECT,
+                    'code_object' => File::CODE_OBJ_APPLICATION,
                     'filename' => $fileName,
                     'content_type' => 'application/pdf',
                     'path' => $newApplication->fileFolder.$fileName,

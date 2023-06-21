@@ -35,6 +35,7 @@ mix.scripts([
     'resources/adminlte-3.2/plugins/daterangepicker/daterangepicker.js',
     'resources/adminlte-3.2/dist/js/adminlte.min.js',
     'resources/js/partials/select2Ekatte.js',
+    'resources/js/partials/uploadFileToTable.js',
     'resources/js/main.js'
 ], 'public/js/admin.js');
 

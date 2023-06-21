@@ -75,13 +75,31 @@
                                         <label class="col-sm-12 control-label" for="new_resp_subject">event_status</label>
                                         <div class="col-12">
                                             <select name="event_status"  class="form-control form-control-sm @error('event_status'){{ 'is-invalid' }}@enderror">
-                                                @foreach(['' => '', 1 => 'Изпълнено', 2 => 'Неизпълнено'] as $key => $value)
+                                                @foreach(['' => '', \App\Models\Event::EVENT_STATUS_COMPLETED => 'Изпълнено', \App\Models\Event::EVENT_STATUS_NOT_COMPLETED => 'Неизпълнено'] as $key => $value)
                                                     <option value="{{ $key }}" @if(old('event_status', ($item->id ? $item->event_status : '')) == $key) selected @endif>
                                                         {{ $value }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                             @error('event_status')
+                                            <div class="text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label" for="new_resp_subject">date_type</label>
+                                        <div class="col-12">
+                                            <select name="date_type"  class="form-control form-control-sm @error('date_type'){{ 'is-invalid' }}@enderror">
+                                                @foreach(['' => '', \App\Models\Event::DATE_TYPE_EVENT => 'Дата на събитието', \App\Models\Event::DATE_TYPE_SUBJECT_REGISTRATION => 'Дата на регистрация при ЗС'] as $key => $value)
+                                                    <option value="{{ $key }}" @if(old('date_type', ($item->id ? $item->date_type : '')) == $key) selected @endif>
+                                                        {{ $value }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('date_type')
                                             <div class="text-danger mt-1">{{ $message }}</div>
                                             @enderror
                                         </div>

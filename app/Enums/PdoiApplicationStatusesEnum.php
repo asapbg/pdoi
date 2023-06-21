@@ -46,4 +46,25 @@ enum PdoiApplicationStatusesEnum: int
 //            self::FORWARD_ТО_NOT_REGISTERED_SUBJECT
         ];
     }
+
+    public static function finalStatuses(): array
+    {
+        return [
+            self::APPROVED,
+            self::PART_APPROVED,
+            self::NOT_APPROVED,
+            self::INFO_NOT_EXIST
+        ];
+    }
+
+    public static function isFinalStatus($value): bool
+    {
+        $check = false;
+        foreach (self::finalStatuses() as $item){
+            if( $item->value == (int)$value ) {
+                $check = true;
+            }
+        }
+        return $check;
+    }
 }
