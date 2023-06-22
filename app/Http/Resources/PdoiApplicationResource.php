@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PdoiApplicationResource extends JsonResource
@@ -29,6 +30,8 @@ class PdoiApplicationResource extends JsonResource
                     'apply_date' => displayDate($this->created_at)
                 ]),
             'response_subject_name' => $this->responseSubject->subject_name,
+            'response' => $this->response,
+            'response_date' => displayDate($this->response_date),
             'request' => $this->request,
             'created_at' => $this->created_at,
             'status' => $this->status,
@@ -53,6 +56,24 @@ class PdoiApplicationResource extends JsonResource
             'themes' => $this->categories->count() ?
                 $this->categories->map(function ($item) {
                     return $item->name;
+                })->toArray() : [],
+            'events' => $this->events->count() ?
+                $this->events->map(function ($item) {
+                    return [
+                        'name' => $item->event->name,
+                        'date' => displayDate($item->event_date),
+                        'user_name' => auth()->user() ?
+                            (auth()->user()->id == $item->user_reg ? 'Аз'
+                                : ($item->user->user_type == User::USER_TYPE_INTERNAL ? $item->user->names
+                                    : ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ) )
+                            )
+                            : '',
+                        'user_type' => auth()->user() ?
+                            ($item->user_reg > 0 ?
+                                ($item->user->user_type == User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') )
+                                : 'Системен')
+                            : '',
+                    ];
                 })->toArray() : [],
         ];
     }

@@ -180,11 +180,37 @@
                                 @endcan
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
-                            Отговор
-                        </div>
+                        @if(!empty($item->response_date))
+                            <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
+                                <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $item->response_date }}</p>
+                                {!! html_entity_decode($item->response) !!}
+                            </div>
+                        @endif
                         <div class="tab-pane fade" id="custom-tabs-three-messages" role="tabpanel" aria-labelledby="custom-tabs-three-messages-tab">
-                            История
+                            <table class="table table-light table-sm table-bordered mb-4">
+                                <thead>
+                                <tr>
+                                    <th>{{ __('custom.date') }}</th>
+                                    <th>{{ trans_choice('custom.process', 1) }}</th>
+                                    <th>{{ trans_choice('custom.users', 1) }}</th>
+                                </tr>
+                                </thead>
+                                <thead>
+                                @if($item->events->count())
+                                    @foreach($item->events as $event)
+                                        <tr>
+                                            <td>{{ displayDate($event->event_date) }}</td>
+                                            <td>{{ displayDate($event->event->name) }}</td>
+                                            <td><a href="">{{ $event->user->names }}</a>
+                                                <span class="fst-italic">({{ $event->user_reg > 0 ? ($event->user->user_type == \App\Models\User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') ) : 'Системен' }})</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr><td colspan="3">{{ __('custom.no_results') }}</td></tr>
+                                @endif
+                                </thead>
+                            </table>
                         </div>
                     </div>
                     <div class="form-group row">

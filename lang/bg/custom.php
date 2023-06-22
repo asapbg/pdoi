@@ -236,12 +236,16 @@ return [
     'sort_desc'                        => 'Низходящ ред',
     'expired_term'                     => 'Изтекъл срок',
     'history'                          => 'История',
+    'process'                          => 'Процес|Процеси',
 
     //controllers and breadcrumbs
     'file_content'                              => 'Текст във файлове',
     'pdoi_applications'                         => 'Заявления',
     'applications'                              => 'Заявления',
     //
+    'applicant'                                 => 'Заявител',
+    'admin'                                     => 'Администратор',
+    'decision'                                  => 'Решение',
     'to_base_application'                       => 'към основно заявление',
     'application_system_title'                  => 'Заявление от :user до :subject от :apply_date',
     'own_application_system_title'              => 'Заявление до :subject от :apply_date',

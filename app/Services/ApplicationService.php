@@ -76,21 +76,7 @@ class ApplicationService
                 }
 
                 //TODO Set communication and status
-                if( $eventConfig->app_event == ApplicationEventsEnum::FINAL_DECISION->value ) {
-                    if( !isset($data['final_status']) || !PdoiApplicationStatusesEnum::isFinalStatus($data['final_status']) ) {
-                        throw new \Exception('Try to set not final application status: '. PdoiApplicationStatusesEnum::keyByValue((int)$data['final_status']));
-                    }
-                    if( isset($data['add_text']) && !empty($data['add_text']) ) {
-                        $this->application->response = htmlentities(stripHtmlTags($data['add_text']));
-                    }
-                    $this->application->status = $data['final_status'];
-                    $this->application->status_date = Carbon::now();
-                    $this->application->response_date = Carbon::now();
-                    $this->application->replay_in_time = Carbon::now()->diffInDays($this->application->registration_date);
-                    $this->application->save();
-                }
-
-                //TODO Do we save final decision text as application response or it must be empty in some cases
+                $this->setApplicationStatus($eventConfig);
                 //TODO Where to show events files in application
             }
         } catch (\Exception $e) {
@@ -98,6 +84,41 @@ class ApplicationService
         }
 
         return $newEvent;
+    }
+
+    private function setApplicationStatus($event)
+    {
+        $needToStatus = [
+            ApplicationEventsEnum::FINAL_DECISION->value,
+            ApplicationEventsEnum::FORWARD->value, //
+            ApplicationEventsEnum::SEND_TO_RKS->value, //изпраетно към деловодна система
+            ApplicationEventsEnum::APPROVE_BY_RKS->value, //потвърдено от деловодна система
+        ];
+        if( in_array($event->app_event, $needToStatus) ) {
+            //final decision
+            if ($event->app_event == ApplicationEventsEnum::FINAL_DECISION->value) {
+                if (!isset($data['final_status']) || !PdoiApplicationStatusesEnum::isFinalStatus($data['final_status'])) {
+                    throw new \Exception('Try to set not final application status: ' . PdoiApplicationStatusesEnum::keyByValue((int)$data['final_status']));
+                }
+                if (isset($data['add_text']) && !empty($data['add_text'])) {
+                    $this->application->response = htmlentities(stripHtmlTags($data['add_text']));
+                }
+                $this->application->status = $data['final_status'];
+                $this->application->status_date = Carbon::now();
+                $this->application->response_date = Carbon::now();
+                $this->application->replay_in_time = Carbon::now()->diffInDays($this->application->registration_date);
+            }else {
+                $this->application->status = $event->app_status;
+                $this->application->status_date = Carbon::now();
+
+                if( $event->app_event == ApplicationEventsEnum::APPROVE_BY_RKS->value ) {
+                    //потвърдено от деловодна система
+                    $this->application->registration_date = Carbon::now();
+                    $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION);
+                }
+            }
+            $this->application->save();
+        }
     }
 
     private function attachEventFiles($event, $files, $descriptions)

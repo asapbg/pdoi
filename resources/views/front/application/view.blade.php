@@ -39,6 +39,14 @@
                                 <div class="col-12 mb-3">
                                     {!! html_entity_decode($application['request']) !!}
                                 </div>
+                                @if(!empty($application['response_date']))
+                                    <div class="col-12 mb-3">
+                                        <h4>{{ __('custom.decision') }}</h4>
+                                        <hr>
+                                        <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
+                                        {!! html_entity_decode($application['response']) !!}
+                                    </div>
+                                @endif
                                 <div class="col-12 mb-3">
                                     <div class="share-buttons d-inline-block me-3">
                                         <div class="share-button d-inline-block p-2 rounded" role="button" data-color="#4267B2" data-selected="true" data-network="facebook" title="facebook" style="background-color: rgb(66, 103, 178);">
@@ -56,42 +64,21 @@
                             <table class="table table-sm table-bordered table-responsive">
                                 <thead>
                                 <tr>
-                                    <th>Дата</th>
-                                    <th>Процес</th>
-{{--                                    <th>Потребител</th>--}}
+                                    <th>{{ __('custom.date') }}</th>
+                                    <th>{{ trans_choice('custom.process', 1) }}</th>
                                 </tr>
                                 </thead>
                                 <thead>
-                                <tr>
-                                    <td>06.04.2023</td>
-                                    <td>Регистриран в процес на обработка</td>
-{{--                                    <td><a href="">Кирил Иванов</a> <span class="fst-italic">(заявител)</span></td>--}}
-                                </tr>
-                                <tr>
-                                    <td>10.04.2023</td>
-                                    <td>Препратено по компетентсност (Общинска администрация - Сливница )</td>
-{{--                                    <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>--}}
-                                </tr>
-                                <tr>
-                                    <td>15.04.2023</td>
-                                    <td>Публикуван отказ</td>
-{{--                                    <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>--}}
-                                </tr>
-                                <tr>
-                                    <td>28.04.2023</td>
-                                    <td>Обжалвано чрез съдебно решение (№ 234234243234 / 20.04.2023)</td>
-{{--                                    <td><a href="">Кирил Иванов</a> <span class="fst-italic">(заявител)</span></td>--}}
-                                </tr>
-                                <tr>
-                                    <td>29.04.2023</td>
-                                    <td>Одобрено обжалване</td>
-{{--                                    <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>--}}
-                                </tr>
-                                <tr>
-                                    <td>30.04.2023</td>
-                                    <td>Връчен отговор</td>
-{{--                                    <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>--}}
-                                </tr>
+                                @if(isset($application['events']) && sizeof($application['events']))
+                                    @foreach($application['events'] as $event)
+                                        <tr>
+                                            <td>{{ $event['date'] }}</td>
+                                            <td>{{ $event['name'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr><td colspan="2">{{ __('custom.no_results') }}</td></tr>
+                                @endif
                                 </thead>
                             </table>
                         </div>

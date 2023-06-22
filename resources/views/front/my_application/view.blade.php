@@ -11,9 +11,11 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="application-tab" data-bs-toggle="tab" data-bs-target="#application" role="button" aria-controls="application" aria-selected="true">{{ trans_choice('custom.applications',1) }}</a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="answer-tab" data-bs-toggle="tab" data-bs-target="#answer" role="button" aria-controls="answer" aria-selected="false">{{ __('custom.answer') }}</a>
-                    </li>
+                    @if(!empty($application['response_date']))
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="answer-tab" data-bs-toggle="tab" data-bs-target="#answer" role="button" aria-controls="answer" aria-selected="false">{{ __('custom.answer') }}</a>
+                        </li>
+                    @endif
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="button" aria-controls="history" aria-selected="false">{{ __('custom.history') }}</a>
                     </li>
@@ -124,49 +126,35 @@
                             </table>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="answer" role="tabpanel" aria-labelledby="answer-tab">
-                        Отговор
-                    </div>
+                    @if(!empty($application['response_date']))
+                        <div class="tab-pane fade" id="answer" role="tabpanel" aria-labelledby="answer-tab">
+                            <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
+                            {!! html_entity_decode($application['response']) !!}
+                        </div>
+                    @endif
                     <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
                         <table class="table table-sm table-bordered table-responsive">
                             <thead>
                             <tr>
-                                <th>Дата</th>
-                                <th>Процес</th>
-                                <th>Потребител</th>
+                                <th>{{ __('custom.date') }}</th>
+                                <th>{{ trans_choice('custom.process', 1) }}</th>
+                                <th>{{ trans_choice('custom.users', 1) }}</th>
                             </tr>
                             </thead>
                             <thead>
-                            <tr>
-                                <td>06.04.2023</td>
-                                <td>Регистриран в процес на обработка</td>
-                                <td><a href="">Кирил Иванов</a> <span class="fst-italic">(заявител)</span></td>
-                            </tr>
-                            <tr>
-                                <td>10.04.2023</td>
-                                <td>Препратено по компетентсност (Общинска администрация - Сливница )</td>
-                                <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>
-                            </tr>
-                            <tr>
-                                <td>15.04.2023</td>
-                                <td>Публикуван отказ</td>
-                                <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>
-                            </tr>
-                            <tr>
-                                <td>28.04.2023</td>
-                                <td>Обжалвано чрез съдебно решение (№ 234234243234 / 20.04.2023)</td>
-                                <td><a href="">Кирил Иванов</a> <span class="fst-italic">(заявител)</span></td>
-                            </tr>
-                            <tr>
-                                <td>29.04.2023</td>
-                                <td>Одобрено обжалване</td>
-                                <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>
-                            </tr>
-                            <tr>
-                                <td>30.04.2023</td>
-                                <td>Връчен отговор</td>
-                                <td><a href="">Мартина Симова</a> <span class="fst-italic">(Администартор-модератор)</span></td>
-                            </tr>
+                                @if(isset($application['events']) && sizeof($application['events']))
+                                    @foreach($application['events'] as $event)
+                                        <tr>
+                                            <td>{{ $event['date'] }}</td>
+                                            <td>{{ $event['name'] }}</td>
+                                            <td><a href="">{{ $event['user_name'] }}</a>
+                                                @if(!empty($event['user_type']))<span class="fst-italic">({{ $event['user_type'] }})</span>@endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr><td colspan="3">{{ __('custom.no_results') }}</td></tr>
+                                @endif
                             </thead>
                         </table>
                     </div>
