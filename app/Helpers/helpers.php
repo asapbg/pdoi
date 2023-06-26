@@ -358,7 +358,7 @@ if (!function_exists('logError')) {
      */
     function logError(string $method, string $error): void
     {
-        \Illuminate\Support\Facades\Log::error(\Illuminate\Support\Carbon::now().' '.$method.': '.$error );
+        \Illuminate\Support\Facades\Log::error($method.': '.$error );
     }
 }
 

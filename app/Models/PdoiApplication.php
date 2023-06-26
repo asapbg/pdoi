@@ -23,7 +23,9 @@ class PdoiApplication extends ModelActivityExtend
     const UPLOAD_DIR = 'upload/';
 
     //END TERMS PARAMETERS
+    const DAYS_AFTER_APPLY = 14; //14 дни от подаване на зявлението при ЗС
     const DAYS_AFTER_SUBJECT_REGISTRATION = 14; //14 дни от регситрацията на зявлението при ЗС
+    const DAYS_AFTER_GIVE_INFORMATION = 14; //14 дни от потвърждението на предоставената информация
 
     /**
      * The attributes that are mass assignable.

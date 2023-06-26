@@ -6,13 +6,14 @@ use App\Traits\FilterSort;
 use Astrotomic\Translatable\Translatable;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class PdoiResponseSubject extends ModelActivityExtend implements TranslatableContract
 {
-    use SoftDeletes, FilterSort, LogsActivity, CausesActivity, Translatable;
+    use SoftDeletes, FilterSort, LogsActivity, CausesActivity, Translatable, Notifiable;
 
     const PAGINATE = 20;
     const TRANSLATABLE_FIELDS = ['subject_name', 'address', 'add_info', 'court_text'];

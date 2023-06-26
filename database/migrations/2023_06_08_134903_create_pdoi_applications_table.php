@@ -108,7 +108,7 @@ return new class extends Migration
             $table->foreign('new_resp_subject_id')
                 ->references('id')
                 ->on('pdoi_response_subject');
-            $table->unsignedBigInteger('user_reg');
+            $table->unsignedBigInteger('user_reg')->nullable();
             $table->foreign('user_reg')
                 ->references('id')
                 ->on('users');

@@ -19,7 +19,7 @@
                         <p><span class="fw-semibold">{{ __('custom.end_date') }}: </span> {{ $application['response_end_time'] }}</p>
                     </div>
                 @endforeach
-                <a class="btn btn-primary mt-3" href=""><i class="text-white fa-solid fa-print me-1"></i>{{ __('custom.print') }}</a>
+                <button class="btn btn-primary mt-3" href="" onclick="window.print();return false;"><i class="text-white fa-solid fa-print me-1"></i>{{ __('custom.print') }}</button>
             </div>
         </div>
     </div>

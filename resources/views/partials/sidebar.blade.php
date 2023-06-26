@@ -32,13 +32,13 @@
                     </li>
                 @endcanany
                 <!-- RZS subjects and sections -->
-                @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_sections', 'administration.rzs_items'])
+                @canany(['manage.*', 'administration.*', 'administration.rzs_sections', 'administration.rzs_items'])
                     <li class="nav-item">
                         <a href="#" class="nav-link @if(strstr(url()->current(), 'rzs-')) active @endif">
                             <i class="nav-icon far fa-registered"></i>
                             <p>{{ __('custom.rzs_short') }}<i class="fas fa-angle-left right"></i></p>
                         </a>
-                        @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_sections'])
+                        @canany(['manage.*', 'administration.*', 'administration.rzs_sections'])
                             <ul class="nav nav-treeview" style="display: none;">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.rzs.sections') }}"
@@ -49,7 +49,7 @@
                                 </li>
                             </ul>
                         @endcan
-                        @canany(['manage.*', 'administration.*', 'administration.rzs.*', 'administration.rzs_items'])
+                        @canany(['manage.*', 'administration.*', 'administration.rzs_items'])
                             <ul class="nav nav-treeview" style="display: none;">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.rzs') }}"

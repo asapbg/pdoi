@@ -21,6 +21,8 @@ use App\Models\File;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\User;
+use App\Notifications\NotifySubjectNewApplication;
+use App\Notifications\NotifyUserForAppStatus;
 use App\Services\ApplicationService;
 use App\Services\FileOcr;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -37,6 +39,11 @@ class PdoiApplicationController extends Controller
     //public page
     public function index(Request $request)
     {
+        $testApplication = PdoiApplication::find(10);
+        $testApplication->applicant->notify(new NotifyUserForAppStatus($testApplication));
+$appService = new ApplicationService($testApplication);
+$appService->communicationCallback(json_encode(['notification_id' => DB::table('notifications')->latest()->limit(1)->first()->id]));
+
         $filter = $this->filters($request);
         $requestFilter = $request->all();
         $applications = null;
@@ -141,7 +148,6 @@ class PdoiApplicationController extends Controller
             $this->updateProfile($validated);
 
             foreach ($validated['subjects'] as $response_subject_id) {
-                //TODO generate application for each Subject
                 $newApplication = new PdoiApplication([
                     'user_reg' => $user->id,
                     'applicant_type' => $user->legal_form,
@@ -172,9 +178,11 @@ class PdoiApplicationController extends Controller
 //                    'headoffice_publication' => $validated['headoffice_publication'] ?? 0,
                 ]);
                 $newApplication->save();
+
                 $appService = new ApplicationService($newApplication);
-                //register first app event
+                //Register event: register first app event
                 $receivedEvent = $appService->registerEvent(ApplicationEventsEnum::SEND->value);
+
                 if ( is_null($receivedEvent) ) {
                     DB::rollBack();
                     logError('Apply application (front): ', 'Operation roll back because cant\'t register '.ApplicationEventsEnum::SEND->name. ' event');
@@ -201,67 +209,19 @@ class PdoiApplicationController extends Controller
                     }
                 }
 
-                //REGISTER APPLICATION DEPENDING ON SUBJECT DELIVERY METHOD
-                //now SUBJECTS has 3 methods for delivery (mail, SDES, RKS)
                 $subject = $newApplication->responseSubject;
-                switch ($subject->delivery_method) {
-//                    case PdoiSubjectDeliveryMethodsEnum::SDES: //ССЕВ
-//                        //TODO create service for SDES
-//                        break;
-//                    case PdoiSubjectDeliveryMethodsEnum::RKS: //Деловодна система
-//                        //TODO create service for RKS
-//                        // автоматично препращане към съответната деловодна система на задължения субект, което се
-//                        // извършва чрез Системата за електронен обмен на съобщения (СЕОС). Статусът на заявлението се
-//                        // променя на „Очаква регистрация при задължен субект“. На заявителя се изпраща съобщение,
-//                        // че заявлението очаква регистрация при задължения субект.
-//                        $newApplication->status = PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value;
-//                        $newApplication->status_date = Carbon::now();
-//                        // След получаване на потвърждение от деловодната система на задължения субект, статусът на заявлението става
-//                        // „Регистрирано/в процес на обработка“ и автоматично стартира 14-дневен срок за решение.
-//                        // Платформата изпраща автоматично e-mail съобщение до заявителя, с което го уведомява за стартиралата
-//                        // обработка на заявлението и за срока за решение.
-//                        $newApplication->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
-//                        $newApplication->status_date = Carbon::now();
-//                        $newApplication->registration_date = Carbon::now();
-//                        $newApplication->response_end_time = Carbon::now()->addDays(14);//14 дни от регситрацията на зявлението при ЗС
-//                        // В случай, че деловодната система на задължения субект не е интегрирана със Системата за електронен
-//                        // обмен на съобщения (СЕОС), 14-дневният срок за решение стартира при регистриране на заявлението в платформата,
-//                        // за което администраторът на съответния профил се уведомява с e-mail.
-//                        //TODO send mail to subject
-//                        $newApplication->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
-//                        $newApplication->status_date = Carbon::now();
-//                        $newApplication->registration_date = Carbon::now();
-//                        $newApplication->response_end_time = Carbon::now()->addDays(14);//14 дни от регситрацията на зявлението при ЗС
-//                        break;
-                    default:
-                        //delivery_method is email or not set
-                        $newApplication->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
-                        $newApplication->status_date = Carbon::now();
-                        $newApplication->registration_date = Carbon::now();
-                        $newApplication->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION);
-                        $newApplication->save();
+                //Communication: notify subject for new application
+                $subject->notify(new NotifySubjectNewApplication($newApplication));
 
-                        //send mail to subject
-                        if( env('SEND_MAILS') ) {
-                            Mail::to($user->email)->send(new SubjectRegisterNewApplication($newApplication));
-                            //TODO fix me check if subject mail else send to Admin
-//                        Mail::to($subject->email)->send(new SubjectRegisterNewApplication($newApplication));
-                        }
+                //TODO fix me simulation remove after communication is ready. For now we simulate approve by RKS (деловодна система)
+                $lastNotify = DB::table('notifications')
+                    ->where('type', 'App\Notifications\NotifySubjectNewApplication')
+                    ->latest()->limit(1)->get()->pluck('id');
+                if(isset($lastNotify[0])) {
+                    $appService = new ApplicationService($newApplication);
+                    $appService->communicationCallback(json_encode(['notification_id' => $lastNotify[0]]));
                 }
 
-                //return info for each generated application
-                $data['applicationsInfo'][] = array(
-                    'reg_number' => $newApplication->application_uri,
-                    'response_subject' => $newApplication->responseSubject->subject_name,
-                    'status' => $newApplication->statusName,
-                    'status_date' => displayDate($newApplication->status_date),
-                    'response_end_time' => displayDate($newApplication->response_end_time),
-                );
-
-                //send mail for application status to user
-                if( env('SEND_MAILS') ) {
-                    Mail::to($newApplication->applicant->email)->send(new NotiyUserApplicationStatus($newApplication));
-                }
 
                 $fileName = 'zayavlenie_ZDOI_'.displayDate($newApplication->created_at).'.pdf';
                 $pdfFile = Pdf::loadView('pdf.application_doc', ['application' => $newApplication]);
@@ -273,6 +233,17 @@ class PdoiApplicationController extends Controller
                     'path' => $newApplication->fileFolder.$fileName,
                 ]);
                 $newApplication->files()->save($newFile);
+
+                $newApplication->refresh();
+                //return info for each generated application
+                $data['applicationsInfo'][] = array(
+                    'reg_number' => $newApplication->application_uri,
+                    'response_subject' => $newApplication->responseSubject->subject_name,
+                    'status' => $newApplication->statusName,
+                    'status_date' => displayDate($newApplication->status_date),
+                    'response_end_time' => displayDate($newApplication->response_end_time),
+                );
+
                 sleep(1);
             }
 

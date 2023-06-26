@@ -9,9 +9,11 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="false">{{ trans_choice('custom.applications',1) }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false">{{ __('custom.answer') }}</a>
-                        </li>
+                        @if(!empty($item->response_date))
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false">{{ __('custom.answer') }}</a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="pill" href="#custom-tabs-three-messages" role="tab" aria-controls="custom-tabs-three-messages" aria-selected="true">{{ trans_choice('custom.activity_logs',1) }}</a>
                         </li>
@@ -200,8 +202,8 @@
                                     @foreach($item->events as $event)
                                         <tr>
                                             <td>{{ displayDate($event->event_date) }}</td>
-                                            <td>{{ displayDate($event->event->name) }}</td>
-                                            <td><a href="">{{ $event->user->names }}</a>
+                                            <td>{{ $event->event->name }}</td>
+                                            <td><a href="">{{ $event->user_reg > 0 ? $event->user->names : '' }}</a>
                                                 <span class="fst-italic">({{ $event->user_reg > 0 ? ($event->user->user_type == \App\Models\User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') ) : 'Системен' }})</span>
                                             </td>
                                         </tr>

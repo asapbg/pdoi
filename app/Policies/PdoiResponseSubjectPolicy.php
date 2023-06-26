@@ -18,7 +18,7 @@ class PdoiResponseSubjectPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_items']);
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items']);
     }
 
     /**
@@ -30,7 +30,7 @@ class PdoiResponseSubjectPolicy
      */
     public function view(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_items']);
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items']);
     }
 
     /**
@@ -41,7 +41,7 @@ class PdoiResponseSubjectPolicy
      */
     public function create(User $user)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_items']);
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items']);
     }
 
     /**
@@ -53,7 +53,7 @@ class PdoiResponseSubjectPolicy
      */
     public function update(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_items'])
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items'])
             && $pdoiResponseSubject->adm_register;
     }
 
@@ -66,7 +66,7 @@ class PdoiResponseSubjectPolicy
      */
     public function delete(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_items'])
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items'])
             && $pdoiResponseSubject->adm_register && !$pdoiResponseSubject->trashed();
     }
 
@@ -79,7 +79,7 @@ class PdoiResponseSubjectPolicy
      */
     public function restore(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_items'])
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items'])
             && $pdoiResponseSubject->adm_register && $pdoiResponseSubject->trashed();
     }
 

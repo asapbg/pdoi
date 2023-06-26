@@ -18,7 +18,7 @@ class RzsSectionPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_sections']);
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_sections']);
     }
 
     /**
@@ -30,7 +30,7 @@ class RzsSectionPolicy
      */
     public function view(User $user, RzsSection $rzsSection)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_sections']);
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_sections']);
     }
 
     /**
@@ -41,7 +41,7 @@ class RzsSectionPolicy
      */
     public function create(User $user)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_sections']);
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_sections']);
     }
 
     /**
@@ -53,7 +53,7 @@ class RzsSectionPolicy
      */
     public function update(User $user, RzsSection $rzsSection)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs.*', 'administration.rzs_sections']);
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_sections']);
     }
 
     /**
