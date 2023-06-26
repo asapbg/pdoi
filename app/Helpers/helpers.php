@@ -472,7 +472,7 @@ if (!function_exists('optionsApplicationStatus')) {
          */
         function stripHtmlTags(string $html_string, array $tags = [])
         {
-            $tagsToStrip = sizeof($tags) ? $tags : ['p', 'ul', 'ol', 'b', 'i', 'u'];
+            $tagsToStrip = sizeof($tags) ? $tags : ['p', 'ul', 'ol', 'li', 'b', 'i', 'u'];
             return strip_tags($html_string, $tagsToStrip);
         }
     }
