@@ -39,11 +39,6 @@ class PdoiApplicationController extends Controller
     //public page
     public function index(Request $request)
     {
-        $testApplication = PdoiApplication::find(10);
-        $testApplication->applicant->notify(new NotifyUserForAppStatus($testApplication));
-$appService = new ApplicationService($testApplication);
-$appService->communicationCallback(json_encode(['notification_id' => DB::table('notifications')->latest()->limit(1)->first()->id]));
-
         $filter = $this->filters($request);
         $requestFilter = $request->all();
         $applications = null;

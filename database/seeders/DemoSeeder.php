@@ -52,5 +52,10 @@ class DemoSeeder extends Seeder
                 $item->save();
             }
         }
+
+
+        $this->call([
+            EventSeeder::class,
+        ]);
     }
 }

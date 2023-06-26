@@ -74,8 +74,7 @@ class ApplicationService
                 }
 
                 $this->application->save();
-
-                $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::APPROVE_BY_RKS->value]) ? $this->userId : null;
+                $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::APPROVE_BY_RKS->value]) ? $this->userId : null;
                 $newEvent->status = $eventConfig->event_status;
                 $this->application->events()->save($newEvent);
                 $newEvent->refresh();
@@ -86,7 +85,7 @@ class ApplicationService
                 }
 
                 //Set communication and status
-                $this->setApplicationStatus($eventConfig);
+                $this->setApplicationStatus($eventConfig, $data);
                 $this->scheduleCommunication($eventConfig);
                 DB::commit();
             }
@@ -110,7 +109,7 @@ class ApplicationService
         };
     }
 
-    private function setApplicationStatus($event)
+    private function setApplicationStatus($event, $data)
     {
         if ($event->app_event == ApplicationEventsEnum::FINAL_DECISION->value) {
             if (!isset($data['final_status']) || !PdoiApplicationStatusesEnum::isFinalStatus($data['final_status'])) {
