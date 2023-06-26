@@ -42,11 +42,14 @@ class PdoiApplicationController extends Controller
         $filter = $this->filters($request);
         $requestFilter = $request->all();
         $applications = null;
+
+        $sort = $request->filled('sort') ? $request->input('sort') : 'apply_date';
+        $sortOrd = $request->filled('ord') ? $request->input('ord') : 'desc';
         if( isset($requestFilter['search']) ) {
             $paginate = $filter['paginate'] ?? PdoiApplication::PAGINATE;
             $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
                 ->FilterBy($request->all())
-                ->SortedBy($request->input('sort'),$request->input('ord'));
+                ->SortedBy($sort,$sortOrd);
 
             $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
         }
@@ -67,16 +70,20 @@ class PdoiApplicationController extends Controller
 
     public function myApplications(Request $request)
     {
+        $filter = $this->filters($request);
         $paginate = $request->filled('paginate') ? $request->get('paginate') : PdoiApplication::PAGINATE;
+        $sort = $request->filled('sort') ? $request->input('sort') : 'apply_date';
+        $sortOrd = $request->filled('ord') ? $request->input('ord') : 'desc';
+
         $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
             ->FilterBy($request->all())
-            ->SortedBy($request->input('sort'),$request->input('ord'))
+            ->SortedBy($sort,$sortOrd)
             ->where('user_reg', $request->user()
                 ->id);
         $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
         $myList = true;
         $titlePage =__('front.my_application.title');
-        return view('front.application.list', compact('applications', 'titlePage', 'myList'));
+        return view('front.application.list', compact('applications', 'titlePage', 'myList', 'filter'));
     }
 
     public function showMy(Request $request, int $id = 0)
