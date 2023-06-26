@@ -19,7 +19,7 @@ class PdoiApplicationShortCollection extends ResourceCollection
             'current_page' => $resource->currentPage(),
             'total_pages' => $resource->lastPage()
         ];
-        $this->links = $resource->links();
+        $this->links = $resource->withQueryString()->links();
 
         $resource = $resource->getCollection();
 

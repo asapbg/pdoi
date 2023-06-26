@@ -161,7 +161,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-md-6 col-md-offset-3">
-                        <a href="{{ route('application.my') }}" class="btn btn-sm btn-primary">{{ __('custom.back') }}</a>
+                        <a href="{{ url()->previous() }}" class="btn btn-sm btn-primary">{{ __('custom.back') }}</a>
                     </div>
                 </div>
             </div>

@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div class="col-md-6 col-md-offset-3">
-                <a href="{{ route('application.list') }}" class="btn btn-sm btn-primary">{{ __('custom.back') }}</a>
+                <a href="{{ url()->previous() }}" class="btn btn-sm btn-primary">{{ __('custom.back') }}</a>
             </div>
     </section>
 @endsection
