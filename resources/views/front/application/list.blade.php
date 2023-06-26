@@ -15,8 +15,8 @@
                         {{ __('custom.sort') }}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ addSortToUrlQuery(request()->query(), 'from_date', 'asc') }}">{{ __('custom.date_apply') }} - {{ __('custom.sort_asc') }}</a></li>
-                        <li><a class="dropdown-item" href="{{ addSortToUrlQuery(request()->query(), 'from_date', 'desc') }}">{{ __('custom.date_apply') }} - {{ __('custom.sort_desc') }}</a></li>
+                        <li><a class="dropdown-item" href="{{ addSortToUrlQuery(request()->query(), 'apply_date', 'asc') }}">{{ __('custom.date_apply') }} - {{ __('custom.sort_asc') }}</a></li>
+                        <li><a class="dropdown-item" href="{{ addSortToUrlQuery(request()->query(), 'apply_date', 'desc') }}">{{ __('custom.date_apply') }} - {{ __('custom.sort_desc') }}</a></li>
                     </ul>
                 </div>
             </div>
