@@ -39,7 +39,7 @@
 
                 <div class="card-footer mt-2">
                     @if(isset($items) && $items->count() > 0)
-                        {{ $items->appends(request()->query())->links() }}
+                        {{ $items->withQueryString()->links() }}
                     @endif
                 </div>
             </div>

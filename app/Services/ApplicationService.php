@@ -49,12 +49,14 @@ class ApplicationService
                 $newEvent->event_date = Carbon::now();
                 if ($eventConfig->days) {
                     //event waiting time
-                    $eventEndDate = match ($eventConfig->app_event){
-                        ApplicationEventsEnum::ASK_FOR_INFO->value => Carbon::now()->addDays($eventConfig->days)
+                    $eventEndDate = match ((int)$eventConfig->app_event){
+                        ApplicationEventsEnum::ASK_FOR_INFO->value => Carbon::now()->addDays($eventConfig->days),
+                        default => null
                     };
                     //extending response time for application
-                    $extendTermDate = match ($eventConfig->app_event){
-                        ApplicationEventsEnum::EXTEND_TERM->value => Carbon::parse($this->application->response_end_time)->addDays($eventConfig->days)
+                    $extendTermDate = match ((int)$eventConfig->app_event){
+                        ApplicationEventsEnum::EXTEND_TERM->value => Carbon::parse($this->application->response_end_time)->addDays($eventConfig->days),
+                        default => null
                     };
                     if( $eventEndDate ) {
                         $newEvent->event_end_date = $eventEndDate;

@@ -120,7 +120,7 @@ class EventSeeder extends Seeder
                     'bg' => 'Удължаване на срока',
                     'en' => 'Deadline extension',
                 ],
-                'next_events' => [],
+                'next_events' => [6],
                 'id' => 5,
                 'app_event' => 5,
                 'app_status' => 3,
