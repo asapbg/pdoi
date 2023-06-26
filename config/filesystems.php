@@ -70,4 +70,11 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Custom config
+    |--------------------------------------------------------------------------
+    */
+    'max_upload_file_size' => env('MAX_UPLOAD_FILE_SIZE', 10240) //in kilobytes
+
 ];

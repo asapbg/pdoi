@@ -476,4 +476,19 @@ if (!function_exists('optionsApplicationStatus')) {
             return strip_tags($html_string, $tagsToStrip);
         }
     }
+
+    if (!function_exists('displayBytes')) {
+        /**
+         * Convert kilobytes to readable value
+         * @param $kilobytes
+         * @param int $precision
+         * @return string
+         */
+        function displayBytes($kilobytes, int $precision = 2): string
+        {
+            $base = log($kilobytes, 1024);
+            $suffixes = array('KB', 'MB', 'GB', 'TB');
+            return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
+        }
+    }
 }

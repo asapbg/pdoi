@@ -54,7 +54,7 @@ class PdoiApplicationApplyRequest extends FormRequest
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
             'files' => ['array'],
-            'files.*' => ['file', 'max:'.File::MAX_FILE_SIZE, 'mimes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS)],
+            'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), 'mimes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS)],
         ];
 
         if( request()->input('delivery_method') && (int)request()->input('delivery_method') === DeliveryMethodsEnum::SDES->value ) {

@@ -1,3 +1,72 @@
+//===============================
+// START MyModal
+// Create modal and show it with option for load body from url or pass direct content
+// available params:
+// title, body (content), destroyListener (boolean : do destroy modal on close), bodyLoadUrl (url for loading body content)
+//===============================
+
+function MyModal(obj){
+    var _myModal = Object.create(MyModal.prototype)
+    _myModal.id = (new Date()).getTime();
+    _myModal.dismissible = typeof obj.dismissible != 'undefined' ? obj.dismissible : true;
+    _myModal.title = typeof obj.title != 'undefined' ? obj.title : '';
+    _myModal.body = typeof obj.body != 'undefined' ? obj.body : '';
+    _myModal.bodyLoadUrl = typeof obj.bodyLoadUrl != 'undefined' ? obj.bodyLoadUrl : null;
+    _myModal.destroyListener = typeof obj.destroyListener != 'undefined' ? obj.destroyListener : false;
+    _myModal.modalObj = _myModal.init(_myModal);
+    if( _myModal.destroyListener ) {
+        _myModal.setDestroyListener(_myModal);
+    }
+    if( _myModal.bodyLoadUrl ) {
+        _myModal.loadModalBody(_myModal)
+    } else {
+        _myModal.showModal(_myModal);
+    }
+    return _myModal;
+}
+
+MyModal.prototype.init = function (_myModal) {
+    let modalHtml = '<div id="' + _myModal.id + '" class="modal fade myModal" role="dialog" style="display: none">\n' +
+        '  <div class="modal-dialog">\n' +
+        '    <!-- Modal content-->\n' +
+        '    <div class="modal-content">\n' +
+        '      <div class="modal-header">\n' +
+        '        <h4 class="modal-title">' + _myModal.title + '</h4>\n' +
+        (_myModal.dismissible ? '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n' : '') +
+        '      </div>\n' +
+        '      <div class="modal-body" id="' + _myModal.id + '-body' + '">\n' + _myModal.body +
+        '      </div>\n' +
+        '    </div>\n' +
+        '  </div>\n' +
+        '</div>';
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    return  new bootstrap.Modal(document.getElementById(_myModal.id), {
+        keyboard: false,
+        backdrop: 'static'
+    })
+}
+
+MyModal.prototype.showModal = function (_myModal){
+    _myModal.modalObj.show();
+}
+
+MyModal.prototype.setDestroyListener = function (_myModal){
+    $('#' + _myModal.id).on('hidden.bs.modal', function(){
+        _myModal.modalObj.dispose();
+        $('#' + _myModal.id).remove();
+    });
+}
+
+MyModal.prototype.loadModalBody = function (_myModal) {
+    $('#' + _myModal.id + '-body').load(_myModal.bodyLoadUrl, function (){
+        _myModal.showModal(_myModal);
+    });
+}
+
+//==========================
+// End MyModal
+//==========================
+
 $(function() {
     $(document).ready(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();
@@ -65,73 +134,6 @@ $(function() {
                 });
             });
         }
-
-        //===============================
-        // START MyModal
-        // Create modal and show it with option for load body from url or pass direct content
-        // available params:
-        // title, body (content), destroyListener (boolean : do destroy modal on close), bodyLoadUrl (url for loading body content)
-        //===============================
-
-        function MyModal(obj){
-            var _myModal = Object.create(MyModal.prototype)
-            _myModal.id = (new Date()).getTime();
-            _myModal.title = typeof obj.title != 'undefined' ? obj.title : '';
-            _myModal.body = typeof obj.body != 'undefined' ? obj.body : '';
-            _myModal.bodyLoadUrl = typeof obj.bodyLoadUrl != 'undefined' ? obj.bodyLoadUrl : null;
-            _myModal.destroyListener = typeof obj.destroyListener != 'undefined' ? obj.destroyListener : false;
-            _myModal.modalObj = _myModal.init(_myModal);
-            if( _myModal.destroyListener ) {
-                _myModal.setDestroyListener(_myModal);
-            }
-            if( _myModal.bodyLoadUrl ) {
-                _myModal.loadModalBody(_myModal)
-            } else {
-                _myModal.showModal(_myModal);
-            }
-            return _myModal;
-        }
-
-        MyModal.prototype.init = function (_myModal) {
-            let modalHtml = '<div id="' + _myModal.id + '" class="modal fade myModal" role="dialog" style="display: none">\n' +
-                '  <div class="modal-dialog">\n' +
-                '    <!-- Modal content-->\n' +
-                '    <div class="modal-content">\n' +
-                '      <div class="modal-header">\n' +
-                '        <h4 class="modal-title">' + _myModal.title + '</h4>\n' +
-                '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n' +
-                '      </div>\n' +
-                '      <div class="modal-body" id="' + _myModal.id + '-body' + '">\n' + _myModal.body +
-                '      </div>\n' +
-                '    </div>\n' +
-                '  </div>\n' +
-                '</div>';
-            document.body.insertAdjacentHTML('beforeend', modalHtml);
-            return  new bootstrap.Modal(document.getElementById(_myModal.id), {
-                keyboard: false
-            })
-        }
-
-        MyModal.prototype.showModal = function (_myModal){
-            _myModal.modalObj.show();
-        }
-
-        MyModal.prototype.setDestroyListener = function (_myModal){
-            $('#' + _myModal.id).on('hidden.bs.modal', function(){
-                _myModal.modalObj.dispose();
-                $('#' + _myModal.id).remove();
-            });
-        }
-
-        MyModal.prototype.loadModalBody = function (_myModal) {
-            $('#' + _myModal.id + '-body').load(_myModal.bodyLoadUrl, function (){
-                _myModal.showModal(_myModal);
-            });
-        }
-
-        //==========================
-        // End MyModal
-        //==========================
 
         // ==========================
         // START Profile form validation

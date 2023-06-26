@@ -2496,7 +2496,6 @@ $(function() {
                     //validate file
                     if (true) {//file is validated
                         let fileNumber = $('.file-row').length + 1;
-                        console.log($('.file-row').length);
                         let fileName = (uploadInput.val()).replace(/.*(\/|\\)/, '');
                         //add file row
                         fileListId.find('tbody').append('<tr class="file-row" id="file-row-' + fileNumber + '" style="vertical-align: middle;">\n' +
@@ -3071,6 +3070,7 @@ $(document).ready(function (e) {
         var _myModal = Object.create(MyModal.prototype)
         _myModal.id = (new Date()).getTime();
         _myModal.title = typeof obj.title != 'undefined' ? obj.title : '';
+        _myModal.dismissible = typeof obj.dismissible != 'undefined' ? obj.dismissible : true;
         _myModal.body = typeof obj.body != 'undefined' ? obj.body : '';
         _myModal.bodyLoadUrl = typeof obj.bodyLoadUrl != 'undefined' ? obj.bodyLoadUrl : null;
         _myModal.destroyListener = typeof obj.destroyListener != 'undefined' ? obj.destroyListener : false;
@@ -3093,7 +3093,7 @@ $(document).ready(function (e) {
             '    <div class="modal-content">\n' +
             '      <div class="modal-header">\n' +
             '        <h4 class="modal-title">' + _myModal.title + '</h4>\n' +
-            '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
+            (_myModal.dismissible ? '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' : '') +
             '      </div>\n' +
             '      <div class="modal-body" id="' + _myModal.id + '-body' + '">\n' + _myModal.body +
             '      </div>\n' +
@@ -3102,7 +3102,8 @@ $(document).ready(function (e) {
             '</div>';
         document.body.insertAdjacentHTML('beforeend', modalHtml);
         return  new bootstrap.Modal(document.getElementById(_myModal.id), {
-            keyboard: false
+            keyboard: false,
+            backdrop: 'static'
         })
     }
 
