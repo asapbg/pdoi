@@ -269,7 +269,7 @@
                                     <label for="tmpFile" class="form-label p-0 m-0">
                                         <i class="fa-solid fa-upload text-primary p-1" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __('front.upload_btn') }}"></i>
                                     </label>
-                                    <input class="form-control d-none" type="file" name="tmpFile" id="tmpFile" data-container="attachFiles">
+                                    <input class="form-control d-none do-not-ignore" type="file" name="tmpFile" id="tmpFile" data-container="attachFiles">
                                 </div>
                             </th>
                         </tr>
@@ -344,5 +344,6 @@
 @push('scripts')
     <script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
     <script src="{{ asset('jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('jquery-validation/additional-methods.min.js') }}"></script>
     <script src="{{ asset('jquery-validation/localization/messages_' . app()->getLocale() . '.js') }}"></script>
 @endpush

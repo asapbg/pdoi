@@ -15,6 +15,10 @@
     <link href="{{ asset('fontawesome-6.4.0/css/all.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @stack('styles')
+    <script type="text/javascript">
+        var max_upload_file_size = parseInt(<?php echo config('filesystems.max_upload_file_size')?>) * 1024; //kb to b
+        var allowed_file_extensions = '<?php echo(implode('|', \App\Models\File::ALLOWED_FILE_EXTENSIONS))?>';
+    </script>
 </head>
 <body>
 <div id="app">

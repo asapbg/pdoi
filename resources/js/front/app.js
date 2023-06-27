@@ -1,3 +1,15 @@
+function formatBytes(bytes, decimals = 2) {
+    if (!+bytes) return '0 Bytes'
+
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+}
+
 //===============================
 // START MyModal
 // Create modal and show it with option for load body from url or pass direct content
@@ -90,6 +102,29 @@ $(function() {
                 autoclose: true
             });
         }
+
+        //Custom file jquery inline validation for dynamical added files
+        $.validator.addMethod('myfilesize', function(value, element, param) {
+            let _this = this;
+            let isValid = true;
+            if($(element).hasClass('file-validate')) {
+                $('.file-validate').each(function (index, el){
+                    var length = ( el.files.length );
+                    var fileSize = 0;
+                    if (length > 0) {
+                        for (var i = 0; i < length; i++) {
+                            fileSize = el.files[i].size; // get file size
+                            console.log(!_this.optional( element ), fileSize <= param, fileSize,param );
+                            if( !(fileSize <= param) ) {
+                                $($('.file-error')[index]).html('sadfdf');//$.validator.messages.myfilesize
+                                isValid = false;
+                            }
+                        }
+                    }
+                });
+            }
+            return isValid;
+        }, '');
 
         //========================================================
         //Control identity fields depending on selected legal form
@@ -200,6 +235,54 @@ $(function() {
         }
         // ==========================
         // END Profile form validation
+        //==========================
+
+
+        // ==========================
+        // START Upload file and add in table section
+        //==========================
+        if( $('#tmpFile').length ) {
+            let uploadInput = $('#tmpFile');
+            let fileListId = $('#' + uploadInput.data('container'));
+            uploadInput.on('change', function(){
+                if( (uploadInput.val()).length > 0 ) {
+                    //validate file
+                    // uploadInput.valid();
+                    if( true ) {//file is validated
+                        let fileNumber = $('.file-row').length + 1;
+                        let fileName = (uploadInput.val()).replace(/.*(\/|\\)/, '');
+                        //add file row
+                        fileListId.find('tbody').append('<tr class="file-row" id="file-row-'+ fileNumber +'" style="vertical-align: middle;">\n' +
+                            '                            <td></td>\n' +
+                            '                            <td><span class="filename"></span>'+ fileName +'<span class="file-error d-block text-danger"></span></td>\n' +
+                            '                            <td>\n' +
+                            '                                <input type="text" name="file_description[]" class="form-control form-control-sm" value="">\n' +
+                            '                            </td>\n' +
+                            '                            <td>\n' +
+                            // '                                <i class="fa-solid fa-download text-primary me-1" data-file="'+ fileNumber +'" role="button"></i>\n' +
+                            '                                <i class="fa-solid fa-circle-xmark text-warning me-1 remove-file" data-file="'+ fileNumber +'" role="button" data-bs-toggle="tooltip" title="Премахни"></i>\n' +
+                            // '                                <i class="fa-solid fa-trash text-danger me-1" data-file="'+ fileNumber +'" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __(\'front.remove_btn\') }}"></i>\n' +
+                            '                            </td>\n' +
+                            '                        </tr>');
+
+                        //clone input
+                        let newFileInput = uploadInput.clone(true);
+                        newFileInput.attr('name', 'files[]');
+                        newFileInput.addClass('file-validate');
+                        newFileInput.removeAttr('id');
+                        $('#file-row-'+ fileNumber + ' td span.filename').html(newFileInput);
+                        //clear tmp input
+                        uploadInput.val('');
+                    }
+                }
+            });
+
+            $(document).on('click', '.remove-file', function(){
+                $('#file-row-'+ $(this).data('file')).remove();
+            });
+        }
+        // ==========================
+        // END Upload file and add in table section
         //==========================
     });
 });

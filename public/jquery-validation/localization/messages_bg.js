@@ -29,7 +29,8 @@ $.extend( $.validator.messages, {
 	rangelength: $.validator.format( "Моля, въведете стойност с дължина между {0} и {1} символа." ),
 	range: $.validator.format( "Моля, въведете стойност между {0} и {1}." ),
 	max: $.validator.format( "Моля, въведете стойност по-малка или равна на {0}." ),
-	min: $.validator.format( "Моля, въведете стойност по-голяма или равна на {0}." )
+	min: $.validator.format( "Моля, въведете стойност по-голяма или равна на {0}." ),
+	myfilesize: $.validator.format( "Максималеният позволен размер на файл е {0} bytes." )
 } );
 return $;
 }));

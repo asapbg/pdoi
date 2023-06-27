@@ -17,7 +17,11 @@ $(function() {
                         errorClass: 'is_invalid',
                         rules: formRules(currentBtn.data('validate')),
                         errorPlacement: function (error, element) {
-                            $("#error-" + element.attr("name")).html(error);
+                            if( element.attr("name") != 'files[]' ) {
+                                $("#error-" + element.attr("name")).html(error);
+                            } else{
+                                error.insertAfter(element);
+                            }
                         },
                         invalidHandler: function (e, validation) {
                             console.log("invalidHandler : event", e);
@@ -118,9 +122,9 @@ $(function() {
         function formRules(formId) {
             let rules = {
                 info: {
-                    tmpFile: {
-                        // extension: 'doc|docx|xsl|xslx|pdf|rtf|txt|gif|jpg|jpeg|png|zem|p7s'
-                        extension: 'doc'
+                    'files[]': {
+                        extension: allowed_file_extensions,
+                        myfilesize: max_upload_file_size
                     },
                     legal_form: {
                         required: true,
