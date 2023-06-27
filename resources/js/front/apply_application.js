@@ -123,7 +123,7 @@ $(function() {
             let rules = {
                 info: {
                     'files[]': {
-                        extension: allowed_file_extensions,
+                        myextension: allowed_file_extensions,
                         myfilesize: max_upload_file_size
                     },
                     legal_form: {

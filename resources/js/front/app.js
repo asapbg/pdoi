@@ -3,7 +3,7 @@ function formatBytes(bytes, decimals = 2) {
 
     const k = 1024
     const dm = decimals < 0 ? 0 : decimals
-    const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
@@ -104,27 +104,48 @@ $(function() {
         }
 
         //Custom file jquery inline validation for dynamical added files
-        $.validator.addMethod('myfilesize', function(value, element, param) {
-            let _this = this;
-            let isValid = true;
-            if($(element).hasClass('file-validate')) {
-                $('.file-validate').each(function (index, el){
-                    var length = ( el.files.length );
-                    var fileSize = 0;
-                    if (length > 0) {
-                        for (var i = 0; i < length; i++) {
-                            fileSize = el.files[i].size; // get file size
-                            console.log(!_this.optional( element ), fileSize <= param, fileSize,param );
-                            if( !(fileSize <= param) ) {
-                                $($('.file-error')[index]).html('sadfdf');//$.validator.messages.myfilesize
-                                isValid = false;
+        if($.validator) {
+            $.validator.addMethod('myfilesize', function(value, element, param) {
+                let _this = this;
+                let isValid = true;
+                if($(element).hasClass('file-validate')) {
+                    $('.file-validate').each(function (index, el){
+                        var length = ( el.files.length );
+                        var fileSize = 0;
+                        if (length > 0) {
+                            for (var i = 0; i < length; i++) {
+                                fileSize = el.files[i].size; // get file size
+                                if( !(fileSize <= param) ) {
+                                    $($('.file-error')[index]).html('Максималният размер на файла трябва да е '+ formatBytes(param));//$.validator.messages.myfilesize
+                                    isValid = false;
+                                }
                             }
                         }
-                    }
-                });
-            }
-            return isValid;
-        }, '');
+                    });
+                }
+                return isValid;
+            }, '');
+
+            $.validator.addMethod('myextension', function(value, element, param) {
+                let _this = this;
+                let isValid = true;
+                if($(element).hasClass('file-validate')) {
+                    $('.file-validate').each(function (index, el){
+                        var length = ( el.files.length );
+                        if (length > 0) {
+                            for (var i = 0; i < length; i++) {
+                                if( !(el.files[i].name).match(new RegExp(".(" + param + ")$", "i")) ) {
+                                    console.log(param);
+                                    $($('.file-error')[index]).html('Разрешените файлови формати са '+ param);//$.validator.messages.myfilesize
+                                    isValid = false;
+                                }
+                            }
+                        }
+                    });
+                }
+                return isValid;
+            }, '');
+        }
 
         //========================================================
         //Control identity fields depending on selected legal form
