@@ -36,7 +36,7 @@ class StoreUsersRequest extends FormRequest
             'permissions'           => ['nullable' ,'array'],
             'status'                => ['required' ,'numeric', 'gt:0'],
             'phone'                 => ['nullable' ,'string', 'max:50'],
-            'administrative_unit'   => ['nullable'],
+            'administrative_unit'   => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
             'lang'                  => ['required' ,'string'],
         ];
 
@@ -48,10 +48,6 @@ class StoreUsersRequest extends FormRequest
             $rules['email'][] = 'unique:users,email';
         } else{
             $rules['email'][] = Rule::unique('users', 'email')->ignore((int)request()->input('id'));
-        }
-
-        if( request()->input('user_type') && request()->input('user_type') == User::USER_TYPE_INTERNAL ) {
-            $rules['administrative_unit'] = ['required', 'numeric', 'exists:pdoi_response_subject,id'];
         }
 
         if(!$must_change_password) {
