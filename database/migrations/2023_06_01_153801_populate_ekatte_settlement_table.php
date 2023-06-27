@@ -47,7 +47,8 @@ return new class extends Migration
         }
 
         fclose($csvFile);
-
+        $currentId = DB::table('ekatte_settlement')->max('id') + 1;
+        DB::raw('ALTER SEQUENCE ekatte_settlement_id_seq RESTART WITH '.$currentId);
     }
 
     /**
