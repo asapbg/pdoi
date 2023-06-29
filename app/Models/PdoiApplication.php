@@ -86,6 +86,17 @@ class PdoiApplication extends ModelActivityExtend
         }
     }
 
+    /**
+     * !! Do not change
+     * Using for cron
+     * @param $query
+     */
+    public function scopeExpiredAndActive($query)
+    {
+        $query->where('pdoi_application.response_end_time', '<=', Carbon::now())
+            ->whereIn('pdoi_application.status', PdoiApplicationStatusesEnum::notCompleted());
+    }
+
     public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(PdoiApplication::class, 'parent_id', 'id');
