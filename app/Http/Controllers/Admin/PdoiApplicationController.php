@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ApplicationEventsEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterEventForwardRequest;
 use App\Http\Requests\RegisterEventRequest;
 use App\Models\Category;
 use App\Models\Event;
@@ -11,6 +12,8 @@ use App\Models\PdoiApplication;
 use App\Services\ApplicationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\Console\Input\Input;
 use Symfony\Component\HttpFoundation\Response;
 
 class PdoiApplicationController extends Controller
@@ -133,18 +136,28 @@ class PdoiApplicationController extends Controller
         }
     }
 
-    public function storeNewEvent(RegisterEventRequest $request)
+    public function storeNewEvent(Request $request)
     {
-        $validated = $request->validated();
+        $event = Event::find((int)$request->input('event'));
+        if(!$event || !in_array($event->app_event, ApplicationEventsEnum::userEvents()) ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        if( $event->app_event == ApplicationEventsEnum::FORWARD->value ) {
+            echo 'In process';
+            exit;
+        }
+        $eventRequest = $event->app_event == ApplicationEventsEnum::FORWARD->value ?
+            new RegisterEventForwardRequest() : new RegisterEventRequest();
+        $validator = Validator::make($request->all(), $eventRequest->rules());
+        if( $validator->fails() ) {
+            return back()->withInput()->withErrors($validator->errors());
+        }
+
+        $validated = $validator->validated();
         $user = auth()->user();
 
         $application = PdoiApplication::find($validated['application']);
         if( !$application || !$user->canAny(['update'], $application) ){
-            abort(Response::HTTP_NOT_FOUND);
-        }
-
-        $event = Event::find($validated['event']);
-        if(!$event || !in_array($event->app_event, ApplicationEventsEnum::userEvents()) ) {
             abort(Response::HTTP_NOT_FOUND);
         }
 
@@ -154,7 +167,6 @@ class PdoiApplicationController extends Controller
         } else {
             back()->with('danger', __('custom.system_error'));
         }
-
     }
 
     private function filters($request): array

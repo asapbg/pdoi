@@ -54,6 +54,7 @@ class PdoiResponseSubjectController extends AdminController
         if( ($item->id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
+        $subjects = PdoiResponseSubject::optionsList($item->id ?? 0);
         $rzsSections = RzsSection::optionsList();
         $areas = EkatteArea::optionsList();
         $municipalities = EkatteMunicipality::optionsList();
@@ -64,7 +65,7 @@ class PdoiResponseSubjectController extends AdminController
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = PdoiResponseSubject::translationFieldsProperties();
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName',
-            'listRouteName', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections', 'courtSubjects'));
+            'listRouteName', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections', 'courtSubjects', 'subjects'));
     }
 
     public function store(PdoiResponseSubjectStoreRequest $request, PdoiResponseSubject $item)

@@ -34,6 +34,7 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
             'region' => ['required', 'numeric'],
             'municipality' => ['required', 'numeric'],
             'town' => ['required', 'numeric'],
+            'parent_id' => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
 
             'phone' => ['nullable', 'string', 'max:1000'],
             'fax' => ['nullable', 'string', 'max:1000'],

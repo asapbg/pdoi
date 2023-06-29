@@ -44,51 +44,59 @@ class ApplicationService
                     }
                 }
 
-                $newEvent = new PdoiApplicationEvent();
-                $newEvent->event_type = $eventConfig->app_event;
-                $newEvent->event_date = Carbon::now();
-                if ($eventConfig->days) {
-                    //event waiting time
-                    $eventEndDate = match ((int)$eventConfig->app_event){
-                        ApplicationEventsEnum::ASK_FOR_INFO->value => Carbon::now()->addDays($eventConfig->days),
-                        default => null
-                    };
-                    //extending response time for application
-                    $extendTermDate = match ((int)$eventConfig->app_event){
-                        ApplicationEventsEnum::EXTEND_TERM->value => Carbon::parse($this->application->response_end_time)->addDays($eventConfig->days),
-                        default => null
-                    };
-                    if( $eventEndDate ) {
-                        $newEvent->event_end_date = $eventEndDate;
-                    }
-                    if( $extendTermDate ) {
-                        $this->application->response_end_time = $extendTermDate;
-                    }
-                }
-                if ($eventConfig->add_text && isset($data['add_text']) && !empty($data['add_text'])) {
-                    $newEvent->add_text = htmlentities(stripHtmlTags($data['add_text']));
-                }
-                if ($eventConfig->old_resp_subject_id && isset($data['old_subject']) && (int)$data['old_subject']) {
-                    $newEvent->old_resp_subject_id = (int)$data['old_subject'];
-                }
-                if ($eventConfig->new_resp_subject_id && isset($data['new_subject']) && (int)$data['new_subject']) {
-                    $newEvent->new_resp_subject_id = (int)$data['new_subject'];
+
+                switch ((int)$eventConfig->app_event) {
+                    case ApplicationEventsEnum::FORWARD->value://Препращане по компетентност
+
+                        break;
+                    default: //all others events
+                        $newEvent = new PdoiApplicationEvent();
+                        $newEvent->event_type = $eventConfig->app_event;
+                        $newEvent->event_date = Carbon::now();
+                        if ($eventConfig->days) {
+                            //event waiting time
+                            $eventEndDate = match ((int)$eventConfig->app_event){
+                                ApplicationEventsEnum::ASK_FOR_INFO->value => Carbon::now()->addDays($eventConfig->days),
+                                default => null
+                            };
+                            //extending response time for application
+                            $extendTermDate = match ((int)$eventConfig->app_event){
+                                ApplicationEventsEnum::EXTEND_TERM->value => Carbon::parse($this->application->response_end_time)->addDays($eventConfig->days),
+                                default => null
+                            };
+                            if( $eventEndDate ) {
+                                $newEvent->event_end_date = $eventEndDate;
+                            }
+                            if( $extendTermDate ) {
+                                $this->application->response_end_time = $extendTermDate;
+                            }
+                        }
+                        if ($eventConfig->add_text && isset($data['add_text']) && !empty($data['add_text'])) {
+                            $newEvent->add_text = htmlentities(stripHtmlTags($data['add_text']));
+                        }
+                        if ($eventConfig->old_resp_subject_id && isset($data['old_subject']) && (int)$data['old_subject']) {
+                            $newEvent->old_resp_subject_id = (int)$data['old_subject'];
+                        }
+                        if ($eventConfig->new_resp_subject_id && isset($data['new_subject']) && (int)$data['new_subject']) {
+                            $newEvent->new_resp_subject_id = (int)$data['new_subject'];
+                        }
+
+                        $this->application->save();
+                        $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::APPROVE_BY_RKS->value]) ? $this->userId : null;
+                        $newEvent->status = $eventConfig->event_status;
+                        $this->application->events()->save($newEvent);
+                        $newEvent->refresh();
+
+                        //Save user attached files
+                        if( isset($data['files']) && sizeof($data['files']) ) {
+                            $this->attachEventFiles($newEvent, $data['files'], $data['file_description']);
+                        }
+
+                        //Set communication and status
+                        $this->setApplicationStatus($eventConfig, $data);
+                        $this->scheduleCommunication($eventConfig);
                 }
 
-                $this->application->save();
-                $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::APPROVE_BY_RKS->value]) ? $this->userId : null;
-                $newEvent->status = $eventConfig->event_status;
-                $this->application->events()->save($newEvent);
-                $newEvent->refresh();
-
-                //Save user attached files
-                if( isset($data['files']) && sizeof($data['files']) ) {
-                    $this->attachEventFiles($newEvent, $data['files'], $data['file_description']);
-                }
-
-                //Set communication and status
-                $this->setApplicationStatus($eventConfig, $data);
-                $this->scheduleCommunication($eventConfig);
                 DB::commit();
             }
         } catch (\Exception $e) {

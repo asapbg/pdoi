@@ -31,31 +31,31 @@
             </div>
         </div>
     </div>
-{{--    <div class="col-md-9 col-12 mt-1">--}}
-{{--        <div class="form-group">--}}
-{{--            <label class="col-sm-12 control-label" >{{ __('validation.attributes.parent_id') }}</label>--}}
-{{--            <div class="col-12 mb-2 d-flex">--}}
-{{--                <select id="subjects" name="parent_id"  class="custom-select form-control form-control-sm select2 @error('parent_id'){{ 'is-invalid' }}@enderror">--}}
-{{--                    @if(!$item->parent_id)--}}
-{{--                        <option value="">---</option>--}}
-{{--                    @endif--}}
-{{--                    @if(isset($subjects) && $subjects->count())--}}
-{{--                        @foreach($subjects as $row)--}}
-{{--                            <option value="{{ $row->id }}" @if(old('parent_id', ($item->id ? $item->parent_id : 0)) == $row->id) selected @endif>{{ $row->name }}</option>--}}
-{{--                        @endforeach--}}
-{{--                    @endif--}}
-{{--                </select>--}}
-{{--                <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject"--}}
-{{--                        data-title="{{ trans_choice('custom.pdoi_response_subjects',2) }}"--}}
-{{--                        data-url="{{ route('modal.pdoi_subjects').'?redirect_only=0&select=1&multiple=0&admin=1' }}">--}}
-{{--                    <i class="fa fa-list"></i>--}}
-{{--                </button>--}}
-{{--                @error('parent_id')--}}
-{{--                <div class="text-danger mt-1">{{ $message }}</div>--}}
-{{--                @enderror--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    <div class="col-md-9 col-12 mt-1">
+        <div class="form-group">
+            <label class="col-sm-12 control-label" >{{ __('validation.attributes.parent_id') }}</label>
+            <div class="col-12 mb-2 d-flex">
+                <select id="subjects" name="parent_id"  class="custom-select form-control form-control-sm select2 @error('parent_id'){{ 'is-invalid' }}@enderror">
+                    @if(!$item->parent_id)
+                        <option value="">---</option>
+                    @endif
+                    @if(isset($subjects) && $subjects->count())
+                        @foreach($subjects as $row)
+                            <option value="{{ $row->id }}" @if(old('parent_id', ($item->id ? $item->parent_id : 0)) == $row->id) selected @endif>{{ $row->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+                <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject"
+                        data-title="{{ trans_choice('custom.pdoi_response_subjects',2) }}"
+                        data-url="{{ route('modal.pdoi_subjects').'?redirect_only=0&select=1&multiple=0&admin=1' }}">
+                    <i class="fa fa-list"></i>
+                </button>
+                @error('parent_id')
+                <div class="text-danger mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+    </div>
     <div class="col-md-3 col-12 mt-1">
         <div class="form-group">
             <label class="col-sm-12 control-label">

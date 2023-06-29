@@ -107,7 +107,10 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     {
         $tree = [];
         $subjects = DB::table('pdoi_response_subject')
-            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name', 'pdoi_response_subject.adm_level as parent'
+            ->select(['pdoi_response_subject.id'
+                , 'pdoi_response_subject_translations.subject_name as name'
+                , 'pdoi_response_subject.adm_level as section_parent'
+                , 'pdoi_response_subject.parent_id as subject_parent'
 //                , DB::raw('case when pdoi_response_subject.parent_id is null then pdoi_response_subject.adm_level else pdoi_response_subject.parent_id end as parent')
                 , DB::raw('1 as selectable')])
             ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
@@ -120,7 +123,10 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         }
 
         $allSubjectsAndSections = DB::table("rzs_section")
-            ->select(['rzs_section.adm_level as id', 'rzs_section_translations.name', 'rzs_section.parent_id as parent'
+            ->select(['rzs_section.adm_level as id'
+                , 'rzs_section_translations.name'
+                , 'rzs_section.parent_id as section_parent'
+                , DB::raw('null as subject_parent')
                 , DB::raw('0 as selectable')])
             ->join('rzs_section_translations', 'rzs_section_translations.rzs_section_id', '=', 'rzs_section.id')
             ->where('rzs_section.active', '=', 1)
@@ -128,36 +134,40 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
             ->where('rzs_section_translations.locale', '=', app()->getLocale())
             ->union($subjects)->orderBy('name','asc')
             ->get();
-
         if( $allSubjectsAndSections->count() ) {
             foreach ($allSubjectsAndSections as $subject) {
-                if( !$subject->selectable && !$subject->parent) {
+                if( !$subject->selectable && !$subject->section_parent ) {
                     $tree[] = array(
                         'id' => $subject->id,
                         'name' => $subject->name,
                         'selectable' => $subject->selectable,
-                        'parent' => $subject->parent,
-                        'children' => self::subjectChildren($subject->id, $allSubjectsAndSections)
+                        'parent' => null,
+                        'children' => self::subjectChildren($subject->id, !$subject->selectable, $allSubjectsAndSections)
                     );
                 }
             }
         }
-
         return $tree;
     }
 
-    private static function subjectChildren(int $parent, $subjects): array
+    private static function subjectChildren(int $parent, int $parentIsSection, $subjects): array
     {
         $children = [];
         if( $subjects->count() ) {
             foreach ($subjects as $subject) {
-                if( (int)$subject->parent == $parent ) {
+                $isSubjectChild = !$parentIsSection && (int)$subject->subject_parent == $parent;
+                $isSectionChild = $parentIsSection &&
+                    (
+                        (!$subject->selectable && (int)$subject->section_parent == $parent)
+                        || ($subject->selectable && (int)$subject->section_parent == $parent && is_null($subject->subject_parent))
+                    );
+                if($isSectionChild || $isSubjectChild) {
                     $children[] = array(
                         'id' => $subject->id,
                         'name' => $subject->name,
                         'selectable' => $subject->selectable,
-                        'parent' => $subject->parent,
-                        'children' => !$subject->selectable ? self::subjectChildren($subject->id, $subjects) : []
+                        'parent' => $subject->subject_parent ?? $subject->section_parent,
+                        'children' => self::subjectChildren($subject->id, !$subject->selectable, $subjects)
                     );
                 }
             }

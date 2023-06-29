@@ -63985,7 +63985,7 @@ table .toggle i { color: #269740 }
 }
 
 :root {
-
+    --border-color: #4a6484;
 }
 
 a.btn-sm i {
@@ -64011,4 +64011,8 @@ li.select2-results__option:empty {
 
 .app-f-small {
     font-size: 12px;
+}
+
+.left-border {
+    border-left: 4px solid var(--border-color);
 }
