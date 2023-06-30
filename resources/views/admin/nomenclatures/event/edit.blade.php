@@ -105,7 +105,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @foreach(['old_resp_subject', 'new_resp_subject', 'add_text', 'files', 'event_delete', 'mail_to_admin', 'mail_to_app', 'mail_to_new_admin'] as $field)
+                                @foreach(['old_resp_subject', 'new_resp_subject', 'add_text', 'files', 'court_decision', 'event_delete', 'mail_to_admin', 'mail_to_app', 'mail_to_new_admin'] as $field)
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="col-sm-12 control-label" for="{{ $field }}">{{ $field }}</label>

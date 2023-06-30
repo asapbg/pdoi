@@ -62,8 +62,8 @@
                                 <div class="form-group form-group-sm col-12 mb-3">
                                     <label class="form-label fw-semibold" ></label>
                                     @php($request = old('add_text', ''))
-                                    <textarea class="form-control summernote w-100" name="add_text" @error('add_text'){{ $message }}@enderror>{{ $request }}</textarea>
-                                    @error('request')
+                                    <textarea class="form-control summernote w-100 @error('add_text') is-invalid @enderror" name="add_text" >{{ $request }}</textarea>
+                                    @error('add_text')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -81,7 +81,7 @@
                                                 <label for="tmpFile" class="form-label p-0 m-0">
                                                     <i class="fas fa-upload text-primary p-1" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __('front.upload_btn') }}"></i>
                                                 </label>
-                                                <input class="form-control d-none" type="file" name="tmpFile" id="tmpFile" data-container="attachFiles" data-admin="1">
+                                                <input class="form-control d-none" type="file" name="tmpFile" id="tmpFile" data-container="attachFiles" data-admin="1" @if($event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value) data-visibleoption="1" @endif>
                                             </div>
                                         </th>
                                     </tr>

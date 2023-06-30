@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\ApplicationEventsEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Models\PdoiApplication;
 use App\Models\User;
@@ -68,13 +69,33 @@ class PdoiApplicationPolicy
      */
     public function update(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
     {
+
         //TODO fix me add subject from events
-        return in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted())
+        return ($pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
+                || in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted()))
             && (
                 $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
                 && $user->administrative_unit === $pdoiApplication->responseSubject->id)
             );
     }
+
+    /**
+     * Determine whether the user can renew the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiApplication  $pdoiApplication
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function renew(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
+    {
+        return PdoiApplicationStatusesEnum::canRenew($pdoiApplication->status)// status allow renewing
+            && $pdoiApplication->currentEvent->event->app_event != ApplicationEventsEnum::RENEW_PROCEDURE->value //check if already has renewed event with rejection
+            && (
+                $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
+                    && $user->administrative_unit === $pdoiApplication->responseSubject->id)
+            );
+    }
+
 
     /**
      * Determine whether the user can delete the model.

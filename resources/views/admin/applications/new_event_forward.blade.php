@@ -44,8 +44,8 @@
                             <div class="form-group form-group-sm col-12 mb-3">
                                 <label class="form-label fw-semibold" ></label>
                                 @php($request = old('add_text', ''))
-                                <textarea class="form-control summernote w-100" name="add_text" @error('add_text'){{ $message }}@enderror>{{ $request }}</textarea>
-                                @error('request')
+                                <textarea class="form-control summernote w-100 @error('add_text') is-invalid @enderror" name="add_text">{{ $request }}</textarea>
+                                @error('add_text')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

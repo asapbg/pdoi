@@ -30,3 +30,16 @@ li.select2-results__option:empty {
 .left-border {
     border-left: 4px solid var(--border-color);
 }
+
+.form-switch .form-check-input.visibility-control {
+    padding-left: 2.5em;
+    margin-left: -1.25rem;
+    margin-top: 10px;
+    background-image: url(../img/not_visible.png);
+}
+
+.form-switch .form-check-input.visibility-control:checked {
+    background-image: url(../img/visible.png);
+    background-color: lightgreen;
+}
+

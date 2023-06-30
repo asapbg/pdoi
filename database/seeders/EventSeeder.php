@@ -39,6 +39,7 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => true,
                 'event_status' => 1,
                 'reason_not_approved' => null,
+                'court_decision' => false,
                 'add_text' => true,
                 'files' => true,
                 'event_delete' => false,
@@ -62,6 +63,7 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => false,
                 'event_status' => 2,
                 'reason_not_approved' => null,
+                'court_decision' => false,
                 'add_text' => true,
                 'files' => true,
                 'event_delete' => true,
@@ -85,6 +87,7 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => false,
                 'event_status' => 1,
                 'reason_not_approved' => null,
+                'court_decision' => false,
                 'add_text' => true,
                 'files' => true,
                 'event_delete' => false,
@@ -108,6 +111,7 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => false,
                 'event_status' => 1,
                 'reason_not_approved' => null,
+                'court_decision' => false,
                 'add_text' => true,
                 'files' => true,
                 'event_delete' => true,
@@ -131,6 +135,7 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => false,
                 'event_status' => 1,
                 'reason_not_approved' => null,
+                'court_decision' => false,
                 'add_text' => true,
                 'files' => true,
                 'event_delete' => true,
@@ -154,6 +159,7 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => false,
                 'event_status' => 1,
                 'reason_not_approved' => 10013,
+                'court_decision' => false,
                 'add_text' => true,
                 'files' => true,
                 'event_delete' => true,
@@ -177,6 +183,7 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => false,
                 'event_status' => 1,
                 'reason_not_approved' => null,
+                'court_decision' => false,
                 'add_text' => false,
                 'files' => false,
                 'event_delete' => false,
@@ -200,6 +207,7 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => false,
                 'event_status' => 1,
                 'reason_not_approved' => null,
+                'court_decision' => false,
                 'add_text' => false,
                 'files' => false,
                 'event_delete' => false,
@@ -223,11 +231,36 @@ class EventSeeder extends Seeder
                 'new_resp_subject' => false,
                 'event_status' => 1,
                 'reason_not_approved' => null,
+                'court_decision' => false,
                 'add_text' => false,
                 'files' => false,
                 'event_delete' => false,
                 'mail_to_admin' => true,
                 'mail_to_app' => true,
+                'mail_to_new_admin' => false,
+            ],
+            10 => [
+                'name' => [
+                    'bg' => 'Възобновяване на процедура',
+                    'en' => 'Resumption of procedure',
+                ],
+                'next_events' => [6],
+                'id' => 10,
+                'app_event' => 10,
+                'app_status' => 10,
+                'extend_terms_reason_id' => null,
+                'days' => null,
+                'date_type' => null,
+                'old_resp_subject' => false,
+                'new_resp_subject' => false,
+                'event_status' => 1,
+                'reason_not_approved' => null,
+                'court_decision' => true,
+                'add_text' => true,
+                'files' => true,
+                'event_delete' => false,
+                'mail_to_admin' => false,
+                'mail_to_app' => false,
                 'mail_to_new_admin' => false,
             ],
         ];
@@ -236,15 +269,19 @@ class EventSeeder extends Seeder
             $names = $row['name'];
             $nextEvents = $row['next_events'];
             unset($row['name'], $row['next_events']);
-            $item = Event::create($row);
-            if ($item) {
-                foreach ($locales as $locale) {
-                    $item->translateOrNew($locale['code'])->name = $names[$locale['code']];
-                }
+            $exist = Event::find((int)$row['id']);
+            if( !$exist ) {
+                $item = Event::create($row);
+                if ($item) {
+                    foreach ($locales as $locale) {
+                        $item->translateOrNew($locale['code'])->name = $names[$locale['code']];
+                    }
 
-                $item->nextEvents()->sync($nextEvents);
+                    $item->nextEvents()->sync($nextEvents);
+                }
+                $item->save();
+                $this->command->info("Event with name ".$names['bg']." created successfully");
             }
-            $item->save();
         }
     }
 }

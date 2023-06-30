@@ -157,6 +157,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
     Route::controller(AdminPdoiApplicationController::class)->group(function () {
         Route::get('/applications',                'index')->name('application')->middleware('can:viewAny,App\Models\PdoiApplication');
         Route::get('/applications/view/{item?}',         'show')->name('application.view');
+        Route::get('/applications/renew/{item?}',         'renew')->name('application.renew');
+        Route::post('/applications/renew',         'renewSubmit')->name('application.renew.submit');
         Route::post('/applications/add-category',         'addCategory')->name('application.category.add');
         Route::post('/applications/remove-category',         'removeCategory')->name('application.category.remove');
         Route::get('/applications/{item}/new-event/{event}',         'newEvent')->name('application.event.new');

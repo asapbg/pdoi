@@ -39,7 +39,12 @@ class ApplicationService
             if( $eventConfig ) {
                 if( $this->application->currentEvent ) {
                     $allowedNextEvents = $this->application->currentEvent->event->nextEvents->pluck('id')->toArray();
-                    if( !in_array($eventConfig->id, $allowedNextEvents) ) {
+                    if(
+                        !in_array($eventConfig->id, $allowedNextEvents)
+                        && !($this->application->currentEvent->event_type == ApplicationEventsEnum::FINAL_DECISION->value
+                            && $eventConfig->app_event == ApplicationEventsEnum::RENEW_PROCEDURE->value
+                            && PdoiApplicationStatusesEnum::canRenew((int)$this->application->status))
+                    ) {
                         throw new \Exception('Not allowed next event to current one: '.$this->application->currentEvent->event->name);
                     }
                 }
@@ -80,6 +85,9 @@ class ApplicationService
                         if ($eventConfig->new_resp_subject_id && isset($data['new_subject']) && (int)$data['new_subject']) {
                             $newEvent->new_resp_subject_id = (int)$data['new_subject'];
                         }
+                        if ($eventConfig->court_decision && isset($data['decision']) && (int)$data['decision']) {
+                            $newEvent->court_decision = (int)$data['decision'];
+                        }
 
                         $this->application->save();
                         $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::APPROVE_BY_RKS->value]) ? $this->userId : null;
@@ -89,9 +97,13 @@ class ApplicationService
 
                         //Save user attached files
                         if( isset($data['files']) && sizeof($data['files']) ) {
-                            $this->attachEventFiles($newEvent, $data['files'], $data['file_description']);
+                            $this->attachEventFiles($newEvent, $data['files'], $data['file_description'], $data['file_visible'] ?? []);
                         }
-
+                        if ($eventConfig->app_event == ApplicationEventsEnum::RENEW_PROCEDURE->value) {
+                            if( isset($data['file_decision']) && !is_null($data['file_decision']) ) {
+                                $this->attachEventFiles($newEvent, [$data['file_decision']], [], []);
+                            }
+                        }
                         //Set communication and status
                         $this->setApplicationStatus($eventConfig, $data);
                         $this->scheduleCommunication($eventConfig);
@@ -116,6 +128,7 @@ class ApplicationService
             ApplicationEventsEnum::FINAL_DECISION->value => $this->application->applicant->notify(new NotifyUserForAppStatus($this->application)),
             ApplicationEventsEnum::ASK_FOR_INFO->value => $this->application->applicant->notify(new NotifyUserNeedMoreInfo($this->application)),
             ApplicationEventsEnum::EXTEND_TERM->value => $this->application->applicant->notify(new NotifyUserExtendTerm($this->application)),
+            default => null
         };
     }
 
@@ -133,8 +146,10 @@ class ApplicationService
             $this->application->response_date = Carbon::now();
             $this->application->replay_in_time = Carbon::now()->diffInDays($this->application->registration_date);
         }else {
-            $this->application->status = $event->app_status;
-            $this->application->status_date = Carbon::now();
+            if( $event->app_event != ApplicationEventsEnum::RENEW_PROCEDURE->value || (isset($data['reopen']) && (int)$data['reopen']) ) {
+                $this->application->status = $event->app_status;
+                $this->application->status_date = Carbon::now();
+            }
 
             if( $event->app_event == ApplicationEventsEnum::SEND->value) {
                 //потвърдено от деловодна система
@@ -152,7 +167,7 @@ class ApplicationService
         $this->application->save();
     }
 
-    private function attachEventFiles($event, $files, $descriptions)
+    private function attachEventFiles($event, $files, $descriptions, $visiblelity)
     {
         foreach ($files as $key => $file) {
             $fileNameToStore = ($key + 1).'_e_'.round(microtime(true)).'.'.$file->getClientOriginalExtension();
@@ -163,8 +178,9 @@ class ApplicationService
                 'filename' => $fileNameToStore,
                 'content_type' => $file->getClientMimeType(),
                 'path' => $this->application->fileFolder.$fileNameToStore,
-                'description' => $descriptions[$key],
+                'description' => $descriptions[$key] ?? null,
                 'user_reg' => $this->userId,
+                'visible_on_site' => $visiblelity[$key] ?? 0,
             ]);
             $event->files()->save($newFile);
             $ocr = new FileOcr($newFile->refresh());

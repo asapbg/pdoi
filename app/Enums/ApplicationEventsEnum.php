@@ -18,6 +18,7 @@ enum ApplicationEventsEnum: int
     case FORWARD = 4; //Препращане на заявление
     case EXTEND_TERM = 5; //Удължаване на срока
     case FINAL_DECISION = 6; //Крайно решение
+    case RENEW_PROCEDURE = 10; //Възобновяване на процедура
 
     public static function userEvents(): array
     {

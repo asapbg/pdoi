@@ -25,6 +25,7 @@
                             <div class="row">
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.reg_number') }}:  <span class="text-primary">{{ $item->application_uri }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.status') }}:  <span class="text-primary">{{ $item->statusName }}</span></div>
+                                <div class="col-md-4 col-12 fw-bold">{{ __('custom.last_event') }}:  <span class="text-primary">{{ $item->currentEvent->event->name }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $item->responseSubject->subject_name }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.date_apply') }}: <span class="text-primary">{{ displayDate($item->created_at) }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($item->response_end_time) }}</span></div>
@@ -162,9 +163,8 @@
                                         <span class="text-danger" id="remove-category-error"></span>
                                     </div>
                                 @endif
-
                                 @can('update', $item)
-                                    @if($item->currentEvent->event->nextEvents->count() && in_array($item->status, \App\Enums\PdoiApplicationStatusesEnum::notCompleted()))
+                                    @if($item->currentEvent->event->nextEvents->count())
                                         <h5 class="bg-primary py-1 px-2 my-4">{{ __('custom.new_event') }}</h5>
                                         <form class=" mb-3" action="post">
                                             @csrf

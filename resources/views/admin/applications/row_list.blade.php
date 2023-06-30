@@ -17,7 +17,7 @@
         {{ mb_substr($itemContent, 0, 100) }}@if(strlen($itemContent) > 100){{ '...' }}@endif
     </td>
     <td>{{ $item->statusName }}</td>
-    <td class="text-center">
+    <td class="text-center text-nowrap">
         @canany(['update', 'view'], $item)
             <a href="{{ route( 'admin.application.view' , [$item->id]) }}"
                class="btn btn-sm btn-info"
@@ -32,5 +32,14 @@
                 <i class="fas fa-history"></i>
             </a>
         @endcan
+        @canany('renew', $item)
+            <a href="{{ route( 'admin.application.renew' , [$item->id]) }}"
+               class="btn btn-sm btn-success"
+               data-toggle="tooltip"
+               title="{{ __('custom.renew') }}">
+                <i class="fas fa-gavel"></i>
+            </a>
+        @endcan
+
     </td>
 </tr>

@@ -40,6 +40,7 @@ class EventStoreRequest extends FormRequest
             $rules['date_type'] = ['nullable', 'numeric', 'in:1,2'];
             $rules['add_text'] = ['required', 'numeric', 'in:0,1'];
             $rules['files'] = ['required', 'numeric', 'in:0,1'];
+            $rules['court_decision'] = ['required', 'numeric', 'in:0,1'];
             $rules['event_delete'] = ['required', 'numeric', 'in:0,1'];
             $rules['mail_to_admin'] = ['required', 'numeric', 'in:0,1'];
             $rules['mail_to_app'] = ['required', 'numeric', 'in:0,1'];

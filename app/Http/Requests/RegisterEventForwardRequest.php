@@ -36,6 +36,8 @@ class RegisterEventForwardRequest extends FormRequest
             'file_description.*' => ['nullable', 'string', 'max:255'],
             'files' => ['array'],
             'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), 'mimes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS)],
+            'file_visible' => ['array'],
+            'file_visible.*' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

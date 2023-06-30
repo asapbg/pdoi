@@ -19,6 +19,7 @@ enum PdoiApplicationStatusesEnum: int
     case INFO_NOT_EXIST = 7; //Информацията не съществува
     case NO_REVIEW = 8; //Оставено без разглеждане
     case FORWARDED = 9; //Препратено по компетентност
+    case RENEWED = 10; //Възобновено
 
 //    case FORWARD_ТО_SUB_SUBJECT = 10; //Препратено по компетентност към подчинен субект
 //    case FORWARD_ТО_NOT_REGISTERED_SUBJECT = 11; //Препратено по компетентност на субект, нерегистриран на платформата
@@ -66,5 +67,13 @@ enum PdoiApplicationStatusesEnum: int
             }
         }
         return $check;
+    }
+
+    public static function canRenew($value): bool
+    {
+        return in_array($value, [
+            self::NOT_APPROVED->value
+            , self::PART_APPROVED->value
+        ]);
     }
 }

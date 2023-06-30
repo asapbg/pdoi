@@ -142,6 +142,7 @@ return [
     'created'                          => 'Създаване',
     'creation_of'                      => 'Създаване на ',
     'edit'                             => 'Редакция',
+    'renew'                            => 'Възобновяване ',
     'edit_of'                          => 'Редакция на ',
     'editing'                          => 'Редактиране',
     'delete'                           => 'Изтрий',
@@ -237,6 +238,7 @@ return [
     'expired_term'                     => 'Изтекъл срок',
     'history'                          => 'История',
     'process'                          => 'Процес|Процеси',
+    'last_event'                       => 'Последно събитие',
 
     //controllers and breadcrumbs
     'file_content'                              => 'Текст във файлове',
@@ -344,6 +346,8 @@ return [
     'category_not_selected'                     => 'Не сте избрали категория',
     'forwarded'                                 => 'Препратено по компетентност',
     'in_process'                                => 'В процес на обработка',
+    'application.renew'                         => 'Възобновяване на заявление',
+    'application.renew.procedure_info'          => 'Посочи данни за съдебно решение по процедурата',
     //application statuses
     'application.status.RECEIVED'               => 'Прието на платформата',
     'application.status.REGISTRATION_TO_SUBJECT'     => 'Очаква регистрация при задължен субект',
@@ -354,6 +358,7 @@ return [
     'application.status.NO_REVIEW'                   => 'Оставено без разглеждане',
     'application.status.NOT_APPROVED'                => 'Неодобрено',
     'application.status.FORWARDED'                   => 'Препратено по компетентност',
+    'application.status.RENEWED'                   => 'Възобновено',
     'application.request_for_info'                   => 'Искане за достъп до обществена информация',
     'application.full_history'                   => 'Електронно досие',
     //events names
@@ -365,5 +370,9 @@ return [
     'event.FORWARD'                             => 'Препращане на заявление',
     'event.EXTEND_TERM'                         => 'Удължаване на срока',
     'event.FINAL_DECISION'                      => 'Крайно решение',
+    //
+    'court_decision.CANCEL'                     => 'Съдът отменя решението за отказ',
+    'court_decision.CONFIRMS'                   => 'Съдът потвърждава решението за отказ',
+    'court_decision.CHANGE'                     => 'Съдът изменя решението решението за отказ',
 ];
 

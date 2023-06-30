@@ -29,7 +29,7 @@ class Event  extends ModelActivityExtend implements TranslatableContract
 
     protected $fillable = ['app_event', 'app_status', 'extend_terms_reason_id', 'days', 'date_type',
         'old_resp_subject', 'new_resp_subject', 'event_status', 'reason_not_approved', 'add_text',
-        'files', 'event_delete', 'mail_to_admin', 'mail_to_app', 'mail_to_new_admin'];
+        'files', 'event_delete', 'mail_to_admin', 'mail_to_app', 'mail_to_new_admin', 'court_decision'];
 
     /**
      * Get the model name

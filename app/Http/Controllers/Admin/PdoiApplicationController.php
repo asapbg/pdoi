@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ApplicationEventsEnum;
+use App\Enums\PdoiApplicationStatusesEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ApplicationRenewRequest;
 use App\Http\Requests\RegisterEventForwardRequest;
 use App\Http\Requests\RegisterEventRequest;
 use App\Models\Category;
@@ -167,6 +169,48 @@ class PdoiApplicationController extends Controller
         } else {
             back()->with('danger', __('custom.system_error'));
         }
+    }
+
+    public function renew(Request $request, $applicationId)
+    {
+        $user = auth()->user();
+
+        $application = PdoiApplication::find($applicationId);
+        if( !$application || !$user->canAny(['renew'], $application) ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if( !PdoiApplicationStatusesEnum::canRenew((int)$application->status) ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->view('admin.applications.renew', compact('application'));
+    }
+
+    public function renewSubmit(ApplicationRenewRequest $request)
+    {
+        $user = auth()->user();
+        $validated = $request->validated();
+        $application = PdoiApplication::find((int)$validated['application']);
+        if( !$application ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if( !$application || !$user->canAny(['renew'], $application) ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if( !PdoiApplicationStatusesEnum::canRenew((int)$application->status) ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $appService = new ApplicationService($application);
+        $registerEvent = $appService->registerEvent(ApplicationEventsEnum::RENEW_PROCEDURE->value, $validated);
+        if ( is_null($registerEvent) ) {
+            return back()->withInput()->with('danger', __('custom.system_error'));
+        }
+        return to_route('admin.application.view', ['item' => $application->id])
+            ->with('success', trans_choice('custom.applications', 1)." ".__('messages.updated_successfully_n'));
     }
 
     private function filters($request): array
