@@ -100,7 +100,19 @@ class PdoiApplicationController extends Controller
         return view('front.my_application.view', compact('application'));
     }
 
+    public function showMyFullHistory(Request $request, int $id = 0)
+    {
+        $item = $this->getFullRecord((int)$id);
+        if( !$item ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        if( !$request->user()->can('viewMy', $item) ) {
+            return back()->with('warning', __('messages.unauthorized'));
+        }
 
+        $application = (new PdoiApplicationResource($item))->resolve();
+        return view('front.my_application.view_full_history', compact('application'));
+    }
 
     public function create(Request $request)
     {

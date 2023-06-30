@@ -74,6 +74,12 @@ class PdoiApplicationResource extends JsonResource
                                 ($item->user->user_type == User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') )
                                 : 'Системен')
                             : '',
+                        'old_subject' => $item->old_resp_subject_id ? $item->oldSubject->subject_name : null,
+                        'new_subject' => $item->new_resp_subject_id ? $item->newSubject->subject_name : null,
+                        'court_decision' => $item->court_decision ? __('custom.court_decision.'.\App\Enums\CourtDecisionsEnum::keyByValue((int)$item->court_decision)) : null,
+                        'end_date' => !is_null($item->event_end_date) ? displayDate($item->event_end_date) : null,
+                        'text' => $item->add_text,
+                        'files' => (new FileCollection($item->files))->resolve(),
                     ];
                 })->toArray() : [],
         ];

@@ -59,6 +59,27 @@ class PdoiApplicationController extends Controller
         return $this->view('admin.applications.view', compact('item', 'categories'));
     }
 
+    public function showFullHistory(Request $request, int $id = 0): \Illuminate\View\View
+    {
+        $item = PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations',
+            'categories', 'categories.translations', 'profileType', 'profileType.translations', 'country',
+            'country.translations', 'area', 'area.translations', 'municipality', 'municipality.translations',
+            'settlement', 'settlement.translations', 'currentEvent', 'currentEvent.event', 'currentEvent.event.nextEvents',
+            'currentEvent.event.nextEvents.extendTimeReason', 'currentEvent.event.nextEvents.extendTimeReason.translation'])
+            ->find((int)$id);
+        if( !$item ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        $user = auth()->user();
+        if( !$user->can('view', $item) ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $categories = Category::optionsList();
+
+        return $this->view('admin.applications.view_full_history', compact('item', 'categories'));
+    }
+
     public function addCategory(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         if( !$request->filled('categories') ) {
@@ -212,6 +233,8 @@ class PdoiApplicationController extends Controller
         return to_route('admin.application.view', ['item' => $application->id])
             ->with('success', trans_choice('custom.applications', 1)." ".__('messages.updated_successfully_n'));
     }
+
+
 
     private function filters($request): array
     {

@@ -3,24 +3,9 @@
 @section('content')
     <section class="content container">
         <div class="page-title mb-md-3 mb-2 px-5">
-            <h3 class="b-1 text-center">{{ $application['my_title'] }}</h3>
+            <h3 class="b-1 text-center">{{ __('custom.full_history') }}: {{ $application['my_title'] }}</h3>
         </div>
         <div class="card card-light mb-4">
-            <div class="card-header app-card-header p-0 pt-1 border-bottom-0">
-                <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="application-tab" data-bs-toggle="tab" data-bs-target="#application" role="button" aria-controls="application" aria-selected="true">{{ trans_choice('custom.applications',1) }}</a>
-                    </li>
-                    @if(!empty($application['response_date']))
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="answer-tab" data-bs-toggle="tab" data-bs-target="#answer" role="button" aria-controls="answer" aria-selected="false">{{ __('custom.answer') }}</a>
-                        </li>
-                    @endif
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="button" aria-controls="history" aria-selected="false">{{ __('custom.history') }}</a>
-                    </li>
-                </ul>
-            </div>
             <div class="card-body">
                 <div class="tab-content" id="custom-tabs-three-tabContent">
                     <div class="tab-pane fade active show" id="application" role="tabpanel" aria-labelledby="application-tab">
@@ -31,10 +16,6 @@
                             <div class="col-md-3 col-12 fw-bold mb-2">{{ __('custom.date_apply') }}: <span class="text-primary">{{ displayDate($application['created_at']) }}</span></div>
                             <div class="col-md-3 col-12 fw-bold mb-2">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($application['term']) }}</span></div>
                             <div class="col-md-12 col-12 fw-bold mb-2">{{ trans_choice('custom.categories', 2) }}: <span class="text-primary">@if(sizeof($application['themes'])){{ implode(';', $application['themes']) }}@else{{ '---' }}@endif</span></div>
-                            <div class="col-md-12 col-12 fw-bold mb-2">
-                                <a href="{{ route('application.my.show.history', ['id' => $application['id']]) }}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square fw-bold me-1"></i>{{ __('custom.application.full_history') }}</a>
-                            </div>
-
                         </div>
                         <hr>
                         <div class="row">
@@ -124,64 +105,69 @@
                                 @endif
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                    @if(!empty($application['response_date']))
-                        <div class="tab-pane fade" id="answer" role="tabpanel" aria-labelledby="answer-tab">
-                            <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
-                            {!! html_entity_decode($application['response']) !!}
-                            @if(isset($application['final_files']) && isset($application['final_files']['data']) && sizeof($application['final_files']['data']))
-                                <hr>
-                                <p class="my-1" style="font-size: 14px;"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
-                                <table class="table table-sm mе-4">
-                                    <tbody>
-                                    @foreach($application['final_files']['data'] as $file)
-                                        <tr>
-                                            <td>
-                                                {{ $loop->index + 1 }}
-                                                <a class="btn btn-sm btn-secondary ms-2" type="button" href="{{ route('download.file', ['file' => $file['id']]) }}">
-                                                    <i class="fas fa-download me-1 download-file" data-file="$file->id" role="button"
-                                                       data-toggle="tooltip" title="{{ __('custom.download') }}"></i>
-                                                </a>
-                                            </td>
-                                            <td>{{ !empty($file['description']) ? $file['description'] : 'Няма описание' }}</td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
+
+                            <h5 class="app-title-bg py-1 px-2 mb-4">{{ trans_choice('custom.events',2) }}</h5>
+                            @if(isset($application['events']) && sizeof($application['events']))
+                                @foreach($application['events'] as $event)
+                                    <div class="col-12 mb-md-4 mb-3">
+                                        <div class="row border border-1 rounded-1 p-3">
+                                            <span class="font-weight-bold ps-0"><i class="far fa-calendar-check me-2"></i>{{ $event['name'] }}</span>
+                                            <hr>
+                                            <div class="col-md-2 col-12 fw-semibold">{{ __('custom.date') }}:  <span class="text-primary">{{ $event['date'] }}</span></div>
+                                            <div class="col-md-8 col-12 fw-semibold">{{ trans_choice('custom.users', 1) }}: <span class="text-primary fw-normal">{{ $event['user_name'] }}</span> @if(!empty($event['user_type']))<span class="fst-italic text-primary fw-normal">({{ $event['user_type'] }})</span>@endif</div>
+                                            @if(!is_null($event['old_subject']) || !is_null($event['new_subject']))
+                                                <div class="col-12 mt-2"></div>
+                                                @if(!is_null($event['old_subject']))
+                                                    <div class="col-md-6 col-12 fw-semibold">{{ __('custom.old_pdoi_subject') }}:  <span class="text-primary fw-normal">{{ $event['old_subject'] }}</span></div>
+                                                @endif
+                                                @if(!is_null($event['new_subject']))
+                                                    <div class="col-md-6 col-12 fw-semibold">{{ __('custom.new_pdoi_subject') }}:  <span class="text-primary fw-normal">{{ $event['new_subject'] }}</span></div>
+                                                @endif
+                                            @endif
+                                            @if(!is_null($event['court_decision']))
+                                                <div class="col-12 fw-semibold mt-2">{{ __('custom.decision') }}:</div>
+                                                <div class="col-12 p-3">{{ $event['court_decision'] }}</div>
+                                            @endif
+                                            @if(!is_null($event['end_date']))
+                                                <div class="col-12 fw-semibold mt-2">{{ __('custom.end_date') }}:</div>
+                                                <div class="col-12 p-3">{{ $event['end_date'] }}</div>
+                                            @endif
+                                            @if(!empty($event['text']))
+                                                <div class="col-12 fw-semibold mt-2">{{ __('custom.additional_info') }}:</div>
+                                                <div class="col-12 p-3">{!! html_entity_decode($event['text']) !!}</div>
+                                            @endif
+                                            @if(isset($event['files']) && isset($event['files']['data']) && sizeof($event['files']['data']))
+                                                <div class="col-12 fw-semibold mt-2">{{ trans_choice('custom.documents', 2) }}:</div>
+                                                <table class="table table-sm mt-2">
+                                                    <tbody>
+                                                    @foreach($event['files']['data'] as $ef)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $loop->index + 1 }}
+                                                                <a class="btn btn-sm btn-secondary ml-2" type="button" href="{{ route('admin.download.file', ['file' => $ef['id']]) }}">
+                                                                    <i class="fas fa-download me-1 download-file" data-file="$file->id" role="button"
+                                                                       data-toggle="tooltip" title="{{ __('custom.download') }}"></i>
+                                                                </a>
+                                                            </td>
+                                                            <td>{{ !empty($ef['description']) ? $ef['description'] : 'Няма описание' }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <tr><td colspan="3">{{ __('custom.no_results') }}</td></tr>
                             @endif
                         </div>
-                    @endif
-                    <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-                        <table class="table table-sm table-bordered table-responsive">
-                            <thead>
-                            <tr>
-                                <th>{{ __('custom.date') }}</th>
-                                <th>{{ trans_choice('custom.process', 1) }}</th>
-                                <th>{{ trans_choice('custom.users', 1) }}</th>
-                            </tr>
-                            </thead>
-                            <thead>
-                                @if(isset($application['events']) && sizeof($application['events']))
-                                    @foreach($application['events'] as $event)
-                                        <tr>
-                                            <td>{{ $event['date'] }}</td>
-                                            <td>{{ $event['name'] }}</td>
-                                            <td><a href="">{{ $event['user_name'] }}</a>
-                                                @if(!empty($event['user_type']))<span class="fst-italic">({{ $event['user_type'] }})</span>@endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr><td colspan="3">{{ __('custom.no_results') }}</td></tr>
-                                @endif
-                            </thead>
-                        </table>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-6 col-md-offset-3">
                         <a href="{{ url()->previous() }}" class="btn btn-sm btn-primary">{{ __('custom.back') }}</a>
+                        <button class="btn btn-sm btn-success" href="" onclick="window.print();return false;"><i class="text-white fas fa-print me-1"></i>{{ __('custom.print') }}</button>
                     </div>
                 </div>
             </div>

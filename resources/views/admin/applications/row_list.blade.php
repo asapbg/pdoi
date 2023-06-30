@@ -25,7 +25,7 @@
                title="{{ __('custom.edit') }}">
                 <i class="fa fa-edit"></i>
             </a>
-            <a href="/application-full-history.html"
+            <a href="{{ route('admin.application.history', [$item->id ]) }}"
                class="btn btn-sm btn-warning"
                data-toggle="tooltip" title=""
                data-original-title="{{ __('custom.application.full_history') }}">

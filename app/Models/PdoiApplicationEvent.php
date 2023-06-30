@@ -31,6 +31,16 @@ class PdoiApplicationEvent extends Model
             ->where('code_object', '=', File::CODE_OBJ_EVENT);
     }
 
+    public function oldSubject(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiResponseSubject::class, 'id' , 'old_resp_subject_id');
+    }
+
+    public function newSubject(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiResponseSubject::class, 'id' , 'new_resp_subject_id');
+    }
+
     public function visibleFiles(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(File::class, 'id_object', 'id')
