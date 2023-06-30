@@ -132,7 +132,9 @@ class CommonController extends Controller
     public function downloadFile(Request $request, File $file)
     {
         $user = $request->user();
-        if( !$user->can('view', $file->application) ) {
+        $application = $file->code_object == File::CODE_OBJ_APPLICATION ? $file->application : $file->event->application;
+
+        if( !$user->can('download', $file) ) {
             abort(Response::HTTP_NOT_FOUND);
         }
         if (Storage::disk('local')->has($file->path)) {

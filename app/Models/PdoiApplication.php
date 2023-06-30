@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ApplicationEventsEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Traits\FilterSort;
 use Carbon\Carbon;
@@ -110,6 +111,12 @@ class PdoiApplication extends ModelActivityExtend
     public function currentEvent(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(PdoiApplicationEvent::class, 'pdoi_application_id','id')->latestOfMany();
+    }
+
+    public function lastFinalEvent(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiApplicationEvent::class, 'pdoi_application_id','id')
+            ->where('event_type', ApplicationEventsEnum::FINAL_DECISION->value)->latestOfMany();
     }
 
     public function events(): \Illuminate\Database\Eloquent\Relations\HasMany

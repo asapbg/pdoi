@@ -22,4 +22,9 @@ class File extends Model
     {
         return $this->hasOne(PdoiApplication::class, 'id', 'id_object');
     }
+
+    public function event(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiApplicationEvent::class, 'id', 'id_object');
+    }
 }

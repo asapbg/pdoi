@@ -130,6 +130,26 @@
                         <div class="tab-pane fade" id="answer" role="tabpanel" aria-labelledby="answer-tab">
                             <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
                             {!! html_entity_decode($application['response']) !!}
+                            @if(isset($application['final_files']) && isset($application['final_files']['data']) && sizeof($application['final_files']['data']))
+                                <hr>
+                                <p class="my-1" style="font-size: 14px;"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
+                                <table class="table table-sm mе-4">
+                                    <tbody>
+                                    @foreach($application['final_files']['data'] as $file)
+                                        <tr>
+                                            <td>
+                                                {{ $loop->index + 1 }}
+                                                <a class="btn btn-sm btn-secondary ms-2" type="button" href="{{ route('download.file', ['file' => $file['id']]) }}">
+                                                    <i class="fas fa-download me-1 download-file" data-file="$file->id" role="button"
+                                                       data-toggle="tooltip" title="{{ __('custom.download') }}"></i>
+                                                </a>
+                                            </td>
+                                            <td>{{ !empty($file['description']) ? $file['description'] : 'Няма описание' }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
                         </div>
                     @endif
                     <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">

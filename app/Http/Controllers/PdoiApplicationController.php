@@ -335,7 +335,7 @@ class PdoiApplicationController extends Controller
         return PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations',
             'categories', 'categories.translations', 'profileType', 'profileType.translations', 'country',
             'country.translations', 'area', 'area.translations', 'municipality', 'municipality.translations',
-            'settlement', 'settlement.translations', 'events', 'events.event'])
+            'settlement', 'settlement.translations', 'events', 'events.user', 'events.event'])
             ->find((int)$id);
     }
 }

@@ -108,7 +108,7 @@
                                 <table class="table table-light table-sm table-bordered mb-4">
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th></th>
                                         <th>{{ __('front.file_name') }}</th>
                                         <th>{{ __('front.description') }}</th>
                                         <th>{{ __('custom.actions') }}</th>
@@ -116,9 +116,9 @@
                                     </thead>
                                     <tbody>
                                         @if($item->files->count())
-                                            @foreach($item->files as $file)
+                                            @foreach($item->files as $key => $file)
                                                 <tr>
-                                                    <td>1</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $file->filename }}</td>
                                                     <td>{{ $file->description }}</td>
                                                     <td>
@@ -186,6 +186,26 @@
                             <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
                                 <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $item->response_date }}</p>
                                 {!! html_entity_decode($item->response) !!}
+                                @if($item->lastFinalEvent && $item->lastFinalEvent->visibleFiles->count())
+                                    <hr>
+                                    <p class="my-1" style="font-size: 14px;"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
+                                    <table class="table table-sm mb-4">
+                                        <tbody>
+                                        @foreach($item->lastFinalEvent->visibleFiles as $file)
+                                            <tr>
+                                                <td>
+                                                    {{ $loop->index + 1 }}
+                                                    <a class="btn btn-sm btn-secondary ml-2" type="button" href="{{ route('admin.download.file', ['file' => $file->id]) }}">
+                                                        <i class="fas fa-download me-1 download-file" data-file="$file->id" role="button"
+                                                           data-toggle="tooltip" title="{{ __('custom.download') }}"></i>
+                                                    </a>
+                                                </td>
+                                                <td>{{ !empty($file->description) ? $file->description : 'Няма описание' }}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                @endif
                             </div>
                         @endif
                         <div class="tab-pane fade" id="custom-tabs-three-messages" role="tabpanel" aria-labelledby="custom-tabs-three-messages-tab">

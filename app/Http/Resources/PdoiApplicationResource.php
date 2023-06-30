@@ -53,6 +53,7 @@ class PdoiApplicationResource extends JsonResource
             'address' => $this->address,
             'address_second' => $this->address_second,
             'files' => (new FileCollection($this->files))->resolve(),
+            'final_files' => $this->lastFinalEvent && $this->lastFinalEvent->visibleFiles->count() ? (new FileCollection($this->lastFinalEvent->visibleFiles))->resolve() : [],
             'themes' => $this->categories->count() ?
                 $this->categories->map(function ($item) {
                     return $item->name;
@@ -62,7 +63,7 @@ class PdoiApplicationResource extends JsonResource
                     return [
                         'name' => $item->event->name,
                         'date' => displayDate($item->event_date),
-                        'user_name' => auth()->user() ?
+                        'user_name' => auth()->user() && $item->user ?
                             (auth()->user()->id == $item->user_reg ? 'Аз'
                                 : ($item->user->user_type == User::USER_TYPE_INTERNAL ? $item->user->names
                                     : ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ) )
