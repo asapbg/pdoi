@@ -9,6 +9,11 @@
 
             <div class="card">
                 <div class="card-body table-responsive">
+                    <div class="text-right">
+                        <a href="{{ route('admin.application.create') }}" class="btn btn-sm btn-success d-inline-block">
+                            <i class="fas fa-plus-circle"></i> {{ __('custom.application.add_external') }}
+                        </a>
+                    </div>
                     <div id="legend" class="mb-3">
                         <div class="d-inline-block app-f-small"><span class="badge badge-info ms-2 lh-1">&nbsp;</span> {{ __('custom.forwarded') }}</div>
                         <div class="d-inline-block app-f-small"><span class="badge badge-success ms-2 lh-1">&nbsp;</span> {{ __('custom.in_process') }}</div>

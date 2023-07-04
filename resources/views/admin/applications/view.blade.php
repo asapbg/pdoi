@@ -23,12 +23,17 @@
                     <div class="tab-content" id="custom-tabs-three-tabContent">
                         <div class="tab-pane fade active show" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
                             <div class="row">
+                                @if($item->manual)
+                                    <div class="col-12 bg-info mb-3">{{ __('custom.application.manual_application') }}</div>
+                                @endif
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.reg_number') }}:  <span class="text-primary">{{ $item->application_uri }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.status') }}:  <span class="text-primary">{{ $item->statusName }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.last_event') }}:  <span class="text-primary">{{ $item->currentEvent->event->name }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $item->responseSubject->subject_name }}</span></div>
-                                <div class="col-md-4 col-12 fw-bold">{{ __('custom.date_apply') }}: <span class="text-primary">{{ displayDate($item->created_at) }}</span></div>
-                                <div class="col-md-4 col-12 fw-bold">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($item->response_end_time) }}</span></div>
+                                <div class="col-md-4 col-12 fw-bold">{{ !$item->manual ? __('custom.date_apply') : __('custom.date_public') }}: <span class="text-primary">{{ displayDate($item->created_at) }}</span></div>
+                                @if(!$item->manual)
+                                    <div class="col-md-4 col-12 fw-bold">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($item->response_end_time) }}</span></div>
+                                @endif
                             </div>
                             <hr>
                             <div class="row">
@@ -51,7 +56,7 @@
                                 </div>
                                 <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                                     <label class="form-label fw-semibold">{{ __('custom.name') }}: </label>
-                                    <input class="form-control form-control-sm" type="text" value="{{ $item->names }}" disabled>
+                                    <input class="form-control form-control-sm" type="text" value="{{ $item->full_names }}" disabled>
                                 </div>
                                 <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                                     <label class="form-label fw-semibold">{{ __('custom.email') }}: </label>
@@ -71,19 +76,19 @@
                                 <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                                     <label class="form-label fw-semibold">{{ trans_choice('custom.area',1) }}: </label>
                                     <select class="form-control form-control-sm" disabled>
-                                        <option>{{ $item->area->ime }}</option>
+                                        <option>{{ $item->area ? $item->area->ime : '--' }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                                     <label class="form-label fw-semibold">{{ trans_choice('custom.municipality',1) }}: </label>
                                     <select class="form-control form-control-sm" disabled>
-                                        <option>{{ $item->municipality->ime }}</option>
+                                        <option>{{ $item->municipality ? $item->municipality->ime : '' }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                                     <label class="form-label fw-semibold">{{ trans_choice('custom.settlement',1) }}: </label>
                                     <select class="form-control form-control-sm" disabled>
-                                        <option>{{ $item->settlement->ime }}</option>
+                                        <option>{{ $item->settlement ? $item->settlement->ime : '' }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group form-group-sm col-md-2 col-12 mb-3">

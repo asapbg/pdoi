@@ -26,7 +26,7 @@ class ApplicationService
         $this->userId = auth()->user() ? auth()->user()->id : null;
     }
 
-    public function registerEvent(int $eventType, $data = []): ?PdoiApplicationEvent
+    public function registerEvent(int $eventType, $data = [], $disableCommunication = false): ?PdoiApplicationEvent
     {
         $newEvent = null;
         DB::beginTransaction();
@@ -106,7 +106,9 @@ class ApplicationService
                         }
                         //Set communication and status
                         $this->setApplicationStatus($eventConfig, $data);
-                        $this->scheduleCommunication($eventConfig);
+                        if(!$disableCommunication) {
+                            $this->scheduleCommunication($eventConfig);
+                        }
                 }
 
                 DB::commit();

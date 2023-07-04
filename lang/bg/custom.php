@@ -210,6 +210,7 @@ return [
     'date_request'                     => 'Предаден на',
     'date_received'                    => 'Получен на',
     'date_created'                     => 'Дата на създаване',
+    'date_public'                       => 'Дата на публикуване',
     'date_apply'                       => 'Дата на подаване',
     'date_registration'                => 'Дата на регистрация',
     'are_you_sure_to_delete'           => 'Сигурни ли сте, че искате да изтриете',
@@ -347,6 +348,8 @@ return [
     'category_not_selected'                     => 'Не сте избрали категория',
     'forwarded'                                 => 'Препратено по компетентност',
     'in_process'                                => 'В процес на обработка',
+    'application.add_external'                  => 'Вписване и публикуване на заявление',
+    'application.create'                        => 'Публикуване на заявление постъпило извън платформата',
     'application.renew'                         => 'Възобновяване на заявление',
     'application.renew.procedure_info'          => 'Посочи данни за съдебно решение по процедурата',
     //application statuses
@@ -362,6 +365,7 @@ return [
     'application.status.RENEWED'                   => 'Възобновено',
     'application.request_for_info'                   => 'Искане за достъп до обществена информация',
     'application.full_history'                   => 'Електронно досие',
+    'application.manual_application'            => 'Получено извън плаформата',
     //events names
     'event.SEND'                                => 'Подаване на заявление',
     'event.SEND_TO_RKS'                         => 'Изпратено към деловодна система',

@@ -61,6 +61,17 @@ class PdoiApplicationPolicy
     }
 
     /**
+     * Determine whether the user can create manual models.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function createManual(User $user): \Illuminate\Auth\Access\Response|bool
+    {
+        return $user->can('manage.*') || $user->canany(['application.*', 'application.edit']);
+    }
+
+    /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
@@ -89,6 +100,7 @@ class PdoiApplicationPolicy
     public function renew(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
     {
         return PdoiApplicationStatusesEnum::canRenew($pdoiApplication->status)// status allow renewing
+            && !$pdoiApplication->manual
             && $pdoiApplication->currentEvent->event->app_event != ApplicationEventsEnum::RENEW_PROCEDURE->value //check if already has renewed event with rejection
             && (
                 $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])

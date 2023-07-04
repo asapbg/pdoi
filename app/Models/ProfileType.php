@@ -49,10 +49,12 @@ class ProfileType extends ModelActivityExtend implements TranslatableContract
     public static function optionsList(int $legal_form = 0): \Illuminate\Support\Collection
     {
         return DB::table('profile_type')
-            ->select(['profile_type.id', 'profile_type_translations.name'])
+            ->select(['profile_type.id', 'profile_type_translations.name', DB::raw('user_legal_form as legal_form')])
             ->join('profile_type_translations', 'profile_type_translations.profile_type_id', '=', 'profile_type.id')
             ->where('profile_type.active', '=', 1)
-            ->where('profile_type.user_legal_form', '=', (int)$legal_form)
+            ->when((int)$legal_form, function ($q) use($legal_form){
+                return $q->wheer('profile_type.user_legal_form', '=', (int)$legal_form);
+            })
             ->where('profile_type_translations.locale', '=', app()->getLocale())
             ->orderBy('profile_type_translations.name', 'asc')
             ->get();

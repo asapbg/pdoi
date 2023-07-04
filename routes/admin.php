@@ -156,6 +156,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
     //Applications
     Route::controller(AdminPdoiApplicationController::class)->group(function () {
         Route::get('/applications',                'index')->name('application')->middleware('can:viewAny,App\Models\PdoiApplication');
+        Route::match(['get', 'post'],'/applications/create',         'create')->name('application.create');
         Route::get('/applications/view/{item?}',         'show')->name('application.view');
         Route::get('/applications/renew/{item?}',         'renew')->name('application.renew');
         Route::get('/applications/full-history/{item?}',         'showFullHistory')->name('application.history');

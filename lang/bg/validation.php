@@ -273,6 +273,11 @@ return [
         'court'                     => 'Съдебен орган (РЗС)',
         'add_text'                  => 'Допълнителна информация',
         'decision'                  => 'Решение',
-        'file_decision'                  => 'Файл (съдебно решение)',
+        'file_decision'             => 'Файл (съдебно решение)',
+        'full_names'                => 'Имена',
+        'applicant_type'            => 'Тип профил',
+        'country_id'                => 'Държава',
+        'request'                   => 'Запитване',
+        'response_subject_id'       => 'Задължен субект',
     ],
 ];

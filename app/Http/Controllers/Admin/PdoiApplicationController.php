@@ -5,15 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\ApplicationEventsEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminCreateApplicationRequest;
 use App\Http\Requests\ApplicationRenewRequest;
 use App\Http\Requests\RegisterEventForwardRequest;
 use App\Http\Requests\RegisterEventRequest;
 use App\Models\Category;
+use App\Models\Country;
+use App\Models\EkatteArea;
+use App\Models\EkatteMunicipality;
+use App\Models\EkatteSettlement;
 use App\Models\Event;
+use App\Models\File;
 use App\Models\PdoiApplication;
+use App\Models\ProfileType;
 use App\Services\ApplicationService;
+use App\Services\FileOcr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,6 +66,68 @@ class PdoiApplicationController extends Controller
         $categories = Category::optionsList();
 
         return $this->view('admin.applications.view', compact('item', 'categories'));
+    }
+
+    public function create(Request $request)
+    {
+        if( $request->isMethod('post') ) {
+            $appRequest = new AdminCreateApplicationRequest();
+            $validator = Validator::make($request->all(), $appRequest->rules());
+            if( $validator->fails() ){
+                return back()->withInput()->withErrors($validator->errors());
+            }
+
+            $validated = $validator->validated();
+            //TODO why files are missing
+            $application = new PdoiApplication();
+            if(!auth()->user()->can('createManual', $application) ){
+                abort(Response::HTTP_NOT_FOUND);
+            }
+
+            $validated['request'] = htmlentities(stripHtmlTags($validated['request']));
+
+            $eventData = [
+                'final_status' => $validated['status'],
+                'add_text' => $validated['response'],
+                'files' => $validated['files'] ?? [],
+                'file_description' => $validated['file_description'] ?? [],
+                'file_visible' => $validated['file_visible'] ?? [],
+            ];
+
+            foreach (['files', 'file_description', 'file_visible', 'status', 'response'] as $field) {
+                if(isset($validated[$field])) { unset($validated[$field]);}
+            }
+            DB::beginTransaction();
+            try {
+                $application->fill($validated);
+                $application->user_reg = auth()->user()->id;
+                $application->application_uri = round(microtime(true)).'-'. displayDate(Carbon::now());
+                $application->response_date = Carbon::now();
+                $application->status_date = Carbon::now();
+                $application->manual = 1;
+                $application->save();
+                $application->refresh();
+
+                $event = Event::find(ApplicationEventsEnum::FINAL_DECISION->value);
+                $appService = new ApplicationService($application);
+                $appService->registerEvent($event->app_event, $eventData, true);
+                DB::commit();
+                return redirect(route('admin.application'))->with('success', __('messages.created_successfully_m'));
+            } catch (\Exception $e){
+                DB::rollBack();
+                logError('Create manual application', 'data: '.json_encode($validated).' | Error: '.$e->getMessage());
+                return back()->withInput()->with('danger', __('custom.system_error'));
+            }
+        }
+
+        $profileTypes = ProfileType::optionsList();
+        $countries = Country::optionsList();
+        $areas = EkatteArea::optionsList();
+        $municipality = EkatteMunicipality::optionsList();
+        $settlements = EkatteSettlement::optionsList();
+        $subjects = optionsFromModel(PdoiApplication::optionsList());
+        return $this->view('admin.applications.create', compact('profileTypes','countries'
+            , 'areas', 'municipality', 'settlements', 'subjects'));
     }
 
     public function showFullHistory(Request $request, int $id = 0): \Illuminate\View\View
