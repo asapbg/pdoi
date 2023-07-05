@@ -8,6 +8,7 @@ use App\Models\RzsSection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -55,6 +56,13 @@ class CommonController extends Controller
                 $entity->syncPermissions([]);
             }
             $entity->$booleanType = $status;
+        }
+
+        if( $request->get('model') === 'ModelSection' ) {
+            //Clear menu cache
+            foreach (config('available_languages') as $locale) {
+                Cache::forget('menu_'.$locale['code']);
+            }
         }
 
         $entity->save();

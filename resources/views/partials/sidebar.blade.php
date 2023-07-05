@@ -62,6 +62,37 @@
                         @endcan
                     </li>
                 @endcanany
+{{--                Publick sections, menu and pages--}}
+                @canany(['manage.*', 'menu_section.*', 'menu_section.section', 'menu_section.page'])
+                    <li class="nav-item">
+                        <a href="#" class="nav-link @if(strstr(url()->current(), 'menu_section')) active @endif">
+                            <i class="nav-icon fas fa-ellipsis-v"></i>
+                            <p>{{ trans_choice('custom.menu_sections',2) }}<i class="fas fa-angle-left right"></i></p>
+                        </a>
+                        @canany(['manage.*', 'menu_section.*', 'menu_section.section'])
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.menu_section') }}"
+                                       class="nav-link @if(strstr(url()->current(), 'menu-section/section')) active @endif">
+                                        <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                        <p>{{ trans_choice('custom.menu_section.sections', 2) }}</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endcan
+                        @canany(['manage.*', 'menu_section.*', 'menu_section.page'])
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.page') }}"
+                                       class="nav-link @if(strstr(url()->current(), 'menu-section/page')) active @endif">
+                                        <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                        <p>{{ trans_choice('custom.menu_section.pages', 2) }}</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endcan
+                    </li>
+                @endcanany
 {{--                Nomenlatures--}}
                 @canany(['manage.*', 'administration.*', 'administration.system_classification'])
                     <li class="nav-header">{{ trans_choice('custom.nomenclatures', 2) }}</li>

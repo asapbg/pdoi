@@ -167,4 +167,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::post('/applications/new-event/store',         'storeNewEvent')->name('application.event.new.store');
     });
 
+    Route::controller(\App\Http\Controllers\Admin\MenuSectionController::class)->group(function () {
+        Route::get('/menu-section/section',                'index')->name('menu_section')->middleware('can:viewAny,App\Models\MenuSection');
+        Route::get('/menu-section/section/edit/{item?}',         'edit')->name('menu_section.edit');
+        Route::match(['post', 'put'], '/menu-section/section/store/{item?}',         'store')->name('menu_section.store');
+    });
+
+    Route::controller(\App\Http\Controllers\Admin\PageController::class)->group(function () {
+        Route::get('/menu-section/page',                'index')->name('page')->middleware('can:viewAny,App\Models\Page');
+        Route::get('/menu-section/page/edit/{item?}',         'edit')->name('page.edit');
+        Route::match(['post', 'put'], '/menu-section/page/store/{item?}',         'store')->name('page.store');
+    });
+
 });

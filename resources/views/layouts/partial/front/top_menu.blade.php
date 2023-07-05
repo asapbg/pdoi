@@ -21,6 +21,11 @@
                 <li class="nav-item px-1">
                     <a class="nav-link @if(in_array(request()->route()->getName(), ['application.show', 'application.list'])) active @endif" href="{{ route('application.list') }}" >{{ __('custom.search') }}</a>
                 </li>
+                @if(isset($menu_sections) && sizeof($menu_sections))
+                    @foreach($menu_sections as $ms)
+                        @include('front.partials.menu_section_link', ['section' => $ms])
+                    @endforeach
+                @endif
                 <li class="nav-item px-1">
                     <a class="nav-link" href="#">Документи</a>
                 </li>

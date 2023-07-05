@@ -42,6 +42,9 @@
     --breakpoint-xl: 1200px;
 
     --app-link:#72afd2;
+    --menu-drop-down-link:#212529;
+    --link-font-size:16px;
+    --p-font-size:14px;
 }
 
 @font-face {
@@ -66,6 +69,14 @@ body {
 
 .fs {
     font-size: 10px;
+}
+
+.a-fs {
+    font-size: var(--link-font-size);
+}
+
+.p-fs {
+    font-size: var(--p-font-size);
 }
 
 label.is_invalid {
@@ -97,6 +108,14 @@ li.select2-results__option:empty {
     background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(87,87,87,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#575757",GradientType=1);
 }
+.top-menu-nav .dropdown-menu a{
+    color: var(--menu-drop-down-link);
+}
+.top-menu-nav li.dropdown:hover > ul.dropdown-menu {
+    display:block;
+
+}
+
 .top-menu-nav ul > li, .top-menu-nav ul > li > a {
     color: #fff;
 }

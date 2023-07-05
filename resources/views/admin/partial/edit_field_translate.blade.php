@@ -14,6 +14,10 @@
 {{--                                   class="form-control form-control-sm @error($fieldName){{ 'is-invalid' }}@enderror"--}}
 {{--                                   value="{{ old($fieldName, ($item->id ? $item->translate($language['code'])->{$field} : '')) }}">--}}
                         @break
+                        @case('summernote')
+                        <textarea id="{{ $fieldName }}" name="{{ $fieldName }}"
+                                  class="form-control form-control-sm summernote @error($fieldName){{ 'is-invalid' }}@enderror">{{ old($fieldName, ($item->id ? $item->translate($language['code'])->{$field} : '')) }}</textarea>
+                        @break
                         @default
                             <input type="text" id="{{ $fieldName }}" name="{{ $fieldName }}"
                                    class="form-control form-control-sm @error($fieldName){{ 'is-invalid' }}@enderror"

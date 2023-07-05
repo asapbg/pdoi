@@ -2,7 +2,9 @@
 
 namespace App\View\Composers;
 
+use App\Models\MenuSection;
 use App\Models\Sector;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -34,6 +36,18 @@ class ViewServiceProvider extends ServiceProvider
                 ->get();
 
             $view->with('sectors', $sectors);
+        });
+
+        // Using closure based composers...
+        View::composer('layouts.partial.front.top_menu', function ($view) {
+            $currentMenuKey = 'menu_'.app()->getLocale();
+            $menu_sections = null;
+            if( is_null($menu_sections) ) {
+                $menu_sections = MenuSection::menu();
+                Cache::put($currentMenuKey, $menu_sections, 3600);
+            }
+
+            $view->with('menu_sections', $menu_sections);
         });
     }
 }

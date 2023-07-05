@@ -24,7 +24,6 @@ Route::get('/locale', function (Request $request) {
 //pdoi subjects modal
 Route::get('/get-pdoi-subjects', [CommonController::class, 'modalPdoiSubjects'])->name('modal.pdoi_subjects');
 
-
 //application
 Route::controller(PdoiApplicationFrontController::class)->group(function () {
     Route::get('/application','index')->name('application.list');
@@ -62,6 +61,10 @@ require_once('admin.php');
 Route::get('/debug-sentry', function () {
     throw new Exception('My first Sentry error!');
 });
+
+//Sections and pages
+Route::get('{slug}', [\App\Http\Controllers\HomeController::class, 'section'])->name('section');
+Route::get('{section_slug}/{slug}', [\App\Http\Controllers\HomeController::class, 'page'])->name('page');
 
 Route::fallback(function(){
     Log::channel('info')->info('Path not found; User ip: '.request()->ip().'; Url: '.request()->getPathInfo());

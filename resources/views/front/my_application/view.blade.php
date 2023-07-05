@@ -128,11 +128,11 @@
                     </div>
                     @if(!empty($application['response_date']))
                         <div class="tab-pane fade" id="answer" role="tabpanel" aria-labelledby="answer-tab">
-                            <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
+                            <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
                             {!! html_entity_decode($application['response']) !!}
                             @if(isset($application['final_files']) && isset($application['final_files']['data']) && sizeof($application['final_files']['data']))
                                 <hr>
-                                <p class="my-1" style="font-size: 14px;"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
+                                <p class="my-1 p-fs"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
                                 <table class="table table-sm mе-4">
                                     <tbody>
                                     @foreach($application['final_files']['data'] as $file)

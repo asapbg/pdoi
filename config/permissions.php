@@ -13,4 +13,7 @@
     'application.*' => 'Всички права',
     'application.view' => 'Достъп до Заявления (търсене и преглед)',
     'application.edit' => 'Обработка на заявления',
+    'menu_section.*' => 'Всички права',
+    'menu_section.section' => 'Управление на секции',
+    'menu_section.page' => 'Управление на страници',
 );

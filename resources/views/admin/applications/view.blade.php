@@ -189,11 +189,11 @@
                         </div>
                         @if(!empty($item->response_date))
                             <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
-                                <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $item->response_date }}</p>
+                                <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $item->response_date }}</p>
                                 {!! html_entity_decode($item->response) !!}
                                 @if($item->lastFinalEvent && $item->lastFinalEvent->visibleFiles->count())
                                     <hr>
-                                    <p class="my-1" style="font-size: 14px;"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
+                                    <p class="my-1 p-fs"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
                                     <table class="table table-sm mb-4">
                                         <tbody>
                                         @foreach($item->lastFinalEvent->visibleFiles as $file)

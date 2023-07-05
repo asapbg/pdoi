@@ -22,15 +22,15 @@
                         <div class="tab-pane fade active show" id="application" role="tabpanel" aria-labelledby="application-tab">
                             <div class="row">
                                 <div class="col-12 mb-3">
-                                    <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.reg_number') }}:</strong>
+                                    <p class="my-1 p-fs"><strong>{{ __('custom.reg_number') }}:</strong>
                                         {{ $application['uri'] }} | {{ $application['subject'] }} | {{ $application['statusName'] }} |
                                         <strong>{{ __('custom.date_apply') }}:</strong> {{ displayDate($application['created_at'] )}} |
                                         <strong>{{ __('custom.term') }}:</strong>{{ displayDate($application['term'] ) }}<br>
                                     </p>
-                                    <p class="my-1" style="font-size: 14px;">
+                                    <p class="my-1 p-fs">
                                         <a href="#"><i class="fas fa-user text-dark fw-bold me-1"></i> {{ $application['user_name'] }}</a> |
                                     </p>
-                                    <p style="font-size: 14px;">
+                                    <p class="p-fs">
                                         @if($application['phone'] && !empty($application['phone']))<i class="fas fa-phone text-dark fw-bold me-1"></i> {{ $application['phone'] }} |@endif
                                         @if($application['email'] && !empty($application['email']))<i class="fas fa-envelope text-dark fw-bold me-1"></i> {{ $application['email'] }} |@endif
                                         @if($application['address'] && !empty($application['address']))<i class="fas fa-location text-dark fw-bold me-1"></i> {{ $application['address'] }} |@endif
@@ -43,11 +43,11 @@
                                     <div class="col-12 mb-3">
                                         <h4>{{ __('custom.decision') }}</h4>
                                         <hr>
-                                        <p class="my-1" style="font-size: 14px;"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
+                                        <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
                                         {!! html_entity_decode($application['response']) !!}
                                         @if(isset($application['final_files']) && isset($application['final_files']['data']) && sizeof($application['final_files']['data']))
                                             <hr>
-                                            <p class="my-1" style="font-size: 14px;"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
+                                            <p class="my-1 p-fs"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
                                             <table class="table table-sm mе-4">
                                                 <tbody>
                                                 @foreach($application['final_files']['data'] as $file)
@@ -76,7 +76,7 @@
                                             <img alt="twitter" src="https://platform-cdn.sharethis.com/img/twitter.svg">
                                         </div>
                                     </div>
-                                    <p class="my-1 d-inline-block" style="font-size: 14px;"><i class="fas fa-eye text-primary me-1"></i>0</p>
+                                    <p class="my-1 d-inline-block p-fs"><i class="fas fa-eye text-primary me-1"></i>0</p>
                                 </div>
                             </div>
                         </div>

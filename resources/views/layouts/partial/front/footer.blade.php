@@ -6,11 +6,11 @@
     </div>
 
     <div class="row footer-content">
-        <div class="col-md-2">
+        <div class="col-md-2 col-6">
             <img src="{{ asset('img/eu_white.png') }}" alt="EU" class="img-fluid"/>
         </div>
-        <div class="col-md-8"></div>
-        <div class="col-md-2">
+        <div class="col-md-8 d-md-block d-none"></div>
+        <div class="col-md-2 col-6">
             <img src="{{ asset('img/op_white.png') }}" alt="OP" class="img-fluid"/>
         </div>
     </div>

@@ -8,7 +8,7 @@
                 <img src="{{ asset('img/coat_arms.png') }}" width="110px" height="auto" alt="{{ __('custom.ministry') }}">
                 <div class="project_name align-self-center ps-2">
                     <h1>{{ mb_strtoupper(__('custom.ministry')) }}</h1>
-                    <h2>{{ __('custom.full_app_name') }}</h2>
+                    <h2 class="text-wrap">{{ __('custom.full_app_name') }}</h2>
                 </div>
             </div>
         </a>

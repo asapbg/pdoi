@@ -83,6 +83,10 @@ return [
     'reason_refusals'                   => 'Причина за отказ|Причини за отказ',
     'area'                              => 'Обалст|Области',
     'municipality'                      => 'Община|Общини',
+    'menu_section'                      => 'Публични секции',
+    'menu_sections'                      => 'Публична секция|Публични секции',
+    'pages'                              => 'Страница|Страници',
+    'page'                              => 'Страници',
     'settlement'                      => 'Населено място|Населени места',
     'profile_types'                    => 'Потребителски профил|Потребителски профили',
     'profile_type'                     => 'Потребителски профил|Потребителски профили',
@@ -246,6 +250,7 @@ return [
     'file_content'                              => 'Текст във файлове',
     'pdoi_applications'                         => 'Заявления',
     'applications'                              => 'Заявления',
+    'section'                                   => 'Секции',
     //
     'applicant'                                 => 'Заявител',
     'admin'                                     => 'Администратор',
@@ -288,6 +293,7 @@ return [
     'administration.rzs.'                       => 'Регистър на задължените субекти',
     'application.'                              => 'Обработка на заявления',
     'pdoi.'                                     => 'ПДОИ',
+    'menu_section.'                             => 'Публични секции',
     //users
     'users.type.1'                              => 'Вътрешен',
     'users.type.2'                              => 'Външен',
@@ -379,5 +385,8 @@ return [
     'court_decision.CANCEL'                     => 'Съдът отменя решението за отказ',
     'court_decision.CONFIRMS'                   => 'Съдът потвърждава решението за отказ',
     'court_decision.CHANGE'                     => 'Съдът изменя решението решението за отказ',
+    //menu sections
+    'menu_section.sections'                     => 'Секция|Секции',
+    'menu_section.pages'                        => 'Страница|Страници'
 ];
 
