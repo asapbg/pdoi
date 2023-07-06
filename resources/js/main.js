@@ -247,6 +247,18 @@ function ConfirmToggleBoolean(booleanType, entityId, message, title = false) {
     $("#modal-confirm").modal('show');
 }
 
+function formatBytes(bytes, decimals = 2) {
+    if (!+bytes) return '0 Bytes'
+
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+}
+
 $.fn.appendAttr = function(attrName, suffix) {
     this.attr(attrName, function(i, val) {
         return val + suffix;
@@ -593,5 +605,4 @@ $(document).ready(function (e) {
     //==========================
     // End MyModal
     //==========================
-
 })

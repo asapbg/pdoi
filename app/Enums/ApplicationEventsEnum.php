@@ -30,6 +30,13 @@ enum ApplicationEventsEnum: int
         ];
     }
 
+    public static function forwardGroupEvents(): array
+    {
+        return [
+            self::FORWARD->value,
+        ];
+    }
+
     // Return enum name by value
     public static function keyByValue($searchVal): string
     {

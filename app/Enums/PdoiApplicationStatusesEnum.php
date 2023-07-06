@@ -54,7 +54,8 @@ enum PdoiApplicationStatusesEnum: int
             self::APPROVED,
             self::PART_APPROVED,
             self::NOT_APPROVED,
-            self::INFO_NOT_EXIST
+            self::INFO_NOT_EXIST,
+            self::FORWARDED
         ];
     }
 
@@ -74,6 +75,14 @@ enum PdoiApplicationStatusesEnum: int
         return in_array($value, [
             self::NOT_APPROVED->value
             , self::PART_APPROVED->value
+        ]);
+    }
+
+    public static function canForward($value): bool
+    {
+        return in_array($value, [
+            self::IN_PROCESS->value,
+            self::FORWARDED->value,
         ]);
     }
 }

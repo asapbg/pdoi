@@ -236,19 +236,9 @@ class PdoiApplicationController extends Controller
                     $appService->communicationCallback(json_encode(['notification_id' => $lastNotify[0]]));
                 }
 
-
-                $fileName = 'zayavlenie_ZDOI_'.displayDate($newApplication->created_at).'.pdf';
-                $pdfFile = Pdf::loadView('pdf.application_doc', ['application' => $newApplication]);
-                Storage::disk('local')->put($newApplication->fileFolder.$fileName, $pdfFile->output());
-                $newFile = new File([
-                    'code_object' => File::CODE_OBJ_APPLICATION,
-                    'filename' => $fileName,
-                    'content_type' => 'application/pdf',
-                    'path' => $newApplication->fileFolder.$fileName,
-                ]);
-                $newApplication->files()->save($newFile);
-
+                $appService->generatePdf($newApplication);
                 $newApplication->refresh();
+
                 //return info for each generated application
                 $data['applicationsInfo'][] = array(
                     'reg_number' => $newApplication->application_uri,
@@ -332,7 +322,7 @@ class PdoiApplicationController extends Controller
             'subjects' => array(
                 'type' => 'subjects',
                 'multiple' => false,
-                'options' => optionsFromModel(PdoiApplication::optionsList(), true,''),
+                'options' => optionsFromModel(PdoiResponseSubject::simpleOptionsList(), true,''),
                 'value' => $request->input('subjects') ?? [],
                 'default' => '',
                 'placeholder' => trans_choice('custom.pdoi_response_subjects',1),

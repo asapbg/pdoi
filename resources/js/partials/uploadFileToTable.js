@@ -18,7 +18,7 @@ $(function() {
                         //add file row
                         fileListId.find('tbody').append('<tr class="file-row" id="file-row-' + fileNumber + '" style="vertical-align: middle;">\n' +
                             '                            <td></td>\n' +
-                            '                            <td><span class="filename"></span>' + fileName + '</td>\n' +
+                            '                            <td><span class="filename"></span>'+ fileName +'<span class="file-error d-block text-danger"></span></td>\n' +
                             '                            <td>\n' +
                             '                                <input type="text" name="file_description[]" class="form-control form-control-sm" value="">\n' +
                             '                            </td>\n' +
@@ -37,6 +37,9 @@ $(function() {
                         //clone input
                         let newFileInput = uploadInput.clone(true);
                         newFileInput.attr('name', 'files[]');
+                        if(typeof uploadInput.data('check') != 'undefined' && parseInt(uploadInput.data('check')) === 1 ) {
+                            newFileInput.addClass('file-validate');
+                        }
                         newFileInput.removeAttr('id');
                         $('#file-row-' + fileNumber + ' td span.filename').html(newFileInput);
                         //clear tmp input

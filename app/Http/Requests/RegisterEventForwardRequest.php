@@ -24,20 +24,29 @@ class RegisterEventForwardRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'event' => ['nullable', 'numeric'],
+            'in_platform' => ['required', 'numeric'],
             'application' => ['nullable', 'numeric', 'exists:pdoi_application,id'],
-            'new_resp_subject_id' => ['required', 'array', 'min:1'],
-            'new_resp_subject_id.*' => ['numeric', 'exists:pdoi_response_subject,id'],
-            'subject-notes' => ['required', 'array', 'min:1'],
-            'subject-notes.*' => ['required', 'string', 'min:3'],
-            'add_text' => ['nullable', 'string'],
+            'old_subject' => ['required', 'numeric', 'exists:pdoi_response_subject,id'],
+            'subject_user_request' => ['required', 'string', 'min:3'],
+            'add_text' => ['nullable', 'string', 'min:3'],
+            'current_subject_user_request' => ['nullable', 'string', 'min:3'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
             'files' => ['array'],
             'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), 'mimes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS)],
-            'file_visible' => ['array'],
-            'file_visible.*' => ['nullable', 'string', 'max:255'],
         ];
+
+        $inPlatform = (int)request()->input('in_platform');
+        if( $inPlatform ) {
+            $rules['new_resp_subject_id'] = ['required', 'numeric', 'exists:pdoi_response_subject,id'];
+        } else {
+            $rules['new_resp_subject_eik'] = ['required', 'string', 'max:13'];
+            $rules['new_resp_subject_name'] = ['required', 'string', 'max:255'];
+            $rules['subject_is_child'] = ['nullable', 'numeric'];
+        }
+
+        return $rules;
     }
 }

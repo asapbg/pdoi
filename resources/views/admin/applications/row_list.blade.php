@@ -1,7 +1,7 @@
 <tr>
     <td class="bg-{{ $item->statusStyle }}">{{ $item->id }}</td>
     <td>{{ $item->application_uri }}
-        @if($item->parent)
+        @if($item->parent_id)
             @canany(['update', 'view'], $item)
                 <a class="app-f-small" href="{{ route('admin.application.view', ['item' => $item->parent->id]) }}" target="_blank">
                     <i class="fas fa-external-link-alt text-primary"

@@ -79,6 +79,7 @@ class PdoiApplication extends ModelActivityExtend
 
     public function scopeByUserSubjects($query)
     {
+        //TODO fix me add parent clause to get application without subject id add clause in application policy too
         //if user has full permission skip else
         //filter list by user subject(rzs)
         $user = auth()->user();
@@ -100,7 +101,7 @@ class PdoiApplication extends ModelActivityExtend
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(PdoiApplication::class, 'parent_id', 'id');
+        return $this->hasOne(PdoiApplication::class, 'id', 'parent_id');
     }
 
     public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -167,16 +168,5 @@ class PdoiApplication extends ModelActivityExtend
     public function profileType(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');
-    }
-
-    public static function optionsList(): \Illuminate\Support\Collection
-    {
-        return DB::table('pdoi_response_subject')
-            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name'])
-            ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
-            ->where('pdoi_response_subject.active', '=', 1)
-            ->where('pdoi_response_subject_translations.locale', '=', app()->getLocale())
-            ->orderBy('pdoi_response_subject_translations.subject_name', 'asc')
-            ->get();
     }
 }

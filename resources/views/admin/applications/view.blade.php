@@ -17,6 +17,11 @@
                         <li class="nav-item">
                             <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="pill" href="#custom-tabs-three-messages" role="tab" aria-controls="custom-tabs-three-messages" aria-selected="true">{{ trans_choice('custom.activity_logs',1) }}</a>
                         </li>
+                        @if($item->children->count())
+                            <li class="nav-item">
+                                <a class="nav-link" id="sub-application-tab" data-toggle="pill" href="#sub-application" role="tab" aria-controls="sub-application" aria-selected="false">Препратени заявления</a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="card-body">
@@ -177,7 +182,9 @@
                                                 <select class="form-select form-select-sm" id="next-event">
                                                     <option value="">{{ __('custom.available_actions') }}</option>
                                                     @foreach($item->currentEvent->event->nextEvents as $event)
-                                                        <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => (int)$event->id]) }}">@if($event->extendTimeReason){{ $event->extendTimeReason->name }}@else{{ $event->name }} @endif</option>
+                                                        @if($event->app_event != \App\Enums\ApplicationEventsEnum::FORWARD || \App\Enums\PdoiApplicationStatusesEnum::canForward((int)$item->status) )
+                                                            <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => (int)$event->id]) }}">@if($event->extendTimeReason){{ $event->extendTimeReason->name }}@else{{ $event->name }} @endif</option>
+                                                        @endif
                                                     @endforeach
                                                 </select>
                                                 <a href="#" id="apply_event" role="button" class="btn btn-sm btn-success disabled">{{ __('custom.apply') }}</a>
@@ -227,7 +234,7 @@
                                     @foreach($item->events as $event)
                                         <tr>
                                             <td>{{ displayDate($event->event_date) }}</td>
-                                            <td>{{ $event->event->name }}</td>
+                                            <td>{{ $event->event->name }} @if($event->new_resp_subject_id)({{ $event->newSubject->subject_name }})@endif</td>
                                             <td><a href="">{{ $event->user_reg > 0 ? $event->user->names : '' }}</a>
                                                 <span class="fst-italic">({{ $event->user_reg > 0 ? ($event->user->user_type == \App\Models\User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') ) : 'Системен' }})</span>
                                             </td>
@@ -239,6 +246,38 @@
                                 </thead>
                             </table>
                         </div>
+                        @if($item->children->count())
+                            <div class="tab-pane fade" id="sub-application" role="tabpanel" aria-labelledby="sub-application-tab">
+                                <table class="table table-light table-sm table-bordered mb-4">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ __('custom.reg_number') }}</th>
+                                        <th>{{ __('custom.new_pdoi_subject') }}</th>
+                                        <th>{{ __('custom.created_at') }}</th>
+                                        <th>{{ __('custom.status') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <thead>
+                                        @foreach($item->children as $app)
+                                            <tr>
+                                                <td>
+                                                    @canany(['update', 'view'], $app)
+
+                                                        <a href="{{ route('admin.application.view', ['item' => $app->id]) }}" target="_blank">
+                                                            <i class="fas fa-external-link-alt text-primary"></i> {{ $app->application_uri }}</a>
+                                                    @else
+                                                        {{ $app->application_uri }}
+                                                    @endcanany
+                                                </td>
+                                                <td>{{ $app->response_subject_id ? $app->responseSubject->subject_name : 'EIK...NAME'}}</td>
+                                                <td>{{ displayDate($app->created_at) }}</td>
+                                                <td>{{ __('custom.application.status.'. \App\Enums\PdoiApplicationStatusesEnum::keyByValue($app->status)) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </thead>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <div class="col-md-6 col-md-offset-3">

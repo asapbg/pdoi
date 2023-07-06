@@ -17,6 +17,7 @@ use App\Models\EkatteSettlement;
 use App\Models\Event;
 use App\Models\File;
 use App\Models\PdoiApplication;
+use App\Models\PdoiResponseSubject;
 use App\Models\ProfileType;
 use App\Services\ApplicationService;
 use App\Services\FileOcr;
@@ -78,7 +79,7 @@ class PdoiApplicationController extends Controller
             }
 
             $validated = $validator->validated();
-            //TODO why files are missing
+            //TODO fix me why files are missing
             $application = new PdoiApplication();
             if(!auth()->user()->can('createManual', $application) ){
                 abort(Response::HTTP_NOT_FOUND);
@@ -125,7 +126,7 @@ class PdoiApplicationController extends Controller
         $areas = EkatteArea::optionsList();
         $municipality = EkatteMunicipality::optionsList();
         $settlements = EkatteSettlement::optionsList();
-        $subjects = optionsFromModel(PdoiApplication::optionsList());
+        $subjects = optionsFromModel(PdoiResponseSubject::simpleOptionsList());
         return $this->view('admin.applications.create', compact('profileTypes','countries'
             , 'areas', 'municipality', 'settlements', 'subjects'));
     }
@@ -213,12 +214,11 @@ class PdoiApplicationController extends Controller
                 };
             }
 
-
             $view = match ($event->app_event) {
                 ApplicationEventsEnum::FORWARD->value => 'new_event_forward',
                 default => 'new_event',
             };
-            $subjects = optionsFromModel(PdoiApplication::optionsList());
+            $subjects = optionsFromModel(PdoiResponseSubject::simpleOptionsList());
             return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate'));
         }
 
@@ -236,10 +236,7 @@ class PdoiApplicationController extends Controller
         if(!$event || !in_array($event->app_event, ApplicationEventsEnum::userEvents()) ) {
             abort(Response::HTTP_NOT_FOUND);
         }
-        if( $event->app_event == ApplicationEventsEnum::FORWARD->value ) {
-            echo 'In process';
-            exit;
-        }
+
         $eventRequest = $event->app_event == ApplicationEventsEnum::FORWARD->value ?
             new RegisterEventForwardRequest() : new RegisterEventRequest();
         $validator = Validator::make($request->all(), $eventRequest->rules());
@@ -256,14 +253,35 @@ class PdoiApplicationController extends Controller
         }
 
         $appService = new ApplicationService($application);
+
+        //If event is forward replace event with his child event
+        if( $event->app_event == ApplicationEventsEnum::FORWARD->value ) {
+            if( (int)$validated['in_platform'] ) {
+                //TODO fix me check if new subject is child of current
+                $isChild = false;
+                if( $isChild ) {
+                    $event = 'Препратено по компетентност към подчинен субект';
+                    echo $event;exit;
+                }
+            } else {
+                if( (int)$validated['subject_is_child'] ) {
+                    $event = 'Препратено по компетентност към подчинен субект';
+                    echo $event;exit;
+                } else {
+                    $event = 'Препратено по компетентност на субект, нерегистриран на платформата';
+                    echo $event;exit;
+                }
+            }
+        }
+
         if( $appService->registerEvent($event->app_event, $validated) ) {
-            return redirect(route('admin.application.view', ['item' => $application->id]));
+            return redirect(route('admin.application.view', ['item' => $application->id]))->with('success', __('Успено завършено регистриране на събитие '.$event->name));
         } else {
             back()->with('danger', __('custom.system_error'));
         }
     }
 
-    public function renew(Request $request, $applicationId)
+    public function renew(Request $request, $applicationId): \Illuminate\View\View
     {
         $user = auth()->user();
 
@@ -279,7 +297,7 @@ class PdoiApplicationController extends Controller
         return $this->view('admin.applications.renew', compact('application'));
     }
 
-    public function renewSubmit(ApplicationRenewRequest $request)
+    public function renewSubmit(ApplicationRenewRequest $request): \Illuminate\Http\RedirectResponse
     {
         $user = auth()->user();
         $validated = $request->validated();
@@ -304,8 +322,6 @@ class PdoiApplicationController extends Controller
         return to_route('admin.application.view', ['item' => $application->id])
             ->with('success', trans_choice('custom.applications', 1)." ".__('messages.updated_successfully_n'));
     }
-
-
 
     private function filters($request): array
     {
@@ -369,7 +385,7 @@ class PdoiApplicationController extends Controller
             'subjects' => array(
                 'type' => 'subjects',
                 'multiple' => false,
-                'options' => optionsFromModel(PdoiApplication::optionsList(), true, '', trans_choice('custom.pdoi_response_subjects', 1)),
+                'options' => optionsFromModel(PdoiResponseSubject::simpleOptionsList(), true, '', trans_choice('custom.pdoi_response_subjects', 1)),
                 'value' => $request->input('subjects'),
                 'default' => '',
                 'placeholder' => trans_choice('custom.pdoi_response_subjects',1),

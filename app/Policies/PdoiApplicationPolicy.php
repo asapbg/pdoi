@@ -82,7 +82,8 @@ class PdoiApplicationPolicy
     {
 
         //TODO fix me add subject from events
-        return ($pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
+        return (PdoiApplicationStatusesEnum::canRenew($pdoiApplication->status) //is in forwarded status
+                || $pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
                 || in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted()))
             && (
                 $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
@@ -102,6 +103,23 @@ class PdoiApplicationPolicy
         return PdoiApplicationStatusesEnum::canRenew($pdoiApplication->status)// status allow renewing
             && !$pdoiApplication->manual
             && $pdoiApplication->currentEvent->event->app_event != ApplicationEventsEnum::RENEW_PROCEDURE->value //check if already has renewed event with rejection
+            && (
+                $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
+                    && $user->administrative_unit === $pdoiApplication->responseSubject->id)
+            );
+    }
+
+    /**
+     * Determine whether the user can forward the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiApplication  $pdoiApplication
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function forward(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
+    {
+        return PdoiApplicationStatusesEnum::canForward($pdoiApplication->status)// status allow forwarding
+            && !$pdoiApplication->manual
             && (
                 $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
                     && $user->administrative_unit === $pdoiApplication->responseSubject->id)

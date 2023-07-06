@@ -2501,7 +2501,7 @@ $(function() {
                         //add file row
                         fileListId.find('tbody').append('<tr class="file-row" id="file-row-' + fileNumber + '" style="vertical-align: middle;">\n' +
                             '                            <td></td>\n' +
-                            '                            <td><span class="filename"></span>' + fileName + '</td>\n' +
+                            '                            <td><span class="filename"></span>'+ fileName +'<span class="file-error d-block text-danger"></span></td>\n' +
                             '                            <td>\n' +
                             '                                <input type="text" name="file_description[]" class="form-control form-control-sm" value="">\n' +
                             '                            </td>\n' +
@@ -2520,6 +2520,9 @@ $(function() {
                         //clone input
                         let newFileInput = uploadInput.clone(true);
                         newFileInput.attr('name', 'files[]');
+                        if(typeof uploadInput.data('check') != 'undefined' && parseInt(uploadInput.data('check')) === 1 ) {
+                            newFileInput.addClass('file-validate');
+                        }
                         newFileInput.removeAttr('id');
                         $('#file-row-' + fileNumber + ' td span.filename').html(newFileInput);
                         //clear tmp input
@@ -2789,6 +2792,18 @@ function ConfirmToggleBoolean(booleanType, entityId, message, title = false) {
     $("#modal-confirm button.btn-success").attr('onclick', "ToggleBoolean('"+booleanType+"','"+entityId+"')");
     $("#modal-confirm button.btn-success").attr('data-dismiss', "modal");
     $("#modal-confirm").modal('show');
+}
+
+function formatBytes(bytes, decimals = 2) {
+    if (!+bytes) return '0 Bytes'
+
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
 
 $.fn.appendAttr = function(attrName, suffix) {
@@ -3137,5 +3152,4 @@ $(document).ready(function (e) {
     //==========================
     // End MyModal
     //==========================
-
 })

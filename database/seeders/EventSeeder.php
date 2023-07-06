@@ -16,6 +16,7 @@ class EventSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('event_next')->truncate();
         DB::table('event_translations')->truncate();
         DB::table('event')->truncate();
 
@@ -25,13 +26,13 @@ class EventSeeder extends Seeder
         $data = [
             1 => [
                 'name' => [
-                    'bg' => 'Препращане на заявление',
+                    'bg' => 'Препращане по компетентност',
                     'en' => 'Application Forwarding',
                 ],
-                'next_events' => [6],
+                'next_events' => [1],
                 'id' => 1,
                 'app_event' => 4,
-                'app_status' => 2,
+                'app_status' => 9,
                 'extend_terms_reason_id' => null,
                 'days' => null,
                 'date_type' => null,
@@ -282,6 +283,19 @@ class EventSeeder extends Seeder
                 $item->save();
                 $this->command->info("Event with name ".$names['bg']." created successfully");
             }
+        }
+
+        $tableToResetSeq = ['event', 'event_translations'];
+        foreach ($tableToResetSeq as $table) {
+            \Illuminate\Support\Facades\DB::statement(
+                "do $$
+                        declare newId int;
+                        begin
+                            select (max(id) +1)  from ".$table." into newId;
+                            execute 'alter SEQUENCE ".$table."_id_seq RESTART with '|| newId;
+                        end;
+                        $$ language plpgsql"
+            );
         }
     }
 }

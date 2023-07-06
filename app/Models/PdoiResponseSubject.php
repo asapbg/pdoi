@@ -73,6 +73,17 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return $this->name;
     }
 
+    public static function simpleOptionsList(): \Illuminate\Support\Collection
+    {
+        return DB::table('pdoi_response_subject')
+            ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name'])
+            ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
+            ->where('pdoi_response_subject.active', '=', 1)
+            ->where('pdoi_response_subject_translations.locale', '=', app()->getLocale())
+            ->orderBy('pdoi_response_subject_translations.subject_name', 'asc')
+            ->get();
+    }
+
     /**
      * @param array|int $ignoreId
      * @return \Illuminate\Support\Collection
