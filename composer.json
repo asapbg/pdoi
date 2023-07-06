@@ -20,7 +20,7 @@
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^9.0",
         "psr/simple-cache": "2",
-        "sentry/sentry-laravel": "^2.11",
+        "sentry/sentry-laravel": "^3.6",
         "spatie/laravel-activitylog": "^4.4",
         "spatie/laravel-permission": "^5.5",
         "spatie/pdf-to-text": "^1.52"
