@@ -42,6 +42,9 @@ class CloseExpiredApplications extends Command
                     }
                     continue;
                 }
+                if($application->status == PdoiApplicationStatusesEnum::FORWARDED->value) {
+                    continue;
+                }
                 $needToFinishIds[]= $application->id;
             }
             $applications = array_chunk($needToFinishIds, 10);
