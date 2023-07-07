@@ -53,7 +53,8 @@ class RzsSectionPolicy
      */
     public function update(User $user, RzsSection $rzsSection)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs_sections']);
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_sections'])
+            && $rzsSection->manual;
     }
 
     /**

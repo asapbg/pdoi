@@ -23,7 +23,7 @@ class RzsSection  extends ModelActivityExtend implements TranslatableContract
     //activity
     protected string $logName = "rzs_sections";
 
-    protected $fillable = ['adm_level', 'system_name', 'parent_id', 'active'];
+    protected $fillable = ['adm_level', 'system_name', 'parent_id', 'active', 'manual'];
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public function scopeIsActive($query)

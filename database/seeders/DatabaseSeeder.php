@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             RzsSectionSeeder::class,
             CategorySeeder::class,
             ExtendTermsReasonSeeder::class,
-            ReasonRefusalSeeder::class
+            ReasonRefusalSeeder::class,
+            EventSeeder::class
         ]);
     }
 }

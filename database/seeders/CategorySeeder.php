@@ -16,6 +16,8 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
+        DB::table('category_translations')->truncate();
+        DB::table('category')->truncate();
         $locales = config('available_languages');
 
         //sections
@@ -59,7 +61,17 @@ class CategorySeeder extends Seeder
             $item->save();
         }
 
-        $currentId = DB::table('category')->max('id') + 1;
-        DB::raw('ALTER SEQUENCE category_id_seq RESTART WITH '.$currentId);
+        $tableToResetSeq = ['category'];
+        foreach ($tableToResetSeq as $table) {
+            \Illuminate\Support\Facades\DB::statement(
+                "do $$
+                        declare newId int;
+                        begin
+                            select (max(id) +1)  from ".$table." into newId;
+                            execute 'alter SEQUENCE ".$table."_id_seq RESTART with '|| newId;
+                        end;
+                        $$ language plpgsql"
+            );
+        }
     }
 }

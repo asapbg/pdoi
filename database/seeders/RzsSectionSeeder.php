@@ -71,7 +71,7 @@ class RzsSectionSeeder extends Seeder
                     'email' => $data[9],
                     'date_from' => $data[11],
                     'date_to' => empty($data[12]) ? null : $data[12],
-                    'adm_register' => (int)!($data[13] == 't'),
+                    'adm_register' => (int)($data[13] == 't'),
                     'adm_level' => (int)$data[14] > 0 ? $data[14] : null,
                     'zip_code' => (int)$data[19] > 0 ? $data[19] : null,
                     'nomer_register' => $data[20],
@@ -90,5 +90,18 @@ class RzsSectionSeeder extends Seeder
         }
 
         fclose($csvFile);
+
+        $tableToResetSeq = ['rzs_section', 'pdoi_response_subject'];
+        foreach ($tableToResetSeq as $table) {
+            \Illuminate\Support\Facades\DB::statement(
+                "do $$
+                        declare newId int;
+                        begin
+                            select (max(id) +1)  from ".$table." into newId;
+                            execute 'alter SEQUENCE ".$table."_id_seq RESTART with '|| newId;
+                        end;
+                        $$ language plpgsql"
+            );
+        }
     }
 }

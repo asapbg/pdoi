@@ -86,7 +86,7 @@ class PdoiResponseSubjectController extends AdminController
 
             $fillable = $this->getFillableValidated($validated, $item);
             if( !$id ) {
-                $fillable['adm_register'] = 1;
+                $fillable['adm_register'] = 0;
             }
             $fillable['redirect_only'] = $fillable['redirect_only'] ?? 0;
 

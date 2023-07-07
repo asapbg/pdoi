@@ -16,6 +16,8 @@ class ReasonRefusalSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('reason_refusal_translations')->truncate();
+        DB::table('reason_refusal')->truncate();
         $locales = config('available_languages');
 
         //sections
@@ -36,6 +38,19 @@ class ReasonRefusalSeeder extends Seeder
                 }
             }
             $item->save();
+        }
+
+        $tableToResetSeq = ['reason_refusal'];
+        foreach ($tableToResetSeq as $table) {
+            \Illuminate\Support\Facades\DB::statement(
+                "do $$
+                        declare newId int;
+                        begin
+                            select (max(id) +1)  from ".$table." into newId;
+                            execute 'alter SEQUENCE ".$table."_id_seq RESTART with '|| newId;
+                        end;
+                        $$ language plpgsql"
+            );
         }
     }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        $tableToResetSeq = ['ekatte_area', 'ekatte_municipality', 'ekatte_settlement', 'category', 'extend_terms_reason', 'reason_refusal'];
+        $tableToResetSeq = ['ekatte_area', 'ekatte_municipality', 'ekatte_settlement'];
         foreach ($tableToResetSeq as $table) {
             \Illuminate\Support\Facades\DB::statement(
                 "do $$

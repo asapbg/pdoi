@@ -71,6 +71,7 @@ class RzsSectionController extends AdminController
             $item->save();
 
             if( !$id ) {
+                $item->manual = 1;
                 $item->adm_level = $item->id;
                 $item->save();
             }

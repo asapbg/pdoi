@@ -17,6 +17,8 @@ class ExtendTermsReasonSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('extend_terms_reason_translations')->truncate();
+        DB::table('extend_terms_reason')->truncate();
         $locales = config('available_languages');
 
         //sections
@@ -38,7 +40,17 @@ class ExtendTermsReasonSeeder extends Seeder
             $item->save();
         }
 
-        $currentId = DB::table('extend_terms_reason')->max('id') + 1;
-        DB::raw('ALTER SEQUENCE extend_terms_reason_id_seq RESTART WITH '.$currentId);
+        $tableToResetSeq = ['extend_terms_reason'];
+        foreach ($tableToResetSeq as $table) {
+            \Illuminate\Support\Facades\DB::statement(
+                "do $$
+                        declare newId int;
+                        begin
+                            select (max(id) +1)  from ".$table." into newId;
+                            execute 'alter SEQUENCE ".$table."_id_seq RESTART with '|| newId;
+                        end;
+                        $$ language plpgsql"
+            );
+        }
     }
 }
