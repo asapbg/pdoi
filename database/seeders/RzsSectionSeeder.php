@@ -46,7 +46,8 @@ class RzsSectionSeeder extends Seeder
         foreach ($data as $code => $rzsSection) {
             $item = RzsSection::create([
                 'adm_level' => $code,
-                'system_name' => $rzsSection[1]
+                'system_name' => $rzsSection[1],
+                'manual' => (int)($rzsSection[1] == 'NA')
             ]);
             if ($item) {
                 foreach ($locales as $locale) {
