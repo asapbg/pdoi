@@ -179,4 +179,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::match(['post', 'put'], '/menu-section/page/store/{item?}',         'store')->name('page.store');
     });
 
+    Route::controller(\App\Http\Controllers\Admin\MailTemplatesController::class)->group(function () {
+        Route::get('/mail-template',                'index')->name('mail_template')->middleware('can:viewAny,App\Models\MailTemplates');
+        Route::get('/mail-template/edit/{item?}',         'edit')->name('mail_template.edit');
+        Route::match(['put'], '/mail-template/store/{item?}',         'store')->name('mail_template.store');
+    });
+
 });

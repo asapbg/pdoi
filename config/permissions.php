@@ -5,6 +5,7 @@
     'administration.rzs_sections' => 'Регистър ЗС (Раздели)',
     'administration.rzs_items' => 'Регистър ЗС (Задължените субекти)',
     'administration.system_classification' => 'Системни класификации',
+    'administration.mail_templates' => 'Шаблони (съобщения)',
     'administration.activity_log' => 'Обща активност',
     'users.*' => 'Всички права',
     'roles_permissions.*' => 'Всички права',

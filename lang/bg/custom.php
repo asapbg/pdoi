@@ -245,11 +245,13 @@ return [
     'full_history'                     => 'Електронно досие',
     'process'                          => 'Процес|Процеси',
     'last_event'                       => 'Последно събитие',
+    'attributes'                       => 'Атрибут|Атрибути',
 
     //controllers and breadcrumbs
     'file_content'                              => 'Текст във файлове',
     'pdoi_applications'                         => 'Заявления',
     'applications'                              => 'Заявления',
+    'mail_templates'                            => 'Шаблони (съобщения)',
     'section'                                   => 'Секции',
     //
     'applicant'                                 => 'Заявител',
@@ -391,6 +393,16 @@ return [
     'court_decision.CHANGE'                     => 'Съдът изменя решението решението за отказ',
     //menu sections
     'menu_section.sections'                     => 'Секция|Секции',
-    'menu_section.pages'                        => 'Страница|Страници'
+    'menu_section.pages'                        => 'Страница|Страници',
+    //mail_templates
+    'mail_template'                             => 'Шаблон (съобщения)|Шаблони (съобщения)',
+    'mail_template.RZS_AUTO_FORWARD'            => 'Автоматично препращане',
+    'mail_template.RZS_MANUAL_FORWARD'          => 'Препращане по компетентност',
+    'mail_templates.placeholders.administration' => 'Наименование на администрацията',
+    'mail_templates.placeholders.forward_administration'       => 'Наименование на администрацията (препращане)',
+    'mail_templates.placeholders.applicant_name'         => 'Имена на заявителя',
+    'mail_templates.placeholders.date_apply'         => 'Дата на подаване',
+    'mail_templates.placeholders.forward_date_apply'         => 'Дата (ново заявление)',
+    'mail_templates.placeholders.reg_number'         => 'Рег. №',
 ];
 

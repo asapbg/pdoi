@@ -62,7 +62,7 @@
                         @endcan
                     </li>
                 @endcanany
-{{--                Publick sections, menu and pages--}}
+{{--                Public sections, menu and pages--}}
                 @canany(['manage.*', 'menu_section.*', 'menu_section.section', 'menu_section.page'])
                     <li class="nav-item">
                         <a href="#" class="nav-link @if(strstr(url()->current(), 'menu_section')) active @endif">
@@ -91,6 +91,16 @@
                                 </li>
                             </ul>
                         @endcan
+                    </li>
+                @endcanany
+                <!-- Mail templates -->
+                @canany(['manage.*', 'administration.*', 'administration.mail_templates'])
+                    <li class="nav-item">
+                        <a href="{{ route('admin.mail_template') }}"
+                           class="nav-link @if(strstr(url()->current(), 'mail-template/')) active @endif">
+                            <i class="fas far fa-envelope"></i>
+                            <p>{{ trans_choice('custom.mail_template',2) }}</p>
+                        </a>
                     </li>
                 @endcanany
 {{--                Nomenlatures--}}

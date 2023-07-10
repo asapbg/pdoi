@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ExtendTermsReasonSeeder::class,
             ReasonRefusalSeeder::class,
-            EventSeeder::class
+            EventSeeder::class,
+            MailTemplateSeeder::class
         ]);
     }
 }
