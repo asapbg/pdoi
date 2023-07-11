@@ -56,7 +56,6 @@ class SyncIisda extends Command
                 , 'pdoi_response_subject.municipality'
                 , 'pdoi_response_subject.town'
                 , 'pdoi_response_subject.zip_code'
-                , 'pdoi_response_subject.address'
                 , 'pdoi_response_subject.type'
             )
             ->leftJoin('rzs_section', 'rzs_section.adm_level', '=', 'pdoi_response_subject.adm_level')
