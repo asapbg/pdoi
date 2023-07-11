@@ -33,6 +33,7 @@ class SyncIisda extends Command
      * @return int
      */
 
+    private array $typesToSync = []; //'AdmStructure'
     private array $typesWithAddress = ['AdmStructure'];
     private int $getAddressAtOnes = 10;
 
@@ -56,11 +57,14 @@ class SyncIisda extends Command
                 , 'pdoi_response_subject.town'
                 , 'pdoi_response_subject.zip_code'
                 , 'pdoi_response_subject.address'
+                , 'pdoi_response_subject.type'
             )
             ->leftJoin('rzs_section', 'rzs_section.adm_level', '=', 'pdoi_response_subject.adm_level')
             ->leftJoin('pdoi_response_subject_translations', function ($join){
                 $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
                     ->where('pdoi_response_subject_translations.locale', '=', 'bg');
+            })->when(sizeof($this->typesToSync), function ($query) {
+                return $query->where('pdoi_response_subject.type', '=', $this->typesToSync);
             })
             ->where('pdoi_response_subject.adm_register', '=', 1)
             ->get();
@@ -117,6 +121,7 @@ class SyncIisda extends Command
                                 if( (int)$localSubject->batch_id != (int)$subject['BatchID']
                                     || $localSubject->section != $subject['AdmStructureKind']
                                     || $localSubject->eik != ($subject['UIC'] ?? 'N/A')
+                                    || $localSubject->type != ($subject['Type'] ?? null)
                                     || ((int)$localSubject->active != (int)($subject['Status'] == 'Active'))
                                     || ( $addressInfo && (
                                         $addressInfo['email'] != $localSubject->email
@@ -132,15 +137,16 @@ class SyncIisda extends Command
 //                                    Log::error('Update base: '.PHP_EOL. $localSubject. PHP_EOL. json_encode($addressInfo));
                                     $localSubject->batch_id = (int)$subject['BatchID'];
                                     $localSubject->eik = $subject['UIC'] ?? 'N/A';
+                                    $localSubject->type = $subject['Type'] ?? null;
                                     $localSubject->adm_level = $localSections[$subject['AdmStructureKind']] ?? 0;
                                     $localSubject->active = (int)($subject['Status'] == 'Active');
-                                    $localSubject->email = $addressInfo['email'];
-                                    $localSubject->phone = $addressInfo['phone'];
-                                    $localSubject->fax = $addressInfo['fax'];
-                                    $localSubject->zip_code = $addressInfo['zip_code'];
-                                    $localSubject->region = $addressInfo['region'];
-                                    $localSubject->municipality = $addressInfo['municipality'];
-                                    $localSubject->town = $addressInfo['town'];
+                                    $localSubject->email = $addressInfo ? $addressInfo['email'] : null;
+                                    $localSubject->phone = $addressInfo ? $addressInfo['phone'] : null;
+                                    $localSubject->fax = $addressInfo ? $addressInfo['fax'] : null;
+                                    $localSubject->zip_code = $addressInfo ? $addressInfo['zip_code'] : null;
+                                    $localSubject->region = $addressInfo ? $addressInfo['region'] : null;
+                                    $localSubject->municipality = $addressInfo ? $addressInfo['municipality'] : null;
+                                    $localSubject->town = $addressInfo ? $addressInfo['town'] : null;
                                     $localSubject->save();
                                     $updated = true;
                                 }
@@ -172,6 +178,7 @@ class SyncIisda extends Command
                                 $toInsert[] = array(
                                     'batch_id' => $subject['BatchID'],
                                     'eik' => $subject['UIC'] ?? 'N/A',
+                                    'type' => $subject['Type'] ?? null,
                                     'nomer_register' => $subject['IdentificationNumber'],
                                     'active' => $subject['IdentificationNumber'] === 'Active',
                                     'adm_level' => $localSections[$subject['AdmStructureKind']] ?? 0,
@@ -340,10 +347,17 @@ class SyncIisda extends Command
 
     private function dataSoapSearchBatchesIdentificationInfo(): string
     {
+        $types = '';
+        if( sizeof($this->typesToSync) ) {
+            foreach ($this->typesToSync as $type) {
+                $types .= '<int:batchType>'.$type.'</int:batchType>';
+            }
+        }
         return '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:int="http://iisda.government.bg/RAS/IntegrationServices"><soap:Header xmlns:wsa="http://www.w3.org/2005/08/addressing"><wsa:Action>http://iisda.government.bg/RAS/IntegrationServices/IBatchInfoService/SearchBatchesIdentificationInfo</wsa:Action><wsa:To>https://iisda.government.bg/Services/RAS/RAS.Integration.Host/BatchInfoService.svc</wsa:To></soap:Header>
    <soap:Body>
       <int:SearchBatchesIdentificationInfo>
          <int:status>Active</int:status>
+         '.$types.'
       </int:SearchBatchesIdentificationInfo>
    </soap:Body>
 </soap:Envelope>';
