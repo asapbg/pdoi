@@ -1,4 +1,4 @@
-@if(isset($isChild) && $isChild)
+@if(isset($isChild) && $isChild && !(isset($section['children']) && sizeof($section['children'])))
     <li><a class="dropdown-item px-2 @if(\Illuminate\Support\Str::contains(url()->current(), [$section['slug']])) active @endif" href="{{ route('section', ['slug' => $section['slug']]) }}">{{ $section['name'] }}</a></li>
 @else
     <li class="nav-item @if(isset($section['children']) && sizeof($section['children'])) dropdown @endif">
@@ -10,7 +10,7 @@
             @if(isset($section['children']) && sizeof($section['children']))<span class="dropdown-toggle-arrow"></span>@endif
         </a>
         @if(isset($section['children']) && sizeof($section['children']))
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu ms-{{ ($section['level'] * 4) - 4 }}">
                 @foreach($section['children'] as $child)
                     @include('front.partials.menu_section_link', ['section' => $child, 'isChild' => true])
                 @endforeach

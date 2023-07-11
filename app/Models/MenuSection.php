@@ -96,7 +96,7 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
     {
         $tree = [];
         $items = DB::table('menu_section')
-            ->select(['menu_section.id', 'menu_section.slug', 'menu_section_translations.name', 'menu_section.parent_id'])
+            ->select(['menu_section.id', 'menu_section.slug', 'menu_section_translations.name', 'menu_section.parent_id', 'menu_section.level'])
             ->join('menu_section_translations', 'menu_section_translations.menu_section_id', '=', 'menu_section.id')
             ->where('menu_section.active', '=', 1)
             ->whereNull('menu_section.deleted_at')
@@ -111,6 +111,7 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
                     $tree[] = array(
                         'slug' => $item->slug,
                         'name' => $item->name,
+                        'level' => $item->level,
                         'children' => self::menuChildren($item->id, $items)
                     );
                 }
@@ -128,6 +129,7 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
                     $children[] = array(
                         'slug' => $item->slug,
                         'name' => $item->name,
+                        'level' => $item->level,
                         'children' => self::menuChildren($item->id, $items)
                     );
                 }
