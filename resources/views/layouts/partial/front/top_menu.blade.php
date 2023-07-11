@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary top-menu-nav py-0">
+<nav class="navbar navbar-dark navbar-expand-lg bg-body-tertiary top-menu-nav py-1">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topMenuNav" aria-controls="topMenuNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

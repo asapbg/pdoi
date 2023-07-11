@@ -99,6 +99,12 @@ MyModal.prototype.loadModalBody = function (_myModal) {
 
 $(function() {
     $(document).ready(function() {
+        //menu
+        $('.dropdown-toggle-arrow').on('click', function (e){
+            e.preventDefault();
+           console.log(e);
+        });
+
         $('[data-bs-toggle="tooltip"]').tooltip();
 
         if($('.summernote').length) {

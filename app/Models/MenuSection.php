@@ -12,6 +12,7 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
     use FilterSort, Translatable;
 
     const PAGINATE = 20;
+    const MAX_LEVEL = 2;
     const TRANSLATABLE_FIELDS = ['name', 'content', 'meta_keyword', 'meta_title', 'meta_description'];
     const MODULE_NAME = 'custom.menu_section';
 
@@ -23,7 +24,7 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
     //activity
     protected string $logName = "menu_section";
 
-    protected $fillable = ['active', 'parent_id', 'slug', 'order_idx'];
+    protected $fillable = ['active', 'parent_id', 'slug', 'order_idx', 'level'];
 
     public function scopeIsActive($query)
     {
@@ -73,7 +74,7 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
         );
     }
 
-    public static function optionsList($ignoreId = 0)
+    public static function optionsList($ignoreId = 0, $onlyAvailableToAddSub = false)
     {
         return DB::table('menu_section')
             ->select(['menu_section.id', 'menu_section_translations.name'])
@@ -82,6 +83,9 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
             ->whereNull('menu_section.deleted_at')
             ->when((int)$ignoreId, function ($q) use($ignoreId){
                 return $q->where('menu_section.id', '<>', (int)$ignoreId);
+            })
+            ->when($onlyAvailableToAddSub, function ($q) use($ignoreId){
+                return $q->where('menu_section.level', '<', self::MAX_LEVEL);
             })
             ->where('menu_section_translations.locale', '=', app()->getLocale())
             ->orderBy('menu_section_translations.name', 'asc')

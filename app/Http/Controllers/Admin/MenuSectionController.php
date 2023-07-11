@@ -51,7 +51,7 @@ class MenuSectionController  extends AdminController
         $storeRouteName = self::STORE_ROUTE;
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = MenuSection::translationFieldsProperties();
-        $sections = MenuSection::optionsList((int)$item->id);
+        $sections = MenuSection::optionsList((int)$item->id, true);
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName', 'listRouteName', 'translatableFields', 'sections'));
     }
 
@@ -69,10 +69,20 @@ class MenuSectionController  extends AdminController
             if( empty($validated['slug']) ) {
                 $validated['slug'] = Str::slug($validated['name_bg']);
             }
-            $validated['parent_id'] = $validated['section'];
 
+            $validated['parent_id'] = $validated['section'];
             $fillable = $this->getFillableValidated($validated, $item);
+
+            $level = 1;
+            if( isset($fillable['parent_id']) && (int)$fillable['parent_id'] ) {
+                $section = MenuSection::find((int)$fillable['parent_id']);
+                if($section) {
+                    $level = $section->level + 1;
+                }
+            }
+
             $item->fill($fillable);
+            $item->level = $level;
             $item->save();
             $this->storeTranslateOrNew(MenuSection::TRANSLATABLE_FIELDS, $item, $validated);
 
