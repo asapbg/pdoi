@@ -19,12 +19,14 @@ class MailTemplates extends ModelActivityExtend
     protected $fillable = ['name', 'type', 'content'];
 
     const PLACEHOLDERS = [
+        'to_name'        => ['translation_key' => 'to_name'],
         'date_apply'        => ['translation_key' => 'date_apply'],
         'reg_number'        => ['translation_key' => 'reg_number'],
         'administration'    => ['translation_key' => 'administration'],
         'applicant'         => ['translation_key' => 'applicant_name'],
         'forward_administration' => ['translation_key' => 'forward_administration'],
         'forward_date_apply'        => ['translation_key' => 'forward_date_apply'],
+        'new_reg_number'        => ['translation_key' => 'new_reg_number'],
     ];
 
     /**

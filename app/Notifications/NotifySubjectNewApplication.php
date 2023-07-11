@@ -14,14 +14,16 @@ class NotifySubjectNewApplication extends Notification
     use Queueable;
 
     private PdoiApplication $application;
+    private array $notifyData;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($application)
+    public function __construct($application, $data)
     {
         $this->application = $application;
+        $this->notifyData = $data;
     }
 
     /**
@@ -43,8 +45,12 @@ class NotifySubjectNewApplication extends Notification
      */
     public function toDatabase($notifiable): array
     {
+        $message = $this->notifyData['message'];
+        if( isset($this->notifyData['comment']) && !empty($this->notifyData['comment']) ) {
+            $message .= PHP_EOL.'-------------------'.PHP_EOL.'Допълнителен коментар:'. $this->notifyData['comment'];
+        }
         $communicationData = [
-            'message' => 'Съобщение за ново заявление до задължен субект през системата за сигурно втъчване',
+            'message' => $message,
             'subject' => __('mail.subject.register_new_application'),
             'application_id' => $this->application->id,
             'files' => [],

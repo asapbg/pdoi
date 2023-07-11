@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use App\Enums\ApplicationEventsEnum;
+use App\Enums\MailTemplateTypesEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Models\Event;
 use App\Models\File;
+use App\Models\MailTemplates;
 use App\Models\PdoiApplication;
 use App\Models\PdoiApplicationEvent;
 use App\Notifications\NotifySubjectNewApplication;
@@ -17,6 +19,7 @@ use App\Notifications\NotifyUserNeedMoreInfo;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 
 class ApplicationService
@@ -179,7 +182,24 @@ class ApplicationService
         if( isset($data['new_resp_subject_id']) ) {
             $subject = $newApplication->responseSubject;
             //Communication: notify subject for new application
-            $subject->notify(new NotifySubjectNewApplication($newApplication));
+            $instructionData = array(
+                'to_name' => $data['to_name'] ?? '',
+                'reg_number' => $newApplication->parent->application_uri,
+                'date_apply' => displayDate($newApplication->created_at),
+                'administration' => $newApplication->parent->responseSubject->subject_name,
+                'applicant' => $newApplication->parent->full_names,
+                //
+                'new_reg_number' => $newApplication->application_uri,
+                'forward_administration' => $newApplication->responseSubject->subject_name,
+                'forward_date_apply' => displayDate(Carbon::now()),
+            );
+            $instructionTemplate = MailTemplates::where('type', '=', MailTemplateTypesEnum::RZS_MANUAL_FORWARD->value)->first();
+            $message = $instructionTemplate ? Lang::get($instructionTemplate->content, $instructionData) : '';
+            $notifyData['message'] = htmlentities($message);
+            if( isset($data['add_text']) && !empty($data['add_text']) ) {
+                $notifyData['comment'] = htmlentities(stripHtmlTags($data['add_text']));
+            }
+            $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
 
             //TODO fix me simulation remove after communication is ready. For now we simulate approve by RKS (деловодна система)
             $lastNotify = DB::table('notifications')

@@ -31,6 +31,7 @@ class RegisterEventForwardRequest extends FormRequest
             'old_subject' => ['required', 'numeric', 'exists:pdoi_response_subject,id'],
             'subject_user_request' => ['required', 'string', 'min:3'],
             'add_text' => ['nullable', 'string', 'min:3'],
+            'to_name' => ['nullable', 'string', 'min:2'],
             'current_subject_user_request' => ['nullable', 'string', 'min:3'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],

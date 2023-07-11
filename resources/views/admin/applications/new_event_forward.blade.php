@@ -54,6 +54,11 @@
                                         </div>
                                         <span class="text-danger" id="error-new_resp_subject_id"></span>
                                     </div>
+                                    <div class="form-group form-group-sm col-md-4 col-12 mb-3">
+                                        <label class="form-label fw-semibold" >{{ __('custom.mail_templates.placeholders.to_name') }}:</label>
+                                        <input type="text" class="form-control form-control-sm" name="to_name" value="" id="to_name">
+                                        <span class="text-danger" id="error-to_name"></span>
+                                    </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.user_request') }}: <span class="required">*</span></label>
                                         <textarea class="col-12 form-control summernote-custom-clone"></textarea>
@@ -137,6 +142,11 @@
                                             <input type="checkbox" name="subject_is_child" value="" class="mr-1">{{ __('custom.rzs.subordinate') }}:
                                         </label>
                                         <span class="text-danger" id="error-subject_is_child"></span>
+                                    </div>
+                                    <div class="form-group form-group-sm col-md-4 col-12 mb-3">
+                                        <label class="form-label fw-semibold" >{{ __('custom.mail_templates.placeholders.to_name') }}:</label>
+                                        <input type="text" class="form-control form-control-sm" name="to_name" value="" id="to_name">
+                                        <span class="text-danger" id="error-to_name"></span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.user_request') }}:</label>
@@ -307,7 +317,7 @@
                                 }
                                 return false;
                             }
-                        },
+                        }
                     };
                 } else {
                     return {
@@ -331,7 +341,7 @@
                                 }
                                 return false;
                             }
-                        },
+                        }
                     };
                 }
 

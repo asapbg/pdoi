@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ApplicationEventsEnum;
+use App\Enums\MailTemplateTypesEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Requests\PdoiApplicationApplyRequest;
@@ -18,6 +19,7 @@ use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
 use App\Models\Event;
 use App\Models\File;
+use App\Models\MailTemplates;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\User;
@@ -30,6 +32,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -225,7 +228,16 @@ class PdoiApplicationController extends Controller
 
                 $subject = $newApplication->responseSubject;
                 //Communication: notify subject for new application
-                $subject->notify(new NotifySubjectNewApplication($newApplication));
+                $instructionData = array(
+                    'reg_number' => $newApplication->application_uri,
+                    'date_apply' => displayDate($newApplication->created_at),
+                    'administration' => $newApplication->responseSubject->subject_name,
+                    'applicant' => $newApplication->full_names,
+                );
+                $instructionTemplate = MailTemplates::where('type', '=', MailTemplateTypesEnum::RZS_AUTO_FORWARD->value)->first();
+                $message = $instructionTemplate ? Lang::get($instructionTemplate->content, $instructionData) : '';
+                $notifyData['message'] = htmlentities($message);
+                $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
 
                 //TODO fix me simulation remove after communication is ready. For now we simulate approve by RKS (деловодна система)
                 $lastNotify = DB::table('notifications')

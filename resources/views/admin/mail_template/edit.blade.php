@@ -17,7 +17,7 @@
                         <input type="hidden" name="type" value="{{ $item->id ? $item->type : 0 }}">
 
                         <div class="row mb-4">
-{{--                            <h5 class="bg-primary py-1 px-2 mb-4">{{ __('custom.general_info') }}</h5>--}}
+                            <h5 class="bg-primary py-1 px-2 my-4">{{ __('custom.general_info') }}</h5>
                             <div class="col-md-4 col-12 mt-1">
                                 <div class="form-group">
                                     <label for="name">{{ __('custom.name') }}</label>
@@ -28,14 +28,15 @@
                                     @enderror
                                 </div>
                             </div>
+                            <h5 class="bg-primary py-1 px-2 my-4">{{ __('custom.content') }}</h5>
                             <div class="col-12 mt-1">
                                 <div class="form-group">
-                                    <label for="content">{{ __('custom.content') }}</label>
+{{--                                    <label for="content">{{ __('custom.content') }}</label>--}}
                                     <div style="margin-bottom: 2px">
                                         <label style="font-style: italic;">{{ trans_choice('custom.attributes', 2) }}</label>
                                         @if($placeholders && count($placeholders) > 0)
                                             @foreach($placeholders as $k => $placeholder)
-                                                <button type="button" id="{{$k}}" class="js-add-placeholder btn-info btn-sm"
+                                                <button type="button" id="{{$k}}" class="js-add-placeholder btn-info btn-sm mb-1"
                                                         data-placeholder="{{ $k }}">
                                                     {{ __('custom.mail_templates.placeholders.'.$placeholder['translation_key']) }}
                                                 </button>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ApplicationEventsEnum;
+use App\Enums\MailTemplateTypesEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCreateApplicationRequest;
@@ -16,6 +17,7 @@ use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
 use App\Models\Event;
 use App\Models\File;
+use App\Models\MailTemplates;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\ProfileType;
@@ -219,7 +221,13 @@ class PdoiApplicationController extends Controller
                 default => 'new_event',
             };
             $subjects = optionsFromModel(PdoiResponseSubject::simpleOptionsList());
-            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate'));
+
+            $mailTemplate = match ($event->app_event) {
+                ApplicationEventsEnum::FORWARD->value => MailTemplates::where('type', MailTemplateTypesEnum::RZS_MANUAL_FORWARD->value)->first(),
+                default => null,
+            };
+
+            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate', 'mailTemplate'));
         }
 
         $appService = new ApplicationService($application);

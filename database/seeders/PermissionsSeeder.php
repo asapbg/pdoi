@@ -37,5 +37,9 @@ class PermissionsSeeder extends Seeder
         //add permissions to our role
         $role = Role::whereName('service_user')->first();
         $role->givePermissionTo('manage.*');
+
+        //auto add external user web access
+        $role = Role::whereName('external_user')->first();
+        $role->givePermissionTo('pdoi.web');
     }
 }

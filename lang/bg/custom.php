@@ -395,6 +395,7 @@ return [
     'menu_section.sections'                     => 'Секция|Секции',
     'menu_section.pages'                        => 'Страница|Страници',
     //mail_templates
+    'mail_template.instruction'                 => 'Шаблон (съобщение с инстуркции)',
     'mail_template'                             => 'Шаблон (съобщения)|Шаблони (съобщения)',
     'mail_template.RZS_AUTO_FORWARD'            => 'Автоматично препращане',
     'mail_template.RZS_MANUAL_FORWARD'          => 'Препращане по компетентност',
@@ -404,5 +405,7 @@ return [
     'mail_templates.placeholders.date_apply'         => 'Дата на подаване',
     'mail_templates.placeholders.forward_date_apply'         => 'Дата (ново заявление)',
     'mail_templates.placeholders.reg_number'         => 'Рег. №',
+    'mail_templates.placeholders.to_name'         => 'До (Име)',
+    'mail_templates.placeholders.new_reg_number'  => 'Рег. № (служебно генерирано)',
 ];
 
