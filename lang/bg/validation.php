@@ -286,5 +286,7 @@ return [
         'meta_description'          => 'Описание (meta)',
         'meta_keyword'              => 'Ключови думи (meta)',
         'short_content'              => 'Кратко описание',
+        'files.*'                   => 'Файл',
+        'file_description.*'        => 'Описание на файл',
     ],
 ];

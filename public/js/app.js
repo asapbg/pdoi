@@ -102,7 +102,6 @@ $(function() {
         //menu
         $('.dropdown-toggle-arrow').on('click', function (e){
             e.preventDefault();
-           console.log(e);
         });
 
         $('[data-bs-toggle="tooltip"]').tooltip();
@@ -407,8 +406,10 @@ $(function() {
                 processData: false,
                 contentType: false,
                 success: function (data) {
+                    console.log(data);
                     if (typeof data.errors != 'undefined') {
                         apllyErrorDiv.html(data.errors);
+                        applayModal.modalObj.hide();
                     } else {
                         if (typeof data.applicationsInfo != 'undefined' && data.applicationsInfo.length > 0) {
                             $('div#apply').html(data.html);
@@ -418,6 +419,7 @@ $(function() {
                             activateTab('apply');
                         } else {
                             apllyErrorDiv.html('Нещо се обърка по врене на запис, заявлението не е завършено.');
+                            applayModal.modalObj.hide();
                         }
                     }
                     //enable actions

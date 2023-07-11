@@ -148,14 +148,13 @@ class PdoiApplicationController extends Controller
 
         $user = $request->user();
         if( !$user || $user->cannot('create', PdoiApplication::class) ) {
-            return response()->json(['warning' => __('messages.unauthorized')], 200);
+            return response()->json(['errors' => __('messages.unauthorized')], 200);
         }
 
         $applicationRequest = new PdoiApplicationApplyRequest();
         $validator = Validator::make($request->all(), $applicationRequest->rules());
-
         if($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 200);
+            return response()->json(['errors' => $validator->errors()->first()], 200);
         }
 
         DB::beginTransaction();
