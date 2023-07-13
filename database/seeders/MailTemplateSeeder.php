@@ -45,7 +45,7 @@ class MailTemplateSeeder extends Seeder
             "do $$
                         declare newId int;
                         begin
-                            select (max(id) +1)  from mail_template into newId;
+                            select (coalesce(max(id),0) +1)  from mail_template into newId;
                             execute 'alter SEQUENCE mail_template_id_seq RESTART with '|| newId;
                         end;
                         $$ language plpgsql"

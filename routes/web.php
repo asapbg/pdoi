@@ -27,6 +27,7 @@ Route::get('/get-pdoi-subjects', [CommonController::class, 'modalPdoiSubjects'])
 //application
 Route::controller(PdoiApplicationFrontController::class)->group(function () {
     Route::get('/application','index')->name('application.list');
+    Route::get('/application/view/{id}','show')->name('application.show');
 });
 
 Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\CustomRole::WEB_ACCESS_RULE)]], function() {
@@ -45,7 +46,6 @@ Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\Cus
         Route::get( '/my-application/view/{id}','showMy')->name('application.my.show');
         Route::get( '/my-application/full-history/{id}','showMyFullHistory')->name('application.my.show.history');
         Route::get('/application/new','create')->name('application.create');
-        Route::get('/application/view/{id}','show')->name('application.show');
         Route::post('/application/store','store')->name('application.store');
     });
 });

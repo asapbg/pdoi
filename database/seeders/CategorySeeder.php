@@ -67,7 +67,7 @@ class CategorySeeder extends Seeder
                 "do $$
                         declare newId int;
                         begin
-                            select (max(id) +1)  from ".$table." into newId;
+                            select (coalesce(max(id),0) +1)  from ".$table." into newId;
                             execute 'alter SEQUENCE ".$table."_id_seq RESTART with '|| newId;
                         end;
                         $$ language plpgsql"
