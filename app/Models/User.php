@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Auth\VerifiesEmails;
@@ -244,6 +245,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function applications(): HasMany
     {
         return $this->hasMany(PdoiApplication::class, 'user_reg', 'id');
+    }
+
+    public function responseSubject(): HasOne
+    {
+        return $this->hasOne(PdoiResponseSubject::class, 'id', 'administrative_unit');
     }
 
     public static function prepareModelFields($validated, $checkAllowed = false) {

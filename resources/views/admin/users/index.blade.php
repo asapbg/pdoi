@@ -102,12 +102,15 @@
                             <th>{{__('validation.attributes.username')}}</th>
                             <th>{{__('validation.attributes.email')}}</th>
                             <th>{{__('validation.attributes.role')}}</th>
+                            <th>{{ trans_choice('custom.pdoi_response_subjects',1) }}</th>
                             <th>{{__('validation.attributes.user_type')}}</th>
+                            <th>{{__('custom.status')}}</th>
                             <th>{{__('custom.active_m')}}</th>
                             <th>{{__('custom.actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>
+                        @php($userStatuses = \App\Models\User::getUserStatuses())
                         @if(isset($users) && $users->count() > 0)
                             @foreach($users as $user)
                                 <tr>
@@ -116,7 +119,9 @@
                                     <td>{{$user->username}}</td>
                                     <td>{{$user->email}}</td>
                                     <td>{!! implode('<br>',$user->roles->pluck('display_name')->toArray()) !!}</td>
+                                    <td>{{ $user->responseSubject ? $user->responseSubject->subject_name : '' }}</td>
                                     <td>{{ __('custom.users.type.'.$user->user_type) }}</td>
+                                    <td>{{ $userStatuses[$user->status] }}</td>
                                     <td>
                                         @includeIf('partials.toggle-boolean', ['object' => $user, 'model' => 'User'])
                                     </td>

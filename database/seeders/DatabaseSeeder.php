@@ -16,13 +16,15 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             PermissionsSeeder::class,
-            UsersSeeder::class,
+            CountrySeeder::class,
+//            UsersSeeder::class, // we insert our users after old user migration
             RzsSectionSeeder::class,
             CategorySeeder::class,
             ExtendTermsReasonSeeder::class,
             ReasonRefusalSeeder::class,
             EventSeeder::class,
-            MailTemplateSeeder::class
+            MailTemplateSeeder::class,
+            MigrationSeeder:: class
         ]);
     }
 }

@@ -90,6 +90,21 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
+        //old database for migration
+        'old' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_OLD', '127.0.0.1'),
+            'port' => env('DB_PORT_OLD', '5432'),
+            'database' => env('DB_DATABASE_OLD', 'forge'),
+            'username' => env('DB_USERNAME_OLD', 'forge'),
+            'password' => env('DB_PASSWORD_OLD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
 
     ],
 

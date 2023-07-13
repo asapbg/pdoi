@@ -53,7 +53,7 @@ class  UsersController extends Controller
             ->get(['id','display_name']);
 
         //\DB::enableQueryLog();
-        $users = User::with(['roles'])
+        $users = User::with(['roles', 'responseSubject', 'responseSubject.translation'])
             ->when($role_id, function ($query, $role_id) {
                 return $query->whereHas('roles', function ($q) use ($role_id) {
                     $q->where('id', $role_id);

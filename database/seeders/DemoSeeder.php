@@ -18,20 +18,6 @@ class DemoSeeder extends Seeder
     {
         $locales = config('available_languages');
 
-        //countries
-        $countries = ['България', 'Унгария', 'Хърватия'];
-
-        foreach ($countries as $name) {
-            $item = new Country();
-            $item->save();
-            if ($item->id) {
-                foreach ($locales as $locale) {
-                    $item->translateOrNew($locale['code'])->name = $name;
-                }
-            }
-            $item->save();
-        }
-
         //profile types
         $types = [
             User::USER_TYPE_PERSON => ['Студент', 'Програмист', 'Журналист'],
