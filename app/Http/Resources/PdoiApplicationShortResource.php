@@ -60,6 +60,7 @@ class PdoiApplicationShortResource extends JsonResource
                     ];
                 })->toArray() : [],
             'final_files' => $this->lastFinalEvent && $this->lastFinalEvent->visibleFiles->count() ? (new FileCollection($this->lastFinalEvent->visibleFiles))->resolve() : [],
+            'cnt_visits' => (int)$this->number_of_visits
         ];
     }
 }

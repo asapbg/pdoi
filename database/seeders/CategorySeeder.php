@@ -20,48 +20,35 @@ class CategorySeeder extends Seeder
         DB::table('category')->truncate();
         $locales = config('available_languages');
 
-        //sections
-        $data = [
-            1 => [ 'bg' => 'Бизнес среда', 'en' => 'Business environment'],
-            2 => [ 'bg' => 'Външна политика', 'en' => 'Foreign policy'],
-            3 => [ 'bg' => 'Сигурност и отбрана', 'en' => 'Security and Defense'],
-            4 => [ 'bg' => 'Държавна администрация', 'en' => 'Public administration'],
-            5 => [ 'bg' => 'Енергетика', 'en' => 'Energy'],
-            6 => [ 'bg' => 'Защита на потребителите', 'en' => 'Consumer protection'],
-            7 => [ 'bg' => 'Здравеопазване', 'en' => 'Healthcare'],
-            8 => [ 'bg' => 'Земеделие и развитие на селските райони', 'en' => 'Agriculture and Rural Development'],
-            9 => [ 'bg' => 'Качество и безопасност на храните', 'en' => 'Food quality and safety'],
-            10 => [ 'bg' => 'Култура', 'en' => 'Culture'],
-            11 => [ 'bg' => 'Младежка политика', 'en' => 'Youth Policy'],
-            12 => [ 'bg' => 'Междусекторни политики', 'en' => 'Cross-cutting policies'],
-            13 => [ 'bg' => 'Наука и технологии', 'en' => 'Science and Technology'],
-            14 => [ 'bg' => 'Образование', 'en' => 'Education'],
-            15 => [ 'bg' => 'Околна среда', 'en' => 'Education'],
-            16 => [ 'bg' => 'Правосъдие и вътрешен ред', 'en' => 'Justice and internal order'],
-            17 => [ 'bg' => 'Регионална политика', 'en' => 'Regional Policy'],
-            18 => [ 'bg' => 'Социална политика и заетост', 'en' => 'Social policy and employment'],
-            19 => [ 'bg' => 'Спорт', 'en' => 'Sport'],
-            20 => [ 'bg' => 'Транспорт', 'en' => 'Transport'],
-            21 => [ 'bg' => 'Туризъм', 'en' => 'Tourism'],
-            22 => [ 'bg' => 'Финансова и данъчна политика', 'en' => 'Financial and Tax Policy'],
-            23 => [ 'bg' => 'Електронно управление', 'en' => 'Electronic management'],
-            24 => [ 'bg' => 'Икономика', 'en' => 'Economy'],
-        ];
+        $oldCategories = DB::connection('old')->select("
+            select
+                system_classif.code as id,
+                max(case WHEN sysclassif_multilang.lang = 1 then sysclassif_multilang.tekst else '' end) as bg,
+                max(case WHEN sysclassif_multilang.lang = 2 then sysclassif_multilang.tekst else '' end) as en
+            from system_classif
+            join sysclassif_multilang on sysclassif_multilang.tekst_key = system_classif.tekst_key
+            where
+                system_classif.code_classif = 10008 -- categories/themes
+            group by system_classif.code, system_classif.code_classif
+            order by system_classif.code asc
+        ");
 
-        foreach ($data as $id => $dbItem) {
-            $item = Category::create([
-                'id' => $id
-            ]);
+        if( sizeof($oldCategories) ) {
+            foreach ($oldCategories as $category) {
+                $item = Category::create([
+                    'id' => $category->id
+                ]);
 
-            if ($item) {
-                foreach ($locales as $locale) {
-                    $item->translateOrNew($locale['code'])->name = $dbItem[$locale['code']] ?? '';
+                if ($item) {
+                    foreach ($locales as $locale) {
+                        $item->translateOrNew($locale['code'])->name = $category->{$locale['code']} ?? '';
+                    }
                 }
+                $item->save();
             }
-            $item->save();
         }
 
-        $tableToResetSeq = ['category'];
+        $tableToResetSeq = ['category', 'category_translations'];
         foreach ($tableToResetSeq as $table) {
             \Illuminate\Support\Facades\DB::statement(
                 "do $$

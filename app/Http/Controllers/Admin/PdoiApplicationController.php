@@ -52,10 +52,10 @@ class PdoiApplicationController extends Controller
 
     public function show(Request $request, int $id = 0): \Illuminate\View\View
     {
-        $item = PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations',
+        $item = PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations', 'events', 'events.event', 'events.event.translation', 'events.user',
             'categories', 'categories.translations', 'profileType', 'profileType.translations', 'country',
             'country.translations', 'area', 'area.translations', 'municipality', 'municipality.translations',
-            'settlement', 'settlement.translations', 'currentEvent', 'currentEvent.event', 'currentEvent.event.nextEvents',
+            'settlement', 'settlement.translations', 'currentEvent', 'currentEvent.event', 'currentEvent.event.translation', 'currentEvent.event.nextEvents',
             'currentEvent.event.nextEvents.extendTimeReason', 'currentEvent.event.nextEvents.extendTimeReason.translation'])
             ->find((int)$id);
         if( !$item ) {

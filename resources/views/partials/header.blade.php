@@ -34,6 +34,11 @@
     </div>
 
     <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <div id="front-timer">
+                @include('layouts.partial.count-down-timer')
+            </div>
+        </li>
         <!-- User Account: style can be found in dropdown.less -->
         <li class="nav-item dropdown">
             @php

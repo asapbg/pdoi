@@ -76,7 +76,7 @@
                                             <img alt="twitter" src="https://platform-cdn.sharethis.com/img/twitter.svg">
                                         </div>
                                     </div>
-                                    <p class="my-1 d-inline-block p-fs"><i class="fas fa-eye text-primary me-1"></i>0</p>
+                                    <p class="my-1 d-inline-block p-fs"><i class="fas fa-eye text-primary me-1"></i>{{ $application['cnt_visits'] }}</p>
                                 </div>
                             </div>
                         </div>

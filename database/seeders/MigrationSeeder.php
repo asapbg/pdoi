@@ -15,10 +15,10 @@ class MigrationSeeder extends Seeder
     {
         $this->call([
             UsersSeeder::class,
+            CategorySeeder::class,
             ApplicationSeeder::class,
             ApplicationEventSeeder::class,
-            //TODO save application files
-            //TODO save application events files
+            FileSeeder::class,
         ]);
     }
 }

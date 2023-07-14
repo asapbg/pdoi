@@ -140,6 +140,11 @@ class LoginController extends Controller
             $user->last_login_at = Carbon::now();
             $user->save();
 
+            \Illuminate\Support\Facades\Session::put('user_last_login', $user->last_login_at);
+            //TODO add admin config for session
+            $sessionLifetime = 5;
+            \Illuminate\Support\Facades\Session::put('user_session_time_limit', $sessionLifetime);
+
             \Auth::logoutOtherDevices(request('password'));
 
             return redirect()->intended($this->redirectPath());

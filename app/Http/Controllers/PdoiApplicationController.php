@@ -50,7 +50,9 @@ class PdoiApplicationController extends Controller
         $sortOrd = $request->filled('ord') ? $request->input('ord') : 'desc';
         if( isset($requestFilter['search']) ) {
             $paginate = $filter['paginate'] ?? PdoiApplication::PAGINATE;
-            $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
+            $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translation',
+                'events', 'events.user', 'events.event', 'events.event.translation',
+                'lastFinalEvent', 'lastFinalEvent.visibleFiles'])
                 ->FilterBy($request->all())
                 ->SortedBy($sort,$sortOrd);
 
@@ -66,7 +68,8 @@ class PdoiApplicationController extends Controller
         if( !$item ) {
             abort(Response::HTTP_NOT_FOUND);
         }
-
+        $item->number_of_visits += 1;
+        $item->save();
         $application = (new PdoiApplicationShortResource($item))->resolve();
         return view('front.application.view', compact('application'));
     }
@@ -78,7 +81,9 @@ class PdoiApplicationController extends Controller
         $sort = $request->filled('sort') ? $request->input('sort') : 'apply_date';
         $sortOrd = $request->filled('ord') ? $request->input('ord') : 'desc';
 
-        $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translations'])
+        $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translation' ,
+            'events', 'events.user', 'events.event', 'events.event.translation',
+            'lastFinalEvent', 'lastFinalEvent.visibleFiles'])
             ->FilterBy($request->all())
             ->SortedBy($sort,$sortOrd)
             ->where('user_reg', $request->user()
@@ -119,7 +124,8 @@ class PdoiApplicationController extends Controller
 
     public function create(Request $request)
     {
-        $user = User::with(['country', 'area', 'municipality', 'settlement'])->find((int)$request->user()->id);
+        $user = User::with(['country', 'country.translation', 'area', 'area.translation',
+            'municipality', 'municipality.translation', 'settlement', 'settlement.translation'])->find((int)$request->user()->id);
 
         if( !$user || $user->cannot('create', PdoiApplication::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
@@ -348,7 +354,7 @@ class PdoiApplicationController extends Controller
         return PdoiApplication::with(['files', 'responseSubject', 'responseSubject.translations',
             'categories', 'categories.translations', 'profileType', 'profileType.translations', 'country',
             'country.translations', 'area', 'area.translations', 'municipality', 'municipality.translations',
-            'settlement', 'settlement.translations', 'events', 'events.user', 'events.event'])
+            'settlement', 'settlement.translations', 'events', 'events.user', 'events.event', 'events.files', 'events.event.translation', 'lastFinalEvent', 'lastFinalEvent.visibleFiles'])
             ->find((int)$id);
     }
 }

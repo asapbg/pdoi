@@ -11,6 +11,14 @@
         </a>
         <div class="navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 flex-row flex-wrap">
+                @if(auth()->user())
+                    <li class="nav-item">
+                        <div id="front-timer">
+                            @include('layouts.partial.count-down-timer')
+                        </div>
+                    </li>
+                    <li class="nav-item d-md-none w-100"></li>
+                @endif
                 <li class="nav-item order-1 me-md-0 me-3">
                     @foreach(config('available_languages') as $locale)
                         @if(!$loop->first) | @endif

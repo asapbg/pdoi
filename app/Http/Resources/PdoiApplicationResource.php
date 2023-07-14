@@ -82,6 +82,7 @@ class PdoiApplicationResource extends JsonResource
                         'files' => (new FileCollection($item->files))->resolve(),
                     ];
                 })->toArray() : [],
+            'cnt_visits' => (int)$this->number_of_visits
         ];
     }
 }
