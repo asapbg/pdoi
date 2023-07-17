@@ -68,14 +68,17 @@ class FileSeeder extends Seeder
                         foreach ($oldFiles as $file) {
                             if( !sizeof($existingFileIds) || !in_array($file->id, $existingFileIds) ) { //skip if already inserted
                                 $appToArray = get_object_vars($file);
+
+                                $content = $appToArray['content'];
+                                unset($appToArray['content']);
                                 //remove non-printed characters from string like LRM
                                 $appToArray['filename'] = preg_replace('/(\x{200e}|\x{200f})/u', '', $appToArray['filename']);
                                 $appToArray['path'] = preg_replace('/(\x{200e}|\x{200f})/u', '', $appToArray['path']);
                                 $newItem = new File();
                                 $newItem->fill($appToArray);
                                 $newItem->save();
-                                if( !empty($appToArray['content']) ) {
-                                    Storage::disk('local')->put($appToArray['path'], $appToArray['content']);
+                                if( !empty($content) ) {
+                                    Storage::disk('local')->put($appToArray['path'], $content);
                                 }
                             }
                         }
