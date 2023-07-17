@@ -41,7 +41,7 @@ class ViewServiceProvider extends ServiceProvider
         // Using closure based composers...
         View::composer('layouts.partial.front.top_menu', function ($view) {
             $currentMenuKey = 'menu_'.app()->getLocale();
-            $menu_sections = null;
+            $menu_sections = Cache::get($currentMenuKey);
             if( is_null($menu_sections) ) {
                 $menu_sections = MenuSection::menu();
                 Cache::put($currentMenuKey, $menu_sections, 3600);

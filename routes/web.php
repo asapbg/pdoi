@@ -62,6 +62,11 @@ Route::get('/debug-sentry', function () {
     throw new Exception('My first Sentry error!');
 });
 
+//help pages
+Route::get('help-section', [\App\Http\Controllers\HomeController::class, 'help'])->name('help.index');
+Route::get('help-section/{slug}', [\App\Http\Controllers\HomeController::class, 'helpPage'])->name('help.page');
+Route::get('help-section/download/{file}', [\App\Http\Controllers\HomeController::class, 'downloadHelpDoc'])->name('help.download');
+
 //Sections and pages
 Route::get('{slug}', [\App\Http\Controllers\HomeController::class, 'section'])->name('section');
 Route::get('{section_slug}/{slug}', [\App\Http\Controllers\HomeController::class, 'page'])->name('page');

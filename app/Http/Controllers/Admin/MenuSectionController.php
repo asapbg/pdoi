@@ -86,15 +86,16 @@ class MenuSectionController  extends AdminController
             $item->save();
             $this->storeTranslateOrNew(MenuSection::TRANSLATABLE_FIELDS, $item, $validated);
 
+            //Clear menu cache
+            foreach (config('available_languages') as $locale) {
+                Cache::forget('menu_'.$locale['code']);
+            }
+
             if( $id ) {
                 return redirect(route(self::EDIT_ROUTE, $item) )
                     ->with('success', trans_choice('custom.menu_sections', 1)." ".__('messages.updated_successfully_m'));
             }
 
-            //Clear menu cache
-            foreach (config('available_languages') as $locale) {
-                Cache::forget('menu_'.$locale['code']);
-            }
             return to_route(self::LIST_ROUTE)
                 ->with('success', trans_choice('custom.menu_sections', 1)." ".__('messages.created_successfully_m'));
         } catch (\Exception $e) {

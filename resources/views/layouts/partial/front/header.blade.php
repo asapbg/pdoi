@@ -36,7 +36,7 @@
                     </li>
                 @endif
                 <li class="nav-item order-md-3 order-2 me-md-0 me-1">
-                    <a href="" class="nav-link"><i class="fa-solid fa-circle-question text-primary me-1" data-bs-toggle="tooltip" data-bs-title="{{ __('custom.instructions') }}"></i></a>
+                    <a href="{{ route('help.index') }}" class="nav-link"><i class="fa-solid fa-circle-question text-primary me-1" data-bs-toggle="tooltip" data-bs-title="{{ __('custom.help') }}"></i></a>
                 </li>
                 <li class="nav-item order-md-4 order-3 me-md-0 me-3">
                     <a href="" class="nav-link"><i class="fa-solid fa-eye-slash text-primary" data-bs-toggle="tooltip" data-bs-title="{{ __('custom.options_for_blind') }}"></i></a>

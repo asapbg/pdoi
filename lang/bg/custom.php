@@ -278,6 +278,7 @@ return [
     'logout'                                    => 'Изход',
     'register'                                  => 'Регистрация',
     'instructions'                              => 'Инструкции',
+    'help'                                      => 'Помощ',
     'options_for_blind'                         => 'Опции за незрящи',
     'general_info'                              => 'Основна информация',
     'in_reg_process'                            => 'В процес на регистрация',

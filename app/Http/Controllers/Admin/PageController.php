@@ -6,6 +6,7 @@ use App\Http\Requests\PageStoreRequest;
 use App\Models\MenuSection;
 use App\Models\Page;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,11 +80,15 @@ class PageController  extends AdminController
             $item->save();
             $this->storeTranslateOrNew(Page::TRANSLATABLE_FIELDS, $item, $validated);
 
+            //Clear menu cache
+            foreach (config('available_languages') as $locale) {
+                Cache::forget('menu_'.$locale['code']);
+            }
+
             if( $id ) {
                 return redirect(route(self::EDIT_ROUTE, $item) )
                     ->with('success', trans_choice('custom.pages', 1)." ".__('messages.updated_successfully_m'));
             }
-
             return to_route(self::LIST_ROUTE)
                 ->with('success', trans_choice('custom.pages', 1)." ".__('messages.created_successfully_m'));
         } catch (\Exception $e) {
