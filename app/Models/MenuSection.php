@@ -104,7 +104,7 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
             ->orderBy('menu_section.order_idx', 'asc')
             ->orderBy('menu_section.parent_id', 'asc')
             ->get();
-
+//dd($items);
         if( $items->count() ) {
             foreach ($items as $item) {
                 if( is_null($item->parent_id) ) {

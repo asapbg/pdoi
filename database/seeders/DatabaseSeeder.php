@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RolesSeeder::class,
             PermissionsSeeder::class,
             SettingsSeeder::class,
+            PageSeeder::class,
             CountrySeeder::class,
 //            UsersSeeder::class, // we insert our users after old user migration
             RzsSectionSeeder::class,

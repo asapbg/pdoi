@@ -15,6 +15,8 @@ class Page  extends ModelActivityExtend implements TranslatableContract
     const TRANSLATABLE_FIELDS = ['name', 'short_content', 'content', 'meta_keyword', 'meta_title', 'meta_description'];
     const MODULE_NAME = 'custom.page';
 
+    const APPEAL_INFO_PAGE = 'appeal_info';
+
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 
     public $timestamps = true;
@@ -23,7 +25,7 @@ class Page  extends ModelActivityExtend implements TranslatableContract
     //activity
     protected string $logName = "page";
 
-    protected $fillable = ['active', 'section_id', 'slug', 'ord er_idx'];
+    protected $fillable = ['active', 'section_id', 'slug', 'ord er_idx', 'system_name'];
 
     public function scopeIsActive($query)
     {

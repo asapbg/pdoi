@@ -6,15 +6,21 @@
     <input type="hidden" name="model" class="model" value="{{ $model }}">
     <div class="status-box">
         @if ($object->$boolean)
-            <span class="badge badge-success status" style="cursor: pointer"
+            <span class="badge badge-success status" @if(!isset($disable_btn) || !$disable_btn) style="cursor: pointer" @endif
                   data-status="0"
-                  onclick="ConfirmToggleBoolean('{{ $boolean }}','{{ $object->id }}','{{ __('custom.are_you_sure_to_make_not_'.$boolean)." ".$object->getModelName() }}')">
+                  @if(!isset($disable_btn) || !$disable_btn)
+                    onclick="ConfirmToggleBoolean('{{ $boolean }}','{{ $object->id }}','{{ __('custom.are_you_sure_to_make_not_'.$boolean)." ".$object->getModelName() }}')"
+                  @endif
+            >
                 {{__('custom.yes')}}
             </span>
         @else
-            <span class="badge badge-danger status" style="cursor: pointer"
+            <span class="badge badge-danger status" @if(!isset($disable_btn) || !$disable_btn) style="cursor: pointer" @endif
                   data-status="1"
-                  onclick="ConfirmToggleBoolean('{{ $boolean }}','{{ $object->id }}', '{{ __('custom.are_you_sure_to_make_'.$boolean)." ".$object->getModelName() }}')">
+                  @if(!isset($disable_btn) || !$disable_btn)
+                    onclick="ConfirmToggleBoolean('{{ $boolean }}','{{ $object->id }}', '{{ __('custom.are_you_sure_to_make_'.$boolean)." ".$object->getModelName() }}')"
+                    @endif
+            >
                 {{__('custom.no')}}
             </span>
         @endif

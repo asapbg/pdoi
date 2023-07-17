@@ -69,7 +69,10 @@ class PageController  extends AdminController
             if( empty($validated['slug']) ) {
                 $validated['slug'] = Str::slug($validated['name_bg']);
             }
-            $validated['section_id'] = $validated['section'];
+            //if not system page
+            if(!$id || empty($item->system_name)) {
+                $validated['section_id'] = $validated['section'];
+            }
 
             $fillable = $this->getFillableValidated($validated, $item);
             $item->fill($fillable);

@@ -34,11 +34,11 @@
                             @foreach($items as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->name }}</td>
+                                    <td>@if(!empty($item->system_name)) <i class="fas fa-info-circle text-info" data-toggle="tooltip" title="{{ __('custom.pages.'.$item->system_name) }}"></i> @endif{{ $item->name }}</td>
                                     <td>{{ $item->section ? $item->section->name : '---' }}</td>
                                     <td>
                                         @if(isset($toggleBooleanModel))
-                                            @includeIf('partials.toggle-boolean', ['object' => $item, 'model' => $toggleBooleanModel])
+                                            @includeIf('partials.toggle-boolean', ['object' => $item, 'model' => $toggleBooleanModel, 'disable_btn' => !empty($item->system_name)])
                                         @endif
                                     </td>
                                     <td class="text-center">

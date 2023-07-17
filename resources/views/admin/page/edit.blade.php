@@ -12,6 +12,10 @@
                             @method('PUT')
                         @endif
                         <input type="hidden" name="id" value="{{ $item->id ?? 0 }}">
+                        @if($item->id && !empty($item->system_name))
+                            <input type="hidden" name="active" value="{{ $item->active }}">
+                            <input type="hidden" name="order_idx" value="0">
+                        @endif
 
                         <div class="row mb-4">
                             @include('admin.partial.edit_field_translate', ['field' => 'name', 'required' => true])
@@ -35,56 +39,58 @@
                                 </div>
                             </div>
                             <div class="col-12"></div>
-                            <div class="col-md-3 col-12">
-                                <div class="form-group">
-                                    <label class="col-sm-12 control-label" for="section">
-                                        {{ __('validation.attributes.section') }}
-                                    </label>
-                                    <div class="col-12">
-                                        <select id="section" name="section"  class="form-control form-control-sm @error('section'){{ 'is-invalid' }}@enderror">
-                                            <option value="" @if(old('section', $item->id ? $item->parent_id ?? '' : '') == '') selected @endif>---</option>
-                                            @if(isset($sections) && sizeof($sections))
-                                                @foreach($sections as $row)
-                                                    <option value="{{ $row->id }}" @if(old('section', ($item->id ? $item->section_id ?? '' : '')) == $row->id) selected @endif>{{ $row->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        @error('section')
-                                        <div class="text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-12">
-                                <div class="form-group">
-                                    <label class="col-sm-12 control-label" for="active">
-                                        {{ __('validation.attributes.status') }}
-                                    </label>
-                                    <div class="col-12">
-                                        <select id="active" name="active"  class="form-control form-control-sm @error('active'){{ 'is-invalid' }}@enderror">
-                                            @foreach(optionsStatuses() as $val => $name)
-                                                <option value="{{ $val }}" @if(old('active', ($item->id ? $item->active : 1)) == $val) selected @endif>{{ $name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('active')
-                                        <div class="text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-12">
-                                <div class="form-group">
-                                    <label class="col-sm-12 control-label" for="order_idx">
-                                        {{ __('validation.attributes.order_idx') }}
-                                    </label>
-                                    <div class="col-12">
-                                        <input typeof="number" step="1" name="order_idx" value="{{ old('order_idx', $item->id ? $item->order_idx : 0) }}" class="form-control form-control-sm @error('order_idx'){{ 'is-invalid' }}@enderror">
-                                        @error('order_idx')
+                            @if(!$item->id || empty($item->system_name))
+                                <div class="col-md-3 col-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label" for="section">
+                                            {{ __('validation.attributes.section') }}
+                                        </label>
+                                        <div class="col-12">
+                                            <select id="section" name="section"  class="form-control form-control-sm @error('section'){{ 'is-invalid' }}@enderror">
+                                                <option value="" @if(old('section', $item->id ? $item->parent_id ?? '' : '') == '') selected @endif>---</option>
+                                                @if(isset($sections) && sizeof($sections))
+                                                    @foreach($sections as $row)
+                                                        <option value="{{ $row->id }}" @if(old('section', ($item->id ? $item->section_id ?? '' : '')) == $row->id) selected @endif>{{ $row->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            @error('section')
                                             <div class="text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="col-md-2 col-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label" for="active">
+                                            {{ __('validation.attributes.status') }}
+                                        </label>
+                                        <div class="col-12">
+                                            <select id="active" name="active"  class="form-control form-control-sm @error('active'){{ 'is-invalid' }}@enderror">
+                                                @foreach(optionsStatuses() as $val => $name)
+                                                    <option value="{{ $val }}" @if(old('active', ($item->id ? $item->active : 1)) == $val) selected @endif>{{ $name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('active')
+                                            <div class="text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label" for="order_idx">
+                                            {{ __('validation.attributes.order_idx') }}
+                                        </label>
+                                        <div class="col-12">
+                                            <input typeof="number" step="1" name="order_idx" value="{{ old('order_idx', $item->id ? $item->order_idx : 0) }}" class="form-control form-control-sm @error('order_idx'){{ 'is-invalid' }}@enderror">
+                                            @error('order_idx')
+                                                <div class="text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
 
                         </div>
 
