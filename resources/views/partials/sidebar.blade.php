@@ -240,6 +240,16 @@
                         </a>
                     </li>
                 @endif
+                @canany(['manage.*', 'settings.*'])
+                    <hr class="text-white">
+                    <li class="nav-item">
+                        <a href="{{ route('admin.settings') }}"
+                           class="nav-link @if(strstr(url()->current(), 'settings/')) active @endif">
+                            <i class="fas fa-cogs"></i>
+                            <p>{{ trans_choice('custom.settings', 1) }}</p>
+                        </a>
+                    </li>
+                @endcanany
             </ul>
         </nav>
     </div>

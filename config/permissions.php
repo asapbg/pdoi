@@ -1,5 +1,6 @@
 <?php return array (
     'manage.*' => 'Пълни права в платформата',
+    'settings.*' => 'Системни настройки',
     'administration.*' => 'Всички права',
 //    'administration.rzs.*' => 'Всички права',
     'administration.rzs_sections' => 'Регистър ЗС (Раздели)',

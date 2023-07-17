@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             PermissionsSeeder::class,
+            SettingsSeeder::class,
             CountrySeeder::class,
 //            UsersSeeder::class, // we insert our users after old user migration
             RzsSectionSeeder::class,

@@ -97,6 +97,7 @@ return [
     'groups'                           => 'Група|Групи',
     'types'                            => 'Тип|Типове',
     'events'                           => 'Събитие|Събития',
+    'event'                             => 'Събитие',
     'owners'                           => 'Собственик|Собственици',
     'directors'                        => 'Директор|Директори',
     'canceled'                         => 'отказан|отказани',
@@ -122,7 +123,6 @@ return [
     'short_description'                => 'Кратко описание',
     'giving'                           => 'Предаване',
     'abbreviation'                     => 'Абревиатура',
-    'settings'                         => 'Настройки',
     'year'                             => 'Година',
     'there_is_no'                      => 'Няма',
     'no_subject_data'                  => 'Няма данни за Обекта, може би е бил изтрит',
@@ -253,6 +253,7 @@ return [
     'applications'                              => 'Заявления',
     'mail_templates'                            => 'Шаблони (съобщения)',
     'section'                                   => 'Секции',
+    'setting'                                   => 'Настройки',
     //
     'applicant'                                 => 'Заявител',
     'admin'                                     => 'Администратор',
@@ -407,5 +408,9 @@ return [
     'mail_templates.placeholders.reg_number'         => 'Рег. №',
     'mail_templates.placeholders.to_name'         => 'До (Име)',
     'mail_templates.placeholders.new_reg_number'  => 'Рег. № (служебно генерирано)',
+    // settings
+    'settings'                                   => 'Настройки|Настройки',
+    'settings.sections.general'                   => 'Общи',
+    'settings.session_time_limit'                => 'Потребителска сесия без активност (в минути)',
 ];
 

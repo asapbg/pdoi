@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Providers\RouteServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -141,9 +142,8 @@ class LoginController extends Controller
             $user->save();
 
             \Illuminate\Support\Facades\Session::put('user_last_login', $user->last_login_at);
-            //TODO add admin config for session
-            $sessionLifetime = 5;
-            \Illuminate\Support\Facades\Session::put('user_session_time_limit', $sessionLifetime);
+            $sessionLifetime = Settings::where('name', '=', Settings::SESSION_LIMIT_KEY)->first();
+            \Illuminate\Support\Facades\Session::put('user_session_time_limit', $sessionLifetime ? $sessionLifetime->value : 10);
 
             \Auth::logoutOtherDevices(request('password'));
 
