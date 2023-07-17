@@ -264,3 +264,13 @@ main {
     overflow-y: scroll;
 }
 /*END MODAL*/
+
+/*START RSS FEED*/
+#rss-link {
+    color: #ea7719;
+    background-color: #efefef;
+}
+#rss-link:hover {
+    background-color: #fff !important;
+}
+/*END RSS FEED*/

@@ -19,6 +19,7 @@
         var max_upload_file_size = parseInt(<?php echo config('filesystems.max_upload_file_size')?>) * 1024; //kb to b
         var allowed_file_extensions = '<?php echo(implode('|', \App\Models\File::ALLOWED_FILE_EXTENSIONS))?>';
     </script>
+    @include('feed::links')
 </head>
 <body>
 <div id="app">

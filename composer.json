@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-curl": "*",
+        "ext-simplexml": "*",
         "archtechx/enums": "^0.3.2",
         "astrotomic/laravel-translatable": "^11.12",
         "barryvdh/laravel-dompdf": "^1.0",
@@ -22,10 +24,9 @@
         "psr/simple-cache": "2",
         "sentry/sentry-laravel": "^3.6",
         "spatie/laravel-activitylog": "^4.4",
+        "spatie/laravel-feed": "^4.2",
         "spatie/laravel-permission": "^5.5",
-        "spatie/pdf-to-text": "^1.52",
-      "ext-curl": "*",
-        "ext-simplexml": "*"
+        "spatie/pdf-to-text": "^1.52"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

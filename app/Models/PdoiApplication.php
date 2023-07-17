@@ -11,8 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Feed\Feedable;
+use Spatie\Feed\FeedItem;
 
-class PdoiApplication extends ModelActivityExtend
+class PdoiApplication extends ModelActivityExtend implements Feedable
 {
     use SoftDeletes, FilterSort, LogsActivity, CausesActivity;
 
@@ -37,6 +39,38 @@ class PdoiApplication extends ModelActivityExtend
 
     //activity
     protected string $logName = "applications";
+
+    /**
+     * @return FeedItem
+     */
+    public function toFeedItem(): FeedItem
+    {
+        return FeedItem::create([
+            'id' => $this->id,
+            'title' => __('custom.application_system_title',
+                [
+                    'user' => ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ),
+                    'subject' => $this->responseSubject->subject_name,
+                    'apply_date' => displayDate($this->created_at)
+                ]),
+            'summary' => html_entity_decode($this->request).$this->statusName,
+            'updated' => $this->updated_at,
+            'link' => route('application.show', ['id' => $this->id]),
+            'authorName' => $this->names_publication ? $this->names : __('custom.anonymous_applicant'),
+            'authorEmail' => $this->email_publication ? $this->email : ''
+        ]);
+    }
+
+    /**
+     * We use tjis method for rss feed
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function getFeedItems(): \Illuminate\Database\Eloquent\Collection
+    {
+        return static::with(['responseSubject', 'responseSubject.translations'])
+            ->where('updated_at', '>', Carbon::now()->startOfDay()->subDay())
+            ->get();
+    }
 
     /**
      * Get the model name

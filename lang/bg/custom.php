@@ -246,6 +246,7 @@ return [
     'process'                          => 'Процес|Процеси',
     'last_event'                       => 'Последно събитие',
     'attributes'                       => 'Атрибут|Атрибути',
+    'subscribe'                       => 'Абонирай се',
 
     //controllers and breadcrumbs
     'file_content'                              => 'Текст във файлове',
