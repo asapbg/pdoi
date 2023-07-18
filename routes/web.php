@@ -64,6 +64,10 @@ Route::get('/debug-sentry', function () {
     throw new Exception('My first Sentry error!');
 });
 
+//sitemap
+Route::get('sitemap.xml', [\App\Http\Controllers\HomeController::class, 'sitemap'])->name('sitemap');
+Route::get('sitemap/{subject_id?}', [\App\Http\Controllers\HomeController::class, 'subSitemap'])->name('sitemap.sub');
+
 //help pages
 Route::get('help-section', [\App\Http\Controllers\HomeController::class, 'help'])->name('help.index');
 Route::get('help-section/{slug}', [\App\Http\Controllers\HomeController::class, 'helpPage'])->name('help.page');

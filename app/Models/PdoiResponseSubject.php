@@ -44,6 +44,11 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return $this->hasOne(PdoiResponseSubject::class, 'id', 'court_id');
     }
 
+    public function applications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PdoiApplication::class, 'id', 'response_subject_id');
+    }
+
     public static function translationFieldsProperties(): array
     {
         return array(
