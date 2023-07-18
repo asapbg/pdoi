@@ -299,6 +299,7 @@ return [
     'application.'                              => 'Обработка на заявления',
     'pdoi.'                                     => 'ПДОИ',
     'menu_section.'                             => 'Публични секции',
+    'settings.'                                 => 'Системни настройки',
     //users
     'users.type.1'                              => 'Вътрешен',
     'users.type.2'                              => 'Външен',

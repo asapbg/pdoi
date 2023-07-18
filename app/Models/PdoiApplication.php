@@ -53,10 +53,10 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     'subject' => $this->responseSubject->subject_name,
                     'apply_date' => displayDate($this->created_at)
                 ]),
-            'summary' => html_entity_decode($this->request).$this->statusName,
-            'updated' => $this->updated_at,
+            'summary' => html_entity_decode($this->request).PHP_EOL.__('custom.status').': '.$this->statusName,
+            'updated' => $this->updated_at ?? $this->created_at,
             'link' => route('application.show', ['id' => $this->id]),
-            'authorName' => $this->names_publication ? $this->names : __('custom.anonymous_applicant'),
+            'authorName' => $this->names_publication ? $this->full_names : __('custom.anonymous_applicant'),
             'authorEmail' => $this->email_publication ? $this->email : ''
         ]);
     }
@@ -68,7 +68,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
     public static function getFeedItems(): \Illuminate\Database\Eloquent\Collection
     {
         return static::with(['responseSubject', 'responseSubject.translations'])
-            ->where('updated_at', '>', Carbon::now()->startOfDay()->subDay())
+            ->orderByRaw("(case when updated_at is null then created_at else updated_at end) desc")
+            ->limit(env('RSS_ITEMS', 20))
             ->get();
     }
 
