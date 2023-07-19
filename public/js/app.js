@@ -125,17 +125,7 @@ function resetVisualOptions() {
 function setDomElFontSize(newSize, ignoreOriginalSize){
     if( !ignoreOriginalSize || (newSize != 100 ) ) {
         $("div, span, p, a, i, h1, h2, h3, h4, h5").css({ "font-size": newSize + "%" });
-        // $("span").css({ "font-size": newSize + "%" });
         $(".select2 span").css({ "font-size": 100 + "%" });
-        // $("p").css({ "font-size": newSize + "%" });
-        // $("a").css({ "font-size": newSize + "%" });
-        // $("i").css({ "font-size": newSize + "%" });
-        // $("h1").css({ "font-size": newSize + "%" });
-        // $("h2").css({ "font-size": newSize + "%" });
-        // $("h3").css({ "font-size": newSize + "%" });
-        // $("h4").css({ "font-size": newSize + "%" });
-        // $("h5").css({ "font-size": newSize + "%" });
-
         $('.vo-reset').removeClass('d-none');
         vo_font_percent = newSize;
         setCookie('vo_font_percent', vo_font_percent);

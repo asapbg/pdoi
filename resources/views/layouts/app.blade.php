@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{isset($title) ? $title .' - '.__('custom.full_app_name') : __('custom.full_app_name') }}</title>
+    <title>{{ isset($title) ? $title .' - '.__('custom.full_app_name') : __('custom.full_app_name') }}</title>
 {{--    <meta property="og:url"           content="https://www.your-domain.com/your-page.html" />--}}
 {{--    <meta property="og:type"          content="website" />--}}
 {{--    <meta property="og:title"         content="Your Website Title" />--}}
@@ -41,14 +41,15 @@
         @include('layouts.partial.front.header')
         @include('layouts.partial.front.top_menu')
     </header>
-    <div class="px-md-5 px-3 pt-1 pb-1 text-end social">
-        <div class="fb-share-button"
+    <div class="px-md-5 px-3 pt-1 pb-1 text-end social d-flex justify-content-end">
+        <div class="fb-share-button me-1"
              data-href="{{ request()->url() }}"
              data-layout="button" data-size="small">
             <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore"></a>
         </div>
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button  me-1" data-lang="en" data-show-count="false"></a>
         <a href="{{ config('feed.feeds.main.url') }}" id="rss-link"
-           class="text-decoration-none"
+           class="text-decoration-none  me-1"
            target="_blank" title="{{ __('custom.subscribe') }}">
             <i class="fas fa-rss-square mr-2 bg-white"></i>
         </a>
@@ -67,6 +68,7 @@
     @include('layouts.partial.front.footer')
 </div>
 <!-- Scripts -->
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 @if($vo_font_percent)
 <script type="text/javascript">
