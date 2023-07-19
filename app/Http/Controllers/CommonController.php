@@ -9,7 +9,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class CommonController extends Controller
@@ -150,5 +152,20 @@ class CommonController extends Controller
         } else {
             return back()->with('warning', __('custom.record_not_found'));
         }
+    }
+
+    public function setCookie(Request $request): \Illuminate\Http\JsonResponse
+    {
+        if( $request->filled('value') && $request->filled('name') ) {
+            Session::put($request->input('name'), (int)$request->input('value'));
+        }
+        return response()->json(['ok'], 200);
+    }
+
+    public function resetVisualOptions(Request $request): \Illuminate\Http\JsonResponse
+    {
+        Session::put('vo_font_percent', 100);
+        Session::put('vo_high_contrast', 0);
+        return response()->json(['ok'], 200);
     }
 }

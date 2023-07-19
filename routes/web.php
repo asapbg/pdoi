@@ -25,6 +25,8 @@ Route::get('/locale', function (Request $request) {
 
 //pdoi subjects modal
 Route::get('/get-pdoi-subjects', [CommonController::class, 'modalPdoiSubjects'])->name('modal.pdoi_subjects');
+Route::get('/set-cookie', [CommonController::class, 'setCookie']);
+Route::get('/reset-visual-options', [CommonController::class, 'resetVisualOptions']);
 
 //application
 Route::controller(PdoiApplicationFrontController::class)->group(function () {

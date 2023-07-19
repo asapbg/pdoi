@@ -39,7 +39,9 @@
                     <a href="{{ route('help.index') }}" class="nav-link"><i class="fa-solid fa-circle-question text-primary me-1" data-bs-toggle="tooltip" data-bs-title="{{ __('custom.help') }}"></i></a>
                 </li>
                 <li class="nav-item order-md-4 order-3 me-md-0 me-3">
-                    <a href="" class="nav-link"><i class="fa-solid fa-eye-slash text-primary" data-bs-toggle="tooltip" data-bs-title="{{ __('custom.options_for_blind') }}"></i></a>
+                    <button id="vo-option-btn" class="btn btn-primary" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#visual-option-div"
+                            aria-expanded="false" aria-controls="visual-option-div">{{ __('custom.options_for_blind') }}</button>
                 </li>
                 @if(auth()->user())
                     <li class="nav-item order-4 me-md-0 me-3">

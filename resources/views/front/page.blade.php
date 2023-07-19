@@ -11,20 +11,16 @@
                         <div class="col-12">
                             {!! $item->content !!}
                         </div>
-                        @if(isset($pages))
-                            @if($pages->count())
-                                @foreach($pages as $page)
-                                    <div class="mb-3">
-                                        <a class="d-inline-block a-fs mb-1"href="{{ route('page', ['section_slug' => $page->section->slug, 'slug' => $page->slug]) }}">{{ $page->name }}</a>
-                                        @if(!empty($page->short_content))
-                                            <p class="p-fs">{{ $page->short_content }}</p>
-                                        @endif
-                                    </div>
-                                @endforeach
-                                {{ $pages->appends(request()->query())->links() }}
-                            @else
-                                @include('front.partials.empty_list')
-                            @endif
+                        @if(isset($pages) && $pages->count())
+                            @foreach($pages as $page)
+                                <div class="mb-3">
+                                    <a class="d-inline-block a-fs mb-1"href="{{ route('page', ['section_slug' => $page->section->slug, 'slug' => $page->slug]) }}">{{ $page->name }}</a>
+                                    @if(!empty($page->short_content))
+                                        <p class="p-fs">{{ $page->short_content }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                            {{ $pages->appends(request()->query())->links() }}
                         @endif
                     </div>
                 </div>
