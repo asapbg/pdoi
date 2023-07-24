@@ -16,6 +16,9 @@ class Statistic extends Controller
 
     const TYPE_BASE = 'base';
     const TYPE_APPLICATIONS = 'applications';
+    const TYPE_RENEW = 'renew';
+    const TYPE_FORWARDED = 'forward';
+    const TYPE_TERMS = 'terms';
 
     private function isAuth(){
         if( !auth()->user() || !auth()->user()->canany(['manage.*', 'statistic.*']) ) {
@@ -32,16 +35,30 @@ class Statistic extends Controller
                 'name' => __('custom.statistics.base'),
                 'description' => null,
                 'icon_class' => 'fas fa-layer-group text-info',
-                'url' => route('admin.statistic.type', ['type' => 'base'])
+                'url' => route('admin.statistic.type', ['type' => self::TYPE_BASE])
             ],
             [
                 'name' => __('custom.statistics.applications'),
                 'description' => null,
                 'icon_class' => 'far fa-file-alt text-warning',
-                'url' => route('admin.statistic.type', ['type' => 'applications'])
+                'url' => route('admin.statistic.type', ['type' => self::TYPE_APPLICATIONS])
+            ],
+        );
+        $statisticLinks = array(
+            [
+                'name' => __('custom.statistics.forward'),
+                'url' => route('admin.statistic.type', ['type' => self::TYPE_FORWARDED])
+            ],
+            [
+                'name' => __('custom.statistics.renew'),
+                'url' => route('admin.statistic.type', ['type' => self::TYPE_RENEW])
+            ],
+            [
+                'name' => __('custom.statistics.terms'),
+                'url' => route('admin.statistic.type', ['type' => self::TYPE_TERMS])
             ]
         );
-        return $this->view('admin.statistic.index', compact('statistics'));
+        return $this->view('admin.statistic.index', compact('statistics', 'statisticLinks'));
     }
 
     public function statistic(Request $request, $type = self::TYPE_BASE)
@@ -51,7 +68,7 @@ class Statistic extends Controller
 
         switch ($type)
         {
-            case 'applications':
+            case self::TYPE_APPLICATIONS:
                 $data['filter'] = $this->filter($type);
                 $requestFilter = $request->all();
                 $requestFilter['groupBy'] = $requestFilter['groupBy'] ?? 'subject';
@@ -59,6 +76,24 @@ class Statistic extends Controller
                 $data['name_title'] = __('custom.statistics.applications.name_column.'.$requestFilter['groupBy']);
                 $data['statistic'] = PdoiApplication::statisticGroupBy($requestFilter);
                 $data['groupedBy'] = $requestFilter['groupBy'];
+                break;
+            case self::TYPE_RENEW:
+                $data['filter'] = $this->filter($type);
+                $requestFilter = $request->all();
+                $this->setTitles(__('custom.statistics.renew'));
+                $data['statistic'] = PdoiApplication::statisticRenewed($requestFilter);
+                break;
+            case self::TYPE_TERMS:
+                $data['filter'] = $this->filter($type);
+                $requestFilter = $request->all();
+                $this->setTitles(__('custom.statistics.terms'));
+                $data['statistic'] = PdoiApplication::statisticTerms($requestFilter);
+                break;
+            case self::TYPE_FORWARDED:
+                $data['filter'] = $this->filter($type);
+                $requestFilter = $request->all();
+                $this->setTitles(__('custom.statistics.forward'));
+                $data['statistic'] = PdoiApplication::statisticForwarded($requestFilter);
                 break;
             default:
                 $this->setTitles(__('custom.statistics.'.$type).' '.trans_choice('custom.statistics', 2));
@@ -112,13 +147,36 @@ class Statistic extends Controller
                     'value' => request()->input('category'),
                     'col' => 'col-md-4'
                 ),
-                'subject' => [
+                'subject' => array(
                     'type' => 'subjects',
                     'placeholder' => trans_choice('custom.pdoi_response_subjects', 1),
                     'options' => optionsFromModel(PdoiResponseSubject::simpleOptionsList(), true, '', trans_choice('custom.pdoi_response_subjects', 1)),
                     'value' => request()->input('subject'),
                     'default' => '',
-                ]
+                )
+            ),
+            self::TYPE_FORWARDED,
+            self::TYPE_TERMS,
+            self::TYPE_RENEW => array(
+                'formDate' => array(
+                    'type' => 'datepicker',
+                    'value' => request()->input('formDate') ?? Carbon::now()->startOfMonth()->format('d-m-Y'),
+                    'placeholder' => __('custom.begin_date'),
+                    'col' => 'col-md-2'
+                ),
+                'toDate' => array(
+                    'type' => 'datepicker',
+                    'value' => request()->input('toDate') ?? Carbon::now()->endOfMonth()->format('d-m-Y'),
+                    'placeholder' => __('custom.end_date'),
+                    'col' => 'col-md-2'
+                ),
+                'subject' => array(
+                    'type' => 'subjects',
+                    'placeholder' => trans_choice('custom.pdoi_response_subjects', 1),
+                    'options' => optionsFromModel(PdoiResponseSubject::simpleOptionsList(), true, '', trans_choice('custom.pdoi_response_subjects', 1)),
+                    'value' => request()->input('subject'),
+                    'default' => '',
+                )
             ),
             default => [],
         };

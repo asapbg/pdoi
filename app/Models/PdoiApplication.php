@@ -205,7 +205,104 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');
     }
 
-    public static function statisticGroupBy($filter)
+    public static function statisticRenewed($filter): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        $formDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
+        $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
+
+        $query = DB::table('pdoi_application')
+            ->join('pdoi_application_event', 'pdoi_application_event.pdoi_application_id', '=', 'pdoi_application.id')
+            ->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
+            ->join('pdoi_response_subject_translations', function ($join){
+                $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
+            })
+            ->select(DB::raw('max(pdoi_response_subject_translations.subject_name) as subject_name'), DB::raw('count(distinct(pdoi_application.id)) as applications_cnt'));
+
+        $query->when($subject, function ($q, $subject) {
+            return $q->where('pdoi_application.response_subject_id', $subject);
+        })->when($formDate, function ($q, $formDate) {
+            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($formDate)->startOfDay());
+        })->when($toDate, function ($q, $toDate) {
+            return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
+        })
+            ->where('pdoi_application_event.event_type', '=', ApplicationEventsEnum::RENEW_PROCEDURE->value)
+            ->whereColumn('pdoi_application_event.old_resp_subject_id', '=', 'pdoi_application.response_subject_id');
+
+        return $query->groupBy('pdoi_response_subject.id')
+            ->orderBy('pdoi_response_subject.id')
+            ->paginate(20);
+    }
+
+    public static function statisticTerms($filter): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        $formDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
+        $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
+
+        $query = DB::table('pdoi_application')
+            ->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
+            ->join('pdoi_response_subject_translations', function ($join){
+                $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
+            })
+            ->select(
+                DB::raw('max(pdoi_response_subject_translations.subject_name) as subject_name'),
+                DB::raw('count(pdoi_application.id) as total_applications'),
+                DB::raw('
+                    sum(case when
+                        pdoi_application.response_end_time is not null
+                        and pdoi_application.status_date is not null
+                        and pdoi_application.status_date <= pdoi_application.response_end_time
+                        and pdoi_application.status in ('.PdoiApplicationStatusesEnum::APPROVED->value.','.PdoiApplicationStatusesEnum::PART_APPROVED->value.','.PdoiApplicationStatusesEnum::NOT_APPROVED->value.','.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value.','.PdoiApplicationStatusesEnum::FORWARDED->value.')
+                       then 1 else 0 end) as in_time_applications
+                '),
+                DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_REVIEW->value.' then 1 else 0 end) as expired_applications')
+            );
+
+        $query->when($subject, function ($q, $subject) {
+            return $q->where('pdoi_application.response_subject_id', $subject);
+        })->when($formDate, function ($q, $formDate) {
+            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($formDate)->startOfDay());
+        })->when($toDate, function ($q, $toDate) {
+            return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
+        });
+
+        return $query->groupBy('pdoi_application.response_subject_id')
+            ->orderBy('pdoi_application.response_subject_id')
+            ->paginate(20);
+    }
+
+    public static function statisticForwarded($filter): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        $formDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
+        $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
+
+        $query = DB::table('pdoi_application')
+            ->join('pdoi_application_event', 'pdoi_application_event.pdoi_application_id', '=', 'pdoi_application.id')
+            ->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
+            ->join('pdoi_response_subject_translations', function ($join){
+                $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
+            })
+            ->select(DB::raw('max(pdoi_response_subject_translations.subject_name) as subject_name'), DB::raw('count(distinct(pdoi_application.id)) as applications_cnt'));
+
+        $query->when($subject, function ($q, $subject) {
+            return $q->where('pdoi_application.response_subject_id', $subject);
+        })->when($formDate, function ($q, $formDate) {
+            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($formDate)->startOfDay());
+        })->when($toDate, function ($q, $toDate) {
+            return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
+        })
+            ->whereNotNull('pdoi_application_event.old_resp_subject_id')
+            ->whereNotNull('pdoi_application_event.new_resp_subject_id')
+            ->whereColumn('pdoi_application_event.old_resp_subject_id', '=', 'pdoi_application.response_subject_id');
+
+        return $query->groupBy('pdoi_response_subject.id')
+            ->orderBy('pdoi_response_subject.id')
+            ->paginate(20);
+    }
+
+    public static function statisticGroupBy($filter): \Illuminate\Contracts\Pagination\LengthAwarePaginator|array
     {
         $page = isset($filter['page']) && !empty($filter['page']) ? (int)$filter['page'] : 1;
         $typeQuery = isset($filter['groupBy']) && !empty($filter['groupBy']) ? $filter['groupBy'] : 'subject';

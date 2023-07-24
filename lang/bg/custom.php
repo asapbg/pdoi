@@ -431,6 +431,9 @@ return [
     'statistics.base'                           => 'Основни',
     'statistics.base.user_types_cnt'            => 'Брой потребители (външни/вътрешни)',
     'statistics.base.subjects_with_admin'       => 'Брой Задължени субекти с администратор',
+    'statistics.forward'                      => 'Статистика за броя заявления, препратени от институции',
+    'statistics.renew'                        => 'Статистика за отменените откази',
+    'statistics.terms'                          => 'Справка за срока за произнасяне от институциите',
     'statistics.applications'                   => 'Заявления',
     'statistics.applications.name_column.subject' => 'Задължен субект',
     'statistics.applications.name_column.applicant_type' => 'Тип потребител',
@@ -438,5 +441,8 @@ return [
     'statistics.applications.name_column.status' => 'Статус',
     'statistics.applications.name_column.country' => 'Държава',
     'statistics.applications.name_column.category' => 'Тематика',
+    'statistic.terms.total_applications'            => 'Заявления (общо)',
+    'statistic.terms.in_time'                       => 'Произнесени в срок',
+    'statistic.terms.expired'                       => 'Изтекли',
 ];
 
