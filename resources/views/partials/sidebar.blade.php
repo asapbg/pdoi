@@ -65,7 +65,7 @@
 {{--                Public sections, menu and pages--}}
                 @canany(['manage.*', 'menu_section.*', 'menu_section.section', 'menu_section.page'])
                     <li class="nav-item">
-                        <a href="#" class="nav-link @if(strstr(url()->current(), 'menu_section')) active @endif">
+                        <a href="#" class="nav-link @if(str_contains(url()->current(), 'menu-section')) active @endif">
                             <i class="nav-icon fas fa-ellipsis-v"></i>
                             <p>{{ trans_choice('custom.menu_sections',2) }}<i class="fas fa-angle-left right"></i></p>
                         </a>
