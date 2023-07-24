@@ -230,7 +230,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                 $orderBy = 'pdoi_application.applicant_type';
                 break;
             case 'profile_type':
-                $name = 'max(concat(profile_type_translations.name, \'NA\'))';
+                $name = 'max(coalesce(profile_type_translations.name, \'NA\'))';
                 $value = 'count(pdoi_application.id)';
                 $groupBy = 'pdoi_application.profile_type';
                 $orderBy = 'pdoi_application.profile_type';
@@ -242,13 +242,13 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                 $orderBy = 'pdoi_application.status';
                 break;
             case 'country':
-                $name = 'concat(country_translations.name, \'NA\')';
+                $name = 'coalesce(country_translations.name, \'NA\')';
                 $value = 'count(pdoi_application.id)';
                 $groupBy = ['country.id', 'country_translations.name'];
                 $orderBy = 'country_translations.name';
                 break;
             case 'category':
-                $name = 'concat(category_translations.name, \'NA\')';
+                $name = 'coalesce(category_translations.name, \'NA\')';
                 $value = 'count(pdoi_application.id)';
                 $groupBy = ['category.id', 'category_translations.name'];
                 $orderBy = 'category_translations.name';
