@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -274,5 +275,18 @@ class User extends Authenticatable implements MustVerifyEmailContract
         }
 
         return $validated;
+    }
+
+    public static function statisticCntByUserType(): array
+    {
+        return DB::select('
+            select
+                sum(case when users.user_type = 1 then 1 else 0 end) as internal_users,
+                sum(case when users.user_type = 2 then 1 else 0 end) as external_users
+            from users
+                where
+                    users.active = 1
+                    and users.deleted_at is null
+        ');
     }
 }

@@ -191,4 +191,23 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return $children;
     }
 
+    public static function statisticSubjectsWithAdmin(): array
+    {
+        return DB::select('
+            select
+                max(pdoi_response_subject_translations.subject_name) as rzs_name,
+                count(users.id) as rzs_administrators
+            from pdoi_response_subject
+            join pdoi_response_subject_translations
+                on pdoi_response_subject_translations.pdoi_response_subject_id = pdoi_response_subject.id and pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'
+            join users on pdoi_response_subject.id = users.administrative_unit
+            where
+                users.deleted_at is null
+                and users.active = 1
+                and pdoi_response_subject.deleted_at is null
+                and pdoi_response_subject.active = 1
+            group by pdoi_response_subject.id;
+        ');
+    }
+
 }

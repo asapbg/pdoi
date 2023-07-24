@@ -204,4 +204,97 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
     {
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');
     }
+
+    public static function statisticGroupBy($filter)
+    {
+        $page = isset($filter['page']) && !empty($filter['page']) ? (int)$filter['page'] : 1;
+        $typeQuery = isset($filter['groupBy']) && !empty($filter['groupBy']) ? $filter['groupBy'] : 'subject';
+        $formDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
+        $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
+        $status = (isset($filter['status']) && !empty($filter['status'])) ? (int)$filter['status'] : null;
+        $category = (isset($filter['category']) && !empty($filter['category'])) ? (int)$filter['category'] : null;
+
+        switch ($typeQuery)
+        {
+            case 'subject':
+                $name = 'max(pdoi_response_subject_translations.subject_name)';
+                $value = 'count(pdoi_application.id)';
+                $groupBy = 'pdoi_application.response_subject_id';
+                $orderBy = 'pdoi_application.response_subject_id';
+                break;
+            case 'applicant_type':
+                $name = 'case when pdoi_application.applicant_type = '.User::USER_TYPE_PERSON.' then \''.__('custom.users.legal_form.'.User::USER_TYPE_PERSON).'\' else \''.__('custom.users.legal_form.'.User::USER_TYPE_COMPANY).'\' end';
+                $value = 'count(pdoi_application.id)';
+                $groupBy = 'pdoi_application.applicant_type';
+                $orderBy = 'pdoi_application.applicant_type';
+                break;
+            case 'profile_type':
+                $name = 'max(concat(profile_type_translations.name, \'NA\'))';
+                $value = 'count(pdoi_application.id)';
+                $groupBy = 'pdoi_application.profile_type';
+                $orderBy = 'pdoi_application.profile_type';
+                break;
+            case 'status':
+                $name = 'pdoi_application.status';
+                $value = 'count(pdoi_application.id)';
+                $groupBy = 'pdoi_application.status';
+                $orderBy = 'pdoi_application.status';
+                break;
+            case 'country':
+                $name = 'concat(country_translations.name, \'NA\')';
+                $value = 'count(pdoi_application.id)';
+                $groupBy = ['country.id', 'country_translations.name'];
+                $orderBy = 'country_translations.name';
+                break;
+            case 'category':
+                $name = 'concat(category_translations.name, \'NA\')';
+                $value = 'count(pdoi_application.id)';
+                $groupBy = ['category.id', 'category_translations.name'];
+                $orderBy = 'category_translations.name';
+                break;
+            default:
+                $name = null;
+                $value = null;
+        }
+
+        if( !$name || !$value || !$groupBy ) {
+            return [];
+        }
+
+        $query = DB::table('pdoi_application')
+            ->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
+            ->join('pdoi_response_subject_translations', function ($join){
+                $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
+            })
+            ->leftJoin('profile_type', 'profile_type.id', '=' ,'pdoi_application.profile_type')
+            ->leftJoin('profile_type_translations', function ($join){
+                $join->on('profile_type_translations.profile_type_id', '=', 'profile_type.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
+            })
+            ->leftJoin('country', 'pdoi_application.country_id', '=', 'country.id')
+            ->leftJoin('country_translations', function ($join){
+                $join->on('country_translations.country_id', '=', 'country.id')->whereRaw('country_translations.locale = \''.app()->getLocale().'\'');
+            })
+            ->leftJoin('pdoi_application_category', 'pdoi_application_category.pdoi_application_id', '=', 'pdoi_application.id')
+            ->leftJoin('category', 'category.id', '=', 'pdoi_application_category.category_id')
+            ->leftJoin('category_translations', function ($join){
+                $join->on('category_translations.category_id', '=', 'category.id')->whereRaw('category_translations.locale = \''.app()->getLocale().'\'');
+            })
+            ->select(DB::raw($name.' as name'), DB::raw($value.' as value_cnt'));
+
+        $query->when($category, function ($q, $category) {
+            return $q->where('category.id', $category);
+        })->when($status, function ($q, $status) {
+                return $q->where('pdoi_application.status', $status);
+        })->when($subject, function ($q, $subject) {
+                return $q->where('pdoi_application.response_subject_id', $subject);
+        })->when($formDate, function ($q, $formDate) {
+                return $q->where('pdoi_application.created_at', '>=', Carbon::parse($formDate)->startOfDay());
+        })->when($toDate, function ($q, $toDate) {
+                return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
+        });
+        return $query->groupBy($groupBy)
+            ->orderBy($orderBy)
+            ->paginate(20);
+    }
 }

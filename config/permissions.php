@@ -18,4 +18,5 @@
     'menu_section.*' => 'Всички права',
     'menu_section.section' => 'Управление на секции',
     'menu_section.page' => 'Управление на страници',
+    'statistics.*' => 'Всички права',
 );

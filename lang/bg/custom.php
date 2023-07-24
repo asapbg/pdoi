@@ -85,6 +85,7 @@ return [
     'municipality'                      => 'Община|Общини',
     'menu_section'                      => 'Публични секции',
     'menu_sections'                      => 'Публична секция|Публични секции',
+    'statistics'                      => 'Статистика|Статистики',
     'pages'                              => 'Страница|Страници',
     'page'                              => 'Страници',
     'settlement'                      => 'Населено място|Населени места',
@@ -247,6 +248,7 @@ return [
     'last_event'                       => 'Последно събитие',
     'attributes'                       => 'Атрибут|Атрибути',
     'subscribe'                       => 'Абонирай се',
+    'group_by'                          => 'Групиране',
 
     //controllers and breadcrumbs
     'file_content'                              => 'Текст във файлове',
@@ -257,6 +259,7 @@ return [
     'setting'                                   => 'Настройки',
     //
     'applicant'                                 => 'Заявител',
+    'applicant_type'                            => 'Тип заявител',
     'admin'                                     => 'Администратор',
     'decision'                                  => 'Решение',
     'to_base_application'                       => 'към основно заявление',
@@ -303,6 +306,7 @@ return [
     'pdoi.'                                     => 'ПДОИ',
     'menu_section.'                             => 'Публични секции',
     'settings.'                                 => 'Системни настройки',
+    'statistics.'                                => 'Статистики',
     //users
     'users.type.1'                              => 'Вътрешен',
     'users.type.2'                              => 'Външен',
@@ -420,5 +424,19 @@ return [
     'settings'                                   => 'Настройки|Настройки',
     'settings.sections.general'                   => 'Общи',
     'settings.session_time_limit'                => 'Потребителска сесия без активност (в минути)',
+    //statistics
+    'statistic'                                 => 'Статистики',
+    'base'                                      => 'Основни',
+    'statistics.not_available_statistic'        => 'Не са открити налични статистики',
+    'statistics.base'                           => 'Основни',
+    'statistics.base.user_types_cnt'            => 'Брой потребители (външни/вътрешни)',
+    'statistics.base.subjects_with_admin'       => 'Брой Задължени субекти с администратор',
+    'statistics.applications'                   => 'Заявления',
+    'statistics.applications.name_column.subject' => 'Задължен субект',
+    'statistics.applications.name_column.applicant_type' => 'Тип потребител',
+    'statistics.applications.name_column.profile_type' => 'Тип профил',
+    'statistics.applications.name_column.status' => 'Статус',
+    'statistics.applications.name_column.country' => 'Държава',
+    'statistics.applications.name_column.category' => 'Тематика',
 ];
 

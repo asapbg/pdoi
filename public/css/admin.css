@@ -64029,3 +64029,9 @@ li.select2-results__option:empty {
     background-color: lightgreen;
 }
 
+/*START Statistics*/
+.statistic .statistic-box:hover {
+    font-weight: bold;
+    0 0.125rem 0.25rem rgba(0, 0, 0, 0.4) !important
+}
+/*END Statistics*/

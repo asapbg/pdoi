@@ -190,4 +190,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::match(['put'], '/settings',         'store')->name('settings.store');
     });
 
+    Route::controller(\App\Http\Controllers\Admin\Statistic::class)->group(function () {
+        Route::get('/statistic',                'index')->name('statistic');
+        Route::get('/statistic/{type}',                'statistic')->name('statistic.type');
+    });
+
 });

@@ -69,8 +69,8 @@
                             <i class="nav-icon fas fa-ellipsis-v"></i>
                             <p>{{ trans_choice('custom.menu_sections',2) }}<i class="fas fa-angle-left right"></i></p>
                         </a>
-                        @canany(['manage.*', 'menu_section.*', 'menu_section.section'])
-                            <ul class="nav nav-treeview" style="display: none;">
+                        <ul class="nav nav-treeview" style="display: none;">
+                            @canany(['manage.*', 'menu_section.*', 'menu_section.section'])
                                 <li class="nav-item">
                                     <a href="{{ route('admin.menu_section') }}"
                                        class="nav-link @if(strstr(url()->current(), 'menu-section/section')) active @endif">
@@ -78,10 +78,8 @@
                                         <p>{{ trans_choice('custom.menu_section.sections', 2) }}</p>
                                     </a>
                                 </li>
-                            </ul>
-                        @endcan
-                        @canany(['manage.*', 'menu_section.*', 'menu_section.page'])
-                            <ul class="nav nav-treeview" style="display: none;">
+                            @endcan
+                            @canany(['manage.*', 'menu_section.*', 'menu_section.page'])
                                 <li class="nav-item">
                                     <a href="{{ route('admin.page') }}"
                                        class="nav-link @if(strstr(url()->current(), 'menu-section/page')) active @endif">
@@ -89,8 +87,8 @@
                                         <p>{{ trans_choice('custom.menu_section.pages', 2) }}</p>
                                     </a>
                                 </li>
-                            </ul>
-                        @endcan
+                            @endcan
+                        </ul>
                     </li>
                 @endcanany
                 <!-- Mail templates -->
@@ -100,6 +98,16 @@
                            class="nav-link @if(strstr(url()->current(), 'mail-template/')) active @endif">
                             <i class="fas far fa-envelope"></i>
                             <p>{{ trans_choice('custom.mail_template',2) }}</p>
+                        </a>
+                    </li>
+                @endcanany
+{{--                Statistics--}}
+                @canany(['manage.*', 'statistics.*'])
+                    <li class="nav-item">
+                        <a href="{{ route('admin.statistic') }}"
+                           class="nav-link @if(str_contains(url()->current(), 'statistic')) active @endif">
+                            <i class="fas fa-chart-line"></i>
+                            <p>{{ trans_choice('custom.statistics',2) }}</p>
                         </a>
                     </li>
                 @endcanany

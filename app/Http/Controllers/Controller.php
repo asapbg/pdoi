@@ -20,6 +20,9 @@ class Controller extends BaseController
     /** @var string $title_plural */
     protected $title_plural;
 
+    /** @var string $title_heading */
+    protected $title_heading;
+
     /** @var string $breadcrumb_title */
     protected $breadcrumb_title;
 
@@ -72,7 +75,7 @@ class Controller extends BaseController
         $segments = request()->segments();
         $links_count = count(request()->segments())-1;
         $text = __('custom.list_with');
-        $heading = "$text $this->title_plural";
+        $heading = $this->title_heading ?? "$text $this->title_plural";
 
         if ($segments[$links_count] == "create") {
             array_pop($segments);
@@ -193,6 +196,15 @@ class Controller extends BaseController
      * @param string $title
      * @return void
      */
+    protected function setTitleHeading(string $title)
+    {
+        $this->title_heading = $title;
+    }
+
+    /**
+     * @param string $title
+     * @return void
+     */
     protected function setBreadcrumbsTitle(string $title)
     {
         $this->breadcrumb_title = $title;
@@ -206,6 +218,7 @@ class Controller extends BaseController
     {
         $this->title_singular   = $title;
         $this->title_plural     = $title;
+        $this->title_heading    = $title;
         $this->breadcrumb_title = $title;
     }
 }

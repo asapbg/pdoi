@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filters\PdoiResponseSubject;
+namespace App\Filters\RzsSection;
 
 use App\Filters\FilterContract;
 use App\Filters\QueryFilter;

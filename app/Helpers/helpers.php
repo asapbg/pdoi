@@ -491,4 +491,27 @@ if (!function_exists('optionsApplicationStatus')) {
             return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
         }
     }
+
+    if (!function_exists('statisticApplicationGroupByOptions')) {
+        /**
+         * @param bool $any
+         * @param string|int $anyValue
+         * @param string|int $anyName
+         * @return array
+         */
+        function statisticApplicationGroupByOptions(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
+        {
+            $options = [];
+            if( $any ) {
+                $options[] = ['value' => $anyValue, 'name' => $anyName];
+            }
+            $options[] = ['value' => 'subject', 'name' => trans_choice('custom.pdoi_response_subjects', 1)];
+            $options[] = ['value' => 'applicant_type', 'name' => __('custom.applicant_type')];
+            $options[] = ['value' => 'profile_type', 'name' => trans_choice('custom.profile_type', 1)];
+            $options[] = ['value' => 'status', 'name' => __('custom.status')];
+            $options[] = ['value' => 'country', 'name' => trans_choice('custom.country', 1)];
+            $options[] = ['value' => 'category', 'name' => trans_choice('custom.categories', 1)];
+            return $options;
+        }
+    }
 }
