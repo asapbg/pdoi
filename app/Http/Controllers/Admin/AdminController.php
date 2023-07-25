@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\NomenclatureExport;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -45,6 +48,18 @@ class AdminController extends Controller
             }
         }
         return $validatedFillable;
+    }
+
+
+    protected function getData($q,  $exportType, $extraData = []): \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\RedirectResponse
+    {
+        $items = $q->get();
+        try {
+            return Excel::download(new NomenclatureExport($items, $exportType, $this->title_plural, $extraData), 'nomenclature_'.$exportType.'_'.Carbon::now()->format('Y_m_d_H_i_s').'.xlsx');
+        } catch (\Exception $e) {
+            logError('Export statistic (type '.$exportType.')', $e->getMessage());
+            return redirect()->back()->with('warning', "Възникна грешка при експортирането, моля опитайте отново");
+        }
     }
 
 }

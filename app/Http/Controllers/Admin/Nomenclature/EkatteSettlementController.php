@@ -16,9 +16,11 @@ class EkatteSettlementController extends AdminController
     const STORE_ROUTE = 'admin.nomenclature.ekatte.settlement.store';
     const LIST_VIEW = 'admin.nomenclatures.ekatte.settlement.index';
     const EDIT_VIEW = 'admin.nomenclatures.ekatte.settlement.edit';
+    const EXPORT_TYPE = 'settlement';
 
     public function index(Request $request)
     {
+        $export = $request->filled('export');
         $requestFilter = $request->all();
         $filter = $this->filters($request);
         $paginate = $filter['paginate'] ?? EkatteSettlement::PAGINATE;
@@ -26,10 +28,16 @@ class EkatteSettlementController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = EkatteSettlement::with(['translation'])
+        $q = EkatteSettlement::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('ime')
-            ->paginate($paginate);
+            ->orderByTranslation('ime');
+
+        if( $export ) {
+            return $this->getData($q, self::EXPORT_TYPE);
+        } else {
+            $items = $q->paginate($paginate);
+        }
+
         $toggleBooleanModel = 'EkatteSettlement';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;

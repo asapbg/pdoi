@@ -17,9 +17,11 @@ class ExtendTermsReasonController extends AdminController
     const STORE_ROUTE = 'admin.nomenclature.extend_terms.store';
     const LIST_VIEW = 'admin.nomenclatures.extend_terms_reason.index';
     const EDIT_VIEW = 'admin.nomenclatures.extend_terms_reason.edit';
+    const EXPORT_TYPE = 'extend_terms_reason';
 
     public function index(Request $request)
     {
+        $export = $request->filled('export');
         $requestFilter = $request->all();
         $filter = $this->filters($request);
         $paginate = $filter['paginate'] ?? ExtendTermsReason::PAGINATE;
@@ -27,10 +29,16 @@ class ExtendTermsReasonController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = ExtendTermsReason::with(['translation'])
+        $q = ExtendTermsReason::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('name')
-            ->paginate($paginate);
+            ->orderByTranslation('name');
+
+        if( $export ) {
+            return $this->getData($q, self::EXPORT_TYPE);
+        } else {
+            $items = $q->paginate($paginate);
+        }
+
         $toggleBooleanModel = 'ExtendTermsReason';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;

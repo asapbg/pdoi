@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Nomenclature;
 
+use App\Exports\NomenclatureExport;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends AdminController
@@ -16,9 +19,11 @@ class CategoryController extends AdminController
     const STORE_ROUTE = 'admin.nomenclature.category.store';
     const LIST_VIEW = 'admin.nomenclatures.category.index';
     const EDIT_VIEW = 'admin.nomenclatures.category.edit';
+    const EXPORT_TYPE = 'category';
 
     public function index(Request $request)
     {
+        $export = $request->filled('export');
         $requestFilter = $request->all();
         $filter = $this->filters($request);
         $paginate = $filter['paginate'] ?? Category::PAGINATE;
@@ -26,10 +31,16 @@ class CategoryController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = Category::with(['translation'])
+        $q = Category::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('name')
-            ->paginate($paginate);
+            ->orderByTranslation('name');
+
+        if( $export ) {
+            return $this->getData($q, self::EXPORT_TYPE);
+        } else {
+            $items = $q->paginate($paginate);
+        }
+
         $toggleBooleanModel = 'Category';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;

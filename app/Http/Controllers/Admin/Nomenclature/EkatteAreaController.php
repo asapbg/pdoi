@@ -16,9 +16,11 @@ class EkatteAreaController extends AdminController
     const STORE_ROUTE = 'admin.nomenclature.ekatte.area.store';
     const LIST_VIEW = 'admin.nomenclatures.ekatte.area.index';
     const EDIT_VIEW = 'admin.nomenclatures.ekatte.area.edit';
+    const EXPORT_TYPE = 'area';
 
     public function index(Request $request)
     {
+        $export = $request->filled('export');
         $requestFilter = $request->all();
         $filter = $this->filters($request);
         $paginate = $filter['paginate'] ?? EkatteArea::PAGINATE;
@@ -26,10 +28,17 @@ class EkatteAreaController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = EkatteArea::with(['translation'])
+
+        $q = EkatteArea::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('ime')
-            ->paginate($paginate);
+            ->orderByTranslation('ime');
+
+        if( $export ) {
+            return $this->getData($q, self::EXPORT_TYPE);
+        } else {
+            $items = $q->paginate($paginate);
+        }
+
         $toggleBooleanModel = 'EkatteArea';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;

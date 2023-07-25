@@ -17,9 +17,11 @@ class CountryController extends AdminController
     const STORE_ROUTE = 'admin.nomenclature.ekatte.country.store';
     const LIST_VIEW = 'admin.nomenclatures.ekatte.country.index';
     const EDIT_VIEW = 'admin.nomenclatures.ekatte.country.edit';
+    const EXPORT_TYPE = 'country';
 
     public function index(Request $request)
     {
+        $export = $request->filled('export');
         $requestFilter = $request->all();
         $filter = $this->filters($request);
         $paginate = $filter['paginate'] ?? Country::PAGINATE;
@@ -27,10 +29,16 @@ class CountryController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = Country::with(['translation'])
+        $q = Country::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('name')
-            ->paginate($paginate);
+            ->orderByTranslation('name');
+
+        if( $export ) {
+            return $this->getData($q, self::EXPORT_TYPE);
+        } else {
+            $items = $q->paginate($paginate);
+        }
+
         $toggleBooleanModel = 'Country';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;

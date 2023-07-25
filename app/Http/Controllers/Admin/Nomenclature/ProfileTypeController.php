@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Nomenclature;
 
+use App\Exports\NomenclatureExport;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Requests\ProfileTypeStoreRequest;
 use App\Models\ProfileType;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProfileTypeController extends AdminController
@@ -17,25 +20,33 @@ class ProfileTypeController extends AdminController
     const STORE_ROUTE = 'admin.nomenclature.profile_type.store';
     const LIST_VIEW = 'admin.nomenclatures.profile_type.index';
     const EDIT_VIEW = 'admin.nomenclatures.profile_type.edit';
+    const EXPORT_TYPE = 'profile_type';
 
     public function index(Request $request)
     {
+        $export = $request->filled('export');
         $requestFilter = $request->all();
         $filter = $this->filters($request);
         $paginate = $filter['paginate'] ?? ProfileType::PAGINATE;
 
+        $userLegalForms = User::getUserLegalForms();
+
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = ProfileType::with(['translation'])
+        $q = ProfileType::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('name')
-            ->paginate($paginate);
+            ->orderByTranslation('name');
+
+        if( $export ) {
+            return $this->getData($q, self::EXPORT_TYPE, ['userLegalForms' => $userLegalForms]);
+        } else {
+            $items = $q->paginate($paginate);
+        }
+
         $toggleBooleanModel = 'ProfileType';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;
-
-        $userLegalForms = User::getUserLegalForms();
 
         return $this->view(self::LIST_VIEW, compact('filter', 'items'
             , 'toggleBooleanModel', 'editRouteName', 'listRouteName', 'userLegalForms'));

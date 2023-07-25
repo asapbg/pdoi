@@ -5,7 +5,7 @@
     <section class="content">
         <div class="container-fluid">
 
-            @include('admin.partial.filter_form')
+            @include('admin.partial.filter_form', ['canExport' => 1])
 
             <div class="card">
                 <div class="card-body table-responsive">

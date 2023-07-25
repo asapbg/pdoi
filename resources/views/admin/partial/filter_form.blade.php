@@ -97,15 +97,15 @@
                         <button type="submit" name="search" value="1" class="btn btn-sm btn-success">
                             <i class="fa fa-search"></i> {{ __('custom.search') }}
                         </button>
-                        @if(isset($listRouteName))
-                            <a href="{{ route($listRouteName) }}" class="btn btn-sm btn-default">
-                                <i class="fas fa-eraser"></i> {{ __('custom.clear') }}
-                            </a>
-                        @endif
                         @if(isset($canExport) && $canExport)
                             <button type="submit" name="export" value="1" class="btn btn-sm btn-success">
                                 <i class="fas fa-file-excel"></i> {{ __('custom.export') }}
                             </button>
+                        @endif
+                        @if(isset($listRouteName))
+                            <a href="{{ route($listRouteName) }}" class="btn btn-sm btn-default">
+                                <i class="fas fa-eraser"></i> {{ __('custom.clear') }}
+                            </a>
                         @endif
                     </div>
                 </div>

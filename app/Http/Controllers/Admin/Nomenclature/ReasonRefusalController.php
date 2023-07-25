@@ -17,9 +17,11 @@ class ReasonRefusalController extends AdminController
     const STORE_ROUTE = 'admin.nomenclature.reason_refusal.store';
     const LIST_VIEW = 'admin.nomenclatures.reason_refusal.index';
     const EDIT_VIEW = 'admin.nomenclatures.reason_refusal.edit';
+    const EXPORT_TYPE = 'reason_refusal';
 
     public function index(Request $request)
     {
+        $export = $request->filled('export');
         $requestFilter = $request->all();
         $filter = $this->filters($request);
         $paginate = $filter['paginate'] ?? ReasonRefusal::PAGINATE;
@@ -27,10 +29,16 @@ class ReasonRefusalController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = ReasonRefusal::with(['translation'])
+        $q = ReasonRefusal::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('name')
-            ->paginate($paginate);
+            ->orderByTranslation('name');
+
+        if( $export ) {
+            return $this->getData($q, self::EXPORT_TYPE);
+        } else {
+            $items = $q->paginate($paginate);
+        }
+
         $toggleBooleanModel = 'ReasonRefusal';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;

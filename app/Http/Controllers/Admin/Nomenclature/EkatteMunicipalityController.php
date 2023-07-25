@@ -16,9 +16,11 @@ class EkatteMunicipalityController extends AdminController
     const STORE_ROUTE = 'admin.nomenclature.ekatte.municipality.store';
     const LIST_VIEW = 'admin.nomenclatures.ekatte.municipality.index';
     const EDIT_VIEW = 'admin.nomenclatures.ekatte.municipality.edit';
+    const EXPORT_TYPE = 'municipality';
 
     public function index(Request $request)
     {
+        $export = $request->filled('export');
         $requestFilter = $request->all();
         $filter = $this->filters($request);
         $paginate = $filter['paginate'] ?? EkatteMunicipality::PAGINATE;
@@ -26,10 +28,16 @@ class EkatteMunicipalityController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
-        $items = EkatteMunicipality::with(['translation'])
+        $q = EkatteMunicipality::with(['translation'])
             ->FilterBy($requestFilter)
-            ->orderByTranslation('ime')
-            ->paginate($paginate);
+            ->orderByTranslation('ime');
+
+        if( $export ) {
+            return $this->getData($q, self::EXPORT_TYPE);
+        } else {
+            $items = $q->paginate($paginate);
+        }
+
         $toggleBooleanModel = 'EkatteMunicipality';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;
