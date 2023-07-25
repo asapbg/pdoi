@@ -117,7 +117,7 @@ class Statistic extends Controller
                 'groupBy' => [
                     'type' => 'select',
                     'options' => statisticApplicationGroupByOptions(true, '', __('custom.group_by')),
-                    'value' => request()->input('groupBy'),
+                    'value' => request()->input('groupBy') ?? 'subject',
                     'default' => '',
                     'col' => 'col-md-4'
                 ],
