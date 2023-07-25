@@ -21,19 +21,24 @@ class PdoiApplicationEvent extends Model
         {
             case ApplicationEventsEnum::FINAL_DECISION->value:
                 if( $this->event_reason && $this->event_reason == PdoiApplicationStatusesEnum::NOT_APPROVED->value ) {
-                    $name.= '('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).($this->notApprovedReason ? ' - '.$this->notApprovedReason->name : '').')';
+                    $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).($this->notApprovedReason ? ' - '.$this->notApprovedReason->name : '').')';
                 } else{
-                    $name.= '('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).')';
+                    $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).')';
                 }
                 break;
             case ApplicationEventsEnum::EXTEND_TERM->value:
                 if( $this->event_reason ) {
-                    $name.= '('.$this->extendTimeReason->name.')';
+                    $name.= ' ('.$this->extendTimeReason->name.')';
                 }
                 break;
             case ApplicationEventsEnum::RENEW_PROCEDURE->value:
                 if( $this->court_decision ) {
-                    $name.= '('.__('custom.court_decision.'.CourtDecisionsEnum::keyByValue($this->court_decision)).')';
+                    $name.= ' ('.__('custom.court_decision.'.CourtDecisionsEnum::keyByValue($this->court_decision)).')';
+                }
+                break;
+            case ApplicationEventsEnum::FORWARD->value:
+                if( $this->new_resp_subject_id ) {
+                    $name.= ' ('.$this->newSubject->subject_name.')';
                 }
                 break;
         }

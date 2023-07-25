@@ -60,7 +60,16 @@ class PdoiApplicationShortResource extends JsonResource
                     ];
                 })->toArray() : [],
             'final_files' => $this->lastFinalEvent && $this->lastFinalEvent->visibleFiles->count() ? (new FileCollection($this->lastFinalEvent->visibleFiles))->resolve() : [],
-            'cnt_visits' => (int)$this->number_of_visits
+            'cnt_visits' => (int)$this->number_of_visits,
+            'children' => $this->children->count() ? $this->children->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'reg_num' => $item->application_uri,
+                    'subject' => $item->response_subject_id ? $item->responseSubject->subject_name : 'EIK...NAME',
+                    'date' => displayDateTime($item->created_at),
+                    'status' => __('custom.application.status.'. \App\Enums\PdoiApplicationStatusesEnum::keyByValue($item->status))
+                ];
+            })->toArray() : []
         ];
     }
 }

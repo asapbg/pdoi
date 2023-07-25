@@ -15,6 +15,11 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="button" aria-controls="history" aria-selected="false">{{ __('custom.history') }}</a>
                         </li>
+                        @if(isset($application['children']) && sizeof($application['children']))
+                            <li class="nav-item">
+                                <a class="nav-link" id="sub-application-tab" data-bs-toggle="tab" data-bs-target="#sub-application" role="button" aria-controls="sub-application" aria-selected="false">Препратени заявления</a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="card-body">
@@ -102,6 +107,33 @@
                                 </thead>
                             </table>
                         </div>
+                        @if(isset($application['children']) && sizeof($application['children']))
+                            <div class="tab-pane fade" id="sub-application" role="tabpanel" aria-labelledby="sub-application-tab">
+                                <table class="table table-sm table-bordered table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ __('custom.reg_number') }}</th>
+                                        <th>{{ __('custom.new_pdoi_subject') }}</th>
+                                        <th>{{ __('custom.created_at') }}</th>
+                                        <th>{{ __('custom.status') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <thead>
+                                        @foreach($application['children'] as $child)
+                                            <tr>
+                                                <td>
+                                                    <a href="{{ route('application.show', ['id' => $child['id']]) }}" target="_blank">
+                                                        <i class="fas fa-external-link-alt text-primary"></i> {{ $child['reg_num'] }}</a>
+                                                </td>
+                                                <td>{{ $child['subject'] }}</td>
+                                                <td class="text-nowrap">{{ $child['date'] }}</td>
+                                                <td>{{ $child['status'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </thead>
+                                </table>
+                            </div>
+                        @endif
                     </div>
 
                 </div>
