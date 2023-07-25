@@ -249,6 +249,7 @@ return [
     'attributes'                       => 'Атрибут|Атрибути',
     'subscribe'                       => 'Абонирай се',
     'group_by'                          => 'Групиране',
+    'export'                          => 'Експорт',
 
     //controllers and breadcrumbs
     'file_content'                              => 'Текст във файлове',

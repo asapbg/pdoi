@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\StatisticExport;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\PdoiApplication;
@@ -9,6 +10,8 @@ use App\Models\PdoiResponseSubject;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
 class Statistic extends Controller
@@ -63,37 +66,50 @@ class Statistic extends Controller
 
     public function statistic(Request $request, $type = self::TYPE_BASE)
     {
-        $data = array();
+        $export = $request->filled('export');
+        $data = array('type' => $type);
         $this->isAuth();
 
         switch ($type)
         {
             case self::TYPE_APPLICATIONS:
-                $data['filter'] = $this->filter($type);
                 $requestFilter = $request->all();
                 $requestFilter['groupBy'] = $requestFilter['groupBy'] ?? 'subject';
-                $this->setTitles(trans_choice('custom.statistics', 1).' '.trans_choice('custom.applications', 2));
+                $data['statistic'] = PdoiApplication::statisticGroupBy($requestFilter, $export);
                 $data['name_title'] = __('custom.statistics.applications.name_column.'.$requestFilter['groupBy']);
-                $data['statistic'] = PdoiApplication::statisticGroupBy($requestFilter);
                 $data['groupedBy'] = $requestFilter['groupBy'];
+                $this->setTitles(trans_choice('custom.statistics', 1).' '.trans_choice('custom.applications', 2));
+                if(!$export) {
+                    $data['canExport'] = 1;
+                    $data['filter'] = $this->filter($type);
+                }
                 break;
             case self::TYPE_RENEW:
-                $data['filter'] = $this->filter($type);
                 $requestFilter = $request->all();
+                $data['statistic'] = PdoiApplication::statisticRenewed($requestFilter, $export);
                 $this->setTitles(__('custom.statistics.renew'));
-                $data['statistic'] = PdoiApplication::statisticRenewed($requestFilter);
+                if(!$export) {
+                    $data['filter'] = $this->filter($type);
+                    $data['canExport'] = 1;
+                }
                 break;
             case self::TYPE_TERMS:
-                $data['filter'] = $this->filter($type);
                 $requestFilter = $request->all();
+                $data['statistic'] = PdoiApplication::statisticTerms($requestFilter, $export);
                 $this->setTitles(__('custom.statistics.terms'));
-                $data['statistic'] = PdoiApplication::statisticTerms($requestFilter);
+                if(!$export) {
+                    $data['filter'] = $this->filter($type);
+                    $data['canExport'] = 1;
+                }
                 break;
             case self::TYPE_FORWARDED:
-                $data['filter'] = $this->filter($type);
                 $requestFilter = $request->all();
+                $data['statistic'] = PdoiApplication::statisticForwarded($requestFilter, $export);
                 $this->setTitles(__('custom.statistics.forward'));
-                $data['statistic'] = PdoiApplication::statisticForwarded($requestFilter);
+                if(!$export) {
+                    $data['filter'] = $this->filter($type);
+                    $data['canExport'] = 1;
+                }
                 break;
             default:
                 $this->setTitles(__('custom.statistics.'.$type).' '.trans_choice('custom.statistics', 2));
@@ -107,6 +123,20 @@ class Statistic extends Controller
                 ];
         }
 
+        if( $export ) {
+            try {
+                $period = (isset($requestFilter) ?
+                        (isset($requestFilter['fromDate']) ? displayDate($requestFilter['fromDate']) : '').
+                        (isset($requestFilter['toDate']) ?
+                            (isset($requestFilter['fromDate']) ? ' - ' : '').displayDate($requestFilter['toDate']) : '')
+                        : '');
+                $data['title'] = $this->title_plural.(!empty($period) ? ' ('.$period.')' : '');
+                return Excel::download(new StatisticExport($data), 'statistic_'.$type.'_'.Carbon::now()->format('Y_m_d_H_i_s').'.xlsx');
+            } catch (\Exception $e) {
+                logError('Export statistic (type '.$type.')', $e->getMessage());
+                return redirect()->back()->with('warning', "Възникна грешка при експортирането, моля опитайте отново");
+            }
+        }
         return $this->view('admin.statistic.'.$type, compact('data'));
     }
 
@@ -121,9 +151,9 @@ class Statistic extends Controller
                     'default' => '',
                     'col' => 'col-md-4'
                 ],
-                'formDate' => array(
+                'fromDate' => array(
                     'type' => 'datepicker',
-                    'value' => request()->input('formDate') ?? Carbon::now()->startOfMonth()->format('d-m-Y'),
+                    'value' => request()->input('fromDate') ?? Carbon::now()->startOfMonth()->format('d-m-Y'),
                     'placeholder' => __('custom.begin_date'),
                     'col' => 'col-md-2'
                 ),
@@ -158,9 +188,9 @@ class Statistic extends Controller
             self::TYPE_FORWARDED,
             self::TYPE_TERMS,
             self::TYPE_RENEW => array(
-                'formDate' => array(
+                'fromDate' => array(
                     'type' => 'datepicker',
-                    'value' => request()->input('formDate') ?? Carbon::now()->startOfMonth()->format('d-m-Y'),
+                    'value' => request()->input('fromDate') ?? Carbon::now()->startOfMonth()->format('d-m-Y'),
                     'placeholder' => __('custom.begin_date'),
                     'col' => 'col-md-2'
                 ),

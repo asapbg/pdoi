@@ -210,9 +210,9 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');
     }
 
-    public static function statisticRenewed($filter): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public static function statisticRenewed($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
     {
-        $formDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $fromDate = isset($filter['fromDate']) && !empty($filter['fromDate']) ? $filter['fromDate'] : Carbon::now()->startOfMonth()->startOfDay();
         $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
         $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
 
@@ -226,22 +226,25 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
 
         $query->when($subject, function ($q, $subject) {
             return $q->where('pdoi_application.response_subject_id', $subject);
-        })->when($formDate, function ($q, $formDate) {
-            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($formDate)->startOfDay());
+        })->when($fromDate, function ($q, $fromDate) {
+            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($fromDate)->startOfDay());
         })->when($toDate, function ($q, $toDate) {
             return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
         })
-            ->where('pdoi_application_event.event_type', '=', ApplicationEventsEnum::RENEW_PROCEDURE->value)
-            ->whereColumn('pdoi_application_event.old_resp_subject_id', '=', 'pdoi_application.response_subject_id');
+            ->where('pdoi_application_event.event_type', '=', ApplicationEventsEnum::RENEW_PROCEDURE->value);
 
+        if( $export ) {
+            return $query->groupBy('pdoi_response_subject.id')
+                ->orderBy('pdoi_response_subject.id')->get();
+        }
         return $query->groupBy('pdoi_response_subject.id')
             ->orderBy('pdoi_response_subject.id')
             ->paginate(20);
     }
 
-    public static function statisticTerms($filter): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public static function statisticTerms($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
     {
-        $formDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $fromDate = isset($filter['fromDate']) && !empty($filter['fromDate']) ? $filter['fromDate'] : Carbon::now()->startOfMonth()->startOfDay();
         $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
         $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
 
@@ -266,20 +269,24 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
 
         $query->when($subject, function ($q, $subject) {
             return $q->where('pdoi_application.response_subject_id', $subject);
-        })->when($formDate, function ($q, $formDate) {
-            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($formDate)->startOfDay());
+        })->when($fromDate, function ($q, $fromDate) {
+            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($fromDate)->startOfDay());
         })->when($toDate, function ($q, $toDate) {
             return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
         });
 
+        if( $export ) {
+            return $query->groupBy('pdoi_application.response_subject_id')
+                ->orderBy('pdoi_application.response_subject_id')->get();
+        }
         return $query->groupBy('pdoi_application.response_subject_id')
             ->orderBy('pdoi_application.response_subject_id')
             ->paginate(20);
     }
 
-    public static function statisticForwarded($filter): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public static function statisticForwarded($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
     {
-        $formDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $fromDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
         $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
         $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
 
@@ -293,25 +300,30 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
 
         $query->when($subject, function ($q, $subject) {
             return $q->where('pdoi_application.response_subject_id', $subject);
-        })->when($formDate, function ($q, $formDate) {
-            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($formDate)->startOfDay());
+        })->when($fromDate, function ($q, $fromDate) {
+            return $q->where('pdoi_application.created_at', '>=', Carbon::parse($fromDate)->startOfDay());
         })->when($toDate, function ($q, $toDate) {
             return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
         })
             ->whereNotNull('pdoi_application_event.old_resp_subject_id')
-            ->whereNotNull('pdoi_application_event.new_resp_subject_id')
+            //->whereNotNull('pdoi_application_event.new_resp_subject_id')
             ->whereColumn('pdoi_application_event.old_resp_subject_id', '=', 'pdoi_application.response_subject_id');
+
+        if( $export ) {
+            return $query->groupBy('pdoi_response_subject.id')
+                ->orderBy('pdoi_response_subject.id')->get();
+        }
 
         return $query->groupBy('pdoi_response_subject.id')
             ->orderBy('pdoi_response_subject.id')
             ->paginate(20);
     }
 
-    public static function statisticGroupBy($filter): \Illuminate\Contracts\Pagination\LengthAwarePaginator|array
+    public static function statisticGroupBy($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|array|\Illuminate\Support\Collection
     {
         $page = isset($filter['page']) && !empty($filter['page']) ? (int)$filter['page'] : 1;
         $typeQuery = isset($filter['groupBy']) && !empty($filter['groupBy']) ? $filter['groupBy'] : 'subject';
-        $formDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $fromDate = isset($filter['fromDate']) && !empty($filter['fromDate']) ? $filter['fromDate'] : Carbon::now()->startOfMonth()->startOfDay();
         $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
         $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
         $status = (isset($filter['status']) && !empty($filter['status'])) ? (int)$filter['status'] : null;
@@ -390,11 +402,16 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                 return $q->where('pdoi_application.status', $status);
         })->when($subject, function ($q, $subject) {
                 return $q->where('pdoi_application.response_subject_id', $subject);
-        })->when($formDate, function ($q, $formDate) {
-                return $q->where('pdoi_application.created_at', '>=', Carbon::parse($formDate)->startOfDay());
+        })->when($fromDate, function ($q, $fromDate) {
+                return $q->where('pdoi_application.created_at', '>=', Carbon::parse($fromDate)->startOfDay());
         })->when($toDate, function ($q, $toDate) {
                 return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
         });
+
+        if( $export ) {
+            return $query->groupBy($groupBy)
+                ->orderBy($orderBy)->get();
+        }
         return $query->groupBy($groupBy)
             ->orderBy($orderBy)
             ->paginate(20);

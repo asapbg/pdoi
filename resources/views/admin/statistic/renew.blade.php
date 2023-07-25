@@ -4,7 +4,7 @@
 
     <section class="content">
         <div class="container-fluid">
-            @include('admin.partial.filter_form', ['filter' => $data['filter']])
+            @include('admin.partial.filter_form', ['filter' => $data['filter'], 'canExport' => $data['canExport'] ?? 0])
             <div class="card">
                 <div class="card-body table-responsive">
                     <table class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">

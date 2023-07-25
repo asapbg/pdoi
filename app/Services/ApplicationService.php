@@ -127,7 +127,6 @@ class ApplicationService
                     $this->scheduleCommunication($eventConfig);
                 }
 
-                //TODO fix me if forwarding generate new applications
                 if( in_array($eventConfig->app_event, ApplicationEventsEnum::forwardGroupEvents()) ) {
                     switch ($eventConfig->app_event) {
                         case ApplicationEventsEnum::FORWARD->value:
