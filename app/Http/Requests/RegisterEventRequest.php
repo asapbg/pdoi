@@ -33,6 +33,7 @@ class RegisterEventRequest extends FormRequest
             'application' => ['nullable', 'numeric', 'exists:pdoi_application,id'],
             'new_resp_subject_id' => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
             'add_text' => ['nullable', 'string'],
+            'refuse_reason' => ['nullable', 'numeric', 'exists:reason_refusal,id'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
             'files' => ['array'],

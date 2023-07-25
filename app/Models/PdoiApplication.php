@@ -200,6 +200,11 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         return $this->hasMany(File::class, 'id_object', 'id')->where('code_object', '=', File::CODE_OBJ_APPLICATION);
     }
 
+    public function userFiles(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(File::class, 'id_object', 'id')->where('code_object', '=', File::CODE_OBJ_APPLICATION)->whereNotNull('user_reg');
+    }
+
     public function profileType(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');

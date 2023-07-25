@@ -22,13 +22,26 @@
                             @if($event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value)
                                 <div class="form-group form-group-sm col-md-6 col-12 mb-3">
                                     <label class="form-label fw-semibold" >{{ __('custom.event.FINAL_DECISION') }}:</label>
-                                    <select name="final_status" class="form-control form-control-sm" required>
+                                    <select name="final_status" class="form-control form-control-sm" required id="final_status">
                                         <option value=""></option>
                                         @foreach(\App\Enums\PdoiApplicationStatusesEnum::finalStatuses() as $status)
-                                            <option value="{{ $status->value }}">{{ __('custom.application.status.'.$status->name) }}</option>
+                                            <option value="{{ $status->value }}" @if($status->value == \App\Enums\PdoiApplicationStatusesEnum::NOT_APPROVED->value) data-refuse="1" @endif>{{ __('custom.application.status.'.$status->name) }}</option>
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col-12"></div>
+                                <div class="form-group form-group-sm col-md-6 col-12 mb-3 d-none" id="refuse_reason_box">
+                                    <label class="form-label fw-semibold" >{{ trans_choice('custom.reason_refusals', 1) }}:</label>
+                                    <select name="refuse_reason" class="form-control form-control-sm" id="refuse_reason">
+                                        <option value=""></option>
+                                        @if($refusalReasons->count())
+                                            @foreach($refusalReasons as $refuse)
+                                                <option value="{{ $refuse->id }}">{{ $refuse->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
                             @endif
 
 
@@ -106,3 +119,22 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script type="text/javascript">
+        $(document).ready(function (){
+            let reasonRefuseSelect = $('#refuse_reason');
+            let finalDecisionSelect = $('#final_status');
+            if(finalDecisionSelect) {
+                finalDecisionSelect.on('change', function (){
+                    let isRefuse = $('#final_status').find(':selected').data('refuse');
+                    if( typeof isRefuse != 'undefined' && parseInt(isRefuse) == 1 ) {
+                        $('#refuse_reason_box').removeClass('d-none');
+                    } else {
+                        $('#refuse_reason_box').addClass('d-none');
+                        reasonRefuseSelect.val('');
+                    }
+                });
+            }
+        });
+    </script>
+@endpush

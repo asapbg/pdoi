@@ -398,6 +398,7 @@ return [
     'event.FORWARD'                             => 'Препращане на заявление',
     'event.EXTEND_TERM'                         => 'Удължаване на срока',
     'event.FINAL_DECISION'                      => 'Крайно решение',
+    'event.RENEW_PROCEDURE'                     => 'Възобновена процедура',
     //
     'court_decision.CANCEL'                     => 'Съдът отменя решението за отказ',
     'court_decision.CONFIRMS'                   => 'Съдът потвърждава решението за отказ',

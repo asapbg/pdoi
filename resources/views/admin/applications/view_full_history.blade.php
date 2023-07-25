@@ -141,9 +141,9 @@
                                     @foreach($item->events as $event)
                                         <div class="col-12 mb-md-4 mb-3">
                                             <div class="row border border-1 rounded-1 p-3">
-                                                <span class="font-weight-bold pl-0"><i class="far fa-calendar-check mr-2 text-primary"></i>{{ $event->event->name }}</span>
+                                                <span class="font-weight-bold pl-0"><i class="far fa-calendar-check mr-2 text-primary"></i>{{ $event->eventReasonName }}</span>
                                                 <hr>
-                                                <div class="col-md-2 col-12 font-weight-semibold">{{ __('custom.date') }}:  <span class="text-primary">{{ displayDate($event->event_date) }}</span></div>
+                                                <div class="col-md-2 col-12 font-weight-semibold">{{ __('custom.date') }}:  <span class="text-primary">{{ displayDateTime($event->created_at) }}</span></div>
                                                 <div class="col-md-8 col-12 font-weight-semibold">{{ trans_choice('custom.users', 1) }}: @if($event->user_reg > 0)<span class="text-primary">{{ $event->user->names }}</span>@endif <span class="fst-italic text-primary">({{ $event->user_reg > 0 ? ($event->user->user_type == \App\Models\User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') ) : 'Системен' }})</span></div>
                                                 @if(!empty($event->old_resp_subject_id) || !empty($event->new_resp_subject_id))
                                                     <div class="col-12 mt-2"></div>

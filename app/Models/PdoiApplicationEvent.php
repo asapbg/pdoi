@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\ApplicationEventsEnum;
+use App\Enums\CourtDecisionsEnum;
+use App\Enums\PdoiApplicationStatusesEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,6 +13,34 @@ class PdoiApplicationEvent extends Model
 {
     protected $table = 'pdoi_application_event';
     public $timestamps = true;
+
+    protected function eventReasonName(): Attribute
+    {
+        $name = $this->event->name;
+        switch ($this->event_type)
+        {
+            case ApplicationEventsEnum::FINAL_DECISION->value:
+                if( $this->event_reason && $this->event_reason == PdoiApplicationStatusesEnum::NOT_APPROVED->value ) {
+                    $name.= '('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).($this->notApprovedReason ? ' - '.$this->notApprovedReason->name : '').')';
+                } else{
+                    $name.= '('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).')';
+                }
+                break;
+            case ApplicationEventsEnum::EXTEND_TERM->value:
+                if( $this->event_reason ) {
+                    $name.= '('.$this->extendTimeReason->name.')';
+                }
+                break;
+            case ApplicationEventsEnum::RENEW_PROCEDURE->value:
+                if( $this->court_decision ) {
+                    $name.= '('.__('custom.court_decision.'.CourtDecisionsEnum::keyByValue($this->court_decision)).')';
+                }
+                break;
+        }
+        return Attribute::make(
+            get: fn () => $name
+        );
+    }
 
     public function application(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
@@ -46,5 +78,15 @@ class PdoiApplicationEvent extends Model
         return $this->hasMany(File::class, 'id_object', 'id')
             ->where('visible_on_site', '=', 1)
             ->where('code_object', '=', File::CODE_OBJ_EVENT);
+    }
+
+    public function notApprovedReason(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ReasonRefusal::class, 'id', 'reason_not_approved');
+    }
+
+    public function extendTimeReason(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ExtendTermsReason::class, 'id', 'event_reason');
     }
 }

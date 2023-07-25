@@ -82,6 +82,9 @@ class ApplicationService
                 if ($eventConfig->add_text && isset($data['add_text']) && !empty($data['add_text'])) {
                     $newEvent->add_text = htmlentities(stripHtmlTags($data['add_text']));
                 }
+                if ($eventConfig->extend_terms_reason_id) {
+                    $newEvent->event_reason = $eventConfig->extend_terms_reason_id;
+                }
                 if ($eventConfig->old_resp_subject && isset($data['old_subject']) && (int)$data['old_subject']) {
                     $newEvent->old_resp_subject_id = (int)$data['old_subject'];
                 }
@@ -91,6 +94,17 @@ class ApplicationService
                 if ($eventConfig->court_decision && isset($data['decision']) && (int)$data['decision']) {
                     $newEvent->court_decision = (int)$data['decision'];
                 }
+                //add decision to final event and reason refusal if this is the case
+                if ($eventConfig->app_event == ApplicationEventsEnum::FINAL_DECISION->value) {
+                    $newEvent->event_reason = (int)$data['final_status'] ?? null;
+
+                    if( (int)$data['final_status'] == PdoiApplicationStatusesEnum::NOT_APPROVED->value
+                        && isset($data['refuse_reason']) ) {
+                        $newEvent->reason_not_approved = (int)$data['refuse_reason'];
+                    }
+                }
+
+
                 $this->application->save();
                 $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::APPROVE_BY_RKS->value]) ? $this->userId : null;
                 $newEvent->status = $eventConfig->event_status;
@@ -176,7 +190,14 @@ class ApplicationService
             throw new \Exception('Apply application (front). Operation roll back because cant\'t register '.ApplicationEventsEnum::SEND->name. ' event');
         }
 
-        //TODO fix me Attach user files from original application ??
+        //Attach user files from original application
+        if( $this->application->userFiles->count() ) {
+            foreach ($this->application->userFiles as $f) {
+                $newFile = $f->replicate();
+                $newFile->id_object = $newApplication->id;
+                $newFile->save();
+            }
+        }
 
         //communication to subject
         if( isset($data['new_resp_subject_id']) ) {

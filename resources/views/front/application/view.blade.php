@@ -92,7 +92,7 @@
                                 @if(isset($application['events']) && sizeof($application['events']))
                                     @foreach($application['events'] as $event)
                                         <tr>
-                                            <td>{{ $event['date'] }}</td>
+                                            <td class="text-nowrap">{{ $event['date'] }}</td>
                                             <td>{{ $event['name'] }}</td>
                                         </tr>
                                     @endforeach

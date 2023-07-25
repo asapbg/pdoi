@@ -233,8 +233,10 @@
                                 @if($item->events->count())
                                     @foreach($item->events as $event)
                                         <tr>
-                                            <td>{{ displayDate($event->event_date) }}</td>
-                                            <td>{{ $event->event->name }} @if($event->new_resp_subject_id)({{ $event->newSubject->subject_name }})@endif</td>
+                                            <td>{{ displayDateTime($event->created_at) }}</td>
+                                            <td>{{ $event->eventReasonName }}
+                                                @if($event->new_resp_subject_id)({{ $event->newSubject->subject_name }})@endif
+                                            </td>
                                             <td><a href="">{{ $event->user_reg > 0 ? $event->user->names : '' }}</a>
                                                 <span class="fst-italic">({{ $event->user_reg > 0 ? ($event->user->user_type == \App\Models\User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') ) : 'Системен' }})</span>
                                             </td>

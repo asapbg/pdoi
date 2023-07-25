@@ -61,8 +61,8 @@ class PdoiApplicationResource extends JsonResource
             'events' => $this->events->count() ?
                 $this->events->map(function ($item) {
                     return [
-                        'name' => $item->event->name,
-                        'date' => displayDate($item->event_date),
+                        'name' => $item->eventReasonName,
+                        'date' => displayDateTime($item->created_at),
                         'user_name' => auth()->user() && $item->user ?
                             (auth()->user()->id == $item->user_reg ? 'Аз'
                                 : ($item->user->user_type == User::USER_TYPE_INTERNAL ? $item->user->names

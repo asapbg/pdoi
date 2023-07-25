@@ -165,7 +165,7 @@
                                 @if(isset($application['events']) && sizeof($application['events']))
                                     @foreach($application['events'] as $event)
                                         <tr>
-                                            <td>{{ $event['date'] }}</td>
+                                            <td class="text-nowrap">{{ $event['date'] }}</td>
                                             <td>{{ $event['name'] }}</td>
                                             <td><a href="">{{ $event['user_name'] }}</a>
                                                 @if(!empty($event['user_type']))<span class="fst-italic">({{ $event['user_type'] }})</span>@endif

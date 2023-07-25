@@ -21,6 +21,7 @@ use App\Models\MailTemplates;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\ProfileType;
+use App\Models\ReasonRefusal;
 use App\Services\ApplicationService;
 use App\Services\FileOcr;
 use Carbon\Carbon;
@@ -227,7 +228,9 @@ class PdoiApplicationController extends Controller
                 default => null,
             };
 
-            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate', 'mailTemplate'));
+            $refusalReasons = ReasonRefusal::optionsList();
+
+            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate', 'mailTemplate', 'refusalReasons'));
         }
 
         $appService = new ApplicationService($application);
