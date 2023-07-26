@@ -13,7 +13,7 @@
         </tr>
         <tr>
             <td colspan="4"></td>
-            <td style="text-align: left;font-size: 26px;"><strong>{{ mb_strtoupper(__('custom.to')) }}<br> {{ $application->responseSubject->subject_name }}</strong></td>
+            <td style="text-align: left;font-size: 26px;"><strong>{{ mb_strtoupper(__('custom.to')) }}<br> {{ $application->responseSubject ? $application->responseSubject->subject_name : $application->not_registered_subject_name }}</strong></td>
         </tr>
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr><td colspan="5">&nbsp;</td></tr>

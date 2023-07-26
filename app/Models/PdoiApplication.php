@@ -87,6 +87,14 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         );
     }
 
+    protected function nonRegisteredSubjectName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => !$this->response_subject_id ? $this->not_registered_subject_name.'('.$this->not_registered_subject_eik.')' : null
+        );
+    }
+
+
     protected function statusStyle(): Attribute
     {
         $class = 'light';

@@ -21,9 +21,6 @@ enum PdoiApplicationStatusesEnum: int
     case FORWARDED = 9; //Препратено по компетентност
     case RENEWED = 10; //Възобновено
 
-//    case FORWARD_ТО_SUB_SUBJECT = 10; //Препратено по компетентност към подчинен субект
-//    case FORWARD_ТО_NOT_REGISTERED_SUBJECT = 11; //Препратено по компетентност на субект, нерегистриран на платформата
-
     // Return enum name by value
     public static function keyByValue($searchVal): string
     {

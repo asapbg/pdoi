@@ -91,6 +91,10 @@ class ApplicationService
                 if ($eventConfig->new_resp_subject && isset($data['new_resp_subject_id']) && (int)$data['new_resp_subject_id']) {
                     $newEvent->new_resp_subject_id = (int)$data['new_resp_subject_id'];
                 }
+                if ($eventConfig->new_resp_subject && isset($data['new_resp_subject_eik']) && isset($data['new_resp_subject_name'])) {
+                    $newEvent->subject_eik = $data['new_resp_subject_eik'];
+                    $newEvent->subject_name = $data['new_resp_subject_name'];
+                }
                 if ($eventConfig->court_decision && isset($data['decision']) && (int)$data['decision']) {
                     $newEvent->court_decision = (int)$data['decision'];
                 }
@@ -103,7 +107,6 @@ class ApplicationService
                         $newEvent->reason_not_approved = (int)$data['refuse_reason'];
                     }
                 }
-
 
                 $this->application->save();
                 $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::APPROVE_BY_RKS->value]) ? $this->userId : null;
@@ -130,15 +133,21 @@ class ApplicationService
                 if( in_array($eventConfig->app_event, ApplicationEventsEnum::forwardGroupEvents()) ) {
                     switch ($eventConfig->app_event) {
                         case ApplicationEventsEnum::FORWARD->value:
+                        case ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value:
                             //generate new application for new subject
                             self::generateNewApplication($data, $this->application->id);
-                            //generate new application for current subject
-                            if( isset($data['current_subject_user_request']) && !empty($data['current_subject_user_request']) ) {
-                                self::generateNewApplication($data, $this->application->id, $this->application->response_subject_id);
-                            }
+                            break;
+                        case ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value:
+                        case ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value:
+                            //generate new application for new subject
+                            self::generateNewApplication($data, $this->application->id, 0, true);
                             break;
                         default:
                             break;
+                    }
+                    //generate new application for current subject
+                    if( isset($data['current_subject_user_request']) && !empty($data['current_subject_user_request']) ) {
+                        self::generateNewApplication($data, $this->application->id, $this->application->response_subject_id);
                     }
                 }
 
@@ -152,7 +161,14 @@ class ApplicationService
         return $newEvent;
     }
 
-    private function generateNewApplication(array $data, int $mainAppId, int $subjectId = 0): PdoiApplication
+    /**
+     * @param array $data
+     * @param int $mainAppId
+     * @param int $subjectId //current subject id when we generate new application for current subject
+     * @return PdoiApplication
+     * @throws \Exception
+     */
+    private function generateNewApplication(array $data, int $mainAppId, int $subjectId = 0, bool $notRegisteredSubject = false): PdoiApplication
     {
         $newApplicationData = [
             'user_reg' => $this->application->user_reg,
@@ -162,9 +178,15 @@ class ApplicationService
             'parent_id' => $mainAppId
 //            'user_attached_files' => isset($data['files']) ? sizeof($data['files']) : 0,
         ];
-        //TODO fix me add fields for subject eik and name and make response_subject_id nullable
-        //TODO fix me adapt next operation with this type subject (not registered in platform
-        $newApplicationData['response_subject_id'] = $subjectId ? $subjectId : ($data['new_resp_subject_id'] ?? null);
+
+        if( $notRegisteredSubject ) {
+            //save new subject eik and name and leave response_subject_id null when subject is not registered in platform
+            $newApplicationData['not_registered_subject_eik'] = $data['new_resp_subject_eik'] ?? null;
+            $newApplicationData['not_registered_subject_name'] = $data['new_resp_subject_name'] ?? null;
+        } else{
+            $newApplicationData['response_subject_id'] = $subjectId ? $subjectId : $data['new_resp_subject_id'];
+        }
+
         $newAppRequest = $subjectId ? $data['current_subject_user_request'] : $data['subject_user_request'];
         $newApplicationData['request'] = htmlentities(stripHtmlTags($newAppRequest));
 
@@ -198,7 +220,8 @@ class ApplicationService
             }
         }
 
-        //communication to subject
+        //TODO communication for not existing subject
+        //communication to subject if existing in platform
         if( isset($data['new_resp_subject_id']) ) {
             $subject = $newApplication->responseSubject;
             //Communication: notify subject for new application

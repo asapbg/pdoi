@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-6 col-md-offset-3">
-                                        <button id="save" type="button" class="btn btn-success" data-form="formInPlatform">{{ __('custom.apply') }}</button>
+                                        <button id="save" type="button" class="save btn btn-success" data-form="formInPlatform">{{ __('custom.apply') }}</button>
                                         <a href="{{ route('admin.application.view', ['item' => $application->id]) }}"
                                            class="btn btn-primary">{{ __('custom.cancel') }}</a>
                                     </div>
@@ -139,7 +139,7 @@
                                     </div>
                                     <div class="col-md-3 col-12 mb-3">
                                         <label class="fw-semibold" >
-                                            <input type="checkbox" name="subject_is_child" value="" class="mr-1">{{ __('custom.rzs.subordinate') }}:
+                                            <input type="checkbox" name="subject_is_child" value="1" class="mr-1">{{ __('custom.rzs.subordinate') }}:
                                         </label>
                                         <span class="text-danger" id="error-subject_is_child"></span>
                                     </div>
@@ -191,8 +191,8 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-6 col-md-offset-3">
-                                        <p class="text-danger">Очаква се уточнение как ще се обработват тези препращания преди функционалността да бъде отключена</p>
-{{--                                        <button id="save" type="button" class="btn btn-success" data-form="formOutPlatform">{{ __('custom.apply') }}</button>--}}
+{{--                                        <p class="text-danger">Очаква се уточнение как ще се обработват тези препращания преди функционалността да бъде отключена</p>--}}
+                                        <button id="save" type="button" class="save btn btn-success" data-form="formOutPlatform">{{ __('custom.apply') }}</button>
                                         <a href="{{ route('admin.application.view', ['item' => $application->id]) }}"
                                            class="btn btn-primary">{{ __('custom.cancel') }}</a>
                                     </div>
@@ -290,7 +290,7 @@
                 });
             });
 
-            $('#save').on('click', function (){
+            $('.save').on('click', function (){
                 if ($("#" + $(this).data('form')).valid()) {
                     $("#" + $(this).data('form')).submit();
                 }
@@ -336,7 +336,7 @@
                         },
                         add_text: {
                             required: function(element){
-                                if($('#formInPlatform input[name="subject_user_request"]').val() !== applicationRequest) {
+                                if($('#formOutPlatform input[name="subject_user_request"]').val() !== applicationRequest) {
                                     return true;
                                 }
                                 return false;

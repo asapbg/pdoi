@@ -11,7 +11,7 @@
         @endif
     </td>
     <td>{{ displayDate($item->created_at) }}</td>
-    <td>{{ $item->responseSubject->subject_name }}</td>
+    <td>{{ $item->response_subject_id ? $item->responseSubject->subject_name : $item->nonRegisteredSubjectName }}</td>
     <td>
         @php($itemContent = strip_tags(html_entity_decode($item->request)))
         {{ mb_substr($itemContent, 0, 100) }}@if(strlen($itemContent) > 100){{ '...' }}@endif

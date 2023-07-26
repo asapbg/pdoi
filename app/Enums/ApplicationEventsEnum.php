@@ -19,6 +19,9 @@ enum ApplicationEventsEnum: int
     case EXTEND_TERM = 5; //Удължаване на срока
     case FINAL_DECISION = 6; //Крайно решение
     case RENEW_PROCEDURE = 10; //Възобновяване на процедура
+    case FORWARD_TO_SUB_SUBJECT = 11; //Препратено по компетентност към подчинен субект
+    case FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT = 12; //Препратено по компетентност към подчинен субект (извън платформата)
+    case FORWARD_TO_NOT_REGISTERED_SUBJECT = 13; //Препратено по компетентност извън платформата
 
     public static function userEvents(): array
     {
@@ -34,6 +37,9 @@ enum ApplicationEventsEnum: int
     {
         return [
             self::FORWARD->value,
+            self::FORWARD_TO_SUB_SUBJECT->value,
+            self::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value,
+            self::FORWARD_TO_NOT_REGISTERED_SUBJECT->value,
         ];
     }
 

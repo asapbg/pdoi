@@ -210,4 +210,23 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         ');
     }
 
+    public static function isChildOf($parentId, $childId): bool
+    {
+        $check = DB::select('
+            with recursive rec as (
+                select
+                    id, parent_id
+                from pdoi_response_subject
+                where
+                    parent_id = '.(int)$parentId.'
+                union all
+                    select
+                        c.id, c.parent_id
+                    from pdoi_response_subject c
+                    join rec p on c.parent_id = p.id
+            ) select id from rec where rec.id = '.(int)$childId.';
+        ');
+        return (boolean)sizeof($check);
+    }
+
 }

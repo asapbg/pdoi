@@ -21,12 +21,12 @@ class PdoiApplicationShortResource extends JsonResource
             'title' => __('custom.application_system_title',
                 [
                     'user' => ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ),
-                    'subject' => $this->responseSubject->subject_name,
+                    'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
                     'apply_date' => displayDate($this->created_at)
                 ]),
             'my_title' => __('custom.own_application_system_title',
                 [
-                    'subject' => $this->responseSubject->subject_name,
+                    'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
                     'apply_date' => displayDate($this->created_at)
                 ]),
             'request' => $this->request,
@@ -35,7 +35,7 @@ class PdoiApplicationShortResource extends JsonResource
             'created_at' => $this->created_at,
             'status' => $this->status,
             'statusName' => $this->statusName,
-            'subject' => $this->responseSubject->subject_name,
+            'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
             'term' => $this->response_end_time,
             'user_name' => $this->names_publication ? $this->full_names : __('custom.anonymous_applicant'),
             'phone' => $this->phone_publication ? $this->phone : null,
@@ -65,7 +65,7 @@ class PdoiApplicationShortResource extends JsonResource
                 return [
                     'id' => $item->id,
                     'reg_num' => $item->application_uri,
-                    'subject' => $item->response_subject_id ? $item->responseSubject->subject_name : 'EIK...NAME',
+                    'subject' => $item->response_subject_id ? $item->responseSubject->subject_name : $item->nonRegisteredSubjectName,
                     'date' => displayDateTime($item->created_at),
                     'status' => __('custom.application.status.'. \App\Enums\PdoiApplicationStatusesEnum::keyByValue($item->status))
                 ];

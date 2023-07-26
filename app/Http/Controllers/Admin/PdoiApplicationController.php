@@ -265,22 +265,21 @@ class PdoiApplicationController extends Controller
 
         $appService = new ApplicationService($application);
 
-        //If event is forward replace event with his child event
+        //detect if event is forward and need to switch to child event depending on user selected new subject
         if( $event->app_event == ApplicationEventsEnum::FORWARD->value ) {
             if( (int)$validated['in_platform'] ) {
-                //TODO fix me check if new subject is child of current
-                $isChild = false;
-                if( $isChild ) {
-                    $event = 'Препратено по компетентност към подчинен субект';
-                    echo $event;exit;
+                //if new subject is child of current
+                if( PdoiResponseSubject::isChildOf((int)$validated['old_subject'], (int)$validated['new_resp_subject_id']) ) {
+                    $event = Event::where('app_event', '=', ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value)->first();
+                    unset($validated['event']);
                 }
             } else {
-                if( (int)$validated['subject_is_child'] ) {
-                    $event = 'Препратено по компетентност към подчинен субект';
-                    echo $event;exit;
+                if( isset($validated['subject_is_child']) && (int)$validated['subject_is_child'] ) {
+                    $event = Event::where('app_event', '=', ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value)->first();
+                    unset($validated['event']);
                 } else {
-                    $event = 'Препратено по компетентност на субект, нерегистриран на платформата';
-                    echo $event;exit;
+                    $event = Event::where('app_event', '=', ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value)->first();
+                    unset($validated['event']);
                 }
             }
         }

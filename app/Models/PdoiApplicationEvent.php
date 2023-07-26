@@ -37,9 +37,14 @@ class PdoiApplicationEvent extends Model
                 }
                 break;
             case ApplicationEventsEnum::FORWARD->value:
+            case ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value:
                 if( $this->new_resp_subject_id ) {
                     $name.= ' ('.$this->newSubject->subject_name.')';
                 }
+                break;
+            case ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value:
+            case ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value:
+                $name.= ' - '.$this->subject_name.'('.$this->subject_eik.')';
                 break;
         }
         return Attribute::make(

@@ -34,7 +34,7 @@
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.reg_number') }}:  <span class="text-primary">{{ $item->application_uri }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.status') }}:  <span class="text-primary">{{ $item->statusName }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.last_event') }}:  <span class="text-primary">{{ $item->currentEvent->event->name }}</span></div>
-                                <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $item->responseSubject->subject_name }}</span></div>
+                                <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $item->response_subject_id ? $item->responseSubject->subject_name : $item->nonRegisteredSubjectName }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ !$item->manual ? __('custom.date_apply') : __('custom.date_public') }}: <span class="text-primary">{{ displayDate($item->created_at) }}</span></div>
                                 @if(!$item->manual)
                                     <div class="col-md-4 col-12 fw-bold">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($item->response_end_time) }}</span></div>
@@ -182,7 +182,7 @@
                                                 <select class="form-select form-select-sm" id="next-event">
                                                     <option value="">{{ __('custom.available_actions') }}</option>
                                                     @foreach($item->currentEvent->event->nextEvents as $event)
-                                                        @if($event->app_event != \App\Enums\ApplicationEventsEnum::FORWARD || \App\Enums\PdoiApplicationStatusesEnum::canForward((int)$item->status) )
+                                                        @if($event->app_event != \App\Enums\ApplicationEventsEnum::FORWARD->value || (\App\Enums\PdoiApplicationStatusesEnum::canForward((int)$item->status) && $item->response_subject_id ) )
                                                             <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => (int)$event->id]) }}">@if($event->extendTimeReason){{ $event->extendTimeReason->name }}@else{{ $event->name }} @endif</option>
                                                         @endif
                                                     @endforeach
@@ -234,9 +234,7 @@
                                     @foreach($item->events as $event)
                                         <tr>
                                             <td>{{ displayDateTime($event->created_at) }}</td>
-                                            <td>{{ $event->eventReasonName }}
-                                                @if($event->new_resp_subject_id)({{ $event->newSubject->subject_name }})@endif
-                                            </td>
+                                            <td>{{ $event->eventReasonName }}</td>
                                             <td><a href="">{{ $event->user_reg > 0 ? $event->user->names : '' }}</a>
                                                 <span class="fst-italic">({{ $event->user_reg > 0 ? ($event->user->user_type == \App\Models\User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') ) : 'Системен' }})</span>
                                             </td>
@@ -271,7 +269,7 @@
                                                         {{ $app->application_uri }}
                                                     @endcanany
                                                 </td>
-                                                <td>{{ $app->response_subject_id ? $app->responseSubject->subject_name : 'EIK...NAME'}}</td>
+                                                <td>{{ $app->response_subject_id ? $app->responseSubject->subject_name : $app->nonRegisteredSubjectName }}</td>
                                                 <td>{{ displayDate($app->created_at) }}</td>
                                                 <td>{{ __('custom.application.status.'. \App\Enums\PdoiApplicationStatusesEnum::keyByValue($app->status)) }}</td>
                                             </tr>
