@@ -16,7 +16,7 @@
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.reg_number') }}:  <span class="text-primary">{{ $item->application_uri }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.status') }}:  <span class="text-primary">{{ $item->statusName }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.last_event') }}:  <span class="text-primary">{{ $item->currentEvent->event->name }}</span></div>
-                                <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $item->responseSubject->subject_name }}</span></div>
+                                <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $item->response_subject_id ? $item->responseSubject->subject_name : $item->nonRegisteredSubjectName }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ !$item->manual ? __('custom.date_apply') : __('custom.date_public') }}: <span class="text-primary">{{ displayDate($item->created_at) }}</span></div>
                                 @if(!$item->manual)
                                     <div class="col-md-4 col-12 fw-bold">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($item->response_end_time) }}</span></div>

@@ -127,7 +127,16 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         //filter list by user subject(rzs)
         $user = auth()->user();
         if( !$user->can('manage.*') ) {
-            $query->where('response_subject_id', $user->administrative_unit);
+            $query->where(function ($q) use($user){
+                $q->where('response_subject_id', $user->administrative_unit)
+                    ->orWhere(function ($q) use ($user){
+                        $q->whereNull('response_subject_id')
+                            ->WhereHAs('parent', function( $query ) use ( $user ){
+                                $query->where('response_subject_id', $user->administrative_unit);
+                            });
+                    });
+            });
+//            $query->where('response_subject_id', $user->administrative_unit);
         }
     }
 

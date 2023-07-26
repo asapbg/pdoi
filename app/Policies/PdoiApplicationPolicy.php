@@ -33,8 +33,11 @@ class PdoiApplicationPolicy
     public function view(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
     {
         //TODO fix me add subject from events
-        return $user->can('manage.*') || ($user->canany(['application.*', 'application.view'])
-            && $user->administrative_unit === $pdoiApplication->responseSubject->id);
+        return $user->can('manage.*') ||
+            (
+                $user->canany(['application.*', 'application.view'])
+                && ( $user->administrative_unit === $pdoiApplication->response_subject_id || ( !$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id ) )
+            );
     }
 
     /**
@@ -86,8 +89,11 @@ class PdoiApplicationPolicy
                 || $pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
                 || in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted()))
             && (
-                $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
-                && $user->administrative_unit === $pdoiApplication->responseSubject->id)
+                $user->can('manage.*') ||
+                (
+                    $user->canany(['application.*', 'application.view', 'application.edit'])
+                    && ( !$pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id || ($pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id ) )
+                )
             );
     }
 
@@ -104,8 +110,11 @@ class PdoiApplicationPolicy
             && !$pdoiApplication->manual
             && $pdoiApplication->currentEvent->event->app_event != ApplicationEventsEnum::RENEW_PROCEDURE->value //check if already has renewed event with rejection
             && (
-                $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
-                    && $user->administrative_unit === $pdoiApplication->responseSubject->id)
+                $user->can('manage.*') ||
+                (
+                    $user->canany(['application.*', 'application.view', 'application.edit'])
+                    && ( !$pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id || ($pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id ) )
+                )
             );
     }
 
@@ -119,10 +128,13 @@ class PdoiApplicationPolicy
     public function forward(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
     {
         return PdoiApplicationStatusesEnum::canForward($pdoiApplication->status)// status allow forwarding
-            && !$pdoiApplication->manual
+            && !$pdoiApplication->manual && $pdoiApplication->response_subject_id
             && (
-                $user->can('manage.*') || ($user->canany(['application.*', 'application.view', 'application.edit'])
-                    && $user->administrative_unit === $pdoiApplication->responseSubject->id)
+                $user->can('manage.*') ||
+                (
+                    $user->canany(['application.*', 'application.view', 'application.edit'])
+                    && ( !$pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id || ($pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id ) )
+                )
             );
     }
 
