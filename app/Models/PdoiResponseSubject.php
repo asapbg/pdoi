@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Egov\EgovOrganisation;
 use App\Traits\FilterSort;
 use Astrotomic\Translatable\Translatable;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
@@ -47,6 +48,11 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     public function applications(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(PdoiApplication::class, 'id', 'response_subject_id');
+    }
+
+    public function egovOrganisation(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EgovOrganisation::class, 'eik', 'eik');
     }
 
     public static function translationFieldsProperties(): array

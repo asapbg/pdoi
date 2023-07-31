@@ -19,6 +19,11 @@ class MigrationSeeder extends Seeder
             ApplicationSeeder::class,
             ApplicationEventSeeder::class,
             FileSeeder::class,
+            EGovOrganisationsSeeder::class,
+            EGovServicesSeeder::class,
+            EgovMessageSeeder::class,
+            EgovMessageCorespSeeder::class,
+            EgovMessageFileSeeder::class,
         ]);
     }
 }

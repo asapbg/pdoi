@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_object');
-            $table->integer('code_object'); // ?????
+            $table->integer('code_object');
             $table->string('filename', 200)->nullable();
             $table->string('content_type', 500)->nullable();
 //            $table->binary('content')->nullable();
@@ -39,15 +39,6 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-//        Schema::create('pdoi_files_relation', function (Blueprint $table) {
-//            $table->bigIncrements('id');
-//            $table->unsignedBigInteger('id_object');
-//            $table->integer('code_object');
-//
-//            $table->unsignedBigInteger('id_file');
-//            $table->foreign('id_file')
-//                ->references('id')->on('files');
-//        });
     }
 
     /**
@@ -57,7 +48,6 @@ return new class extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('pdoi_files_relation');
         Schema::dropIfExists('files');
     }
 };

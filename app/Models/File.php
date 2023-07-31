@@ -15,6 +15,7 @@ class File extends Model
 
     const CODE_OBJ_APPLICATION = 13;
     const CODE_OBJ_EVENT = 14;
+    const CODE_OBJ_MESSAGE = 10000;
 
     const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xsl', 'xslx', 'pdf'];
 
