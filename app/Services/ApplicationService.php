@@ -109,7 +109,7 @@ class ApplicationService
                 }
 
                 $this->application->save();
-                $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_RKS->value, ApplicationEventsEnum::APPROVE_BY_RKS->value]) ? $this->userId : null;
+                $newEvent->user_reg = !in_array($eventConfig->app_event, [ApplicationEventsEnum::SEND_TO_SEOS->value, ApplicationEventsEnum::APPROVE_BY_SEOS->value]) ? $this->userId : null;
                 $newEvent->status = $eventConfig->event_status;
                 $this->application->events()->save($newEvent);
                 $newEvent->refresh();
@@ -279,8 +279,8 @@ class ApplicationService
     {
         match ($event->app_event){
             ApplicationEventsEnum::SEND->value,
-            ApplicationEventsEnum::SEND_TO_RKS->value,
-            ApplicationEventsEnum::APPROVE_BY_RKS->value,
+            ApplicationEventsEnum::SEND_TO_SEOS->value,
+            ApplicationEventsEnum::APPROVE_BY_SEOS->value,
             ApplicationEventsEnum::FINAL_DECISION->value => $this->application->applicant->notify(new NotifyUserForAppStatus($this->application)),
             ApplicationEventsEnum::ASK_FOR_INFO->value => $this->application->applicant->notify(new NotifyUserNeedMoreInfo($this->application)),
             ApplicationEventsEnum::EXTEND_TERM->value => $this->application->applicant->notify(new NotifyUserExtendTerm($this->application)),
@@ -313,7 +313,7 @@ class ApplicationService
                 (!$this->application->parent_id || $this->application->response_subject_id != $this->application->parent->response_subject_id ) ) {
                 //потвърдено от деловодна система
                 $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_APPLY);
-            } elseif ( $event->app_event == ApplicationEventsEnum::APPROVE_BY_RKS->value) {
+            } elseif ( $event->app_event == ApplicationEventsEnum::APPROVE_BY_SEOS->value) {
                 //потвърдено от деловодна система
                 $this->application->registration_date = Carbon::now();
                 if(!$this->application->parent_id || $this->application->response_subject_id != $this->application->parent->response_subject_id ) {
@@ -385,10 +385,10 @@ class ApplicationService
         if( $notification->type == 'App\Notifications\NotifySubjectNewApplication' ){
             switch ($notification->type_channel)
             {
-                case PdoiSubjectDeliveryMethodsEnum::RKS->value://деловодна система
-                    $this->registerEvent(ApplicationEventsEnum::SEND_TO_RKS->value);//изпратено към деловодна система
+                case PdoiSubjectDeliveryMethodsEnum::SEOS->value://деловодна система
+                    $this->registerEvent(ApplicationEventsEnum::SEND_TO_SEOS->value);//изпратено към деловодна система
                     //TODO fix me simulation
-                    $this->registerEvent(ApplicationEventsEnum::APPROVE_BY_RKS->value);//потвърдено от деловодна система
+                    $this->registerEvent(ApplicationEventsEnum::APPROVE_BY_SEOS->value);//потвърдено от деловодна система
                     break;
                 default://email, //система за сигурно връчване
                     $this->application->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;

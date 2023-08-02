@@ -58,6 +58,18 @@ class PdoiResponseSubjectPolicy
     }
 
     /**
+     * Determine whether the user can update the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiResponseSubject  $pdoiResponseSubject
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function updateSettings(User $user, PdoiResponseSubject $pdoiResponseSubject)
+    {
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items']);
+    }
+
+    /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user

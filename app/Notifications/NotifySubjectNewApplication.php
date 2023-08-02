@@ -11,6 +11,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Selective\XmlDSig\PrivateKeyStore;
+use Selective\XmlDSig\Algorithm;
+use Selective\XmlDSig\CryptoSigner;
+use Selective\XmlDSig\XmlSigner;
 
 class NotifySubjectNewApplication extends Notification
 {
@@ -24,11 +28,10 @@ class NotifySubjectNewApplication extends Notification
      *
      * @return void
      */
-    public function __construct($application, $data, $egovMessageId = null)
+    public function __construct($application, $data)
     {
         $this->application = $application;
         $this->notifyData = $data;
-        $this->egov_message_id = $egovMessageId;
     }
 
     /**
@@ -65,10 +68,12 @@ class NotifySubjectNewApplication extends Notification
         {
             case PdoiSubjectDeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
                 break;
-            case PdoiSubjectDeliveryMethodsEnum::RKS->value: //деловодна система
+            case PdoiSubjectDeliveryMethodsEnum::SEOS->value: //деловодна система
                 $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', env('SEOS_PLATFORM_EIK',null))->first();
                 $receiver = $this->application->responseSubject->egovOrganisation;
-                $service = $receiver?->services->latest();
+
+                $sender = $receiver;
+                $service = $receiver?->services()->first();
                 if( $sender && $receiver && $service) {
                     $egovMessage = new EgovMessage([
                         'msg_guid' => Str::uuid(),
@@ -83,6 +88,7 @@ class NotifySubjectNewApplication extends Notification
                     ]);
                     $egovMessage->save();
                     if( $egovMessage->id ) {
+                        //dd($this->generateSeosXml($sender, $receiver, $messageContent, $this->application, $egovMessage));
                         $egovMessage->msg_xml = $this->generateSeosXml($sender, $receiver, $messageContent, $this->application, $egovMessage);
                         $egovMessage->save();
                     }
@@ -101,8 +107,7 @@ class NotifySubjectNewApplication extends Notification
 
     private function generateSeosXml($sender, $receiver, $messageContent, $application, $egovMessage): string
     {
-        $xml = '
-            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mes="http://services.egov.bg/messaging">
+        $xml = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mes="http://services.egov.bg/messaging">
             <soapenv:Header>
                 <Version>'.$egovMessage->msg_version.'</Version>
                 <MessageType>'.$egovMessage->msg_type.'</MessageType>
@@ -118,7 +123,7 @@ class NotifySubjectNewApplication extends Notification
                     <GUID>'.$receiver->guid.'</GUID>
                 </Recipient>
                 <MessageGUID>'.$egovMessage->msg_guid.'</MessageGUID>
-            <soapenv:Header/>
+            </soapenv:Header>
             <soapenv:Body>
               <DocumentRegistrationRequestType>
                   <DocumentType>
@@ -129,11 +134,10 @@ class NotifySubjectNewApplication extends Notification
         //add files
         if($application->files) {
             foreach ($application->files as $f) {
-                $xml .= '
-                    <DocAttachmentList>
+                $xml .= '<DocAttachmentList>
                         <Attachment>
                             <AttFileName>'.$f->filename.'</AttFileName>
-                            <AttBody>'.Storage::disk('local')->get($f->path).'</AttBody>
+                            <AttBody>'.base64_encode(Storage::disk('local')->get($f->path)).'</AttBody>
                             <AttComment>'.$f->description.'</AttComment>
                             <AttMIMEType>'.$f->content_type.'</AttMIMEType>
                         </Attachment>
@@ -141,14 +145,23 @@ class NotifySubjectNewApplication extends Notification
                 ';
             }
         }
-                $xml .='
-                </DocumentType>
+                $xml .='</DocumentType>
                 <Comment>'.$messageContent.'</Comment>
               </DocumentRegistrationRequestType>
             </soapenv:Body>
-            <ds:Signature>{Траснпортен сертификат ?}</ds:Signature>
             </soapenv:Envelope>
         ';
-        return $xml;
+
+        $privateKeyStore = new PrivateKeyStore();
+        // load a private key from a string
+        $privateKeyStore->loadFromPem(file_get_contents(env('SEOS_SERVER_CERT_KEY_PATH')), file_get_contents(env('SEOS_SERVER_CERT_PATH')));
+        //Define the digest method: sha1, sha224, sha256, sha384, sha512
+        $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
+        //Create a CryptoSigner instance:
+        $cryptoSigner = new CryptoSigner($privateKeyStore, $algorithm);
+        // Create a XmlSigner and pass the crypto signer
+        $xmlSigner = new XmlSigner($cryptoSigner);
+        // Create a signed XML string
+        return $xmlSigner->signXml($xml);
     }
 }

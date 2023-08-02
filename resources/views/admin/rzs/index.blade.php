@@ -46,7 +46,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @can('update', $item)
+                                        @canany(['update', 'updateSettings'], $item)
                                             <a href="{{ route( $editRouteName , [$item->id]) }}"
                                                class="btn btn-sm btn-info"
                                                data-toggle="tooltip"

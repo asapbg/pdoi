@@ -24,6 +24,6 @@ class EgovOrganisation  extends ModelActivityExtend
 
     public function services(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(EgovService::class, 'id', 'id_org')->where('status', '=', 1);
+        return $this->hasMany(EgovService::class, 'id_org', 'id')->where('status', '=', 1);
     }
 }

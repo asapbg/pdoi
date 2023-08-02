@@ -14,9 +14,14 @@
                             @method('PUT')
                         @endif
                         <input type="hidden" name="id" value="{{ $item->id ?? 0 }}">
+                        <input type="hidden" name="full_edit" value="{{ (int)(isset($editOptions) && isset($editOptions['full']) && $editOptions['full']) }}">
+                        @if(!$item->id || (isset($editOptions) && isset($editOptions['full']) && $editOptions['full']))
                             @include('admin.rzs.edit_general')
                             @include('admin.rzs.edit_addres_section')
+                        @endif
+                        @if(!$item->id || (isset($editOptions) && isset($editOptions['settings']) && $editOptions['settings']))
                             @include('admin.rzs.edit_settings_section')
+                        @endif
                         <div class="form-group row">
                             <div class="col-md-6 col-md-offset-3">
                                 <button id="save" type="submit" class="btn btn-success">{{ __('custom.save') }}</button>

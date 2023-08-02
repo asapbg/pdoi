@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df95490b05eae3b1bc4d2b7091185c8f",
+    "content-hash": "aaae949df1775c119d298a1922f0fae2",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -5228,6 +5228,57 @@
             "time": "2021-12-11T13:40:54+00:00"
         },
         {
+            "name": "selective/xmldsig",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/selective-php/xmldsig.git",
+                "reference": "fb9cdf2ecfcf4b65931db8796c7336a43b607d73"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/selective-php/xmldsig/zipball/fb9cdf2ecfcf4b65931db8796c7336a43b607d73",
+                "reference": "fb9cdf2ecfcf4b65931db8796c7336a43b607d73",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-openssl": "*",
+                "php": "~8.0 || ~8.1 || ~8.2"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3",
+                "phpstan/phpstan": "^1",
+                "phpunit/phpunit": "^9 || ^10",
+                "squizlabs/php_codesniffer": "^3",
+                "starkbank/ecdsa": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Selective\\XmlDSig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Sign XML Documents with Digital Signatures",
+            "homepage": "https://github.com/selective-php/xmldsig",
+            "keywords": [
+                "signatures",
+                "verify",
+                "xml",
+                "xmldsig"
+            ],
+            "support": {
+                "issues": "https://github.com/selective-php/xmldsig/issues",
+                "source": "https://github.com/selective-php/xmldsig/tree/3.0.0"
+            },
+            "abandoned": "robrichards/xmlseclibs",
+            "time": "2023-01-28T18:17:36+00:00"
+        },
+        {
             "name": "sentry/sdk",
             "version": "3.5.0",
             "source": {
@@ -8429,55 +8480,6 @@
                 }
             ],
             "time": "2023-06-21T12:08:28+00:00"
-        },
-        {
-            "name": "thiagoalessio/tesseract_ocr",
-            "version": "2.12.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thiagoalessio/tesseract-ocr-for-php.git",
-                "reference": "0f10bd7b02bdcba59c4fbd98fbd93a56f93b09b7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thiagoalessio/tesseract-ocr-for-php/zipball/0f10bd7b02bdcba59c4fbd98fbd93a56f93b09b7",
-                "reference": "0f10bd7b02bdcba59c4fbd98fbd93a56f93b09b7",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3 || ^7.0 || ^8.0"
-            },
-            "require-dev": {
-                "phpunit/php-code-coverage": "^2.2.4 || ^9.0.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "thiagoalessio\\TesseractOCR\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "thiagoalessio",
-                    "email": "thiagoalessio@me.com"
-                }
-            ],
-            "description": "A wrapper to work with Tesseract OCR inside PHP.",
-            "keywords": [
-                "OCR",
-                "Tesseract",
-                "text recognition"
-            ],
-            "support": {
-                "irc": "irc://irc.freenode.net/tesseract-ocr-for-php",
-                "issues": "https://github.com/thiagoalessio/tesseract-ocr-for-php/issues",
-                "source": "https://github.com/thiagoalessio/tesseract-ocr-for-php"
-            },
-            "time": "2021-06-04T21:21:33+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

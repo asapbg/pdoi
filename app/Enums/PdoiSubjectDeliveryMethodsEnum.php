@@ -12,5 +12,5 @@ enum PdoiSubjectDeliveryMethodsEnum: int
 
     case EMAIL = 1;
     case SDES = 2; //Secure electronic delivery system => ССЕВ
-    case RKS = 3; //record keeping system => деловодство
+    case SEOS = 3; //деловодство
 }

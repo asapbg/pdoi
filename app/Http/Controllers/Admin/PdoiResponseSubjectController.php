@@ -51,7 +51,8 @@ class PdoiResponseSubjectController extends AdminController
      */
     public function edit(Request $request, PdoiResponseSubject $item)
     {
-        if( ($item->id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
+        if( ($item->id && ($request->user()->cannot('update', $item) && $request->user()->cannot('updateSettings', $item)) )
+            || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
         $subjects = PdoiResponseSubject::optionsList($item->id ?? 0);
@@ -64,8 +65,15 @@ class PdoiResponseSubjectController extends AdminController
         $storeRouteName = self::STORE_ROUTE;
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = PdoiResponseSubject::translationFieldsProperties();
+        $editOptions = [
+            'full' => $request->user()->can('update', $item),
+            'settings' => $request->user()->can('updateSettings', $item),
+        ];
+
+        $this->setTitlePlural($item->id > 0 ? 'Редакция на ЗС ('.$item->subject_name.')' : 'Създаване на ЗС');
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName',
-            'listRouteName', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections', 'courtSubjects', 'subjects'));
+            'listRouteName', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections',
+            'courtSubjects', 'subjects', 'editOptions'));
     }
 
     public function store(PdoiResponseSubjectStoreRequest $request, PdoiResponseSubject $item)
@@ -75,7 +83,8 @@ class PdoiResponseSubjectController extends AdminController
 //        dd($validator->errors());
         $id = $item->id;
         $validated = $request->validated();
-        if( ($id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
+        if( ($item->id && ($request->user()->cannot('update', $item) && $request->user()->cannot('updateSettings', $item)) )
+            || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
         try {
