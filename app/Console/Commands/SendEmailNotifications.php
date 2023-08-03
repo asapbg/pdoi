@@ -39,14 +39,14 @@ class SendEmailNotifications extends Command
         $beforeTimestamp = Carbon::now()->subHours(1);
         $notifications = DB::table('notifications')
             ->where('type_channel','=', self::EMAIL_CHANNEL)
-            ->where('cnt_send','<=', self::MAX_TRY)
+            ->where('cnt_send','<', self::MAX_TRY)
             ->where('is_send','=', 0)
             ->where('updated_at','<=', $beforeTimestamp)
             ->get();
 
         if( $notifications->count() ) {
             foreach ($notifications as $item) {
-                $messageData = json_decode($item->message, true);
+                $messageData = json_decode($item->data, true);
                 if( !$messageData ) {
                     logError('Send email notification ID '.$item->id, 'Invalid json message data');
                     continue;
@@ -56,7 +56,7 @@ class SendEmailNotifications extends Command
                 try {
                     Mail::send([], [], function ($message) use ($messageData){
                         $message->from($messageData['from_mail'])
-                            ->to(env('APP_ENV') == 'local' ? env('LOCAL_TO_MAIL') : $messageData['to_email'])
+                            ->to(env('APP_ENV') != 'production' ? env('LOCAL_TO_MAIL') : $messageData['to_email'])
                             ->subject($messageData['subject'])
                             ->setBody($messageData['message'],'text/html');
 

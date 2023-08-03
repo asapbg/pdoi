@@ -69,7 +69,7 @@ class NotifySubjectNewApplication extends Notification
                 break;
             case PdoiSubjectDeliveryMethodsEnum::SEOS->value: //деловодна система
                 $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', env('SEOS_PLATFORM_EIK',null))->first();
-                $receiver = $this->application->responseSubject->egovOrganisation;
+                $receiver = env('APP_ENV') != 'production' ? EgovOrganisation::find((int)env('LOCAL_TO_EGOV_ORGANISATION_ID')) : $this->application->responseSubject->egovOrganisation;
 
                 $sender = $receiver;
                 $service = $receiver?->services()->first();
@@ -92,7 +92,7 @@ class NotifySubjectNewApplication extends Notification
                         $egovMessage->save();
                     }
                 }
-                $communicationData['egov_messag_id'] = $egovMessage && $egovMessage->id ? $egovMessage->id : null;
+                $communicationData['egov_messag_id'] = isset($egovMessage) && $egovMessage && $egovMessage->id ? $egovMessage->id : null;
 
                 break;
             default://email
