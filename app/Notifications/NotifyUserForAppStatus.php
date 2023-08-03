@@ -42,9 +42,16 @@ class NotifyUserForAppStatus extends Notification
     public function toDatabase($notifiable): array
     {
         $communicationData = [
-            'message' => 'Съобщение за промяна на статус на заявление до заявител',
+            'message' => 'Здравейте '.$this->application->names.','.PHP_EOL.'
+                Информация за статуса на подадено от вас заявление в '.__('custom.full_app_name').PHP_EOL.'
+                Рег. №: '.$this->application->application_uri.PHP_EOL.'
+                Задължен субект: '.$this->application->responseSubject->subject_name.PHP_EOL.'
+                Статус: '.__('custom.application.status.'.\App\Enums\PdoiApplicationStatusesEnum::keyByValue($this->application->status)).PHP_EOL.'
+                Дата на промяна: '.displayDate($this->application->status_date).PHP_EOL.'
+                Срок за отговор: '.displayDate($this->application->response_end_time).PHP_EOL.'
+                *Забележка: Това съобщение е генерирано автоматично - моля, не му отговаряйте.',
             'subject' => __('mail.subject.new_application_status'),
-            'files' => [],
+            'files' => $this->application->files ? $this->application->files->pluck('id')->toArray() : [],
             'type_channel' => $notifiable->delivery_method
         ];
 

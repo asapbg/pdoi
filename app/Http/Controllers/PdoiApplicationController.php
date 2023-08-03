@@ -10,8 +10,6 @@ use App\Http\Requests\PdoiApplicationApplyRequest;
 use App\Http\Resources\PdoiApplicationResource;
 use App\Http\Resources\PdoiApplicationShortCollection;
 use App\Http\Resources\PdoiApplicationShortResource;
-use App\Mail\NotiyUserApplicationStatus;
-use App\Mail\SubjectRegisterNewApplication;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\EkatteArea;
@@ -242,19 +240,18 @@ class PdoiApplicationController extends Controller
                 $instructionTemplate = MailTemplates::where('type', '=', MailTemplateTypesEnum::RZS_AUTO_FORWARD->value)->first();
                 $message = $instructionTemplate ? Lang::get($instructionTemplate->content, $instructionData) : '';
                 $notifyData['message'] = htmlentities($message);
-                $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
 
-                //TODO fix me simulation remove after communication is ready. For now we simulate approve by RKS (деловодна система)
-                $lastNotify = DB::table('notifications')
-                    ->where('type', 'App\Notifications\NotifySubjectNewApplication')
-                    ->latest()->limit(1)->get()->pluck('id');
-                if(isset($lastNotify[0])) {
-                    $appService = new ApplicationService($newApplication);
-                    $appService->communicationCallback(json_encode(['notification_id' => $lastNotify[0]]));
-                }
-
+//                //TODO fix me simulation remove after communication is ready. For now we simulate approve by RKS (деловодна система)
+//                $lastNotify = DB::table('notifications')
+//                    ->where('type', 'App\Notifications\NotifySubjectNewApplication')
+//                    ->latest()->limit(1)->get()->pluck('id');
+//                if(isset($lastNotify[0])) {
+//                    $appService = new ApplicationService($newApplication);
+//                    $appService->communicationCallback($lastNotify[0]);
+//                }
                 $appService->generatePdf($newApplication);
                 $newApplication->refresh();
+                $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
 
                 //return info for each generated application
                 $data['applicationsInfo'][] = array(

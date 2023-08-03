@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Enums\ApplicationEventsEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Models\Egov\EgovMessage;
 use App\Models\Egov\EgovOrganisation;
@@ -58,10 +57,10 @@ class NotifySubjectNewApplication extends Notification
             $messageContent .= PHP_EOL.'-------------------'.PHP_EOL.'Допълнителен коментар:'. $this->notifyData['comment'];
         }
         $communicationData = [
-//            'message' => $message,
-//            'subject' => __('mail.subject.register_new_application'),
+            'message' => $messageContent,
+            'subject' => __('mail.subject.register_new_application'),
             'application_id' => $this->application->id,
-//            'files' => [],
+            'files' => $this->application->files ? $this->application->files->pluck('id')->toArray() : [],
             'type_channel' => $notifiable->delivery_method
         ];
         switch ($notifiable->delivery_method)

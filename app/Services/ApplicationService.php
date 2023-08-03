@@ -242,20 +242,20 @@ class ApplicationService
             if( isset($data['add_text']) && !empty($data['add_text']) ) {
                 $notifyData['comment'] = htmlentities(stripHtmlTags($data['add_text']));
             }
-            $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
 
-            //TODO fix me simulation remove after communication is ready. For now we simulate approve by RKS (деловодна система)
-            $lastNotify = DB::table('notifications')
-                ->where('type', 'App\Notifications\NotifySubjectNewApplication')
-                ->latest()->limit(1)->get()->pluck('id');
-            if(isset($lastNotify[0])) {
-                $appService = new ApplicationService($newApplication);
-                $appService->communicationCallback(json_encode(['notification_id' => $lastNotify[0]]));
-            }
+//            //TODO fix me simulation remove after communication is ready. For now we simulate approve by RKS (деловодна система)
+//            $lastNotify = DB::table('notifications')
+//                ->where('type', 'App\Notifications\NotifySubjectNewApplication')
+//                ->latest()->limit(1)->get()->pluck('id');
+//            if(isset($lastNotify[0])) {
+//                $appService = new ApplicationService($newApplication);
+//                $appService->communicationCallback($lastNotify[0]);
+//            }
         }
 
         $appService->generatePdf($newApplication);
         $newApplication->refresh();
+        $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
         sleep(1);
 
         return $newApplication;
@@ -349,36 +349,17 @@ class ApplicationService
         }
     }
 
-    public function communicationCallback($data)
+    public function communicationCallback($notification)
     {
-        //data format:
-        //1 {error:1, message: 'dsfsfsdfdsf}
-        //1 {notification_id:1}
-        $arrayData = json_decode($data, true);
-        if( !$arrayData ) {
-            logError('Communication callback', 'Bad format data');
-            exit;
-        }
-        if( isset($arrayData['error']) ) {
-            //do something with error message
-            exit;
-        }
-
-        if( !isset($arrayData['notification_id']) ) {
-            logError('Communication callback', 'Missing notification id: '.$data);
-            exit;
-        }
-
-        $notification = DB::table('notifications')->find($arrayData['notification_id']);
         if( !$notification ) {
-            logError('Communication callback', 'Notification not found: '.$data);
+            logError('Communication callback', 'Missing notification object');
             exit;
         }
 
         $notifiable = $notification->notifiable_type::find($notification->notifiable_id);
 
         if( !$notifiable ) {
-            logError('Communication callback', 'Notifiable not found: '.$data);
+            logError('Communication callback', 'Notifiable not found: '.$notification->notifiable_id.'('.$notification->notifiable_type.')');
             exit;
         }
         //process depending on notification type
