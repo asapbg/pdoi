@@ -60,14 +60,32 @@ class NotifySubjectNewApplication extends Notification
             'message' => $messageContent,
             'subject' => __('mail.subject.register_new_application'),
             'application_id' => $this->application->id,
-            'files' => $this->application->files ? $this->application->files->pluck('id')->toArray() : [],
+            'files' => [],
             'type_channel' => $notifiable->delivery_method
         ];
         switch ($notifiable->delivery_method)
         {
             case PdoiSubjectDeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
+                $eDeliveryConfig = config('e_delivery');
+                if( env('APP_ENV') != 'production' ) {
+                    $communicationData['ssev_profile_id'] = env('LOCAL_TO_SSEV_PROFILE_ID');
+                } else {
+                    $communicationData['to_group'] = $eDeliveryConfig['group_ids']['egov'];
+                    $communicationData['to_identity'] = $notifiable->eik;
+                    $communicationData['ssev_profile_id'] = $notifiable->ssev_profile_id ?? 0;
+                }
+
+                if( $this->application->files->count() ) {
+                    foreach ($this->application->files as $f) {
+                        $communicationData['files'][] = [
+                            'type' => $f->content_type,
+                            'content' => base64_encode(Storage::disk('local')->get($f->path))
+                        ];
+                    }
+                }
                 break;
             case PdoiSubjectDeliveryMethodsEnum::SEOS->value: //деловодна система
+                $communicationData['files']= $this->application->files ? $this->application->files->pluck('id')->toArray() : [];
                 $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', env('SEOS_PLATFORM_EIK',null))->first();
                 $receiver = env('APP_ENV') != 'production' ? EgovOrganisation::find((int)env('LOCAL_TO_EGOV_ORGANISATION_ID')) : $this->application->responseSubject->egovOrganisation;
 
@@ -100,6 +118,7 @@ class NotifySubjectNewApplication extends Notification
                 $communicationData['from_email'] = config('mail.from.address');
                 $communicationData['to_name'] = $notifiable->names;
                 $communicationData['to_email'] = $notifiable->email;
+                $communicationData['files']= $this->application->files ? $this->application->files->pluck('id')->toArray() : [];
         }
         return $communicationData;
     }

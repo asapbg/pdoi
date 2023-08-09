@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Enums\DeliveryMethodsEnum;
 use App\Models\PdoiApplication;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
@@ -51,6 +52,14 @@ class NotifyUserForAppForward extends Notification
         switch ($notifiable->delivery_method)
         {
             case DeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
+                $eDeliveryConfig = config('e_delivery');
+                if( env('APP_ENV') != 'production' ) {
+                    $communicationData['ssev_profile_id'] = env('LOCAL_TO_SSEV_PROFILE_ID');
+                } else {
+                    $communicationData['to_group'] = $notifiable->legal_form == User::USER_TYPE_PERSON ? $eDeliveryConfig['group_ids']['person'] : $eDeliveryConfig['group_ids']['company'];
+                    $communicationData['to_identity'] = $notifiable->legal_form == User::USER_TYPE_PERSON ? $notifiable-> person_identity : $notifiable->company_identity;
+                    $communicationData['ssev_profile_id'] = $notifiable->ssev_profile_id ?? 0;
+                }
                 break;
             default://email
                 $communicationData['from_name'] = config('mail.from.name');

@@ -4,8 +4,10 @@ namespace App\Notifications;
 
 use App\Enums\DeliveryMethodsEnum;
 use App\Models\PdoiApplication;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class NotifyUserForAppStatus extends Notification
 {
@@ -51,19 +53,37 @@ class NotifyUserForAppStatus extends Notification
                 Срок за отговор: '.displayDate($this->application->response_end_time).PHP_EOL.'
                 *Забележка: Това съобщение е генерирано автоматично - моля, не му отговаряйте.',
             'subject' => __('mail.subject.new_application_status'),
-            'files' => $this->application->files ? $this->application->files->pluck('id')->toArray() : [],
+            'files' => [],
             'type_channel' => $notifiable->delivery_method
         ];
 
         switch ($notifiable->delivery_method)
         {
             case DeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
+                $eDeliveryConfig = config('e_delivery');
+                if( env('APP_ENV') != 'production' ) {
+                    $communicationData['ssev_profile_id'] = env('LOCAL_TO_SSEV_PROFILE_ID');
+                } else {
+                    $communicationData['to_group'] = $notifiable->legal_form == User::USER_TYPE_PERSON ? $eDeliveryConfig['group_ids']['person'] : $eDeliveryConfig['group_ids']['company'];
+                    $communicationData['to_identity'] = $notifiable->legal_form == User::USER_TYPE_PERSON ? $notifiable-> person_identity : $notifiable->company_identity;
+                    $communicationData['ssev_profile_id'] = $notifiable->ssev_profile_id ?? 0;
+                }
+
+                if( $this->application->files->count() ) {
+                    foreach ($this->application->files as $f) {
+                        $communicationData['files'][] = [
+                            'type' => $f->content_type,
+                            'content' => base64_encode(Storage::disk('local')->get($f->path))
+                        ];
+                    }
+                }
                 break;
             default://email
                 $communicationData['from_name'] = config('mail.from.name');
                 $communicationData['from_email'] = config('mail.from.address');
                 $communicationData['to_name'] = $notifiable->names;
                 $communicationData['to_email'] = $notifiable->email;
+                $communicationData['files']= $this->application->files ? $this->application->files->pluck('id')->toArray() : [];
         }
         return $communicationData;
     }

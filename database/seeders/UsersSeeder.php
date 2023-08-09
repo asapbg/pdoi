@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -93,6 +94,8 @@ class UsersSeeder extends Seeder
                                 $webUsersIds[] = $user->id;
                             }
                             $userToArray = get_object_vars($user);
+                            $p = base64_decode($userToArray['password']);
+                            $userToArray['password'] = bcrypt($p);
                             unset($userToArray['group_name']);
                             $newUsers[] = $userToArray;
                         }
@@ -111,7 +114,7 @@ class UsersSeeder extends Seeder
                         if( sizeof($webUsersIds) ){
                             $webRole->users()->attach($webUsersIds);
                         }
-                        //TODO get moderator pdoi_response_subjects
+                        //TODO get moderator pdoi_response_subjects if this is not the field adm_users.org_code
                         //TODO assign individual permissions
                     }
 

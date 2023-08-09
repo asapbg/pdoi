@@ -199,16 +199,6 @@ class PdoiApplicationController extends Controller
                 ]);
                 $newApplication->save();
 
-                $appService = new ApplicationService($newApplication);
-                //Register event: register first app event
-                $receivedEvent = $appService->registerEvent(ApplicationEventsEnum::SEND->value);
-
-                if ( is_null($receivedEvent) ) {
-                    DB::rollBack();
-                    logError('Apply application (front): ', 'Operation roll back because cant\'t register '.ApplicationEventsEnum::SEND->name. ' event');
-                    return response()->json(['errors' => __('custom.system_error')], 200);
-                }
-
                 //Save user attached files
                 if( isset($validated['files']) && sizeof($validated['files']) ) {
                     foreach ($validated['files'] as $key => $file) {
@@ -249,7 +239,17 @@ class PdoiApplicationController extends Controller
 //                    $appService = new ApplicationService($newApplication);
 //                    $appService->communicationCallback($lastNotify[0]);
 //                }
+                $appService = new ApplicationService($newApplication);
                 $appService->generatePdf($newApplication);
+
+                //Register event: register first app event
+                $receivedEvent = $appService->registerEvent(ApplicationEventsEnum::SEND->value);
+
+                if ( is_null($receivedEvent) ) {
+                    DB::rollBack();
+                    logError('Apply application (front): ', 'Operation roll back because cant\'t register '.ApplicationEventsEnum::SEND->name. ' event');
+                    return response()->json(['errors' => __('custom.system_error')], 200);
+                }
                 $newApplication->refresh();
                 $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
 
