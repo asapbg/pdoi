@@ -78,8 +78,10 @@ class NotifySubjectNewApplication extends Notification
                 if( $this->application->files->count() ) {
                     foreach ($this->application->files as $f) {
                         $communicationData['files'][] = [
-                            'type' => $f->content_type,
-                            'content' => base64_encode(Storage::disk('local')->get($f->path))
+                            'id' => $f->id,
+                            'name' => $f->filename,
+                            'content_type' => $f->content_type,
+                            'binary_content' => base64_encode(Storage::disk('local')->get($f->path))
                         ];
                     }
                 }

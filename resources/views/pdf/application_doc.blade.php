@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{ trans_choice('custom.applications', 1) }} - {{ $application->application_uri }}</title>
 </head>
-<body style="text-align: center;font-size: 34px; padding-left: 50px; padding-right: 50px; font-family: Arial, sans-serif;">
+<body style="text-align: center;font-size: 34px; padding-left: 50px; padding-right: 50px;">
 <div style="font-size: 22px;">
     <table>
         <tr>

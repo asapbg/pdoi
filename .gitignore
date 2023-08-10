@@ -16,3 +16,4 @@ yarn-error.log
 /.vscode
 result.txt
 app/Http/Controllers/Test.php
+app/Library/EAuthentication.php
