@@ -265,7 +265,8 @@ class ApplicationService
     {
         $fileName = 'zayavlenie_ZDOI_'.displayDate($application->created_at).'.pdf';
         $pdfFile = Pdf::loadView('pdf.application_doc', ['application' => $application]);
-        Storage::disk('local')->put($application->fileFolder.$fileName, "\xEF\xBB\xBF" . $pdfFile->output());
+//        Storage::disk('local')->put($application->fileFolder.$fileName, "\xEF\xBB\xBF" . $pdfFile->output());
+        Storage::disk('local')->put($application->fileFolder.$fileName, $pdfFile->output());
         $newFile = new File([
             'code_object' => File::CODE_OBJ_APPLICATION,
             'filename' => $fileName,
