@@ -98,7 +98,7 @@ class EAuthentication
                 </egovbga:RequestedAttributes>
             </saml2p:Extensions>
         </saml2p:AuthnRequest>';
-
+        
         //$this->xml = $this->sign($xml);
         $this->xml = $xml;
     }
@@ -149,7 +149,7 @@ class EAuthentication
         $fullMsg = json_decode($json, true);
 //        return $fullMsg;
         if( is_null($fullMsg) ) {
-            logError('eAuthentication Invalid response:', $message);
+            Log::error('['.Carbon::now().'] eAuthentication Invalid response: '.$message);
             return null;
         } else {
             // Check message status
@@ -164,12 +164,12 @@ class EAuthentication
                 || !isset($fullMsg['saml2pStatus']['saml2pStatusCode'])
                 || !isset($fullMsg['saml2pStatus']['saml2pStatusCode']['@attributes'])
                 || !isset($fullMsg['saml2pStatus']['saml2pStatusCode']['@attributes']['Value']) ) {
-                logError('eAuthentication Missing status information:', $message);
+                Log::error('['.Carbon::now().'] eAuthentication Missing status information: '.$message);
                 return null;
             }
 
             if( $fullMsg['saml2pStatus']['saml2pStatusCode']['@attributes']['Value'] != 'urn:oasis:names:tc:SAML:2.0:status:Success' ) {
-                logError('eAuthentication Not successful received message:', $message);
+                Log::error('['.Carbon::now().'] eAuthentication Not successful received message: '.$message);
                 return null;
             }
 
@@ -201,7 +201,7 @@ class EAuthentication
                 || !isset($fullMsg['saml2Assertion']['saml2AttributeStatement']['saml2Attribute'])
                 || !is_array($fullMsg['saml2Assertion']['saml2AttributeStatement']['saml2Attribute'])
                 || !sizeof($fullMsg['saml2Assertion']['saml2AttributeStatement']['saml2Attribute']) ) {
-                logError('eAuthentication Missing user attributes:', $message);
+                Log::error('['.Carbon::now().'] eAuthentication Missing user attributes: '.$message);
                 return null;
             }
 
