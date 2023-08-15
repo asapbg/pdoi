@@ -243,7 +243,7 @@ class EAuthentication
     {
         $privateKeyStore = new PrivateKeyStore();
         // load a private key from a string
-        $privateKeyStore->loadFromPem(file_get_contents(env('SEOS_SERVER_CERT_KEY_PATH')), file_get_contents(env('SEOS_SERVER_CERT_PATH')));
+        $privateKeyStore->loadFromPem(file_get_contents(env('EAUTH_CERT_KEY_PATH')), file_get_contents(env('EAUTH_SERVER_CERT_PATH')));
         //Define the digest method: sha1, sha224, sha256, sha384, sha512
         $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
         //Create a CryptoSigner instance:
