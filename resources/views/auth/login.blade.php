@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <a href="{{ route('eauth.login').'?source=web' }}">{{ __('eauth.with_e_auth') }}</a>
+                        <a href="{{ route('eauth.login') }}">{{ __('eauth.with_e_auth') }}</a>
                         <a href="{{ route('register') }}" title="" class="d-inline-block col-12 text-left">{{ __('front.do_not_have_account') }}</a>
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary mt-3">{{ __('custom.login') }}</button>
