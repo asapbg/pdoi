@@ -46,4 +46,7 @@ return [
     'forgot_password_link' => 'Забравена парола?',
     'with_cert' => 'Вход със сертификат',
     'registration' => 'Регистрация',
+    'account_restricted' => 'Нямате достъп до платформата поради статус :status',
+    'account_email_not_validated' => 'Не сте потвърдили и-мейл адресът с който сте се регистрирали. Моля, проверете пощата си.',
+    'account_not_active' => 'Акаунтът ви не е активен',
 ];

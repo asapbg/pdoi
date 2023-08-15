@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Carbon\Carbon;
@@ -115,6 +116,11 @@ class VerificationController extends Controller
             $user->status_date = Carbon::now();
             $user->save();
             Auth::guard('web')->login($user);
+
+            \Illuminate\Support\Facades\Session::put('user_last_login', $user->last_login_at);
+            $sessionLifetime = Settings::where('name', '=', Settings::SESSION_LIMIT_KEY)->first();
+            \Illuminate\Support\Facades\Session::put('user_session_time_limit', $sessionLifetime ? $sessionLifetime->value : 10);
+
             event(new Verified($user));
         }
 

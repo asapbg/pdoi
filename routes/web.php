@@ -13,6 +13,8 @@ Auth::routes(['verify' => true]);
 
 Route::feeds();
 
+include 'eauth.php';
+
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('front.logout');
 
