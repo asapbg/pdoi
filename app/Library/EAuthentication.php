@@ -99,8 +99,8 @@ class EAuthentication
             </saml2p:Extensions>
         </saml2p:AuthnRequest>';
 
-        //$this->xml = $this->sign($xml);
-        $this->xml = $xml;
+        $this->xml = $this->sign($xml);
+        //$this->xml = $xml;
     }
 
     /**
