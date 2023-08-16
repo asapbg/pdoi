@@ -77,7 +77,7 @@ class PdoiResponseSubjectController extends AdminController
             'courtSubjects', 'subjects', 'editOptions'));
     }
 
-    public function store(Request $request, PdoiResponseSubject $item)
+    public function store(PdoiResponseSubjectStoreRequest $request, PdoiResponseSubject $item)
     {
 //        $r = new PdoiResponseSubjectStoreRequest();
 //        $validator = Validator::make($request->all(), $r->rules());
