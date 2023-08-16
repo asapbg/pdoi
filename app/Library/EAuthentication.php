@@ -109,7 +109,7 @@ class EAuthentication
      */
     public function spMetadata(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        $xml = '<EntityDescriptor entityID="'.route('eauth.sp_metadata').'" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+        $xml = '<EntityDescriptor entityID="'.route('eauth.sp_metadata').'" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
     <md:SPSSODescriptor WantAssertionsSigned="true"
         protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
         <md:AssertionConsumerService
