@@ -29,6 +29,15 @@ class Controller extends BaseController
     /** @var array $request */
     protected array $request = [];
 
+    /** @var string $seo_title */
+    protected $seo_title;
+
+    /** @var string $seo_keywords */
+    protected $seo_keywords = '';
+
+    /** @var string $seo_description */
+    protected $seo_description = '';
+
     /**
      * Set pages titles in singular and plural according to controller / model
      * Get the request
@@ -59,6 +68,9 @@ class Controller extends BaseController
                     'title_singular'    => $this->title_singular,
                     'title_plural'      => $this->title_plural,
                     'breadcrumbs'       => $this->breadcrumbs(),
+                    'seo_title'         => $this->seo_title,
+                    'seo_keywords'      => $this->seo_keywords,
+                    'seo_description'   => $this->seo_description,
                 ],
                 $this->request,
                 $variables
@@ -74,6 +86,11 @@ class Controller extends BaseController
         $breadcrumbs = [];
         $segments = request()->segments();
         $links_count = count(request()->segments())-1;
+
+        if($links_count == -1) {
+            return $breadcrumbs;
+        }
+
         $text = __('custom.list_with');
         $heading = $this->title_heading ?? "$text $this->title_plural";
 
@@ -220,5 +237,16 @@ class Controller extends BaseController
         $this->title_plural     = $title;
         $this->title_heading    = $title;
         $this->breadcrumb_title = $title;
+    }
+
+    /**
+     * @param array $seo
+     * @return void
+     */
+    protected function setSeo(array $seo)
+    {
+        $this->seo_title = isset($seo['seo_title']) && !empty($seo['seo_title']) ? $seo['seo_title'].' - '.__('seo.default_title') : __('seo.default_title');
+        $this->seo_keywords = $seo['seo_keywords'] ?? __('seo.default_keywords');
+        $this->seo_description = isset($seo['seo_description']) && !empty($seo['seo_description']) ? $seo['seo_description'] : __('seo.default_description');
     }
 }

@@ -41,7 +41,13 @@ class HomeController extends Controller
         }
         $paginate = $filter['paginate'] ?? MenuSection::PAGINATE;
         $pages = $item->pages()->paginate($paginate);
-        return view('front.page', compact('item', 'pages'));
+
+        $this->setSeo([
+            'seo_title' => $item->meta_title,
+            'seo_keywords' => $item->meta_keyword,
+            'seo_description' => $item->meta_description
+        ]);
+        return $this->view('front.page', compact('item', 'pages'));
     }
 
     public function page($sectionSlug, $slug) {
@@ -49,7 +55,13 @@ class HomeController extends Controller
         if( !$item ) {
             abort(Response::HTTP_NOT_FOUND);
         }
-        return view('front.page', compact('item'));
+
+        $this->setSeo([
+            'seo_title' => $item->meta_title,
+            'seo_keywords' => $item->meta_keyword,
+            'seo_description' => $item->meta_description
+        ]);
+        return $this->view('front.page', compact('item'));
     }
 
     public function help(Request $request)
@@ -69,6 +81,12 @@ class HomeController extends Controller
         if( !$item ) {
             abort(\Illuminate\Http\Response::HTTP_NOT_FOUND);
         }
+
+        $this->setSeo([
+            'seo_title' => $item->meta_title,
+            'seo_keywords' => $item->meta_keyword,
+            'seo_description' => $item->meta_description
+        ]);
         return $this->view('front.help.'.$item->system_name, compact('item'));
     }
 

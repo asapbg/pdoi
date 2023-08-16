@@ -3,10 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($title) ? $title .' - '.__('custom.full_app_name') : __('custom.full_app_name') }}</title>
+
+    <title>{{ isset($seo_title) && !empty($seo_title) ? $seo_title : __('seo.default_title') }}</title>
+    <meta name="description" content="{{ $seo_description ?? __('seo.default_description') }}">
+    <meta name="keywords" content="{{ $seo_keywords ?? __('seo.default_keywords') }}">
+
 {{--    <meta property="og:url"           content="https://www.your-domain.com/your-page.html" />--}}
 {{--    <meta property="og:type"          content="website" />--}}
 {{--    <meta property="og:title"         content="Your Website Title" />--}}
