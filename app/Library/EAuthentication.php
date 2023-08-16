@@ -73,29 +73,6 @@ class EAuthentication
                     <egovbga:Provider>'.env('E_AUTH_PROVIDER_OID', '').'</egovbga:Provider>
                     <egovbga:LevelOfAssurance>'.$this->levelOfAssurance.'</egovbga:LevelOfAssurance>
                 </egovbga:RequestedService>
-                <egovbga:RequestedAttributes xmlns:egovbga="urn:bg:egov:eauth:2.0:saml:ext">
-                    <egovbga:RequestedAttribute FriendlyName="birthName"
-                        Name="urn:egov:bg:eauth:2.0:attributes:birthName"
-                        NameFormat="urn:oasis:names:tc:saml2:2.0:attrname-format:uri" isRequired="true">
-                        <egovbga:AttributeValue>urn:egov:bg:eauth:2.0:attributes:birthName</egovbga:AttributeValue>
-                    </egovbga:RequestedAttribute>
-                    <egovbga:RequestedAttribute FriendlyName="email"
-                        Name="urn:egov:bg:eauth:2.0:attributes:email"
-                        NameFormat="urn:oasis:names:tc:saml2:2.0:attrname-format:uri" isRequired="true">
-                        <egovbga:AttributeValue>urn:egov:bg:eauth:2.0:attributes:email</egovbga:AttributeValue>
-                    </egovbga:RequestedAttribute>
-                    <egovbga:RequestedAttribute FriendlyName="phone"
-                        Name="urn:egov:bg:eauth:2.0:attributes:phone"
-                        NameFormat="urn:oasis:names:tc:saml2:2.0:attrname-format:uri" isRequired="true">
-                        <egovbga:AttributeValue>urn:egov:bg:eauth:2.0:attributes:phone</egovbga:AttributeValue>
-                    </egovbga:RequestedAttribute>
-                    <egovbga:RequestedAttribute
-                        FriendlyName="canonicalResidenceAddress"
-                        Name="urn:egov:bg:eauth:2.0:attributes:canonicalResidenceAddress"
-                        NameFormat="urn:oasis:names:tc:saml2:2.0:attrname-format:uri" isRequired="true">
-                        <egovbga:AttributeValue>urn:egov:bg:eauth:2.0:attributes:canonicalResidenceAddress</egovbga:AttributeValue>
-                    </egovbga:RequestedAttribute>
-                </egovbga:RequestedAttributes>
             </saml2p:Extensions>
         </saml2p:AuthnRequest>';
 
@@ -110,13 +87,34 @@ class EAuthentication
     public function spMetadata(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $xml = '<EntityDescriptor entityID="'.route('eauth.sp_metadata').'" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-    <md:SPSSODescriptor WantAssertionsSigned="true"
-        protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-        <md:AssertionConsumerService
-            Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-            Location="'.route('eauth.login.callback').'" index="1"/>
-    </md:SPSSODescriptor>
-</EntityDescriptor>';
+                    <SPSSODescriptor WantAssertionsSigned="true"
+                        protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+                        <AssertionConsumerService
+                            Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                            Location="'.route('eauth.login.callback').'" index="1"/>
+                            <AttributeConsumingService index="0" isDefault="true">
+                                <ServiceName xml:lang="en">SP</ServiceName>
+                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:personIdentifier" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="true"/>
+                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:personName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="true"/>
+                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="true"/>
+                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:phone" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="false"/>
+                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:dateOfBirth" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="false"/>
+                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:canonicalResidenceAddress" NameFormat="urn:oasis:names:tc:saml2:2.0:attrname-format:uri" isRequired="false"/>
+                            </AttributeConsumingService>
+                    </SPSSODescriptor>
+                    <Organization>
+                        <OrganizationName>Платформа за достъп до обществена информация</OrganizationName>
+                        <OrganizationDisplayName>ПДОИ</OrganizationDisplayName>
+                        <OrganizationURL>'.route('home').'</OrganizationURL>
+                    </Organization>
+                    <ContactPerson contactType="administrative">
+                        <Company>Име компания</Company>
+                        <GivenName>Име</GivenName>
+                        <SurName>Фамилия</SurName>
+                        <EmailAddress>test@t.com</EmailAddress>
+                        <TelephoneNumber>100000000</TelephoneNumber>
+                    </ContactPerson>
+                </EntityDescriptor>';
         return response($this->sign($xml), 200, [
             'Content-Type' => 'application/xml'
         ]);
@@ -243,7 +241,7 @@ class EAuthentication
     {
         $privateKeyStore = new PrivateKeyStore();
         // load a private key from a string
-        $privateKeyStore->loadFromPem(file_get_contents(env('EAUTH_CERT_KEY_PATH')), file_get_contents(env('EAUTH_SERVER_CERT_PATH')));
+        $privateKeyStore->loadFromPkcs12(file_get_contents(env('EAUTH_SERVER_CERT_PATH')), env('EAUTH_CERT_KEY_PATH'));
         //Define the digest method: sha1, sha224, sha256, sha384, sha512
         $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
         //Create a CryptoSigner instance:
