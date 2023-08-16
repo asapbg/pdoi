@@ -30,6 +30,17 @@ class UserController extends Controller
 
             try {
                 $validated = User::prepareModelFields($validator->validated());
+                if( isset($validated['legal_form']) && $validated['legal_form'] ) {
+                    if( $validated['legal_form'] == User::USER_TYPE_PERSON ) {
+                        $validated['company_identity'] = null;
+                    } else {
+                        $validated['person_identity'] = null;
+                    }
+                } else{
+                    $validated['person_identity'] = null;
+                    $validated['company_identity'] = null;
+                }
+
                 $user->fill($validated);
                 $user->save();
                 session()->flash('success', __('custom.success_update'));

@@ -47,10 +47,17 @@ class ProfileStoreRequest extends FormRequest
             'delivery_method' => ['required', 'numeric', Rule::in(DeliveryMethodsEnum::values())],
         ];
 
+        if( request()->input('person_identity') && !empty(request()->input('person_identity')) ) {
+            $rules['person_identity'][] = Rule::unique('users', 'person_identity')->ignore(auth()->user()->id);
+        }
+        if( request()->input('company_identity') && !empty(request()->input('company_identity')) ) {
+            $rules['company_identity'][] = Rule::unique('users', 'company_identity')->ignore(auth()->user()->id);
+        }
+
         if( request()->input('delivery_method') && (int)request()->input('delivery_method') === DeliveryMethodsEnum::SDES->value ) {
             if ( request()->input('legal_form') ) {
                 $personIdentity = request()->input('legal_form') == User::USER_TYPE_PERSON ? 'person_identity' : 'company_identity';
-                $rules[$personIdentity] = ['required', 'string', 'max:20'];
+                $rules[$personIdentity] = ['required', 'string', 'max:20', Rule::unique('users', $personIdentity)->ignore(auth()->user()->id)];
             }
         }
 
