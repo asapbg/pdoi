@@ -71,16 +71,17 @@ class PdoiResponseSubjectController extends AdminController
         ];
 
         $this->setTitlePlural($item->id > 0 ? 'Редакция на ЗС ('.$item->subject_name.')' : 'Създаване на ЗС');
+
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName',
             'listRouteName', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections',
             'courtSubjects', 'subjects', 'editOptions'));
     }
 
-    public function store(PdoiResponseSubjectStoreRequest $request, PdoiResponseSubject $item)
+    public function store(Request $request, PdoiResponseSubject $item)
     {
 //        $r = new PdoiResponseSubjectStoreRequest();
 //        $validator = Validator::make($request->all(), $r->rules());
-//        dd($validator->errors());
+//        dd($request->all(),$validator->errors());
         $id = $item->id;
         $validated = $request->validated();
         if( ($item->id && ($request->user()->cannot('update', $item) && $request->user()->cannot('updateSettings', $item)) )

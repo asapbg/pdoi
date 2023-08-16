@@ -30,7 +30,7 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
         $rules = [];
         if( request()->input('full_edit') ) {
             $rules = [
-                'eik' => ['required', 'string', 'max:13'],
+                'eik' => ['required', 'digits_between:1,13'],
                 'adm_level' => ['required', 'numeric', 'exists:rzs_section,adm_level'],
                 'region' => ['required', 'numeric'],
                 'municipality' => ['required', 'numeric'],

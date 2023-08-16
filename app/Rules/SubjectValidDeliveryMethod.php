@@ -39,37 +39,40 @@ class SubjectValidDeliveryMethod implements Rule
         if( (int)$value == PdoiSubjectDeliveryMethodsEnum::EMAIL->value ) {
             if( $this->fullEdit ) {
                 if( empty($this->email) ) {
-                    $this->message = 'Методът на пренасочване исиква валиден ел. адрес за задълженият субкет.';
+                    $this->message = 'Методът на пренасочване изисква валиден ел. адрес за задълженият субкет.';
                     return false;
                 }
             } else{
                 $subject = PdoiResponseSubject::whereNotNull('email')->where('email', '<>', '')->find($this->id);
                 if( !$subject ) {
-                    $this->message = 'Методът на пренасочване исиква валиден ел. адрес за задълженият субкет.';
+                    $this->message = 'Методът на пренасочване изисква валиден ел. адрес за задълженият субкет.';
                     return false;
                 }
             }
         }
-        if( (int)$value == PdoiSubjectDeliveryMethodsEnum::SEOS->value ) {
+
+        if( (int)$value == PdoiSubjectDeliveryMethodsEnum::SDES->value || (int)$value == PdoiSubjectDeliveryMethodsEnum::SEOS->value ) {
             if( $this->fullEdit ) {
-                if( empty($this->eik) ) {
-                    $this->message = 'Методът на пренасочване исиква валиден EIK за задълженият субкет.';
+                if( empty($this->eik) || preg_match('#[^0-9]#',$this->eik) ) {
+                    $this->message = 'Методът на пренасочване изисква валиден EIK за задълженият субкет.';
                     return false;
                 }
                 $subjectEik = $this->eik;
             } else {
                 $subject = PdoiResponseSubject::whereNotNull('eik')->where('eik', '<>', '')->where('active', 1)->find($this->id);
-                if( !$subject ) {
-                    $this->message = 'Методът на пренасочване исиква валиден EIK за задълженият субкет.';
+                if( !$subject || preg_match('#[^0-9]#',$subject->eik) ) {
+                    $this->message = 'Методът на пренасочване изисква валиден EIK за задълженият субкет.';
                     return false;
                 }
                 $subjectEik = $subject->eik;
             }
 
-            $organisation = EgovOrganisation::where('eik', '=', $subjectEik)->where('status', 1)->first();
-            if( !$organisation ) {
-                $this->message = 'Методът на пренасочване исиква съществуването на организация/участник в СЕОС регистъра с този ЕИК';
-                return false;
+            if( (int)$value == PdoiSubjectDeliveryMethodsEnum::SEOS->value ) {
+                $organisation = EgovOrganisation::where('eik', '=', $subjectEik)->where('status', 1)->first();
+                if( !$organisation ) {
+                    $this->message = 'Методът на пренасочване изисква съществуването на организация/участник в СЕОС регистъра с този ЕИК';
+                    return false;
+                }
             }
         }
         return true;

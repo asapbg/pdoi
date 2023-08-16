@@ -10,6 +10,9 @@
                             <input type="radio" name="rzs_delivery_method" value="{{ $val }}" @if(old('rzs_delivery_method', $item->id ? $item->delivery_method : 0) == $val) checked @endif required> {{ __('custom.rzs.delivery_by.'.$name) }}
                         </label>
                     @endforeach
+                    @error('rzs_delivery_method')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
         </div>

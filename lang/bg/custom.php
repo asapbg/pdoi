@@ -258,6 +258,7 @@ return [
     'mail_templates'                            => 'Шаблони (съобщения)',
     'section'                                   => 'Секции',
     'setting'                                   => 'Настройки',
+    'rzs_subjects'                              => 'Задължени субекти',
     //
     'applicant'                                 => 'Заявител',
     'applicant_type'                            => 'Тип заявител',

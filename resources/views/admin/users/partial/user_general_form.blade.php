@@ -87,16 +87,14 @@
 @if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)
     <div class="form-group @if(old('user_type', (isset($item) ? $item->user_type : '')) != \App\Models\User::USER_TYPE_INTERNAL) d-none @endif">
         <label class="col-sm-12 control-label" for="email">
-            {{ __('validation.attributes.administrative_unit') }} <span class="required">*</span>
+            {{ __('validation.attributes.administrative_unit') }}
         </label>
         <div class="col-12">
             <select id="administrative_unit" name="administrative_unit"  class="form-control form-control-sm select2">
-                @if(!isset($item))
-                    <option value="">---</option>
-                @endif
+                <option value="" @if(old('administrative_unit', isset($item) ? $item->administrative_unit : '') == '') selected @endif>---</option>
                 @if(isset($rzsSubjectOptions) && $rzsSubjectOptions->count())
                     @foreach($rzsSubjectOptions as $rzs)
-                        <option value="{{ $rzs->id }}" @if((isset($item) ? $item->administrative_unit : '') == $rzs->id) selected @endif>{{ $rzs->name }}</option>
+                        <option value="{{ $rzs->id }}" @if(old('administrative_unit', (isset($item) ? $item->administrative_unit : '')) == $rzs->id) selected @endif>{{ $rzs->name }}</option>
                     @endforeach
                 @endif
             </select>
@@ -168,7 +166,6 @@
             $(document).ready(function (){
                 let internalUserType = parseInt(<?php echo \App\Models\User::USER_TYPE_INTERNAL; ?>);
                 $('#user_type').on('change', function (){
-                    console.log(parseInt($('#user_type').val()), internalUserType, parseInt($('#user_type').val()) === internalUserType);
                     if( parseInt($('#user_type').val()) === internalUserType ) {
                         $('#administrative_unit').closest('.form-group').removeClass('d-none');
                     } else {
