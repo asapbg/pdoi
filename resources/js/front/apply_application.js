@@ -75,7 +75,7 @@ $(function() {
                     console.log(data);
                     if (typeof data.errors != 'undefined') {
                         apllyErrorDiv.html(data.errors);
-                        applayModal.modalObj.hide();
+                        applayModal.hideModal(applayModal.id);
                     } else {
                         if (typeof data.applicationsInfo != 'undefined' && data.applicationsInfo.length > 0) {
                             $('div#apply').html(data.html);
@@ -85,12 +85,12 @@ $(function() {
                             activateTab('apply');
                         } else {
                             apllyErrorDiv.html('Нещо се обърка по врене на запис, заявлението не е завършено.');
-                            applayModal.modalObj.hide();
+                            applayModal.hideModal(applayModal.id);
                         }
                     }
                     //enable actions
                     $('.disable-on-send').prop('disabled', false);
-                    applayModal.modalObj.hide();
+                    applayModal.hideModal(applayModal.id);
                 },
                 error: function () {
                     apllyErrorDiv.html('Системна грешка, презаредете и опитайте отново.');
@@ -101,6 +101,7 @@ $(function() {
             });
             navBtns.prop('disable', false);
             $('.disabled-item').prop('disabled', true);
+            $('.disable-on-send').prop('disabled', false);
         }
 
         function applicationNavigate(currentBtn) {

@@ -62,6 +62,13 @@ MyModal.prototype.showModal = function (_myModal){
     _myModal.modalObj.show();
 }
 
+MyModal.prototype.hideModal = function (id){
+    $('#' + id).remove();
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open');
+    $('body').css('overflow', 'normal');
+}
+
 MyModal.prototype.setDestroyListener = function (_myModal){
     $('#' + _myModal.id).on('hidden.bs.modal', function(){
         _myModal.modalObj.dispose();

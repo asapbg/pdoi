@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\DeliveryMethodsEnum;
 use App\Http\Controllers\Controller;
 use App\Models\CustomRole;
 use App\Providers\RouteServiceProvider;
@@ -80,6 +81,7 @@ class RegisterController extends Controller
             'user_type' => User::USER_TYPE_EXTERNAL,
             'password' => Hash::make($data['password']),
             'pass_is_new' => 1,
+            'delivery_method' => DeliveryMethodsEnum::EMAIL->value,
         ]);
         $respondentRole = CustomRole::where('name', User::EXTERNAL_USER_DEFAULT_ROLE)->first();
         $user->assignRole($respondentRole);
