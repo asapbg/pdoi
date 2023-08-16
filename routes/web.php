@@ -18,6 +18,11 @@ include 'eauth.php';
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('front.logout');
 
+Route::controller(\App\Http\Controllers\Auth\ForgotPasswordController::class)->group(function () {
+    Route::get('/forgot-password',                'showLinkRequestForm')->name('forgot_pass');
+    Route::post('/forgot-password/send',                'sendResetLinkEmail')->name('forgot_pass.password.send');
+    Route::post('/forgot-password/update',                'confirmPassword')->name('forgot_pass.password.update');
+});
 
 Route::get('/locale', function (Request $request) {
     if ($request->has('locale')) {

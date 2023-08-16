@@ -53,7 +53,7 @@
 {{--                </div>--}}
                 <div class="row mb-3">
                     <div class="col-12 text-right">
-                        <a href="#" class="font-italic">{{ __('auth.forgot_password_link') }}</a>
+                        <a href="{{ route('forgot_pass') }}" class="font-italic">{{ __('auth.forgot_password_link') }}</a>
                     </div>
                 </div>
                 <div class="row mb-2">
