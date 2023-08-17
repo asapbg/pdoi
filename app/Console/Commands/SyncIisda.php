@@ -200,6 +200,7 @@ class SyncIisda extends Command
                         foreach ($toInsert as $newRow) {
                             $newSubject = new PdoiResponseSubject($newRow);
                             $newSubject->save();
+                            $newSubject->refresh();
                             foreach (config('available_languages') as $lang) {
                                 $newSubject->translate($lang['code'])->subject_name = $newRow['subject_name'];
                                 $newSubject->translate($lang['code'])->address = $newRow['address'];
