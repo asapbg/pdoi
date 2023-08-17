@@ -48,8 +48,9 @@ class CloseExpiredApplications extends Command
                     continue;
                 }
                 $needToFinishIds[] = $application->id;
-                echo sizeof($needToFinishIds).' expired applications';
             }
+            echo sizeof($needToFinishIds).' expired applications';
+
             $applications = array_chunk($needToFinishIds, 10);
             foreach ($applications as $ids) {
                 PdoiApplication::whereIn('id', $ids)->update(['status' => PdoiApplicationStatusesEnum::NO_REVIEW->value]);
