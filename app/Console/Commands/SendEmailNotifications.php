@@ -8,6 +8,7 @@ use App\Services\ApplicationService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,6 +37,8 @@ class SendEmailNotifications extends Command
      */
     public function handle()
     {
+        Log::info("Cron run notification:email.");
+
         $beforeTimestamp = Carbon::now()->subHours(1);
         $notifications = DB::table('notifications')
             ->where('type_channel','=', self::EMAIL_CHANNEL)

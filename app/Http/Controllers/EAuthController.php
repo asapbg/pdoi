@@ -35,7 +35,7 @@ class EAuthController extends Controller
     }
 
     /**
-     * Integration call to this method to send request response to us
+     * Integration call this method to send request response to us
      * @param Request $request
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
      */
@@ -84,7 +84,7 @@ class EAuthController extends Controller
     }
 
     /**
-     * When user not exist and ewe receive all required data
+     * When user not exist, and we receive all required data
      * or after user submit missing data, we use this method to create new user in db
      * @param $data
      * @return \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse

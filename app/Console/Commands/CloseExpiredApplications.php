@@ -8,6 +8,7 @@ use App\Models\PdoiApplication;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class CloseExpiredApplications extends Command
@@ -33,6 +34,8 @@ class CloseExpiredApplications extends Command
      */
     public function handle()
     {
+        Log::info("Cron run check:expired_application.");
+
         $expiredApplication = PdoiApplication::with(['currentEvent'])->ExpiredAndActive()->get();
         if( $expiredApplication->count() ) {
             $needToFinishIds = [];

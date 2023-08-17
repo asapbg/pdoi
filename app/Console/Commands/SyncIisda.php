@@ -39,6 +39,8 @@ class SyncIisda extends Command
 
     public function handle()
     {
+        Log::info("Cron run sync:iisda.");
+
         $localSubjects = $toInsert = [];
         //Local subjects
         $dbSubjects = PdoiResponseSubject::select('pdoi_response_subject.id'
