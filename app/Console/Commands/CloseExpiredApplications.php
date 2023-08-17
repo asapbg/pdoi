@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Notification;
 
 class CloseExpiredApplications extends Command
 {
-    const MAX_TRY = 3;
-    const EMAIL_CHANNEL= 1;
     /**
      * The name and signature of the console command.
      *
@@ -35,17 +33,26 @@ class CloseExpiredApplications extends Command
      */
     public function handle()
     {
-        $beforeTimestamp = Carbon::now()->subHours(1);
-        $notifications = DB::table('notifications')
-        ->where('type_channel','=', self::EMAIL_CHANNEL)
-        ->where('cnt_send','<=', self::MAX_TRY)
-        ->where('is_send','=', 0)
-        ->where('update_at','<=', $beforeTimestamp)
-        ->get();
-
-        if( $notifications->count() ) {
-            foreach ($notifications as $item) {
-                Mail::to($data['email'])->send(new UsersChangePassword($user));
+        $expiredApplication = PdoiApplication::with(['currentEvent'])->ExpiredAndActive()->get();
+        if( $expiredApplication->count() ) {
+            $needToFinishIds = [];
+            foreach ($expiredApplication as $application) {
+                //if current event is ask for info and his end time is expired then set application as finished
+                if ($application->currentEvent && $application->currentEvent->event_type == ApplicationEventsEnum::ASK_FOR_INFO->value) {
+                    if ($application->currentEvent->event_end_date <= Carbon::now()) {
+                        $needToFinishIds[] = $application->id;
+                    }
+                    continue;
+                }
+                if ($application->status == PdoiApplicationStatusesEnum::FORWARDED->value) {
+                    continue;
+                }
+                $needToFinishIds[] = $application->id;
+                echo sizeof($needToFinishIds).' expired applications';
+            }
+            $applications = array_chunk($needToFinishIds, 10);
+            foreach ($applications as $ids) {
+                PdoiApplication::whereIn('id', $ids)->update(['status' => PdoiApplicationStatusesEnum::NO_REVIEW->value]);
             }
         }
     }
