@@ -46,7 +46,8 @@ class NotifyUserNeedMoreInfo extends Notification
             'message' => 'Съобщение за нужда от повече информация',
             'subject' => __('mail.subject.need_more_nfo'),
             'files' => [],
-            'type_channel' => $notifiable->delivery_method
+            'type_channel' => $notifiable->delivery_method,
+            'application_id' => $this->application->id
         ];
 
         switch ($notifiable->delivery_method)

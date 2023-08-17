@@ -46,7 +46,8 @@ class NotifyUserForAppForward extends Notification
             'message' => 'Съобщение за препращане по компетентност',
             'subject' => __('mail.subject.application_forward'),
             'files' => [],
-            'type_channel' => $notifiable->delivery_method
+            'type_channel' => $notifiable->delivery_method,
+            'application_id' => $this->application->id
         ];
 
         switch ($notifiable->delivery_method)

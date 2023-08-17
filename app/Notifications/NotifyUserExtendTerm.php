@@ -46,7 +46,8 @@ class NotifyUserExtendTerm extends Notification
             'message' => 'Съобщение за удължаване на срок и причини за това',
             'subject' => __('mail.subject.extend_term_and_reason'),
             'files' => [],
-            'type_channel' => $notifiable->delivery_method
+            'type_channel' => $notifiable->delivery_method,
+            'application_id' => $this->application->id
         ];
 
         switch ($notifiable->delivery_method)

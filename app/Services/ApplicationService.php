@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Storage;
 class ApplicationService
 {
     private PdoiApplication $application;
-    private int $userId;
+    private int|null $userId;
 
     public function __construct(PdoiApplication $application)
     {

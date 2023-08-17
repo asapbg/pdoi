@@ -54,7 +54,8 @@ class NotifyUserForAppStatus extends Notification
                 *Забележка: Това съобщение е генерирано автоматично - моля, не му отговаряйте.',
             'subject' => __('mail.subject.new_application_status'),
             'files' => [],
-            'type_channel' => $notifiable->delivery_method
+            'type_channel' => $notifiable->delivery_method,
+            'application_id' => $this->application->id
         ];
 
         switch ($notifiable->delivery_method)

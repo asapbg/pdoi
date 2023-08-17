@@ -41,9 +41,11 @@ class SendEmailNotifications extends Command
             ->where('type_channel','=', self::EMAIL_CHANNEL)
             ->where('cnt_send','<', self::MAX_TRY)
             ->where('is_send','=', 0)
-            ->where('updated_at','<=', $beforeTimestamp)
-            ->get();
-
+            ->where(function ($q) use ($beforeTimestamp){
+                $q->where('updated_at','<=', $beforeTimestamp)
+                    ->orWhere('created_at', '>=', $beforeTimestamp);
+            })
+            ->limit(1)->get();
         if( $notifications->count() ) {
             foreach ($notifications as $item) {
                 $messageData = json_decode($item->data, true);
@@ -55,16 +57,17 @@ class SendEmailNotifications extends Command
                 DB::beginTransaction();
                 try {
                     Mail::send([], [], function ($message) use ($messageData){
-                        $message->from($messageData['from_mail'])
+                        $message->from($messageData['from_email'])
                             ->to(env('APP_ENV') != 'production' ? env('LOCAL_TO_MAIL') : $messageData['to_email'])
                             ->subject($messageData['subject'])
-                            ->setBody($messageData['message'],'text/html');
+                            ->html($messageData['message'])
+                            ->text($messageData['message']);
 
                         if( isset($messageData['files']) && sizeof($messageData['files']) ) {
                             $files = File::whereIn('id', $messageData['files'])->get();
                             if( $files->count() ){
                                 foreach ($files as $f) {
-                                    $message->attach(Storage::disk('local')->get($f->path));
+                                    $message->attach(base_path().Storage::disk('local')->url('app'.DIRECTORY_SEPARATOR.$f->path));
                                 }
                             }
                         }
@@ -73,10 +76,16 @@ class SendEmailNotifications extends Command
                     $appService = new ApplicationService($application);
                     $appService->communicationCallback($item);
 
+                    DB::table('notifications')
+                        ->where('id', $item->id)
+                        ->update(['is_send' => 1, 'cnt_send' => ($item->cnt_send + 1)]);
                     DB::commit();
                 } catch (\Exception $e) {
                     logError('Send email notification ID '.$item->id, $e->getMessage());
                     DB::rollBack();
+                    DB::table('notifications')
+                        ->where('id', $item->id)
+                        ->update(['cnt_send' => ($item->cnt_send + 1)]);
                 }
 
             }
