@@ -41,4 +41,7 @@ return [
     'application.request_field.description' => 'На основание на чл.3 от закона за достъп до обществена информация, желая да ми бъде предоставена информация относно',
     //my application
     'my_application.title' => 'Моите заявление',
+    //home page
+    'apply_new_application' => 'Подаване на заявление за достъп до обществена информация.',
+    'search_in_applications' => 'Обществена информация, публикувана на платформата.',
 ];

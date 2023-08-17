@@ -34,7 +34,7 @@
                     <a class="nav-link" href="#">Статистика</a>
                 </li>
                 <li class="nav-item px-1">
-                    <a class="nav-link" href="#">Контакти</a>
+                    <a class="nav-link" href="{{ route('page', ['section_slug' => 'info', 'slug' => \App\Models\Page::CONTACT_SYSTEM_PAGE]) }}">{{ trans_choice('custom.contacts', 2) }}</a>
                 </li>
 {{--                <li class="nav-item dropdown">--}}
 {{--                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">--}}

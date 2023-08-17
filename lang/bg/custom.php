@@ -424,6 +424,7 @@ return [
     'mail_templates.placeholders.new_reg_number'  => 'Рег. № (служебно генерирано)',
     //pages
     'pages.appeal_info'                             => 'Системна страница - съдържаща указания за обжалване на заявление',
+    'pages.contact'                             => 'Системна страница - съдържаща информация за контакт',
     // settings
     'settings'                                   => 'Настройки|Настройки',
     'settings.sections.general'                   => 'Общи',

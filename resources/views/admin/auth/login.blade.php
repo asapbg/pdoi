@@ -74,9 +74,9 @@
                     <div class="col-md-8 col-12 text-md-left text-center ">
                         <a href="{{ route('eauth.login').'?source=admin' }}">{{ __('eauth.with_e_auth') }}</a>
                     </div>
-                    <div class="col-md-8 col-12 text-md-left text-center ">
-                        <a href="#">{{ __('auth.with_cert') }}</a>
-                    </div>
+{{--                    <div class="col-md-8 col-12 text-md-left text-center ">--}}
+{{--                        <a href="#">{{ __('auth.with_cert') }}</a>--}}
+{{--                    </div>--}}
 {{--                    <div class="col-md-4 col-12 text-md-left text-center ">--}}
 {{--                        <a href="#">{{ __('auth.registration') }}</a>--}}
 {{--                    </div>--}}

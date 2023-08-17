@@ -67,7 +67,7 @@ class HomeController extends Controller
     public function help(Request $request)
     {
         $appealPage = Page::with(['translations'])
-            ->where('system_name', '=', Page::APPEAL_INFO_PAGE)
+            ->where('system_name', '=', Page::APPEAL_INFO_SYSTEM_PAGE)
             ->first();
         return $this->view('front.help.index', compact('appealPage'));
     }
