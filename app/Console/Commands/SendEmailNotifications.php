@@ -45,7 +45,7 @@ class SendEmailNotifications extends Command
                 $q->where('updated_at','<=', $beforeTimestamp)
                     ->orWhere('created_at', '>=', $beforeTimestamp);
             })
-            ->limit(1)->get();
+            ->get();
         if( $notifications->count() ) {
             foreach ($notifications as $item) {
                 $messageData = json_decode($item->data, true);
