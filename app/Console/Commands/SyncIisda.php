@@ -202,8 +202,8 @@ class SyncIisda extends Command
                             $newSubject->save();
                             $newSubject->refresh();
                             foreach (config('available_languages') as $lang) {
-                                $newSubject->translate($lang['code'])->subject_name = $newRow['subject_name'];
-                                $newSubject->translate($lang['code'])->address = $newRow['address'];
+                                $newSubject->translateOrNew($lang['code'])->subject_name = $newRow['subject_name'];
+                                $newSubject->translateOrNew($lang['code'])->address = $newRow['subject_name'];
                             }
                             $newSubject->save();
                         }
