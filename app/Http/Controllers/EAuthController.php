@@ -177,7 +177,7 @@ class EAuthController extends Controller
      * This link page is part of auth request message
      * @return \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
      */
-    public function spMetadata($callback_source): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function spMetadata($callback_source = ''): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $eAuth = new EAuthentication();
         return $eAuth->spMetadata($callback_source);
