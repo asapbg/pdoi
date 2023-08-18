@@ -94,6 +94,13 @@ class EAuthentication
         $xml = '<EntityDescriptor entityID="'.route('eauth.sp_metadata').'" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
                     <SPSSODescriptor WantAssertionsSigned="true"
                         protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+                        <md:KeyDescriptor use="signing">
+                            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                                <ds:X509Data>
+                                <ds:X509Certificate>'.$this->publicKey().'</ds:X509Certificate>
+                                </ds:X509Data>
+                            </ds:KeyInfo>
+                        </md:KeyDescriptor>
                         <AssertionConsumerService
                             Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
                             Location="'.route('eauth.login.callback').(!empty($callback_source) ? '/'.$callback_source : '').'" index="1"/>
@@ -286,7 +293,7 @@ class EAuthentication
 
     private function publicKey(): string
     {
-        return '';
+        return 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAshNMIS/zXrxzTgCB6OAQCtz28SW7CEXCOwl+Rz55F7q34U9btrHfeJWpEC3igvTWhyJQuDnL0xwZmhvUef+cfZd0qTF25n2g6dn+5uuF43hsMhxsPoaDVd3e0yat0OEgBtWhEK3jSvCK9ezsdEE1+yQQvaGzThfuT4bcHa+SJ1qV+98ZqIW4J6xjPLXk4YzlRclo23EzlsGluE7pM9V8Oqe1V/+B/TJTYDrvAvyJbcN40rJ0t8iecVVHPSVgz2lQkqaeWjRqpnDa2gzaWdw6Ova6fpg+pF++s+ad1NLd6rcWSu5lzkKA6yVaXGulA9uuoV85O4Y1h6wnBokLbvQFgwIDAQAB';
     }
 
 
