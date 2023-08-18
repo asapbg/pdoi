@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Selective\XmlDSig\Algorithm;
 use Selective\XmlDSig\CryptoSigner;
 use Selective\XmlDSig\PrivateKeyStore;
+use Selective\XmlDSig\PublicKeyStore;
 use Selective\XmlDSig\XmlSigner;
 
 class EAuthentication
@@ -79,8 +80,8 @@ class EAuthentication
             </saml2p:Extensions>
         </saml2p:AuthnRequest>';
 
-        //$this->xml = $this->sign($xml);
-        $this->xml = $xml;
+        $this->xml = $this->sign($xml);
+        //$this->xml = $xml;
     }
 
     /**
@@ -245,9 +246,9 @@ class EAuthentication
     {
         $privateKeyStore = new PrivateKeyStore();
         // load a private key from a string
-        $privateKeyStore->loadFromPkcs12(file_get_contents(env('EAUTH_SERVER_CERT_PATH')), env('EAUTH_CERT_KEY_PATH'));
+        $privateKeyStore->loadFromPem(file_get_contents('C:\laragon\www\pitay\ssl\eauth\selfsigned.key'), '');
         //Define the digest method: sha1, sha224, sha256, sha384, sha512
-        $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
+        $algorithm = new Algorithm(Algorithm::METHOD_SHA256);
         //Create a CryptoSigner instance:
         $cryptoSigner = new CryptoSigner($privateKeyStore, $algorithm);
         // Create a XmlSigner and pass the crypto signer
@@ -281,6 +282,11 @@ class EAuthentication
             }
         }
         return $identity;
+    }
+
+    private function publicKey(): string
+    {
+        return '';
     }
 
 
