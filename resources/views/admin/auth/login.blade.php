@@ -72,7 +72,7 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-8 col-12 text-md-left text-center ">
-                        <a href="{{ route('eauth.login').'?source=admin' }}">{{ __('eauth.with_e_auth') }}</a>
+                        <a href="{{ route('eauth.login') }}">{{ __('eauth.with_e_auth') }}</a>
                     </div>
 {{--                    <div class="col-md-8 col-12 text-md-left text-center ">--}}
 {{--                        <a href="#">{{ __('auth.with_cert') }}</a>--}}

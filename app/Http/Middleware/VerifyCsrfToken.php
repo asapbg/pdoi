@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        'test', 'eauth/login-callback'
+        'test', 'eauth/login-callback', 'eauth/login-callback/*'
     ];
 }

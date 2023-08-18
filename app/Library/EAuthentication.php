@@ -32,12 +32,13 @@ class EAuthentication
 
     /**
      * Open and auto submit form to IP
+     * @param string $source from where is the request (admin/web...type user)
      * @param array $requestParams
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function spLoginPage(array $requestParams = [])
+    public function spLoginPage(string $source = '', array $requestParams = [])
     {
-        $this->generateXml();
+        $this->generateXml($source);
         $params = array(
             'SAMLRequest' => base64_encode($this->xml)
         );
@@ -54,19 +55,21 @@ class EAuthentication
     /**
     * @return void
     */
-    private function generateXml()
+    private function generateXml($source)
     {
         //2023-11-20T11:27:51.265Z
         //<saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">'.route('eauth.sp_metadata').'</saml2:Issuer>
+        $callbackUrl = route('eauth.login.callback').(!empty($source) ? '/'.$source : '');
+
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
         <saml2p:AuthnRequest
-           AssertionConsumerServiceURL="'.route('eauth.login.callback').'"
+           AssertionConsumerServiceURL="'.$callbackUrl.'"
             Destination="'.$this->endpoint.'"
             ForceAuthn="false" ID="ARQ1a1dd6a-3592-47ab-ae25-5c32dfd91720"
             IsPassive="false" IssueInstant="'.Carbon::now()->toIso8601String().'"
             ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
             Version="2.0" xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol">
-            <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">'.route('eauth.sp_metadata').'</saml2:Issuer>
+            <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">'.route('eauth.sp_metadata').(!empty($source) ? '/'.$source : '').'</saml2:Issuer>
             <saml2p:Extensions>
                 <egovbga:RequestedService xmlns:egovbga="urn:bg:egov:eauth:2.0:saml:ext">
                     <egovbga:Service>'.env('E_AUTH_SERVICE_OID', '').'</egovbga:Service>
@@ -82,16 +85,17 @@ class EAuthentication
 
     /**
      * Service provider metadata page
+     * @param string $callback_source
      * @return \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
      */
-    public function spMetadata(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function spMetadata(string $callback_source = ''): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $xml = '<EntityDescriptor entityID="'.route('eauth.sp_metadata').'" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
                     <SPSSODescriptor WantAssertionsSigned="true"
                         protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
                         <AssertionConsumerService
                             Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                            Location="'.route('eauth.login.callback').'" index="1"/>
+                            Location="'.route('eauth.login.callback').(!empty($callback_source) ? '/'.$callback_source : '').'" index="1"/>
                             <AttributeConsumingService index="0" isDefault="true">
                                 <ServiceName xml:lang="en">SP</ServiceName>
                                 <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:personIdentifier" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="true"/>

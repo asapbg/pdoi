@@ -28,18 +28,19 @@ class EAuthController extends Controller
      * Starts a eAuth process by open and submit form automatically to Identity provider
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
      */
-    public function login(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function login(Request $request, $source = ''): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $eAuth = new EAuthentication();
-        return $eAuth->spLoginPage();
+        return $eAuth->spLoginPage($source);
     }
 
     /**
      * Integration call this method to send request response to us
      * @param Request $request
+     * @param string $source You can use this to detect user type or login form... by sending
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
      */
-    public function loginCallback(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    public function loginCallback(Request $request, $source = ''): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         $eAuth = new EAuthentication();
         $userInfo = $eAuth->userData($request->input('SAMLResponse'));
@@ -176,10 +177,10 @@ class EAuthController extends Controller
      * This link page is part of auth request message
      * @return \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
      */
-    public function spMetadata(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function spMetadata($callback_source): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $eAuth = new EAuthentication();
-        return $eAuth->spMetadata();
+        return $eAuth->spMetadata($callback_source);
     }
 
     /**
