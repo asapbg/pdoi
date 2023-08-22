@@ -198,7 +198,7 @@ class EAuthentication
 //                        "Name" => "urn:egov:bg:eauth:2.0:attributes:personIdentifier"
 //                        "NameFormat" => "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
 //                      ]
-//                      +"saml2AttributeValue": "PNOBG-8001211738"
+//                      +"saml2AttributeValue": "PNOBG-1212121212"
 //                    }
 //                    2 => SimpleXMLElement {#664 ▶}
 //                                ]
@@ -255,7 +255,7 @@ class EAuthentication
         // load a private key from a string
         $privateKeyStore->loadFromPem(file_get_contents(env('EAUTH_CERT_PATH')), '');
         //Define the digest method: sha1, sha224, sha256, sha384, sha512
-        $algorithm = new Algorithm(Algorithm::METHOD_SHA256);
+        $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
         //Create a CryptoSigner instance:
         $cryptoSigner = new CryptoSigner($privateKeyStore, $algorithm);
         // Create a XmlSigner and pass the crypto signer
