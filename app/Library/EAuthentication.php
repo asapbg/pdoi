@@ -67,7 +67,7 @@ class EAuthentication
            AssertionConsumerServiceURL="'.$callbackUrl.'"
             Destination="'.$this->endpoint.'"
             ForceAuthn="false" ID="ARQ1a1dd6a-3592-47ab-ae25-5c32dfd91720"
-            IsPassive="false" IssueInstant="'.Carbon::now()->toIso8601String().'"
+            IsPassive="false" IssueInstant="'.Carbon::now('UTC')->format('Y-m-d\TH:i:s.v\Z').'"
             ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
             Version="2.0" xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol">
             <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">'.route('eauth.sp_metadata').(!empty($source) ? '/'.$source : '').'</saml2:Issuer>
