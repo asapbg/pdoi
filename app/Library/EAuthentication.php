@@ -20,6 +20,7 @@ class EAuthentication
 
     /** @var string $endpoint */
     private string $endpoint;
+    private string $sp_domain;
 
     /** @var string $xml */
     private string $xml;
@@ -28,6 +29,7 @@ class EAuthentication
     public function __construct()
     {
         $this->endpoint = env('E_AUTH_ENDPOINT_URL', '');
+        $this->sp_domain = env('E_AUTH_SP_DOMAIN', '');
     }
 
 
@@ -91,8 +93,8 @@ class EAuthentication
      */
     public function spMetadata(string $callback_source = ''): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        $xml = '<EntityDescriptor entityID="'.route('eauth.sp_metadata').'" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-                    <SPSSODescriptor WantAssertionsSigned="true"
+        $xml = '<EntityDescriptor entityID="'.$this->sp_domain.'" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+                    <SPSSODescriptor WantAssertionsSigned="true" AuthnRequestsSigned="true"
                         protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
                         <md:KeyDescriptor use="signing">
                             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
