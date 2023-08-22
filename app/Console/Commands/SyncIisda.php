@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
@@ -193,6 +194,7 @@ class SyncIisda extends Command
                                     'region' => $addressInfo ? $addressInfo['email'] : null,
                                     'municipality' => $addressInfo ? $addressInfo['email'] : null,
                                     'town' => $addressInfo ? $addressInfo['email'] : null,
+                                    'delivery_method' => PdoiSubjectDeliveryMethodsEnum::EMAIL->value,
                                 );
                             }
                         }

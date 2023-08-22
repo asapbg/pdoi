@@ -372,7 +372,7 @@ class ApplicationService
                     //TODO fix me simulation
                     $this->registerEvent(ApplicationEventsEnum::APPROVE_BY_SEOS->value);//потвърдено от деловодна система
                     break;
-                default://email, //система за сигурно връчване
+                default://email, //Система за сигурно връчване. for СЕОС there is separate script which send messages and set next values
                     $this->application->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
                     $this->application->status_date = Carbon::now();
                     $this->application->registration_date = Carbon::now();
