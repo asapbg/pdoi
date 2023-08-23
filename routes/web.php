@@ -36,6 +36,8 @@ Route::get('/locale', function (Request $request) {
 Route::get('/get-pdoi-subjects', [CommonController::class, 'modalPdoiSubjects'])->name('modal.pdoi_subjects');
 Route::get('/set-cookie', [CommonController::class, 'setCookie']);
 Route::get('/reset-visual-options', [CommonController::class, 'resetVisualOptions']);
+//download public page file
+Route::get('/download/page/{file}', [CommonController::class, 'downloadPageFile'])->name('download.page.file');
 
 //application
 Route::controller(PdoiApplicationFrontController::class)->group(function () {

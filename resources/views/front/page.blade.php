@@ -21,6 +21,16 @@
                                 </div>
                             @endforeach
                             {{ $pages->appends(request()->query())->links() }}
+                            <hr>
+                        @endif
+                        @if($item->files->count())
+                            @foreach($item->files as $f)
+                                <div class="row">
+                                    <a class="w-100 mb-2" target="_blank" href="{{ route('download.page.file', ['file' => $f->id]) }}">
+                                        <i class="fas fa-file-download text-secondary me-1"></i> {{ $f->description }}
+                                    </a>
+                                </div>
+                            @endforeach
                         @endif
                     </div>
                 </div>

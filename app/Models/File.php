@@ -15,9 +15,13 @@ class File extends Model
 
     const CODE_OBJ_APPLICATION = 13;
     const CODE_OBJ_EVENT = 14;
+    const CODE_OBJ_MENU_SECTION = 20;
+    const CODE_OBJ_PAGE = 21;
     const CODE_OBJ_MESSAGE = 10000;
 
     const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xsl', 'xslx', 'pdf'];
+
+    const PUBLIC_UPLOAD_DIR = 'pages/';
 
     public function application(): \Illuminate\Database\Eloquent\Relations\HasOne
     {

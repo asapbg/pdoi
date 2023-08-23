@@ -28,10 +28,10 @@
                     @endforeach
                 @endif
                 <li class="nav-item px-1">
-                    <a class="nav-link" href="#">Документи</a>
+                    <a class="nav-link" href="{{ route('section', ['slug' => 'documents']) }}">{{ trans_choice('custom.documents', 2) }}</a>
                 </li>
                 <li class="nav-item px-1">
-                    <a class="nav-link" href="#">Статистика</a>
+                    <a class="nav-link" href="#">{{ trans_choice('custom.statistics', 1) }}</a>
                 </li>
                 <li class="nav-item px-1">
                     <a class="nav-link" href="{{ route('page', ['section_slug' => 'info', 'slug' => \App\Models\Page::CONTACT_SYSTEM_PAGE]) }}">{{ trans_choice('custom.contacts', 2) }}</a>

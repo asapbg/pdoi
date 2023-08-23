@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PageFileUploadRequest;
 use App\Models\File;
+use App\Models\MenuSection;
+use App\Models\Page;
 use App\Models\PdoiResponseSubject;
 use App\Models\RzsSection;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -13,6 +17,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use League\Flysystem\FilesystemException;
 
 class CommonController extends Controller
 {
@@ -167,5 +172,87 @@ class CommonController extends Controller
         Session::put('vo_font_percent', 100);
         Session::put('vo_high_contrast', 0);
         return response()->json(['ok'], 200);
+    }
+
+    /**
+     * Admin Upload file by set object, type object
+     * @param PageFileUploadRequest $request
+     * @param $objectId
+     * @param $typeObject
+     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function uploadFile(PageFileUploadRequest $request, $objectId, $typeObject) {
+        try {
+            $validated = $request->validated();
+            $fileNameToStore = round(microtime(true)).'.'.$validated['file']->getClientOriginalExtension();
+            // Upload File
+            $validated['file']->storeAs(File::PUBLIC_UPLOAD_DIR, $fileNameToStore, 'public_uploads');
+            $item = new File([
+                'id_object' => $objectId,
+                'code_object' => $typeObject,
+                'filename' => $fileNameToStore,
+                'content_type' => $validated['file']->getClientMimeType(),
+                'path' => File::PUBLIC_UPLOAD_DIR.$fileNameToStore,
+                'description' => $validated['description'],
+                'user_reg' => $request->user()->id,
+            ]);
+            $item->save();
+
+            $route = match ((int)$typeObject) {
+                File::CODE_OBJ_PAGE => route('admin.page.edit', Page::find($objectId)) . '#ct-files',
+                File::CODE_OBJ_MENU_SECTION => route('admin.menu_section.edit', MenuSection::find($objectId)) . '#ct-files',
+                default => '',
+            };
+            return redirect($route)->with('success', 'Файлът/файловте са качени успешно');
+        } catch (\Exception $e) {
+            logError('Upload file', $e->getMessage());
+            return back()->with(['danger' => 'Възникна грешка. Презаредете страницата и опитайте отново.']);
+        }
+    }
+
+    /**
+     * Download public file
+     * @param Request $request
+     * @param File $file
+     * @return \Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\StreamedResponse
+     * @throws \League\Flysystem\FilesystemException
+     */
+    public function downloadPageFile(Request $request, File $file)
+    {
+        if( $file->code_object != File::CODE_OBJ_MENU_SECTION && $file->code_object != File::CODE_OBJ_PAGE ) {
+            return back()->with('warning', __('custom.record_not_found'));
+        }
+
+        if (Storage::disk('public_uploads')->has($file->path)) {
+            return Storage::disk('public_uploads')->download($file->path, $file->filename);
+        } else {
+            return back()->with('warning', __('custom.record_not_found'));
+        }
+    }
+
+    /**
+     * Delete public file
+     * @param Request $request
+     * @param File $file
+     * @return bool|RedirectResponse
+     * @throws FilesystemException
+     */
+    public function deleteFile(Request $request, File $file)
+    {
+        $user = $request->user();
+        if( !$user->can('delete', $file) ) {
+            abort(Response::HTTP_UNAUTHORIZED);
+        }
+
+        $route = match ((int)$file->code_object) {
+            File::CODE_OBJ_PAGE => route('admin.page.edit', Page::find($file->id_object)) . '#ct-files',
+            File::CODE_OBJ_MENU_SECTION => route('admin.menu_section.edit', MenuSection::find($file->id_object)) . '#ct-files',
+            default => '',
+        };
+        $file->delete();
+        if (Storage::disk('public_uploads')->has($file->path)) {
+            Storage::disk('public_uploads')->delete($file->path, $file->filename);
+        }
+        return redirect($route)->with('success', 'Файлът е изтрит успешно');
     }
 }

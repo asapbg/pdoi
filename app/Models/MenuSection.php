@@ -41,6 +41,11 @@ class MenuSection  extends ModelActivityExtend implements TranslatableContract
         return $this->hasMany(Page::class, 'section_id', 'id');
     }
 
+    public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(File::class, 'id_object', 'id')->where('code_object', '=', File::CODE_OBJ_MENU_SECTION);
+    }
+
     /**
      * Get the model name
      */

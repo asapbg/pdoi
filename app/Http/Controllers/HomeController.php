@@ -33,7 +33,7 @@ class HomeController extends Controller
     }
 
     public function section($slug) {
-        $item = MenuSection::with(['translation']) //['translation', 'pages', 'pages.translation']
+        $item = MenuSection::with(['translation', 'files']) //['translation', 'pages', 'pages.translation']
             ->where('slug', $slug)
             ->first();
         if( !$item ) {
@@ -51,7 +51,7 @@ class HomeController extends Controller
     }
 
     public function page($sectionSlug, $slug) {
-        $item = Page::with(['translation', 'section', 'section.translation'])->where('slug', $slug)->first();
+        $item = Page::with(['translation', 'section', 'section.translation', 'files'])->where('slug', $slug)->first();
         if( !$item ) {
             abort(Response::HTTP_NOT_FOUND);
         }

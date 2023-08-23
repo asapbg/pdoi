@@ -39,6 +39,11 @@ class Page  extends ModelActivityExtend implements TranslatableContract
         return $this->hasOne(MenuSection::class, 'id', 'section_id');
     }
 
+    public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(File::class, 'id_object', 'id')->where('code_object', '=', File::CODE_OBJ_PAGE);
+    }
+
     /**
      * Get the model name
      */

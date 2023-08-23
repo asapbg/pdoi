@@ -42,13 +42,13 @@
                 </a>
             </div>
             <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                <a href="" title="" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
+                <a href="{{ route('section', ['slug' => 'documents']) }}" title="" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
                     <span>
                         <i class="fa-solid fa-layer-group text-info-emphasis" style="font-size: 55px;"></i>
                     </span>
                     <span class="d-inline-block flex-grow-1">
-                        Документи
-                        <span class="d-inline-block">Нормативни документи: закони, инструции, наредби.</span>
+                         {{ trans_choice('custom.documents', 2) }}
+                        <span class="d-inline-block">{{ __('front.documents') }}</span>
                     </span>
                 </a>
             </div>
@@ -58,7 +58,7 @@
                         <i class="fa-solid fa-chart-line text-danger" style="font-size: 55px;"></i>
                     </span>
                     <span class="d-inline-block flex-grow-1">
-                        Статистика
+                        {{ trans_choice('custom.statistics', 1) }}
                         <span class="d-inline-block">&nbsp;</span>
                     </span>
                 </a>
