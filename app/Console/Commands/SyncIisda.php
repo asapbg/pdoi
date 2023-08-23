@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
+use App\Mail\AlertForSubjectChanges;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
@@ -11,6 +12,7 @@ use App\Models\RzsSection;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class SyncIisda extends Command
 {
@@ -59,6 +61,7 @@ class SyncIisda extends Command
                 , 'pdoi_response_subject.municipality'
                 , 'pdoi_response_subject.town'
                 , 'pdoi_response_subject.zip_code'
+                , 'pdoi_response_subject.type'
                 , 'pdoi_response_subject.type'
             )
             ->leftJoin('rzs_section', 'rzs_section.adm_level', '=', 'pdoi_response_subject.adm_level')
@@ -136,12 +139,36 @@ class SyncIisda extends Command
                                         )
                                     )
                                 ) {
+                                    //alert users if change adm_level or status
+                                    $newLevel = $localSections[$subject['AdmStructureKind']];
+                                    $newStatus = (int)($subject['Status'] == 'Active');
+                                    if( $localSubject->adm_level != $newLevel
+                                        || $localSubject->active != $newStatus ) {
+                                        if( env('APP_ENV') != 'production' ) {
+                                            $emailList =[env('LOCAL_TO_MAIL')];
+                                        } else {
+                                            $emailList = $localSubject->getAlertUsersEmail();
+                                        }
+                                        if( sizeof($emailList) ) {
+                                            $mailData = array(
+                                                'subject' => $localSubject
+                                            );
+                                            if( $localSubject->adm_level != $newLevel ) {
+                                                $mailData['new_level'] = $newLevel;
+                                            }
+                                            if( $localSubject->active != $newStatus ) {
+                                                $mailData['new_status'] = $newStatus;
+                                            }
+                                            Mail::to($emailList)->send(new AlertForSubjectChanges($mailData));
+                                        }
+                                    }
+
 //                                    Log::error('Update base: '.PHP_EOL. $localSubject. PHP_EOL. json_encode($addressInfo));
                                     $localSubject->batch_id = (int)$subject['BatchID'];
                                     $localSubject->eik = $subject['UIC'] ?? 'N/A';
                                     $localSubject->type = $subject['Type'] ?? null;
-                                    $localSubject->adm_level = $localSections[$subject['AdmStructureKind']] ?? 0;
-                                    $localSubject->active = (int)($subject['Status'] == 'Active');
+                                    $localSubject->adm_level = $newLevel;
+                                    $localSubject->active = $newStatus;
                                     $localSubject->email = $addressInfo ? $addressInfo['email'] : null;
                                     $localSubject->phone = $addressInfo ? $addressInfo['phone'] : null;
                                     $localSubject->fax = $addressInfo ? $addressInfo['fax'] : null;

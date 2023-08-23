@@ -27,7 +27,7 @@
                     <i class="fas fa-list"></i>
                 </button>
             </label>
-            <select name="court" id="court" style="width:100%;" class="select2 @error('court') is-invalid @endif">
+            <select name="court" id="court" style="width:100%;" class="select2 @error('court') is-invalid @enderror">
                 @if(isset($courtSubjects) && $courtSubjects->count())
                     <option value="" @if(old('court', $item->id ? $item->court_id : 0) == 0) selected @endif>Списък РЗС</option>
                     @foreach($courtSubjects as $row)

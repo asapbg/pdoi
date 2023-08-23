@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PdoiResponseSubjectStoreRequest;
+use App\Mail\AlertForSubjectChanges;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
 use App\Models\PdoiResponseSubject;
 use App\Models\RzsSection;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,6 +102,30 @@ class PdoiResponseSubjectController extends AdminController
                 $fillable['adm_register'] = 0;
             }
             $fillable['redirect_only'] = $fillable['redirect_only'] ?? 0;
+
+            //Check if need to alert admins and moderators about subject changes
+            if( $id ){
+                if( ($fillable['adm_level'] != $item->adm_level) || ($fillable['parent_id'] != $item->parent_id) ) {
+                    if( env('APP_ENV') != 'production' ) {
+                        $emailList =[env('LOCAL_TO_MAIL')];
+                    } else {
+                        $emailList = $item->getAlertUsersEmail();
+                    }
+                    if( sizeof($emailList) ) {
+                        $mailData = array(
+                            'subject' => $item
+                        );
+                        if( $fillable['adm_level'] != $item->adm_level ) {
+                            $mailData['new_level'] = RzsSection::find((int)$fillable['adm_level']);
+                        }
+                        if( $fillable['parent_id'] != $item->parent_id ) {
+                            $mailData['new_parent'] = PdoiResponseSubject::find((int)$fillable['parent_id']);
+                        }
+                        Mail::to($emailList)->send(new AlertForSubjectChanges($mailData));
+                    }
+                }
+            }
+
 
             $item->fill($fillable);
             $item->save();

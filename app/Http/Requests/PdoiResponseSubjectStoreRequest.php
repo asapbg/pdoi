@@ -41,11 +41,6 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
                 'fax' => ['nullable', 'string', 'max:1000'],
                 'email' => ['nullable', 'email', 'max:255'],
                 'active' => ['required', 'numeric', 'gt:0'],
-
-                'redirect_only' => ['nullable', 'numeric'],
-                'rzs_delivery_method' => ['required', 'numeric', Rule::in(PdoiSubjectDeliveryMethodsEnum::values())],
-                'court' => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
-
             ];
         }
 
@@ -76,9 +71,9 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
             $rules['eik'][] = 'unique:pdoi_response_subject';
         }
 
-        if( request()->input('full_edit') ) {
-            foreach (config('available_languages') as $lang) {
-                foreach (PdoiResponseSubject::translationFieldsProperties() as $field => $properties) {
+        foreach (config('available_languages') as $lang) {
+            foreach (PdoiResponseSubject::translationFieldsProperties() as $field => $properties) {
+                if( request()->input('full_edit') || $field == 'court_text' ) {
                     $rules[$field.'_'.$lang['code']] = $properties['rules'];
                 }
             }

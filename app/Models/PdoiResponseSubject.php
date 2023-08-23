@@ -235,4 +235,25 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return (boolean)sizeof($check);
     }
 
+    /**
+     * Return all emails of users connected with current subject with changes
+     * @return array
+     */
+    public function getAlertUsersEmail(): array
+    {
+        $emails = [];
+        $users = User::IsActive()->where(function ($q){
+            $q->where(function ($q){
+                $q->where('administrative_unit', $this->id)->role('admin_moderator');
+            })->orWhere(function ($q){
+                $q->role('admin');
+            });
+        })->get();
+
+        if( $users ) {
+            $emails = $users->pluck('email')->toArray();
+        }
+        return $emails;
+    }
+
 }
