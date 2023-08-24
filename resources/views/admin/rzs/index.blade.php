@@ -17,6 +17,9 @@
                         <a href="{{ route($editRouteName) }}" class="btn btn-sm btn-success">
                             <i class="fas fa-plus-circle"></i> {{ __('custom.add') }} {{ $title_singular }}
                         </a>
+                        <a href="{{ route('admin.rzs.import') }}" class="btn btn-sm btn-success">
+                            <i class="fas fa-file-import"></i> {{ __('custom.rzs.import_subjects') }}
+                        </a>
                     </div>
 
                     <table class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">

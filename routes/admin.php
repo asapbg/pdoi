@@ -98,6 +98,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/rzs-subjects/edit/{item?}',         'edit')->name('rzs.edit');
         Route::match(['post', 'put'], '/rzs-subjects/store/{item?}',         'store')->name('rzs.store');
         Route::get('/rzs-subjects/{subject}/delete',  'delete')->name('rzs.delete');
+        Route::match(['get', 'post'],'/rzs-subjects/import',  'import')->name('rzs.import');
+        Route::get('/rzs-subjects/import/download-example-file',  'downloadImportTemplateFile')->name('rzs.import.download_example');
     });
 
     //Nomenclature

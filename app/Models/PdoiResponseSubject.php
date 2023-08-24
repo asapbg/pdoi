@@ -35,6 +35,11 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         $query->where('pdoi_response_subject.active', 1);
     }
 
+    public function scopeIsManual($query)
+    {
+        $query->where('pdoi_response_subject.adm_register', 0);
+    }
+
     public function section(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(RzsSection::class, 'adm_level', 'adm_level');

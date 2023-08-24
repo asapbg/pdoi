@@ -288,5 +288,7 @@ return [
         'short_content'              => 'Кратко описание',
         'files.*'                   => 'Файл',
         'file_description.*'        => 'Описание на файл',
+        'file'                      => 'Файл',
+        'response'                  => 'Решение',
     ],
 ];

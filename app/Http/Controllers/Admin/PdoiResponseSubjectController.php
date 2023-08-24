@@ -3,19 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PdoiResponseSubjectStoreRequest;
+use App\Imports\PdoiSubjectImport;
 use App\Mail\AlertForSubjectChanges;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
+use App\Models\File;
 use App\Models\PdoiResponseSubject;
 use App\Models\RzsSection;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
 class PdoiResponseSubjectController extends AdminController
@@ -26,6 +31,7 @@ class PdoiResponseSubjectController extends AdminController
     const STORE_ROUTE = 'admin.rzs.store';
     const LIST_VIEW = 'admin.rzs.index';
     const EDIT_VIEW = 'admin.rzs.edit';
+    const EXAMPLE_IMPORT_FILE = 'import_rzs_template_file.xlsx';
 
     public function index(Request $request)
     {
@@ -45,6 +51,33 @@ class PdoiResponseSubjectController extends AdminController
         $listRouteName = self::LIST_ROUTE;
 
         return $this->view(self::LIST_VIEW, compact('filter', 'items', 'toggleBooleanModel', 'deleteRouteName', 'editRouteName', 'listRouteName'));
+    }
+
+    public function import(Request $request)
+    {
+        $myErrors = [];
+        if( $request->isMethod('post') ) {
+            //validate file
+            $validator = Validator::make($request->all(), [
+                'file' => ['required', 'file', 'max:'.config('filesystems.max_upload_file_size'), 'mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+            ]);
+            if( $validator->fails() ){
+                return back()->withErrors($validator->errors());
+            }
+            DB::beginTransaction();
+            try {
+                $validated = $validator->validated();
+                Excel::import(new PdoiSubjectImport(), $validated['file']->store('temp'));
+                DB::commit();
+                return redirect()->route('admin.rzs.import');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                logError('Import RZS', $e->getMessage());
+                return redirect()->route('admin.rzs.import')->with('danger', 'Възникна грешка при импортирането, моля опитайте отново');
+            }
+
+        }
+        return $this->view('admin.rzs.import', compact('myErrors'));
     }
 
     /**
@@ -162,6 +195,17 @@ class PdoiResponseSubjectController extends AdminController
             Log::error($e);
             return redirect()->back()->withInput(request()->all())->with('danger', __('messages.system_error'));
         }
+    }
+
+    public function downloadImportTemplateFile(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\RedirectResponse
+    {
+        $file = File::PUBLIC_UPLOAD_EXAMPLES_DIR.self::EXAMPLE_IMPORT_FILE;
+        if (Storage::disk('public_uploads')->has($file)) {
+            return Storage::disk('public_uploads')->download($file);
+        } else {
+            return back()->with('warning', __('custom.record_not_found'));
+        }
+
     }
 
     private function filters($request)

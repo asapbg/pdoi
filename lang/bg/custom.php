@@ -251,6 +251,7 @@ return [
     'subscribe'                       => 'Абонирай се',
     'group_by'                          => 'Групиране',
     'export'                          => 'Експорт',
+    'import'                          => 'Импорт',
 
     //controllers and breadcrumbs
     'file_content'                              => 'Текст във файлове',
@@ -337,6 +338,9 @@ return [
     'rzs.court.label'                           => 'Съдебен орган, който е компетентен да разглежда жалби на заявители по ЗДОИ (<span class="fw-normal fst-italic" style="font-size:12px;">Посочете от списъка на РЗС или въведете свободен текст.</span>)',
     'rzs.subordinate'                           => 'Подчинен субект',
     'rzs.egov_organisation_is_missing'          => 'Не е открита организация/участник с този ЕИК в регистъра на СЕОС',
+    'rzs.download_import_example'               => 'Свали примерен файл (импорт)',
+    'rzs.import_subjects'                       => 'Импорт на Задължени субекти',
+    'rzs.import_file'                           => 'Импортирай файл',
     //delivery_method
     'rzs.delivery_by.EMAIL'                     => 'Чрез електронна поща за нотифициране на задължения субект',
     'rzs.delivery_by.SDES'                      => 'Чрез профила на задължения субект в Системата за сигурно електронно връчване (ССЕВ)',

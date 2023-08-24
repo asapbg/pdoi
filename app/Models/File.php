@@ -22,6 +22,7 @@ class File extends Model
     const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xsl', 'xslx', 'pdf'];
 
     const PUBLIC_UPLOAD_DIR = 'pages/';
+    const PUBLIC_UPLOAD_EXAMPLES_DIR = 'examples/';
 
     public function application(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
