@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ApplicationEventsEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
+use App\Enums\StatisticTypeEnum;
 use App\Traits\FilterSort;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -432,5 +433,53 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         return $query->groupBy($groupBy)
             ->orderBy($orderBy)
             ->paginate(20);
+    }
+
+    public static function publicStatistic($type, $from, $to): bool|string
+    {
+        switch ($type)
+        {
+            case StatisticTypeEnum::TYPE_APPLICATION_MONTH->value:
+                $query = DB::table('pdoi_application')
+                    ->select([
+                        DB::raw('pdoi_response_subject_translations.subject_name as name'),
+                        DB::raw('count(pdoi_application.id) as cnt'),
+                        'pdoi_application.status', 'pdoi_application.applicant_type']
+                    )->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
+                    ->join('pdoi_response_subject_translations', function ($join){
+                        $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
+                    })->when($from, function ($q, $from) {
+                        return $q->where('pdoi_application.created_at', '>=', Carbon::parse($from)->startOfDay());
+                    })->when($to, function ($q, $to) {
+                        return $q->where('pdoi_application.created_at', '<=', Carbon::parse($to)->endOfDay());
+                    })
+                    ->groupBy('pdoi_application.response_subject_id', 'pdoi_response_subject_translations.subject_name', 'pdoi_application.applicant_type', 'pdoi_application.status')
+                    ->orderBy('pdoi_response_subject_translations.subject_name');
+                break;
+            case StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value:
+            case StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value:
+                $query = DB::table('pdoi_application')
+                    ->select([
+                            DB::raw('pdoi_response_subject_translations.subject_name as name'),
+                            DB::raw('count(pdoi_application.id) as cnt'),
+                            'pdoi_application.status'
+                        ])
+                    ->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
+                    ->join('pdoi_response_subject_translations', function ($join){
+                        $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
+                    })->when($from, function ($q, $from) {
+                        return $q->where('pdoi_application.created_at', '>=', Carbon::parse($from)->startOfDay());
+                    })->when($to, function ($q, $to) {
+                        return $q->where('pdoi_application.created_at', '<=', Carbon::parse($to)->endOfDay());
+                    })
+                    ->groupBy('pdoi_application.response_subject_id', 'pdoi_response_subject_translations.subject_name', 'pdoi_application.status')
+                    ->orderBy('pdoi_response_subject_translations.subject_name');
+                break;
+            default:
+                $query = null;
+        }
+
+        $data =  is_null($query) ? [] : $query->get()->map(fn ($row) => (array)$row)->toArray();
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 }

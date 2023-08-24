@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
             ReasonRefusalSeeder::class,
             EventSeeder::class,
             MailTemplateSeeder::class,
-            MigrationSeeder:: class
+            MigrationSeeder:: class,
+            StatisticSeeder:: class
         ]);
     }
 }
