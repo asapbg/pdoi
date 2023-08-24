@@ -36,7 +36,7 @@ class StatisticSixMonthApplications extends Command
      */
     public function handle()
     {
-        $type = StatisticTypeEnum::TYPE_APPLICATION_MONTH->value;
+        $type = StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value;
         Log::info("Cron run statistic:applications_per_six_months");
         $currentMonth = (int)date('m');
         if( $currentMonth < 7 ) {
