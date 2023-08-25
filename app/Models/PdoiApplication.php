@@ -442,9 +442,18 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             case StatisticTypeEnum::TYPE_APPLICATION_MONTH->value:
                 $query = DB::table('pdoi_application')
                     ->select([
-                        DB::raw('pdoi_response_subject_translations.subject_name as name'),
-                        DB::raw('count(pdoi_application.id) as cnt'),
-                        'pdoi_application.status', 'pdoi_application.applicant_type']
+                            DB::raw('concat(pdoi_response_subject_translations.subject_name,\' (\',(case when pdoi_application.applicant_type = 1 then \'Физическо лице\' else \'Юридическо лице\' end),\')\') as name'),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::RECEIVED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::RECEIVED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::IN_PROCESS->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::IN_PROCESS->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::APPROVED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::APPROVED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::PART_APPROVED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::PART_APPROVED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NOT_APPROVED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::NOT_APPROVED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_REVIEW->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::NO_REVIEW->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::FORWARDED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::FORWARDED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::RENEWED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::RENEWED->value)
+                        ]
                     )->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
                     ->join('pdoi_response_subject_translations', function ($join){
                         $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
@@ -453,7 +462,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     })->when($to, function ($q, $to) {
                         return $q->where('pdoi_application.created_at', '<=', Carbon::parse($to)->endOfDay());
                     })
-                    ->groupBy('pdoi_application.response_subject_id', 'pdoi_response_subject_translations.subject_name', 'pdoi_application.applicant_type', 'pdoi_application.status')
+                    ->groupBy('pdoi_application.response_subject_id', 'pdoi_response_subject_translations.subject_name', 'pdoi_application.applicant_type')
                     ->orderBy('pdoi_response_subject_translations.subject_name');
                 break;
             case StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value:
@@ -461,8 +470,16 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                 $query = DB::table('pdoi_application')
                     ->select([
                             DB::raw('pdoi_response_subject_translations.subject_name as name'),
-                            DB::raw('count(pdoi_application.id) as cnt'),
-                            'pdoi_application.status'
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::RECEIVED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::RECEIVED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::IN_PROCESS->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::IN_PROCESS->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::APPROVED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::APPROVED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::PART_APPROVED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::PART_APPROVED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NOT_APPROVED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::NOT_APPROVED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_REVIEW->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::NO_REVIEW->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::FORWARDED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::FORWARDED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::RENEWED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::RENEWED->value)
                         ])
                     ->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
                     ->join('pdoi_response_subject_translations', function ($join){
@@ -472,7 +489,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     })->when($to, function ($q, $to) {
                         return $q->where('pdoi_application.created_at', '<=', Carbon::parse($to)->endOfDay());
                     })
-                    ->groupBy('pdoi_application.response_subject_id', 'pdoi_response_subject_translations.subject_name', 'pdoi_application.status')
+                    ->groupBy('pdoi_application.response_subject_id', 'pdoi_response_subject_translations.subject_name')
                     ->orderBy('pdoi_response_subject_translations.subject_name');
                 break;
             default:
