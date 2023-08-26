@@ -40,9 +40,9 @@
     </section>
 @endsection
 @push('scripts')
-    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.3/chart.umd.js"
-            integrity="sha512-wv0y1q2yUeK6D55tLrploHgbqz7ZuGB89rWPqmy6qOR9TmmzYO69YZYbGIYDmqmKG0GwOHQXlKwPyOnJ95intA=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('\js\chart_js_v4.3.3.js') }}"></script>
+    <script src="{{ asset('\js\hammer_2.0.7.js') }}"></script>
+    <script src="{{ asset('\js\chart_js_plugin_zoom_2.0.1.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             let statisticType = parseInt(<?php echo $type; ?>);
@@ -53,47 +53,41 @@
                 const ctx = document.getElementById('chartCanvas').getContext('2d');
                 const chart = new Chart(ctx,
                     {
-                        type: 'bar',
+                        type: 'line',
                         data: data,
                         options: {
-                            categoryPercentage: 0.5, // here
-                            barPercentage: 1,  // here
-                            maintainAspectRatio: false,
-                            minBarLength:5,
-                            maxBarThickness:5,
-                            indexAxis: 'y',
-                            scales: {
-                                y: {
-                                    min: 0,
-                                    max: parseInt(<?php echo(isset($extraChartData['scaleX']['max']) ?? 0) ?>)
-                                },
-                                x: {
-                                    ticks: {
-                                        stepSize: 1
-                                    }
-                                }
-                            },
-                            // Elements options apply to all of the options unless overridden in a dataset
-                            // In this case, we are setting the border of each horizontal bar to be 2px wide
-                            elements: {
-                                bar: {
-                                    borderWidth: 2,
-                                    inflateAmount:7
-                                }
-                            },
+                            indexAxis: 'x',
                             responsive: true,
+                            elements: {
+                                point:{
+                                    radius:2,
+                                }
+                            },
                             plugins: {
                                 legend: {
                                     position: 'top',
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Период'
+                                    text: '<?php echo $titlePeriod ?? 'Период'; ?>'
+                                },
+                                zoom: {
+                                    zoom: {
+                                        drag: {
+                                            enabled: true
+                                        },
+                                        wheel: {
+                                            enabled: true,
+                                        },
+                                        pinch: {
+                                            enabled: true
+                                        },
+                                        mode: 'xy',
+                                    }
                                 }
                             }
                         },
                     });
-                console.log(chart);
             }
         });
     </script>

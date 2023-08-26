@@ -57,44 +57,33 @@ class StatisticController extends Controller
             ];
 
             $chartData['labels'] = array_column($arrayData, 'name');
-            switch ($type)
-            {
-                case StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value:
-                case StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value:
-                    $extraChartData['scaleX']['max'] = 0;
-                    foreach ($statuses as $status) {
-                        $max = max(array_column($arrayData, 'cnt_'.$status));
-                        if( $max > $extraChartData['scaleX']['max'] ) {
-                            $extraChartData['scaleX']['max'] = $max;
-                        }
-                        $chartData['datasets'][] = array(
-                            'label' => __('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($status)),
-                            'data' => array_column($arrayData, 'cnt_'.$status),
-                            'backgroundColor' => $colors[$status]
-                        );
-                    }
-
-                    $extraChartData['scaleX']['max'] += 2;
-                    break;
-                default:
-                    $extraChartData['scaleX']['max'] = 0;
-                    foreach ($statuses as $status) {
-                        $max = max(array_column($arrayData, 'cnt_'.$status));
-                        if( $max > $extraChartData['scaleX']['max'] ) {
-                            $extraChartData['scaleX']['max'] = $max;
-                        }
-                        $chartData['datasets'][] = array(
-                            'label' => __('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($status)),
-                            'data' => array_column($arrayData, 'cnt_'.$status),
-                            'backgroundColor' => $colors[$status]
-                        );
-                    }
-
-                    $extraChartData['scaleX']['max'] += 2;
+            $extraChartData['scaleY']['max'] = 0;
+            foreach ($statuses as $status) {
+                $max = max(array_column($arrayData, 'cnt_'.$status));
+                if( $max > $extraChartData['scaleY']['max'] ) {
+                    $extraChartData['scaleY']['max'] = $max;
+                }
+                $chartData['datasets'][] = array(
+                    'label' => __('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($status)),
+                    'data' => array_column($arrayData, 'cnt_'.$status),
+                    'borderColor' => $colors[$status],
+                    'borderWidth' => 1,
+                    'backgroundColor' => $colors[$status]
+                );
             }
+
+            $extraChartData['scaleY']['max'] += 2;
         }
 
+        $titlePeriod = '';
+        if( $type == StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value ) {
+            $titlePeriod = __('custom.statistics.for_period', ['period' => substr($p, 0, 2) . '.' . substr($p, -4) . ' - ' . substr($p, 2, 2) . '.' . substr($p, -4)]);
+        } elseif ( $type == StatisticTypeEnum::TYPE_APPLICATION_MONTH->value ) {
+            $titlePeriod = __('custom.statistics.for_period', ['period' => substr($p, 0, 2) . '.' . substr($p, 2)]);
+        } else {
+            $titlePeriod = __('custom.statistics.full_period');
+        }
 
-        return $this->view('front.statistic.view', compact('titlePage', 'chartData', 'availablePeriods', 'type', 'extraChartData'));
+        return $this->view('front.statistic.view', compact('titlePage', 'chartData', 'availablePeriods', 'type', 'extraChartData', 'titlePeriod'));
     }
 }

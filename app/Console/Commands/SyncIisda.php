@@ -36,8 +36,8 @@ class SyncIisda extends Command
      * @return int
      */
 
-    private array $typesToSync = []; //'AdmStructure'
-    private array $typesWithAddress = ['AdmStructure'];
+    private array $typesToSync = []; //'AdmStructure' //Use to filter which institution to sync
+    private array $typesWithAddress = ['AdmStructure']; //Use to filter which institution address we need to get
     private int $getAddressAtOnes = 10;
 
     public function handle()
@@ -61,7 +61,6 @@ class SyncIisda extends Command
                 , 'pdoi_response_subject.municipality'
                 , 'pdoi_response_subject.town'
                 , 'pdoi_response_subject.zip_code'
-                , 'pdoi_response_subject.type'
                 , 'pdoi_response_subject.type'
             )
             ->leftJoin('rzs_section', 'rzs_section.adm_level', '=', 'pdoi_response_subject.adm_level')
@@ -111,8 +110,21 @@ class SyncIisda extends Command
                             $addressInfo = $responseArrayAddress[$subject['IdentificationNumber']] ?? null;
                             //TODO fix me add structure if not exist
                             if(!isset($localSections[$subject['AdmStructureKind']])) {
-                                Log::error('Sync RZS: Missing AdmStructureKind:'. $subject['AdmStructureKind']);
-                                continue;
+                                $newInstLevel = RzsSection::create([
+                                    'system_name' => $subject['AdmStructureKind'],
+                                    'manual' => 0
+                                ]);
+                                if( !$newInstLevel ) {
+                                    Log::error('Sync Institution: Missing AdmStructureKind:'. $subject['AdmStructureKind']);
+                                    continue;
+                                }
+
+                                $newInstLevel->adm_level = $newInstLevel->id;
+                                foreach (config('available_languages') as $lang) {
+                                    $newInstLevel->translateOrNew($lang['code'])->name = $subject['AdmStructureKind'];
+                                }
+                                $newInstLevel->save();
+                                $localSections[$subject['AdmStructureKind']] = $newInstLevel->id;
                             }
 
                             //if exist in local db check if need update
@@ -184,16 +196,16 @@ class SyncIisda extends Command
                                 if( $localSubject->subject_name != $subject['Name'] ) {
 //                                    Log::error('Update name: '.PHP_EOL. $localSubject->subject_name. PHP_EOL. $subject['Name']);
                                     foreach (config('available_languages') as $lang) {
-                                        $localSubject->translate($lang['code'])->subject_name = $subject['Name'];
+                                        $localSubject->translateOrNew($lang['code'])->subject_name = $subject['Name'];
                                     }
-                                    $localSubject->translate('bg')->subject_name = $subject['Name'];
+                                    $localSubject->translateOrNew('bg')->subject_name = $subject['Name'];
                                     $translationUpdate = true;
                                     $updated = true;
                                 }
                                 if( $addressInfo && ($localSubject->address != $addressInfo['address']) ) {
 //                                    Log::error('Update address: '.PHP_EOL. $localSubject->address. PHP_EOL. $addressInfo['address']);
                                     foreach (config('available_languages') as $lang) {
-                                        $localSubject->translate($lang['code'])->address = $addressInfo['address'];
+                                        $localSubject->translateOrNew($lang['code'])->address = $addressInfo['address'];
                                     }
                                     $translationUpdate = true;
                                     $updated = true;
@@ -214,13 +226,13 @@ class SyncIisda extends Command
                                     'subject_name' => $subject['Name'],
                                     'adm_register' => 1,
                                     'email' => $addressInfo ? $addressInfo['email'] : null,
-                                    'phone' => $addressInfo ? $addressInfo['email'] : null,
+                                    'phone' => $addressInfo ? $addressInfo['phone'] : null,
                                     'fax' => $addressInfo ? $addressInfo['fax'] : null,
-                                    'zip_code' => $addressInfo ? $addressInfo['email'] : null,
-                                    'address' => $addressInfo ? $addressInfo['email'] : null,
-                                    'region' => $addressInfo ? $addressInfo['email'] : null,
-                                    'municipality' => $addressInfo ? $addressInfo['email'] : null,
-                                    'town' => $addressInfo ? $addressInfo['email'] : null,
+                                    'zip_code' => $addressInfo ? $addressInfo['zip_code'] : null,
+                                    'address' => $addressInfo ? $addressInfo['address'] : null,
+                                    'region' => $addressInfo ? $addressInfo['region'] : null,
+                                    'municipality' => $addressInfo ? $addressInfo['municipality'] : null,
+                                    'town' => $addressInfo ? $addressInfo['town'] : null,
                                     'delivery_method' => PdoiSubjectDeliveryMethodsEnum::EMAIL->value,
                                 );
                             }
@@ -229,12 +241,14 @@ class SyncIisda extends Command
 
                     if( sizeof($toInsert) ) {
                         foreach ($toInsert as $newRow) {
+                            $address = $newRow['address'];
+                            unset($newRow['address']);
                             $newSubject = new PdoiResponseSubject($newRow);
                             $newSubject->save();
                             $newSubject->refresh();
                             foreach (config('available_languages') as $lang) {
                                 $newSubject->translateOrNew($lang['code'])->subject_name = $newRow['subject_name'];
-                                $newSubject->translateOrNew($lang['code'])->address = $newRow['subject_name'];
+                                $newSubject->translateOrNew($lang['code'])->address = $address;
                             }
                             $newSubject->save();
                         }

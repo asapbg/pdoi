@@ -439,6 +439,8 @@ return [
     'base'                                      => 'Основни',
     'statistics.not_available_statistic'        => 'Не са открити налични статистики',
     'statistics.base'                           => 'Основни',
+    'statistics.full_period'                    => 'Общо',
+    'statistics.for_period'                    => 'За периода :period',
     'statistics.base.user_types_cnt'            => 'Брой потребители (външни/вътрешни)',
     'statistics.base.subjects_with_admin'       => 'Брой Задължени субекти с администратор',
     'statistics.forward'                      => 'Статистика за броя заявления, препратени от институции',
