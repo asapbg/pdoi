@@ -265,7 +265,7 @@ class SyncIisda extends Command
                     }
 
                     echo 'Inserted: '.sizeof($toInsert);
-                    echo 'Deactivated: '.sizeof($toInsert);
+                    echo 'Deactivated: '.sizeof($idArrayToDeactivate);
                     echo 'Updated: '.$updatedCnt;
                     DB::commit();
                     return Command::SUCCESS;
