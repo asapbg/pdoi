@@ -44,7 +44,7 @@ class SyncIisda extends Command
     {
         Log::info("Cron run sync:iisda.");
 
-        $localSubjects = $toInsert = [];
+        $localSubjects = $toInsert = $idArrayToDeactivate = [];
         //Local subjects
         $dbSubjects = PdoiResponseSubject::select('pdoi_response_subject.id'
                 , 'pdoi_response_subject.adm_level'
@@ -256,7 +256,6 @@ class SyncIisda extends Command
 
                     //deactivate local subject because we did\'t find them in sync array
                     if( sizeof($localSubjects) ) {
-                        $idArrayToDeactivate = [];
                         foreach ($localSubjects as $p) {
                             $idArrayToDeactivate[] = $p->id;
                         }
