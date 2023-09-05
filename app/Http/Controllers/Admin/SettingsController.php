@@ -26,7 +26,6 @@ class SettingsController extends Controller
         foreach ($validated as $name => $value) {
             $setting = Settings::Editable()->where('name', '=', $name)->first();
             if( $request->user()->cannot('update', $setting) ) {
-                dd('ok');
                 abort(Response::HTTP_FORBIDDEN);
             }
             $setting->value = $value;

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -136,55 +137,40 @@ class UsersSeeder extends Seeder
                     $$ language plpgsql"
         );
 
-        // make asap user with super user role
-        $user = new User;
-        $user->username = "service_user";
-        $user->password = bcrypt('pass123');
-        $user->user_type = User::USER_TYPE_INTERNAL;
-        $user->names = 'Сервизен потребител';
-        $user->email = 'service_user@asap.bg';
-        $user->status = User::STATUS_ACTIVE;
-        $user->pass_last_change = Carbon::now();
-        $user->pass_is_new = 1;
-        $user->save();
-        $this->command->info("User with email: $user->email saved");
+        $localUsers = array(
+            [
+                'role' => 'service_user',
+                'names' => 'Сервизен потребител',
+                'email' => 'service_user@asap.bg',
+            ],
+            [
+                'role' => 'admin',
+                'names' => 'Админситратор',
+                'email' => 'admin@asap.bg',
+            ],
+            [
+                'role' => 'admin',
+                'names' => 'Админ',
+                'email' => 'admin@gov.bg',
+            ]
+        );
 
-        $role = Role::where('name', 'service_user')->first();
-        $user->assignRole($role);
-        $this->command->info("Role $role->name was assigned to $user->names");
+        foreach ($localUsers as $u) {
+            $user = new User;
+            $user->username = $u['email'];
+            $user->password = bcrypt(Str::random(8));
+            $user->user_type = User::USER_TYPE_INTERNAL;
+            $user->names = $u['names'];
+            $user->email = $u['email'];
+            $user->status = User::STATUS_ACTIVE;
+            $user->pass_last_change = Carbon::now();
+            $user->pass_is_new = 1;
+            $user->save();
+            $this->command->info("User with email: $user->email saved");
 
-        // make asap user with admin role
-        $user = new User;
-        $user->username = "admin";
-        $user->password = bcrypt('pass123');
-        $user->user_type = User::USER_TYPE_INTERNAL;
-        $user->names = 'Админситратор';
-        $user->email = 'admin@asap.bg';
-        $user->status = User::STATUS_ACTIVE;
-        $user->pass_last_change = Carbon::now();
-        $user->pass_is_new = 1;
-        $user->save();
-        $this->command->info("User with email: $user->email saved");
-
-        $role = Role::where('name', 'admin')->first();
-        $user->assignRole($role);
-        $this->command->info("Role $role->name was assigned to $user->names");
-
-        // make pitay user with admin role
-        $user = new User;
-        $user->username = "admin@gov.bg";
-        $user->password = bcrypt('1234qweR!');
-        $user->user_type = User::USER_TYPE_INTERNAL;
-        $user->names = 'Админ';
-        $user->email = 'admin@gov.bg';
-        $user->status = User::STATUS_ACTIVE;
-        $user->pass_last_change = Carbon::now();
-        $user->pass_is_new = 1;
-        $user->save();
-        $this->command->info("User with email: $user->email saved");
-
-        $role = Role::where('name', 'admin')->first();
-        $user->assignRole($role);
-        $this->command->info("Role $role->name was assigned to $user->names");
+            $role = Role::where('name', $u['role'])->first();
+            $user->assignRole($role);
+            $this->command->info("Role $role->name was assigned to $user->names");
+        }
     }
 }

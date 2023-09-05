@@ -4,11 +4,6 @@ namespace App\Library;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-use Selective\XmlDSig\Algorithm;
-use Selective\XmlDSig\CryptoSigner;
-use Selective\XmlDSig\PrivateKeyStore;
-use Selective\XmlDSig\PublicKeyStore;
-use Selective\XmlDSig\XmlSigner;
 
 class EAuthentication
 {
@@ -73,6 +68,7 @@ class EAuthentication
             ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
             Version="2.0" xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol">
             <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">'.route('eauth.sp_metadata').(!empty($source) ? '/'.$source : '').'</saml2:Issuer>
+            '.$this->signature().'
             <saml2p:Extensions>
                 <egovbga:RequestedService xmlns:egovbga="urn:bg:egov:eauth:2.0:saml:ext">
                     <egovbga:Service>'.env('E_AUTH_SERVICE_OID', '').'</egovbga:Service>
@@ -93,13 +89,21 @@ class EAuthentication
      */
     public function spMetadata(string $callback_source = ''): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
+        $certificateStr = str_replace(['-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----'], '', file_get_contents(env('EAUTH_CERT_PATH')));
         $xml = '<EntityDescriptor entityID="'.$this->sp_domain.'" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
                     <SPSSODescriptor WantAssertionsSigned="true" AuthnRequestsSigned="true"
                         protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
                         <md:KeyDescriptor use="signing">
                             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
                                 <ds:X509Data>
-                                <ds:X509Certificate>'.$this->publicKey().'</ds:X509Certificate>
+                                <ds:X509Certificate>'.trim($certificateStr).'</ds:X509Certificate>
+                                </ds:X509Data>
+                            </ds:KeyInfo>
+                        </md:KeyDescriptor>
+                        <md:KeyDescriptor use="encryption">
+                            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                                <ds:X509Data>
+                                    <ds:X509Certificate>'.trim($certificateStr).'</ds:X509Certificate>
                                 </ds:X509Data>
                             </ds:KeyInfo>
                         </md:KeyDescriptor>
@@ -116,20 +120,8 @@ class EAuthentication
                                 <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:canonicalResidenceAddress" NameFormat="urn:oasis:names:tc:saml2:2.0:attrname-format:uri" isRequired="false"/>
                             </AttributeConsumingService>
                     </SPSSODescriptor>
-                    <Organization>
-                        <OrganizationName>Платформа за достъп до обществена информация</OrganizationName>
-                        <OrganizationDisplayName>ПДОИ</OrganizationDisplayName>
-                        <OrganizationURL>'.route('home').'</OrganizationURL>
-                    </Organization>
-                    <ContactPerson contactType="administrative">
-                        <Company>Име компания</Company>
-                        <GivenName>Име</GivenName>
-                        <SurName>Фамилия</SurName>
-                        <EmailAddress>test@t.com</EmailAddress>
-                        <TelephoneNumber>100000000</TelephoneNumber>
-                    </ContactPerson>
                 </EntityDescriptor>';
-        return response($this->sign($xml), 200, [
+        return response($xml, 200, [
             'Content-Type' => 'application/xml'
         ]);
     }
@@ -251,19 +243,33 @@ class EAuthentication
      * @param $xmlString
      * @return string
      */
-    private function sign($xmlString): string
+    private function signature(): string
     {
-        $privateKeyStore = new PrivateKeyStore();
-        // load a private key from a string
-        $privateKeyStore->loadFromPem(file_get_contents(env('EAUTH_CERT_PATH')), '');
-        //Define the digest method: sha1, sha224, sha256, sha384, sha512
-        $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
-        //Create a CryptoSigner instance:
-        $cryptoSigner = new CryptoSigner($privateKeyStore, $algorithm);
-        // Create a XmlSigner and pass the crypto signer
-        $xmlSigner = new XmlSigner($cryptoSigner);
-        // Create a signed XML string
-        return $xmlSigner->signXml($xmlString);
+        $refURI = '#ARQ676c11c-b1d2-49ea-9baf-40e3c7bc7e61';
+        //Certificate
+        $certificateStr = str_replace(['-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----'], '', file_get_contents(env('EAUTH_CERT_PATH')));
+        //Signature
+        $pk = file_get_contents(env('EAUTH_CERT_PRIVATE_KEY_PATH'));
+        // compute signature
+        openssl_sign($refURI, $signature, $pk, 'sha256WithRSAEncryption');
+
+        $signature =
+'<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <ds:SignedInfo>
+        <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+        <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />
+        <ds:Reference URI="'.$refURI.'">
+            <ds:Transforms>
+                <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+            </ds:Transforms>
+            <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
+            <ds:DigestValue>'.base64_encode(hash('sha256', $refURI)).'</ds:DigestValue>
+        </ds:Reference>
+    </ds:SignedInfo>
+    <ds:SignatureValue>'.base64_encode($signature).'</ds:SignatureValue>
+</ds:Signature>';
+        return $signature;
     }
 
     /**
@@ -291,11 +297,6 @@ class EAuthentication
             }
         }
         return $identity;
-    }
-
-    private function publicKey(): string
-    {
-        return 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAshNMIS/zXrxzTgCB6OAQCtz28SW7CEXCOwl+Rz55F7q34U9btrHfeJWpEC3igvTWhyJQuDnL0xwZmhvUef+cfZd0qTF25n2g6dn+5uuF43hsMhxsPoaDVd3e0yat0OEgBtWhEK3jSvCK9ezsdEE1+yQQvaGzThfuT4bcHa+SJ1qV+98ZqIW4J6xjPLXk4YzlRclo23EzlsGluE7pM9V8Oqe1V/+B/TJTYDrvAvyJbcN40rJ0t8iecVVHPSVgz2lQkqaeWjRqpnDa2gzaWdw6Ova6fpg+pF++s+ad1NLd6rcWSu5lzkKA6yVaXGulA9uuoV85O4Y1h6wnBokLbvQFgwIDAQAB';
     }
 
 

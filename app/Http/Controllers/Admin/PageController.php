@@ -92,7 +92,7 @@ class PageController  extends AdminController
             return to_route(self::LIST_ROUTE)
                 ->with('success', trans_choice('custom.pages', 1)." ".__('messages.created_successfully_m'));
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             return redirect()->back()->withInput(request()->all())->with('danger', __('messages.system_error'));
         }
 
