@@ -36,7 +36,10 @@ class PdoiApplicationPolicy
         return $user->can('manage.*') ||
             (
                 $user->canany(['application.*', 'application.view'])
-                && ( $user->administrative_unit === $pdoiApplication->response_subject_id || ( !$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id ) )
+                && (
+                    ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+                    || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+                )
             );
     }
 
@@ -83,7 +86,6 @@ class PdoiApplicationPolicy
      */
     public function update(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
     {
-
         //TODO fix me add subject from events
         return (PdoiApplicationStatusesEnum::canRenew($pdoiApplication->status) //is in forwarded status
                 || $pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
@@ -92,7 +94,10 @@ class PdoiApplicationPolicy
                 $user->can('manage.*') ||
                 (
                     $user->canany(['application.*', 'application.view', 'application.edit'])
-                    && ( !$pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id || ($pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id ) )
+                    && (
+                        ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+                        || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+                    )
                 )
             );
     }
@@ -113,7 +118,10 @@ class PdoiApplicationPolicy
                 $user->can('manage.*') ||
                 (
                     $user->canany(['application.*', 'application.view', 'application.edit'])
-                    && ( !$pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id || ($pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id ) )
+                    && (
+                        ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+                        || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+                    )
                 )
             );
     }
@@ -133,7 +141,10 @@ class PdoiApplicationPolicy
                 $user->can('manage.*') ||
                 (
                     $user->canany(['application.*', 'application.view', 'application.edit'])
-                    && ( !$pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id || ($pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id ) )
+                    && (
+                        ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+                        || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+                    )
                 )
             );
     }

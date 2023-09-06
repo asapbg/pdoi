@@ -123,21 +123,19 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
 
     public function scopeByUserSubjects($query)
     {
-        //TODO fix me add parent clause to get application without subject id add clause in application policy too
         //if user has full permission skip else
         //filter list by user subject(rzs)
         $user = auth()->user();
         if( !$user->can('manage.*') ) {
             $query->where(function ($q) use($user){
-                $q->where('response_subject_id', $user->administrative_unit)
-                    ->orWhere(function ($q) use ($user){
+                $q->where('response_subject_id', $user->administrative_unit ?? 0)
+                    ->orWhere(function ($q) use($user){
                         $q->whereNull('response_subject_id')
-                            ->WhereHAs('parent', function( $query ) use ( $user ){
-                                $query->where('response_subject_id', $user->administrative_unit);
-                            });
+                            ->whereHas('parent', function( $query ) use ( $user ){
+                            $query->where('response_subject_id', $user->administrative_unit);
+                        });
                     });
             });
-//            $query->where('response_subject_id', $user->administrative_unit);
         }
     }
 
