@@ -11,6 +11,7 @@ use App\Models\File;
 use App\Models\MailTemplates;
 use App\Models\PdoiApplication;
 use App\Models\PdoiApplicationEvent;
+use App\Notifications\NotifySubjectAdditionalInfo;
 use App\Notifications\NotifySubjectNewApplication;
 use App\Notifications\NotifyUserExtendTerm;
 use App\Notifications\NotifyUserForAppForward;
@@ -47,12 +48,18 @@ class ApplicationService
                 if( $this->application->currentEvent ) {
                     $allowedNextEvents = $this->application->currentEvent->event->nextEvents->pluck('id')->toArray();
                     if(
-                        !in_array($eventConfig->id, $allowedNextEvents)
-                        && !($this->application->currentEvent->event_type == ApplicationEventsEnum::FINAL_DECISION->value
+                        ($eventConfig->app_event != ApplicationEventsEnum::GIVE_INFO->value
+                            && !in_array($eventConfig->id, $allowedNextEvents)
+                            && !($this->application->currentEvent->event_type == ApplicationEventsEnum::FINAL_DECISION->value
                             && $eventConfig->app_event == ApplicationEventsEnum::RENEW_PROCEDURE->value
                             && PdoiApplicationStatusesEnum::canRenew((int)$this->application->status))
-                        && !(in_array($eventConfig->app_event, ApplicationEventsEnum::forwardGroupEvents())
+                            && !(in_array($eventConfig->app_event, ApplicationEventsEnum::forwardGroupEvents())
                             && PdoiApplicationStatusesEnum::canForward($this->application->status))
+                        )
+                        || (
+                            $eventConfig->app_event == ApplicationEventsEnum::GIVE_INFO->value
+                            && (!$this->application->lastEvent || $this->application->lastEvent->event_type != ApplicationEventsEnum::ASK_FOR_INFO->value)
+                        )
                     ) {
                         throw new \Exception('Not allowed next event to current one: '.$this->application->currentEvent->event->name);
                     }
@@ -286,6 +293,7 @@ class ApplicationService
             ApplicationEventsEnum::ASK_FOR_INFO->value => $this->application->applicant->notify(new NotifyUserNeedMoreInfo($this->application)),
             ApplicationEventsEnum::EXTEND_TERM->value => $this->application->applicant->notify(new NotifyUserExtendTerm($this->application)),
             ApplicationEventsEnum::FORWARD->value => $this->application->applicant->notify(new NotifyUserForAppForward($this->application)),
+            ApplicationEventsEnum::GIVE_INFO->value => $this->application->applicant->notify(new NotifySubjectAdditionalInfo($this->application)),
             default => null
         };
     }

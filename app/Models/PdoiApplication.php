@@ -171,6 +171,11 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             ->where('event_type', ApplicationEventsEnum::FINAL_DECISION->value)->latestOfMany();
     }
 
+    public function lastEvent(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PdoiApplicationEvent::class, 'pdoi_application_id','id')->latestOfMany();
+    }
+
     public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(PdoiApplicationEvent::class, 'pdoi_application_id', 'id');

@@ -29,6 +29,28 @@
             <div class="card-body">
                 <div class="tab-content" id="custom-tabs-three-tabContent">
                     <div class="tab-pane fade active show" id="application" role="tabpanel" aria-labelledby="application-tab">
+                        @if(!empty($needInfoSection))
+                            <div class="row">
+                                <h5 class="app-title-bg py-1 px-2 mb-4 bg-danger">{{ $needInfoSection['event_name'] }}</h5>
+                                <form method="post" action="{{ route('application.my.send_info') }}">
+                                    <input type="hidden" value="{{ $application['id'] }}" name="item">
+                                    @csrf
+                                    <p><strong>{{ __('front.need_info_message', ['date' => $needInfoSection['event_date']]) }}</strong></p>
+                                    <p>{{ __('front.need_info_end_date') }}: <strong>{{ displayDate($needInfoSection['event_end']) }}</strong></p>
+                                    <div class="form-group form-group-sm col-12">
+                                        <label class="form-label fw-semibold">{{ __('validation.attributes.extra_info') }}:</label>
+                                        @php($oldInfo = old('extra_info', ''))
+                                        <textarea class="summernote w-100 @error('extra_info') is-invalid @enderror" name="extra_info" id="extra_info">{{ $oldInfo }}</textarea>
+                                        @error('extra_info')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-primary mt-3">{{ __('custom.send') }}</button>
+                                </form>
+                            </div>
+                            <hr>
+                        @endif
+
                         <div class="row">
                             <div class="col-md-3 col-12 fw-bold mb-2">{{ __('custom.reg_number') }}:  <span class="text-primary">{{ $application['uri'] }}</span></div>
                             <div class="col-md-4 col-12 fw-bold mb-2">{{ __('custom.status') }}:  <span class="text-primary">{{ $application['statusName'] }}</span></div>
@@ -220,3 +242,7 @@
         </div>
     </section>
 @endsection
+<link href="{{ asset('summernote/summernote-lite.min.css') }}" rel="stylesheet">
+@push('scripts')
+    <script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
+@endpush

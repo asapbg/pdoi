@@ -149,6 +149,19 @@ class PdoiApplicationPolicy
             );
     }
 
+    /**
+     * Determine whether the user can send Extra Info the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiApplication  $pdoiApplication
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function addExtraInfo(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
+    {
+        return $pdoiApplication->lastEvent
+            && $pdoiApplication->lastEvent->event_type == ApplicationEventsEnum::ASK_FOR_INFO->value
+            && $user->id == $pdoiApplication->user_reg;
+    }
 
     /**
      * Determine whether the user can delete the model.

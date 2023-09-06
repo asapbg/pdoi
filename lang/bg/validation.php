@@ -298,5 +298,6 @@ return [
         'response'                  => 'Решение',
         'address_bg'                => 'Адрес (BG)',
         'address_en'                => 'Адрес (EN)',
+        'extra_info'                => 'Допълнителна информация',
     ],
 ];

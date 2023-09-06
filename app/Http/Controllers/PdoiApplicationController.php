@@ -7,6 +7,7 @@ use App\Enums\MailTemplateTypesEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Requests\PdoiApplicationApplyRequest;
+use App\Http\Requests\StoreInfoEventRequest;
 use App\Http\Resources\PdoiApplicationResource;
 use App\Http\Resources\PdoiApplicationShortCollection;
 use App\Http\Resources\PdoiApplicationShortResource;
@@ -102,7 +103,40 @@ class PdoiApplicationController extends Controller
         }
 
         $application = (new PdoiApplicationResource($item))->resolve();
-        return view('front.my_application.view', compact('application'));
+
+        $lastEvent = $item->lastEvent;
+        $needInfoSection = [];
+        if( $lastEvent->event_type == ApplicationEventsEnum::ASK_FOR_INFO->value
+            && !in_array($item->status,  PdoiApplicationStatusesEnum::finalStatuses())
+            && $item->status != PdoiApplicationStatusesEnum::NO_REVIEW->value ) {
+            $needInfoSection = array(
+                'event_name' => $lastEvent->event->name,
+                'event_date' => $lastEvent->event_date,
+                'event_end' => $lastEvent->event_end_date,
+                'msg' => $lastEvent->add_text,
+            );
+        }
+
+        return view('front.my_application.view', compact('application', 'needInfoSection'));
+    }
+
+    public function sendAdditionalInfo(StoreInfoEventRequest $request)
+    {
+        $user = $request->user();
+        $validated = $request->validated();
+        $item = PdoiApplication::find((int)$validated['item']);
+        if( !$item->lastEvent || $item->lastEvent->event_type != ApplicationEventsEnum::ASK_FOR_INFO->value ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if( !$user->can('addExtraInfo', $item) ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $appService = new ApplicationService($item);
+        $appService->registerEvent(ApplicationEventsEnum::GIVE_INFO->value, ['add_text' => $validated['extra_info']]);
+
+        return redirect(route('application.my.show', ['id' => $item->id]))->with('success', __('front.info_is_send'));
     }
 
     public function showMyFullHistory(Request $request, int $id = 0)
