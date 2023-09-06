@@ -13,7 +13,7 @@ class Name extends QueryFilter implements FilterContract{
         if( !empty($value) ){
             $this->query->whereHas('translations', function ($query) use ($value) {
                 $query->where('locale', app()->getLocale());
-                $query->where('subject_name', 'ilike', '%'.$value.'%');
+                $query->where('name', 'ilike', '%'.$value.'%');
             });
         }
     }
