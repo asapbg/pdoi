@@ -11,6 +11,7 @@
         @endif
     </td>
     <td>{{ displayDate($item->created_at) }}</td>
+    <td>{{ $item->response_end_time ? displayDate($item->response_end_time) : '' }}</td>
     <td>{{ $item->response_subject_id ? $item->responseSubject->subject_name : $item->nonRegisteredSubjectName }}</td>
     <td>
         @php($itemContent = strip_tags(html_entity_decode($item->request)))

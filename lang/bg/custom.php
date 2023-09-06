@@ -276,7 +276,7 @@ return [
     'period.yesterday'                          => 'Вчера',
     'period.current_month'                      => 'Този месец',
     'period.prev_week'                          => 'Миналата седмица',
-    'period.prev_month'                         => 'Минаия месец',
+    'period.prev_month'                         => 'Миналия месец',
     'period.current_year'                       => 'Тази година',
     'period.prev_year'                          => 'Миналата година',
     'period.last_5_year'                        => 'Последните 5 години',

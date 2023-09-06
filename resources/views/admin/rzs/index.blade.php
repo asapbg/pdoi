@@ -57,18 +57,18 @@
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                         @endcan
-                                        @can('delete', $item)
-                                                <a href="javascript:;"
-                                                   class="btn btn-sm btn-danger js-toggle-delete-resource-modal hidden"
-                                                   data-target="#modal-delete-resource"
-                                                   data-resource-id="{{ $item->id }}"
-                                                   data-resource-name="{{ "$item->name" }}"
-                                                   data-resource-delete-url="{{ route($deleteRouteName,[$item->id]) }}"
-                                                   data-toggle="tooltip"
-                                                   title="{{ __('custom.deletion') }}">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                        @endcan
+{{--                                        @can('delete', $item)--}}
+{{--                                                <a href="javascript:;"--}}
+{{--                                                   class="btn btn-sm btn-danger js-toggle-delete-resource-modal hidden"--}}
+{{--                                                   data-target="#modal-delete-resource"--}}
+{{--                                                   data-resource-id="{{ $item->id }}"--}}
+{{--                                                   data-resource-name="{{ "$item->name" }}"--}}
+{{--                                                   data-resource-delete-url="{{ route($deleteRouteName,[$item->id]) }}"--}}
+{{--                                                   data-toggle="tooltip"--}}
+{{--                                                   title="{{ __('custom.deletion') }}">--}}
+{{--                                                    <i class="fa fa-trash"></i>--}}
+{{--                                                </a>--}}
+{{--                                        @endcan--}}
                                     </td>
                                 </tr>
                             @endforeach

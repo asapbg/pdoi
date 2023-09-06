@@ -343,9 +343,9 @@ class PdoiApplicationController extends Controller
                 'value' => $request->input('period'),
                 'col' => 'col-md-3'
             ),
-            'formDate' => array(
+            'fromDate' => array(
                 'type' => 'datepicker',
-                'value' => $request->input('formDate'),
+                'value' => $request->input('fromDate'),
                 'placeholder' => __('custom.begin_date'),
                 'col' => 'col-md-2'
             ),

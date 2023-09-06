@@ -12,7 +12,7 @@ class FromDate extends QueryFilter implements FilterContract{
     public function handle($value): void
     {
         if( !empty($value) ){
-            $this->query->where('pdoi_application.created_at', '>=', databaseDateTime(Carbon::parse($value)->startOfDay()));
+            $this->query->where('pdoi_application.created_at', '>=', Carbon::parse($value)->startOfDay());
         }
     }
 }

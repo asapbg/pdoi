@@ -40,7 +40,7 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
                 'phone' => ['nullable', 'string', 'max:1000'],
                 'fax' => ['nullable', 'string', 'max:1000'],
                 'email' => ['nullable', 'email', 'max:255'],
-                'active' => ['required', 'numeric', 'gt:0'],
+                'active' => ['required', 'numeric', 'in:0,1'],
             ];
         }
 

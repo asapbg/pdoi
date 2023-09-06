@@ -12,7 +12,7 @@ class ToDate extends QueryFilter implements FilterContract{
     public function handle($value): void
     {
         if( !empty($value) ){
-            $this->query->where('pdoi_application.created_at', '<=', databaseDateTime(Carbon::parse($value)->endOfDay()));
+            $this->query->where('pdoi_application.created_at', '<=', Carbon::parse($value)->endOfDay());
         }
     }
 }

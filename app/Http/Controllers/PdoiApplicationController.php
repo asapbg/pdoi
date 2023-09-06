@@ -43,7 +43,6 @@ class PdoiApplicationController extends Controller
         $filter = $this->filters($request);
         $requestFilter = $request->all();
         $applications = null;
-
         $sort = $request->filled('sort') ? $request->input('sort') : 'apply_date';
         $sortOrd = $request->filled('ord') ? $request->input('ord') : 'desc';
         if( isset($requestFilter['search']) ) {
@@ -294,9 +293,9 @@ class PdoiApplicationController extends Controller
                 'placeholder' => __('custom.period'),
                 'col' => 'col-md-3'
             ),
-            'formDate' => array(
+            'fromDate' => array(
                 'type' => 'datepicker',
-                'value' => $request->input('formDate'),
+                'value' => $request->input('fromDate'),
                 'placeholder' => __('custom.begin_date'),
                 'col' => 'col-md-2'
             ),

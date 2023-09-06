@@ -302,7 +302,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
 
     public static function statisticForwarded($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
     {
-        $fromDate = isset($filter['formDate']) && !empty($filter['formDate']) ? $filter['formDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $fromDate = isset($filter['fromDate']) && !empty($filter['fromDate']) ? $filter['fromDate'] : Carbon::now()->startOfMonth()->startOfDay();
         $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
         $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
 

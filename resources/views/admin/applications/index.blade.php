@@ -26,6 +26,7 @@
                             <th>ID</th>
                             <th>{{ __('custom.reg_number') }}</th>
                             <th>{{ __('custom.date_apply') }}</th>
+                            <th>{{ __('custom.end_date') }}</th>
                             <th>{{ trans_choice('custom.pdoi_response_subjects', 1) }}</th>
                             <th>{{ __('custom.application.request_for_info') }}</th>
                             <th>{{ __('custom.status') }}</th>

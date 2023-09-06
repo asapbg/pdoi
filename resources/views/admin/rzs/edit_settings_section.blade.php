@@ -7,7 +7,7 @@
                     <label class="form-label me-3 fw-semibold">{{ __('validation.attributes.rzs_delivery_method') }}: <span class="required">*</span></label> <br>
                     @foreach(\App\Enums\PdoiSubjectDeliveryMethodsEnum::options() as $name => $val)
                         <label class="form-label fw-normal col-12" role="button">
-                            <input type="radio" name="rzs_delivery_method" value="{{ $val }}" @if(old('rzs_delivery_method', $item->id ? $item->delivery_method : 0) == $val) checked @endif required> {{ __('custom.rzs.delivery_by.'.$name) }}
+                            <input type="radio" name="rzs_delivery_method" value="{{ $val }}" @if(old('rzs_delivery_method', $item->id ? $item->delivery_method : 0) == $val) checked @endif> {{ __('custom.rzs.delivery_by.'.$name) }}
                         </label>
                     @endforeach
                     @error('rzs_delivery_method')

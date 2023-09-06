@@ -42,7 +42,7 @@ class RzsSectionController extends AdminController
      */
     public function edit(Request $request, RzsSection $item)
     {
-        if( ($item && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', RzsSection::class) ) {
+        if( ($item->id && $request->user()->cannot('update', $item)) || $request->user()->cannot('create', RzsSection::class) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
 

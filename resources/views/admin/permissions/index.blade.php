@@ -21,7 +21,7 @@
                             @foreach($roles as $role)
                                 <th>{{$role->display_name}}</th>
                             @endforeach
-                            <th>Действия</th>
+{{--                            <th>Действия</th>--}}
                         </thead>
                         <tbody>
 
@@ -61,27 +61,27 @@
                                             >
                                         </td>
                                     @endforeach
-                                    <td>
-                                        @if ($perm->users()->count() && $perm->roles()->count() == 0 && !str_contains($perm->name, '.*'))
-                                            <a href="{{route('admin.permissions.edit',$perm->id)}}"
-                                               class="btn btn-sm btn-warning"
-                                               data-toggle="tooltip"
-                                               title="{{__('custom.edit')}}">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="javascript:;"
-                                               class="btn btn-sm btn-danger js-toggle-delete-resource-modal"
-                                               data-target="#modal-delete-resource"
-                                               data-resource-id="{{ $perm->id }}"
-                                               data-resource-name="{{ $perm->title }}"
-                                               data-resource-delete-url="{{route('admin.permissions.delete',$perm->id)}}"
-                                               data-toggle="tooltip"
-                                               title="{{__('custom.delete')}}">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        @endif
-                                    </td>
-                                </tr class="@if(empty($groupTitle))@endif">
+{{--                                    <td>--}}
+{{--                                        @if ($perm->users()->count() && $perm->roles()->count() == 0 && !str_contains($perm->name, '.*'))--}}
+{{--                                            <a href="{{route('admin.permissions.edit',$perm->id)}}"--}}
+{{--                                               class="btn btn-sm btn-warning"--}}
+{{--                                               data-toggle="tooltip"--}}
+{{--                                               title="{{__('custom.edit')}}">--}}
+{{--                                                <i class="fa fa-edit"></i>--}}
+{{--                                            </a>--}}
+{{--                                            <a href="javascript:;"--}}
+{{--                                               class="btn btn-sm btn-danger js-toggle-delete-resource-modal"--}}
+{{--                                               data-target="#modal-delete-resource"--}}
+{{--                                               data-resource-id="{{ $perm->id }}"--}}
+{{--                                               data-resource-name="{{ $perm->title }}"--}}
+{{--                                               data-resource-delete-url="{{route('admin.permissions.delete',$perm->id)}}"--}}
+{{--                                               data-toggle="tooltip"--}}
+{{--                                               title="{{__('custom.delete')}}">--}}
+{{--                                                <i class="fa fa-trash"></i>--}}
+{{--                                            </a>--}}
+{{--                                        @endif--}}
+{{--                                    </td>--}}
+                                </tr>
                             @endforeach
                         @endforeach
                         </tbody>
@@ -90,7 +90,7 @@
                             @foreach($roles as $role)
                                 <th>{{$role->display_name}}</th>
                             @endforeach
-                            <th>Действия</th>
+{{--                            <th>Действия</th>--}}
                         </tfoot>
                     </table>
                 </div>

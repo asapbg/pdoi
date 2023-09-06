@@ -15,7 +15,7 @@ enum TimePeriodEnum: string
     case YESTERDAY = 'yesterday'; //Вчера
     case CURRENT_MONTH = 'current_month'; //Този месец
     case PREV_WEEK = 'prev_week'; //Миналата седмица
-    case PREV_MONTH = 'prev_month'; //Минаия месец
+    case PREV_MONTH = 'prev_month'; //Миналия месец
     case CURRENT_YEAR = 'current_year'; //Тази година
     case PREV_YEAR = 'prev_year'; //Миналата година
     case LAST_5_YEAR = 'last_5_year'; //Последните 5 години
