@@ -35,8 +35,9 @@
                                 <form method="post" action="{{ route('application.my.send_info') }}">
                                     <input type="hidden" value="{{ $application['id'] }}" name="item">
                                     @csrf
-                                    <p><strong>{{ __('front.need_info_message', ['date' => $needInfoSection['event_date']]) }}</strong></p>
-                                    <p>{{ __('front.need_info_end_date') }}: <strong>{{ displayDate($needInfoSection['event_end']) }}</strong></p>
+                                    <p><strong>{{ __('front.need_info_message', ['date' => $needInfoSection['event_date']]) }}</strong>:
+                                    <br>{!! html_entity_decode($needInfoSection['msg']) !!}</p>
+                                    <p><strong>{{ __('front.need_info_end_date') }}</strong>: {{ displayDate($needInfoSection['event_end']) }}</p>
                                     <div class="form-group form-group-sm col-12">
                                         <label class="form-label fw-semibold">{{ __('validation.attributes.extra_info') }}:</label>
                                         @php($oldInfo = old('extra_info', ''))
