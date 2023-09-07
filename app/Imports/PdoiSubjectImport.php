@@ -58,9 +58,8 @@ class PdoiSubjectImport implements ToCollection
             $row = $row->toArray();
             //skip headers
             if ($row_number < 1) continue;
-
             //validate row columns count
-            if( sizeof($row) != 14 ) {
+            if( sizeof($row) < 14 ) {
                 continue;
             }
 
@@ -72,7 +71,6 @@ class PdoiSubjectImport implements ToCollection
             }
 
             $validated = $validator->validated();
-
             $existingItem = PdoiResponseSubject::IsManual()->where('eik', $validated[0])->first();
             $admLevel = array_keys($this->admLevels, $validated[3]);
             $parent = array_keys($this->responseSubjects, $validated[4]);
