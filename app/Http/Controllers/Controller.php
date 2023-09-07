@@ -109,7 +109,7 @@ class Controller extends BaseController
             $segments[] = $heading;
         }
 
-        $breadcrumbs['heading'] = $heading;
+        $breadcrumbs['heading'] = $this->breadcrumb_title ?? $heading;
         $url = '';
 
         foreach ($segments as $segment) {

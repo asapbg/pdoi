@@ -107,6 +107,7 @@ class PdoiResponseSubjectController extends AdminController
         ];
 
         $this->setTitlePlural($item->id > 0 ? 'Редакция на ЗС ('.$item->subject_name.')' : 'Създаване на ЗС');
+        $this->setBreadcrumbsTitle($item->id > 0 ? 'Редакция на ЗС ('.$item->subject_name.')' : 'Създаване на ЗС');
 
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName',
             'listRouteName', 'translatableFields', 'areas', 'municipalities', 'settlement', 'rzsSections',

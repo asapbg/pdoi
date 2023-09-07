@@ -456,5 +456,7 @@ return [
     'statistic.terms.total_applications'            => 'Заявления (общо)',
     'statistic.terms.in_time'                       => 'Произнесени в срок',
     'statistic.terms.expired'                       => 'Изтекли',
+    'create_object'                                  => 'Създаване на :object',
+    'edit_object'                                   => 'Редакция на :object (:object_name)',
 ];
 

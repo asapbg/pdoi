@@ -52,6 +52,11 @@ class EventController extends AdminController
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = Event::translationFieldsProperties();
         $extendReasons = ExtendTermsReason::optionsList();
+
+        $title = $item->id > 0 ? __('custom.edit_object', ['object' => trans_choice('custom.events', 1), 'object_name' => $item->name]) : __('custom.create_object', ['object' => trans_choice('custom.events', 1)]);
+        $this->setTitlePlural($title);
+        $this->setBreadcrumbsTitle($title);
+
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName', 'listRouteName',
             'translatableFields', 'extendReasons'));
     }

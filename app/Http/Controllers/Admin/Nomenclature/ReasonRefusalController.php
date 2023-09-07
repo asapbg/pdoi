@@ -59,6 +59,11 @@ class ReasonRefusalController extends AdminController
         $storeRouteName = self::STORE_ROUTE;
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = ReasonRefusal::translationFieldsProperties();
+
+        $title = $item->id > 0 ? __('custom.edit_object', ['object' => trans_choice('custom.nomenclature.reason_refusal', 1), 'object_name' => $item->name]) : __('custom.create_object', ['object' => trans_choice('custom.nomenclature.reason_refusal', 1)]);
+        $this->setTitlePlural($title);
+        $this->setBreadcrumbsTitle($title);
+
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName', 'listRouteName', 'translatableFields'));
     }
 
