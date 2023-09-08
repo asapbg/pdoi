@@ -163,6 +163,8 @@ $(function() {
 
         };
 
+        $.datepicker.setDefaults( $.datepicker.regional[typeof GlobalLang != 'undefined' ? GlobalLang : ''] );
+
         //blind options
         $('#visual-option-div').on("click", '#vo-close', function() {
             $('#vo-option-btn').click();
