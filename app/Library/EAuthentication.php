@@ -5,6 +5,7 @@ namespace App\Library;
 use Carbon\Carbon;
 use CkBinData;
 use CkCrypt2;
+use CkGlobal;
 use CkPrivateKey;
 use CkRsa;
 use CkStringBuilder;
@@ -117,6 +118,20 @@ class EAuthentication
     public function userData($samlResponse)
     {
         include(config('eauth.chilkat_library'));
+
+        $glob = new CkGlobal();
+        $success = $glob->UnlockBundle('ASAPBG.CB4092025_GvUzdfJg0H2z');
+        if ($success != true) {
+            Log::error('['.Carbon::now().'] Chilkat License error: '.$glob->lastErrorText());
+            return null;
+        }
+
+        $status = $glob->get_UnlockStatus();
+        if ($status != 2) {
+            Log::error('['.Carbon::now().'] Chilkat License expired');
+            return null;
+        }
+
         $user = array(
             'email' => null,
             'name' => null,
