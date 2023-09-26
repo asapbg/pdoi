@@ -71,31 +71,6 @@ class EAuthentication
       <egovbga:LevelOfAssurance>'.$this->levelOfAssurance.'</egovbga:LevelOfAssurance>
     </egovbga:RequestedService>
   </saml2p:Extensions>
-  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
-    <SignedInfo>
-      <CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#WithComments" />
-      <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />
-      <Reference URI="">
-        <Transforms>
-          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
-          <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
-        </Transforms>
-        <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
-        <DigestValue>QKyJvFThgQ+/hixcQF3Mpg3poinWnBi77Ghxl01Nw8E=</DigestValue>
-      </Reference>
-    </SignedInfo>
-    <SignatureValue>RIRGoY8zXfD4gFhgXbgPjgSmDZQKG2CTtmPHcl6ytcnH+DVIGbgqDW07zRlwwgnxxJ33W5x4+okzb5vtQ7b+g+kicUqq5jwcq7b54a1En+vpX31Cacg6wTO1k6WBYMRu8kLpqs+xChFK6k6VZRVT3bidMYHuGY/zfRM4NJDNDZLbgv+3NdHEd7IuKb5RTnDPKIRYdlpElfZVso055gkvrNHBCTMbgQRNoo8j18D5Ced43EOeyU9prr4EtPWY7BrkDsndFppzzw9KNJsGGngZzbXAwj+2vu7C+spDcQNNFlPI/8or7M10QnXG7OlNPHELfc7zIL6B1f+HdHNoujdPTQ==</SignatureValue>
-    <KeyInfo>
-      <X509Data>
-        <X509IssuerSerial>
-          <X509IssuerName> CN=pitay.asapbg.com</X509IssuerName>
-          <X509SerialNumber>562059792614306195654885395502627933748084316530</X509SerialNumber>
-        </X509IssuerSerial>
-        <X509SubjectName> CN=pitay.asapbg.com</X509SubjectName>
-        <X509Certificate>'.trim($this->certificateStr).'</X509Certificate>
-      </X509Data>
-    </KeyInfo>
-  </Signature>
 </saml2p:AuthnRequest>';
         return $this->sign($xml);
     }
