@@ -3,6 +3,12 @@
 namespace App\Library;
 
 use Carbon\Carbon;
+use CkBinData;
+use CkCrypt2;
+use CkPrivateKey;
+use CkRsa;
+use CkStringBuilder;
+use CkXml;
 use Illuminate\Support\Facades\Log;
 
 class EAuthentication
@@ -101,12 +107,8 @@ class EAuthentication
      */
     public function spMetadata(string $callback_source = ''): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-$xml = '<?xml version="1.0"?>
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="'.Carbon::now('UTC')->addDays(1)->format('Y-m-d\TH:i:s.v\Z').'" cacheDuration="PT604800S" entityID="'.route('eauth.sp_metadata').'" ID="pfx539d13c3-90b4-8492-8046-ccde30887ed3"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
-    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-  <ds:Reference URI="#pfx539d13c3-90b4-8492-8046-ccde30887ed3"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>Q2FFOBqK+2BLr7l3MIV2oapNDTE=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>dN+B0r4rX7d9S/RZUDYlOT35RAgw+joYwIiuoHIrK4NzX4cC60xlDFhB0KzYNK2W4/xe0/8OTmNkkXz5Clid83bXiMZLc775f4O0NjhuEO6d1eO2zSkV80Rv/3Ybp7zOyUDQbP3+aQ4ZQylbQUumfMWxC+ecsAAQ5EBCcaE2vy5HEZE5lTHjLuU+nAeDGvFNip60tIXPX3RvIMUY7KX8QWX/pEH+xqSDcBcK1oIfHc0iuYSpDadH9Fp/86JXrGxKqDSB4gxjxEVeUvugLCGPMBzXBuLIbWhpECa8WxhKg08vUBaPBtJXSMQZym3qUCgCDlNpf0WjIOZH8VbLfgPYGA==</ds:SignatureValue>
-<ds:KeyInfo><ds:X509Data><ds:X509Certificate>'.trim($this->certificateStr).'</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature>
+        $xml = '<?xml version="1.0"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="'.Carbon::now('UTC')->addYears(1)->format('Y-m-d\TH:i:s\Z').'" cacheDuration="PT604800S" entityID="'.route('eauth.sp_metadata').'">
   <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:KeyDescriptor use="signing">
       <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
@@ -344,16 +346,10 @@ $xml = '<?xml version="1.0"?>
      */
     private function sign($xmlString): string
     {
-        $signedXml = shell_exec('php '.config('eauth.sign_script').' \''.$xmlString.'\'');
-        if( !is_null($signedXml) ){
-            if( !str_contains($signedXml, '<?xml version="1.0" encoding="UTF-8"?>') ) {
-                logError('eAuth sign xml', $signedXml);
-            } else {
-                $xmlString = $signedXml;
-            }
-        }
-
-        return $xmlString;
+        file_put_contents('/home/web/sign/test.xml', $xmlString);
+        shell_exec('php '.config('eauth.sign_script'));
+        sleep(1);
+        return file_get_contents('/home/web/sign/signTest.xml');
     }
 
     /**
