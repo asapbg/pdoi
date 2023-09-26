@@ -16,13 +16,11 @@ class EAuthentication
     /** @var string $endpoint */
     private string $endpoint;
     private string $certificateStr;
-    private string $privateKeyStr;
 
     public function __construct()
     {
         $this->endpoint = config('eauth.endpoint');
         $this->certificateStr = str_replace(["-----BEGIN CERTIFICATE-----", "-----END CERTIFICATE-----",  "\r", "\r\n", "\n"], '', file_get_contents(config('eauth.certificate_path')));
-        $this->privateKeyStr = str_replace(["-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----",  "\r", "\r\n", "\n"], '', file_get_contents(config('eauth.certificate_private_key')));
     }
 
 
