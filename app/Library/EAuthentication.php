@@ -344,7 +344,7 @@ $xml = '<?xml version="1.0"?>
      */
     private function sign($xmlString): string
     {
-        $signedXml = shell_exec('php '.config('eauth.sign_script').' '.$xmlString);
+        $signedXml = shell_exec('php '.config('eauth.sign_script').' \''.$xmlString.'\'');
         if( !is_null($signedXml) ){
             if( !str_contains($signedXml, '<?xml version="1.0" encoding="UTF-8"?>') ) {
                 logError('eAuth sign xml', $signedXml);
