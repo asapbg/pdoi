@@ -63,7 +63,7 @@ class NotifyUserForAppStatus extends Notification
             case DeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
                 $eDeliveryConfig = config('e_delivery');
                 if( env('APP_ENV') != 'production' ) {
-                    $communicationData['ssev_profile_id'] = env('LOCAL_TO_SSEV_PROFILE_ID');
+                    $communicationData['ssev_profile_id'] = config('e_delivery.local_ssev_profile_id');
                 } else {
                     $communicationData['to_group'] = $notifiable->legal_form == User::USER_TYPE_PERSON ? $eDeliveryConfig['group_ids']['person'] : $eDeliveryConfig['group_ids']['company'];
                     $communicationData['to_identity'] = $notifiable->legal_form == User::USER_TYPE_PERSON ? $notifiable->person_identity : $notifiable->company_identity;

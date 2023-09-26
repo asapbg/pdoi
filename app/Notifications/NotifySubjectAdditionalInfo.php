@@ -64,7 +64,7 @@ class NotifySubjectAdditionalInfo extends Notification
             case PdoiSubjectDeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
                 $eDeliveryConfig = config('e_delivery');
                 if( env('APP_ENV') != 'production' ) {
-                    $communicationData['ssev_profile_id'] = env('LOCAL_TO_SSEV_PROFILE_ID');
+                    $communicationData['ssev_profile_id'] = config('e_delivery.local_ssev_profile_id');
                 } else {
                     $communicationData['to_group'] = $eDeliveryConfig['group_ids']['egov'];
                     $communicationData['to_identity'] = $notifiable->eik;
@@ -72,8 +72,8 @@ class NotifySubjectAdditionalInfo extends Notification
                 }
                 break;
             case PdoiSubjectDeliveryMethodsEnum::SEOS->value: //деловодна система
-                $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', env('SEOS_PLATFORM_EIK',null))->first();
-                $receiver = env('APP_ENV') != 'production' ? EgovOrganisation::find((int)env('LOCAL_TO_EGOV_ORGANISATION_ID')) : $this->application->responseSubject->egovOrganisation;
+                $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', config('seos.eik'))->first();
+                $receiver = env('APP_ENV') != 'production' ? EgovOrganisation::find((int)config('seos.local_egov_org_id')) : $this->application->responseSubject->egovOrganisation;
                 $sender = $receiver;
                 $service = $receiver?->services()->first();
                 if( $sender && $receiver && $service) {
@@ -156,7 +156,7 @@ class NotifySubjectAdditionalInfo extends Notification
 
         $privateKeyStore = new PrivateKeyStore();
         // load a private key from a string
-        $privateKeyStore->loadFromPem(file_get_contents(env('SEOS_SERVER_CERT_KEY_PATH')), file_get_contents(env('SEOS_SERVER_CERT_PATH')));
+        $privateKeyStore->loadFromPem(file_get_contents(config('seos.certificate_key_path')), file_get_contents(config('seos.certificate_path')));
         //Define the digest method: sha1, sha224, sha256, sha384, sha512
         $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
         //Create a CryptoSigner instance:

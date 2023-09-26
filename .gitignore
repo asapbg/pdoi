@@ -18,3 +18,4 @@ result.txt
 app/Http/Controllers/Test.php
 /public/files/pages/
 /ssl
+app/Library/EAuthenticationWork.php

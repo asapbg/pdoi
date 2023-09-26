@@ -11,7 +11,7 @@
     </p>
 </noscript>
 
-<form action="{{ env('E_AUTH_ENDPOINT_URL') }}" method="post">
+<form action="{{ config('eauth.endpoint') }}" method="post">
     <div>
         <input type="hidden" name="SAMLRequest" value="{{ isset($params) && sizeof($params) && isset($params['SAMLRequest']) ? $params['SAMLRequest']: '' }}"/>
     </div>

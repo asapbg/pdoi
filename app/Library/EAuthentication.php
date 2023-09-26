@@ -15,16 +15,14 @@ class EAuthentication
 
     /** @var string $endpoint */
     private string $endpoint;
-    private string $sp_domain;
-
-    /** @var string $xml */
-    private string $xml;
-
+    private string $certificateStr;
+    private string $privateKeyStr;
 
     public function __construct()
     {
-        $this->endpoint = env('E_AUTH_ENDPOINT_URL', '');
-        $this->sp_domain = env('E_AUTH_SP_DOMAIN', '');
+        $this->endpoint = config('eauth.endpoint');
+        $this->certificateStr = str_replace(["-----BEGIN CERTIFICATE-----", "-----END CERTIFICATE-----",  "\r", "\r\n", "\n"], '', file_get_contents(config('eauth.certificate_path')));
+        $this->privateKeyStr = str_replace(["-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----",  "\r", "\r\n", "\n"], '', file_get_contents(config('eauth.certificate_private_key')));
     }
 
 
@@ -36,9 +34,9 @@ class EAuthentication
      */
     public function spLoginPage(string $source = '', array $requestParams = [])
     {
-        $this->generateXml($source);
+        $xml = $this->generateXml($source);
         $params = array(
-            'SAMLRequest' => base64_encode($this->xml)
+            'SAMLRequest' => base64_encode($xml)
         );
         //add additional parameters to form
         if( sizeof($requestParams) ) {
@@ -51,35 +49,51 @@ class EAuthentication
 
 
     /**
-    * @return void
-    */
-    private function generateXml($source)
+     * @param $source
+     * @return string
+     */
+    private function generateXml($source):string
     {
         //2023-11-20T11:27:51.265Z
-        //<saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">'.route('eauth.sp_metadata').'</saml2:Issuer>
         $callbackUrl = route('eauth.login.callback').(!empty($source) ? '/'.$source : '');
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
-        <saml2p:AuthnRequest
-           AssertionConsumerServiceURL="'.$callbackUrl.'"
-            Destination="'.$this->endpoint.'"
-            ForceAuthn="true" ID="ARQ1a1dd6a-3592-47ab-ae25-5c32dfd91720"
-            IsPassive="false" IssueInstant="'.Carbon::now('UTC')->format('Y-m-d\TH:i:s.v\Z').'"
-            ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-            Version="2.0" xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol">
-            <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">'.route('eauth.sp_metadata').(!empty($source) ? '/'.$source : '').'</saml2:Issuer>
-            '.$this->signature().'
-            <saml2p:Extensions>
-                <egovbga:RequestedService xmlns:egovbga="urn:bg:egov:eauth:2.0:saml:ext">
-                    <egovbga:Service>'.env('E_AUTH_SERVICE_OID', '').'</egovbga:Service>
-                    <egovbga:Provider>'.env('E_AUTH_PROVIDER_OID', '').'</egovbga:Provider>
-                    <egovbga:LevelOfAssurance>'.$this->levelOfAssurance.'</egovbga:LevelOfAssurance>
-                </egovbga:RequestedService>
-            </saml2p:Extensions>
-        </saml2p:AuthnRequest>';
-
-        //$this->xml = $this->sign($xml);
-        $this->xml = $xml;
+<saml2p:AuthnRequest xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol" AssertionConsumerServiceURL="'.$callbackUrl.'" Destination="'.$this->endpoint.'" ForceAuthn="true" ID="ARQ1a1dd6a-3592-47ab-ae25-5c32dfd91720" IsPassive="false" IssueInstant="'.Carbon::now('UTC')->format('Y-m-d\TH:i:s.v\Z').'" ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Version="2.0">
+  <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">'.route('eauth.sp_metadata').'</saml2:Issuer>
+  <saml2p:Extensions>
+    <egovbga:RequestedService xmlns:egovbga="urn:bg:egov:eauth:2.0:saml:ext">
+      <egovbga:Service>'.config('eauth.service_oid').'</egovbga:Service>
+      <egovbga:Provider>'.config('eauth.provider_oid').'</egovbga:Provider>
+      <egovbga:LevelOfAssurance>'.$this->levelOfAssurance.'</egovbga:LevelOfAssurance>
+    </egovbga:RequestedService>
+  </saml2p:Extensions>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#WithComments" />
+      <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />
+      <Reference URI="">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+          <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
+        <DigestValue>QKyJvFThgQ+/hixcQF3Mpg3poinWnBi77Ghxl01Nw8E=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>RIRGoY8zXfD4gFhgXbgPjgSmDZQKG2CTtmPHcl6ytcnH+DVIGbgqDW07zRlwwgnxxJ33W5x4+okzb5vtQ7b+g+kicUqq5jwcq7b54a1En+vpX31Cacg6wTO1k6WBYMRu8kLpqs+xChFK6k6VZRVT3bidMYHuGY/zfRM4NJDNDZLbgv+3NdHEd7IuKb5RTnDPKIRYdlpElfZVso055gkvrNHBCTMbgQRNoo8j18D5Ced43EOeyU9prr4EtPWY7BrkDsndFppzzw9KNJsGGngZzbXAwj+2vu7C+spDcQNNFlPI/8or7M10QnXG7OlNPHELfc7zIL6B1f+HdHNoujdPTQ==</SignatureValue>
+    <KeyInfo>
+      <X509Data>
+        <X509IssuerSerial>
+          <X509IssuerName> CN=pitay.asapbg.com</X509IssuerName>
+          <X509SerialNumber>562059792614306195654885395502627933748084316530</X509SerialNumber>
+        </X509IssuerSerial>
+        <X509SubjectName> CN=pitay.asapbg.com</X509SubjectName>
+        <X509Certificate>'.trim($this->certificateStr).'</X509Certificate>
+      </X509Data>
+    </KeyInfo>
+  </Signature>
+</saml2p:AuthnRequest>';
+        return $this->sign($xml);
     }
 
     /**
@@ -89,38 +103,32 @@ class EAuthentication
      */
     public function spMetadata(string $callback_source = ''): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        $certificateStr = str_replace(['-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----'], '', file_get_contents(env('EAUTH_CERT_PATH')));
-        $xml = '<EntityDescriptor entityID="'.$this->sp_domain.'" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-                    <SPSSODescriptor WantAssertionsSigned="true" AuthnRequestsSigned="true"
-                        protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-                        <md:KeyDescriptor use="signing">
-                            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-                                <ds:X509Data>
-                                <ds:X509Certificate>'.trim($certificateStr).'</ds:X509Certificate>
-                                </ds:X509Data>
-                            </ds:KeyInfo>
-                        </md:KeyDescriptor>
-                        <md:KeyDescriptor use="encryption">
-                            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-                                <ds:X509Data>
-                                    <ds:X509Certificate>'.trim($certificateStr).'</ds:X509Certificate>
-                                </ds:X509Data>
-                            </ds:KeyInfo>
-                        </md:KeyDescriptor>
-                        <AssertionConsumerService
-                            Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                            Location="'.route('eauth.login.callback').(!empty($callback_source) ? '/'.$callback_source : '').'" index="1"/>
-                            <AttributeConsumingService index="0" isDefault="true">
-                                <ServiceName xml:lang="en">SP</ServiceName>
-                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:personIdentifier" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="true"/>
-                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:personName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="true"/>
-                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="true"/>
-                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:phone" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="false"/>
-                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:dateOfBirth" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" isRequired="false"/>
-                                <RequestedAttribute Name="urn:egov:bg:eauth:2.0:attributes:canonicalResidenceAddress" NameFormat="urn:oasis:names:tc:saml2:2.0:attrname-format:uri" isRequired="false"/>
-                            </AttributeConsumingService>
-                    </SPSSODescriptor>
-                </EntityDescriptor>';
+$xml = '<?xml version="1.0"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="'.Carbon::now('UTC')->addDays(1)->format('Y-m-d\TH:i:s.v\Z').'" cacheDuration="PT604800S" entityID="'.route('eauth.sp_metadata').'" ID="pfx539d13c3-90b4-8492-8046-ccde30887ed3"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI="#pfx539d13c3-90b4-8492-8046-ccde30887ed3"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>Q2FFOBqK+2BLr7l3MIV2oapNDTE=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>dN+B0r4rX7d9S/RZUDYlOT35RAgw+joYwIiuoHIrK4NzX4cC60xlDFhB0KzYNK2W4/xe0/8OTmNkkXz5Clid83bXiMZLc775f4O0NjhuEO6d1eO2zSkV80Rv/3Ybp7zOyUDQbP3+aQ4ZQylbQUumfMWxC+ecsAAQ5EBCcaE2vy5HEZE5lTHjLuU+nAeDGvFNip60tIXPX3RvIMUY7KX8QWX/pEH+xqSDcBcK1oIfHc0iuYSpDadH9Fp/86JXrGxKqDSB4gxjxEVeUvugLCGPMBzXBuLIbWhpECa8WxhKg08vUBaPBtJXSMQZym3qUCgCDlNpf0WjIOZH8VbLfgPYGA==</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>'.trim($this->certificateStr).'</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature>
+  <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:X509Data>
+          <ds:X509Certificate>'.trim($this->certificateStr).'</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:KeyDescriptor use="encryption">
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:X509Data>
+          <ds:X509Certificate>'.trim($this->certificateStr).'</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="'.$this->endpoint.'" index="1"/>
+  </md:SPSSODescriptor>
+</md:EntityDescriptor>
+';
         return response($xml, 200, [
             'Content-Type' => 'application/xml'
         ]);
@@ -133,6 +141,7 @@ class EAuthentication
      */
     public function userData($samlResponse)
     {
+        include(config('eauth.chilkat_library'));
         $user = array(
             'email' => null,
             'name' => null,
@@ -142,12 +151,105 @@ class EAuthentication
             'identity_number' => null,
         );
 
-        $message = $samlResponse ? base64_decode($samlResponse) : '';
-        if(empty($message)) {
+        $message = $samlResponse ? base64_decode($samlResponse, true) : '';
+        if($message && empty($message)) {
             return redirect(route('home'))->with('danger', __('custom.system_error'));
         }
 
-        $response = preg_replace("/(<\/?)(\w+):([^>]*>)/", "$1$2$3", $message);
+        $xml = new CkXml();
+        $xml->LoadXml2($message,true);
+
+        //  Load the RSA private key..
+        $privkey = new CkPrivateKey();
+        $success = $privkey->LoadPem(file_get_contents('/home/web/ssl/eauth/selfsigned.key'));
+
+        if (!$success) {
+            Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$privkey->lastErrorText().PHP_EOL.'Response: '.$message);
+            return null;
+        }
+
+        //  Prepare an RSA object w/ the private key...
+        $rsa = new CkRsa();
+        $success = $rsa->ImportPrivateKeyObj($privkey);
+        if (!$success) {
+            Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$rsa->lastErrorText().PHP_EOL.'Response: '.$message);
+            return null;
+        }
+
+        //  RSA will be used to decrypt the xenc:EncryptedKey
+        //  The bytes to be decrypted are in xenc:CipherValue (in base64 format)
+        $encryptedAesKey = $xml->getChildContent('saml2:EncryptedAssertion|xenc:EncryptedData|ds:KeyInfo|xenc:EncryptedKey|xenc:CipherData|xenc:CipherValue');
+        if ( !$xml->get_LastMethodSuccess() ) {
+            Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: Encrypted AES key not found.'.PHP_EOL.'Response: '.$message);
+            return null;
+        }
+
+        $bdAesKey = new CkBinData();
+        $bdAesKey->AppendEncoded($encryptedAesKey,'base64');
+
+        $sbRsaAlg = new CkStringBuilder();
+        $sbRsaAlg->Append($xml->chilkatPath('saml2:EncryptedAssertion|xenc:EncryptedData|ds:KeyInfo|xenc:EncryptedKey|xenc:EncryptionMethod|(Algorithm)'));
+        //print 'sbRsaAlg contains: ' . $sbRsaAlg->getAsString() . "\n";
+        if ($sbRsaAlg->Contains('rsa-oaep',true) == true) {
+            $rsa->put_OaepPadding(true);
+        }
+
+        //  Note: The DecryptBd method is introduced in Chilkat v9.5.0.76
+        $success = $rsa->DecryptBd($bdAesKey,true);
+        if ( !$success ) {
+            Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$rsa->lastErrorText().PHP_EOL.'Response: '.$message);
+            return null;
+        }
+
+        //  Get the encrypted XML (in base64) to be decrypted w/ the AES key.
+        $encrypted64 = $xml->getChildContent('saml2:EncryptedAssertion|xenc:EncryptedData|xenc:CipherData|xenc:CipherValue');
+        if ( !$xml->get_LastMethodSuccess() ) {
+            Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: Encrypted data not found.'.PHP_EOL.'Response: '.$message);
+            return null;
+        }
+
+        $bdEncrypted = new CkBinData();
+        $bdEncrypted->AppendEncoded($encrypted64,'base64');
+
+        //  Get the symmetric algorithm:  "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+        //  and set the symmetric decrypt properties.
+        $crypt = new CkCrypt2();
+        $sbAlg = new CkStringBuilder();
+        $sbAlg->Append($xml->chilkatPath('saml2:EncryptedAssertion|xenc:EncryptedData|xenc:EncryptionMethod|(Algorithm)'));
+        if ( !$sbAlg->Contains('aes128-cbc',true) ) {
+            $crypt->put_CryptAlgorithm('aes');
+            $crypt->put_KeyLength(128);
+            $crypt->put_CipherMode('cbc');
+            //  The 1st 16 bytes of the encrypted data are the AES IV.
+            $crypt->SetEncodedIV($bdEncrypted->getEncodedChunk(0,16,'hex'),'hex');
+            $bdEncrypted->RemoveChunk(0,16);
+        }
+
+        //  Other algorithms, key lengths, etc, can be supported by checking for different Algorithm attribute values..
+        $crypt->SetEncodedKey($bdAesKey->getEncoded('hex'),'hex');
+
+        //  AES decrypt...
+        $success = $crypt->DecryptBd($bdEncrypted);
+        if ( !$success ) {
+            Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$crypt->lastErrorText().PHP_EOL.'Response: '.$message);
+            return null;
+        }
+
+        //  Get the decrypted XML
+        $decryptedXml = $bdEncrypted->getString('utf-8');
+
+        $xmlAssertion = new CkXml();
+        $xmlAssertion->LoadXml($decryptedXml);
+
+        //  Replace the saml2:EncryptedAssertion XML subtree with the saml2:Assertion XML.
+        // xmlEncryptedAssertion is a CkXml
+        $xmlEncryptedAssertion = $xml->FindChild('saml2:EncryptedAssertion');
+        $xmlEncryptedAssertion->SwapTree($xmlAssertion);
+
+        //  The decrypted XML assertion has now replaced the encrypted XML assertion.
+        //  Examine the fully decrypted XML document:
+
+        $response = preg_replace("/(<\/?)(\w+):([^>]*>)/", "$1$2$3", $xml->getXml());
         $xml = simplexml_load_string($response);
         $json = json_encode($xml);
         $fullMsg = json_decode($json, true);
@@ -241,35 +343,19 @@ class EAuthentication
     /**
      * Sign xml
      * @param $xmlString
-     * @return string
      */
-    private function signature(): string
+    private function sign($xmlString): string
     {
-        $refURI = '#ARQ676c11c-b1d2-49ea-9baf-40e3c7bc7e61';
-        //Certificate
-        $certificateStr = str_replace(['-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----'], '', file_get_contents(env('EAUTH_CERT_PATH')));
-        //Signature
-        $pk = file_get_contents(env('EAUTH_CERT_PRIVATE_KEY_PATH'));
-        // compute signature
-        openssl_sign($refURI, $signature, $pk, 'sha256WithRSAEncryption');
+        $signedXml = shell_exec('php '.config('eauth.sign_script').' '.$xmlString);
+        if( !is_null($signedXml) ){
+            if( !str_contains($signedXml, '<?xml version="1.0" encoding="UTF-8"?>') ) {
+                logError('eAuth sign xml', $signedXml);
+            } else {
+                $xmlString = $signedXml;
+            }
+        }
 
-        $signature =
-'<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-    <ds:SignedInfo>
-        <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
-        <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />
-        <ds:Reference URI="'.$refURI.'">
-            <ds:Transforms>
-                <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
-                <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
-            </ds:Transforms>
-            <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
-            <ds:DigestValue>'.base64_encode(hash('sha256', $refURI)).'</ds:DigestValue>
-        </ds:Reference>
-    </ds:SignedInfo>
-    <ds:SignatureValue>'.base64_encode($signature).'</ds:SignatureValue>
-</ds:Signature>';
-        return $signature;
+        return $xmlString;
     }
 
     /**

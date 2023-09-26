@@ -16,8 +16,8 @@ class FileOcr
     public function __construct(File $file)
     {
         $this->file = $file;
-        $this->pdf_to_text_env_path = env('PDF_TO_TEXT_ENV_PATH') ?? '/usr/bin/pdftotext';
-        $this->doc_to_text_env_path = env('DOC_TO_TEXT_ENV_PATH') ?? '/usr/sbin/antiword';
+        $this->pdf_to_text_env_path = config('file_to_text.pdf_env_path') ?? '/usr/bin/pdftotext';
+        $this->doc_to_text_env_path = config('file_to_text.doc_env_path') ?? '/usr/sbin/antiword';
     }
 
     public function extractText(): bool
