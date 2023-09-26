@@ -204,6 +204,7 @@ class EAuthentication
         //  Get the symmetric algorithm:  "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
         //  and set the symmetric decrypt properties.
         $crypt = new CkCrypt2();
+        $crypt->put_Charset('windows-1252');
         $sbAlg = new CkStringBuilder();
         $sbAlg->Append($xml->chilkatPath('saml2:EncryptedAssertion|xenc:EncryptedData|xenc:EncryptionMethod|(Algorithm)'));
         if ( !$sbAlg->Contains('aes128-cbc',true) ) {
@@ -240,7 +241,7 @@ class EAuthentication
         //  Examine the fully decrypted XML document:
 
         $response = preg_replace("/(<\/?)(\w+):([^>]*>)/", "$1$2$3", $xml->getXml());
-        $xml = simplexml_load_string($response);
+        $xml = simplexml_load_string(utf8_encode($response));
         $json = json_encode($xml);
         $fullMsg = json_decode($json, true);
 //        return $fullMsg;
