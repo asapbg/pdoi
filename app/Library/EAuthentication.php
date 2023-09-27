@@ -151,7 +151,7 @@ class EAuthentication
 
         //  Load the RSA private key..
         $privkey = new CkPrivateKey();
-        $success = $privkey->LoadPem(file_get_contents('/home/web/ssl/eauth/selfsigned.key'));
+        $success = $privkey->LoadPem(file_get_contents(config('eauth.certificate_private_key')));
 
         if (!$success) {
             Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$privkey->lastErrorText().PHP_EOL.'Response: '.$message);
@@ -306,8 +306,9 @@ class EAuthentication
                 if( isset($attribute['@attributes']) && isset($attribute['@attributes']['Name']) && isset($attribute['saml2AttributeValue']) ) {
                     switch ($attribute['@attributes']['Name']) {
                         case 'urn:egov:bg:eauth:2.0:attributes:personName':
-                            $user['name'] = $attribute['saml2AttributeValue'];
-                            break;
+                            if( $attribute['saml2AttributeValue'] != 'Потребител идентифициран с ПИК на НАП' ) { //ПИК login not returning name
+                                $user['name'] = $attribute['saml2AttributeValue'];
+                            }
                         case 'urn:egov:bg:eauth:2.0:attributes:email':
                             $user['email'] = $attribute['saml2AttributeValue'];
                             break;
