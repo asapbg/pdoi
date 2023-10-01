@@ -2,10 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Enums\DeliveryMethodsEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Models\Egov\EgovMessage;
 use App\Models\Egov\EgovOrganisation;
 use App\Models\PdoiApplication;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -57,7 +59,7 @@ class NotifySubjectAdditionalInfo extends Notification
             'subject' => __('mail.subject.register_new_application'),
             'application_id' => $this->application->id,
             'files' => [],
-            'type_channel' => $notifiable->delivery_method
+            'type_channel' => $notifiable->delivery_method != PdoiSubjectDeliveryMethodsEnum::SEOS->value ? $notifiable->delivery_method : PdoiSubjectDeliveryMethodsEnum::EMAIL->value
         ];
         switch ($notifiable->delivery_method)
         {
@@ -101,69 +103,9 @@ class NotifySubjectAdditionalInfo extends Notification
                 $communicationData['from_name'] = config('mail.from.name');
                 $communicationData['from_email'] = config('mail.from.address');
                 $communicationData['to_name'] = $notifiable->names;
-                $communicationData['to_email'] = $notifiable->email;
+                $communicationData['to_email'] = $this->application->responseSubject->email;
                 $communicationData['files']= [];
         }
         return $communicationData;
-    }
-
-    private function generateSeosXml($sender, $receiver, $messageContent, $application, $egovMessage): string
-    {
-        $xml = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mes="http://services.egov.bg/messaging">
-            <soapenv:Header>
-                <Version>'.$egovMessage->msg_version.'</Version>
-                <MessageType>'.$egovMessage->msg_type.'</MessageType>
-                <MessageDate>'.$egovMessage->created_at.'</MessageDate>
-                <Sender>
-                    <Identifier>'.$sender->eik.'</Identifier>
-                    <AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName>
-                    <GUID>'.$sender->guid.'</GUID>
-                </Sender>
-                <Recipient>
-                    <Identifier>'.$receiver->eik.'</Identifier>
-                    <AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName>
-                    <GUID>'.$receiver->guid.'</GUID>
-                </Recipient>
-                <MessageGUID>'.$egovMessage->msg_guid.'</MessageGUID>
-            </soapenv:Header>
-            <soapenv:Body>
-              <DocumentRegistrationRequestType>
-                  <DocumentType>
-                    <DocID>
-                        <DocumentGUID>'.$application->doc_guid.'</DocumentGUID>
-                    </DocID>
-                    <DocKind>Предоставяне на допълнителна информация</DocKind>';
-        //add files
-        if($application->files) {
-            foreach ($application->files as $f) {
-                $xml .= '<DocAttachmentList>
-                        <Attachment>
-                            <AttFileName>'.$f->filename.'</AttFileName>
-                            <AttBody>'.base64_encode(Storage::disk('local')->get($f->path)).'</AttBody>
-                            <AttComment>'.$f->description.'</AttComment>
-                            <AttMIMEType>'.$f->content_type.'</AttMIMEType>
-                        </Attachment>
-                    </DocAttachmentList>
-                ';
-            }
-        }
-                $xml .='</DocumentType>
-                <Comment>'.$messageContent.'</Comment>
-              </DocumentRegistrationRequestType>
-            </soapenv:Body>
-            </soapenv:Envelope>
-        ';
-
-        $privateKeyStore = new PrivateKeyStore();
-        // load a private key from a string
-        $privateKeyStore->loadFromPem(file_get_contents(config('seos.certificate_key_path')), file_get_contents(config('seos.certificate_path')));
-        //Define the digest method: sha1, sha224, sha256, sha384, sha512
-        $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
-        //Create a CryptoSigner instance:
-        $cryptoSigner = new CryptoSigner($privateKeyStore, $algorithm);
-        // Create a XmlSigner and pass the crypto signer
-        $xmlSigner = new XmlSigner($cryptoSigner);
-        // Create a signed XML string
-        return $xmlSigner->signXml($xml);
     }
 }

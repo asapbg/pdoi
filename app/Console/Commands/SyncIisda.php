@@ -157,7 +157,7 @@ class SyncIisda extends Command
                                     if( $localSubject->adm_level != $newLevel
                                         || $localSubject->active != $newStatus ) {
                                         if( env('APP_ENV') != 'production' ) {
-                                            $emailList =[env('LOCAL_TO_MAIL')];
+                                            $emailList =[config('mail.local_to_mail')];
                                         } else {
                                             $emailList = $localSubject->getAlertUsersEmail();
                                         }

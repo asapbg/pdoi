@@ -116,4 +116,6 @@ return [
         ],
     ],
 
+    'local_to_mail' => env('LOCAL_TO_MAIL', 'test')
+
 ];

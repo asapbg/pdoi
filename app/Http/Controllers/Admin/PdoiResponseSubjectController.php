@@ -141,7 +141,7 @@ class PdoiResponseSubjectController extends AdminController
             if( $id ){
                 if( ($fillable['adm_level'] != $item->adm_level) || ($fillable['parent_id'] != $item->parent_id) ) {
                     if( env('APP_ENV') != 'production' ) {
-                        $emailList =[env('LOCAL_TO_MAIL')];
+                        $emailList =[config('mail.local_to_mail')];
                     } else {
                         $emailList = $item->getAlertUsersEmail();
                     }

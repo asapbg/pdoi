@@ -6,6 +6,7 @@ use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Models\Egov\EgovMessage;
 use App\Models\Egov\EgovOrganisation;
 use App\Models\PdoiApplication;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -107,7 +108,6 @@ class NotifySubjectNewApplication extends Notification
                     ]);
                     $egovMessage->save();
                     if( $egovMessage->id ) {
-                        //dd($this->generateSeosXml($sender, $receiver, $messageContent, $this->application, $egovMessage));
                         $egovMessage->msg_xml = $this->generateSeosXml($sender, $receiver, $messageContent, $this->application, $egovMessage);
                         $egovMessage->save();
                     }
@@ -127,61 +127,17 @@ class NotifySubjectNewApplication extends Notification
 
     private function generateSeosXml($sender, $receiver, $messageContent, $application, $egovMessage): string
     {
-        $xml = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mes="http://services.egov.bg/messaging">
-            <soapenv:Header>
-                <Version>'.$egovMessage->msg_version.'</Version>
-                <MessageType>'.$egovMessage->msg_type.'</MessageType>
-                <MessageDate>'.$egovMessage->created_at.'</MessageDate>
-                <Sender>
-                    <Identifier>'.$sender->eik.'</Identifier>
-                    <AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName>
-                    <GUID>'.$sender->guid.'</GUID>
-                </Sender>
-                <Recipient>
-                    <Identifier>'.$receiver->eik.'</Identifier>
-                    <AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName>
-                    <GUID>'.$receiver->guid.'</GUID>
-                </Recipient>
-                <MessageGUID>'.$egovMessage->msg_guid.'</MessageGUID>
-            </soapenv:Header>
-            <soapenv:Body>
-              <DocumentRegistrationRequestType>
-                  <DocumentType>
-                    <DocID>
-                        <DocumentGUID>'.$application->doc_guid.'</DocumentGUID>
-                    </DocID>
-                    <DocKind>Заявление за достъп до обществена информация</DocKind>';
         //add files
+        $docList = '';
         if($application->files) {
             foreach ($application->files as $f) {
-                $xml .= '<DocAttachmentList>
-                        <Attachment>
-                            <AttFileName>'.$f->filename.'</AttFileName>
-                            <AttBody>'.base64_encode(Storage::disk('local')->get($f->path)).'</AttBody>
-                            <AttComment>'.$f->description.'</AttComment>
-                            <AttMIMEType>'.$f->content_type.'</AttMIMEType>
-                        </Attachment>
-                    </DocAttachmentList>
-                ';
+                $docList .= '<DocAttachmentList><Attachment><AttFileName>'.$f->filename.'</AttFileName><AttBody>'.base64_encode(Storage::disk('local')->get($f->path)).'</AttBody><AttComment>'.$f->description.'</AttComment><AttMIMEType>text/unknown</AttMIMEType></Attachment></DocAttachmentList>';
             }
         }
-                $xml .='</DocumentType>
-                <Comment>'.$messageContent.'</Comment>
-              </DocumentRegistrationRequestType>
-            </soapenv:Body>
-            </soapenv:Envelope>
-        ';
 
-        $privateKeyStore = new PrivateKeyStore();
-        // load a private key from a string
-        $privateKeyStore->loadFromPem(file_get_contents(config('seos.certificate_key_path')), file_get_contents(config('seos.certificate_path')));
-        //Define the digest method: sha1, sha224, sha256, sha384, sha512
-        $algorithm = new Algorithm(Algorithm::METHOD_SHA1);
-        //Create a CryptoSigner instance:
-        $cryptoSigner = new CryptoSigner($privateKeyStore, $algorithm);
-        // Create a XmlSigner and pass the crypto signer
-        $xmlSigner = new XmlSigner($cryptoSigner);
-        // Create a signed XML string
-        return $xmlSigner->signXml($xml);
+        //MessageDate = 2023-03-29T17:14:48.177+03:00
+        $xml = '<Message xmlns="http://schemas.egov.bg/messaging/v1" xmlns:ns2="http://ereg.egov.bg/segment/0009-000001" xmlns:ns3="http://www.w3.org/2000/09/xmldsig#"><Header><Version>'.$egovMessage->msg_version.'</Version><MessageType>'.$egovMessage->msg_type.'</MessageType><MessageDate>'.$egovMessage->created_at.'</MessageDate><Sender><Identifier>'.$sender->eik.'</Identifier><AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName><GUID>'.$sender->guid.'</GUID></Sender><Recipient><Identifier>'.$receiver->eik.'</Identifier><AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName><GUID>'.$receiver->guid.'</GUID></Recipient><MessageGUID>'.$egovMessage->msg_guid.'</MessageGUID></Header><Body><DocumentRegistrationRequest><Document><DocID><DocumentNumber><DocNumber>'.$application->application_uri.'</DocNumber><DocDate>'.Carbon::parse($application->created_at, 'UTC')->format('Y-m-d').'</DocDate></DocumentNumber><DocumentGUID>'.$application->doc_guid.'</DocumentGUID></DocID><DocKind>Заявление за достъп до обществена информация</DocKind>'.$docList.'<DocAbout>'.$application->application_uri.' Заявление за достъп до обществена информация</DocAbout><DocComment>'.$application->application_uri.' Заявление за достъп до обществена информация</DocComment></Document><Comment>'.$messageContent.'</Comment></DocumentRegistrationRequest></Body></Message>';
+
+        return $xml;
     }
 }

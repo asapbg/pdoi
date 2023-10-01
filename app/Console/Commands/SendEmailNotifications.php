@@ -61,7 +61,7 @@ class SendEmailNotifications extends Command
                 try {
                     Mail::send([], [], function ($message) use ($messageData){
                         $message->from($messageData['from_email'])
-                            ->to(env('APP_ENV') != 'production' ? env('LOCAL_TO_MAIL') : $messageData['to_email'])
+                            ->to(env('APP_ENV') != 'production' ? config('mail.local_to_mail') : $messageData['to_email'])
                             ->subject($messageData['subject'])
                             ->html($messageData['message'])
                             ->text($messageData['message']);
