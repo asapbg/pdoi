@@ -7,14 +7,12 @@ use App\Models\Egov\EgovMessage;
 use App\Models\Egov\EgovOrganisation;
 use App\Models\PdoiApplication;
 use Carbon\Carbon;
+use DOMDocument;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Selective\XmlDSig\PrivateKeyStore;
-use Selective\XmlDSig\Algorithm;
-use Selective\XmlDSig\CryptoSigner;
-use Selective\XmlDSig\XmlSigner;
+use Sign;
 
 class NotifySubjectNewApplication extends Notification
 {
@@ -137,7 +135,18 @@ class NotifySubjectNewApplication extends Notification
 
         //MessageDate = 2023-03-29T17:14:48.177+03:00
         $xml = '<Message xmlns="http://schemas.egov.bg/messaging/v1" xmlns:ns2="http://ereg.egov.bg/segment/0009-000001" xmlns:ns3="http://www.w3.org/2000/09/xmldsig#"><Header><Version>'.$egovMessage->msg_version.'</Version><MessageType>'.$egovMessage->msg_type.'</MessageType><MessageDate>'.$egovMessage->created_at.'</MessageDate><Sender><Identifier>'.$sender->eik.'</Identifier><AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName><GUID>'.$sender->guid.'</GUID></Sender><Recipient><Identifier>'.$receiver->eik.'</Identifier><AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName><GUID>'.$receiver->guid.'</GUID></Recipient><MessageGUID>'.$egovMessage->msg_guid.'</MessageGUID></Header><Body><DocumentRegistrationRequest><Document><DocID><DocumentNumber><DocNumber>'.$application->application_uri.'</DocNumber><DocDate>'.Carbon::parse($application->created_at, 'UTC')->format('Y-m-d').'</DocDate></DocumentNumber><DocumentGUID>'.$application->doc_guid.'</DocumentGUID></DocID><DocKind>Заявление за достъп до обществена информация</DocKind>'.$docList.'<DocAbout>'.$application->application_uri.' Заявление за достъп до обществена информация</DocAbout><DocComment>'.$application->application_uri.' Заявление за достъп до обществена информация</DocComment></Document><Comment>'.$messageContent.'</Comment></DocumentRegistrationRequest></Body></Message>';
+        return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><Submit xmlns="http://services.egov.bg/messaging/"><request>'.($this->sign($xml)).'</request></Submit></s:Body></s:Envelope>';
+    }
 
-        return $xml;
+    /**
+     * Sign xml
+     * @param $xmlString
+     */
+    public static function sign($xmlString)
+    {
+        file_put_contents('/home/web/sign/test.xml', $xmlString);
+        shell_exec('php '.config('eauth.sign_script'));
+        sleep(1);
+        return file_get_contents('/home/web/sign/signTest.xml');
     }
 }
