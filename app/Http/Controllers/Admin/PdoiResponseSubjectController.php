@@ -138,7 +138,7 @@ class PdoiResponseSubjectController extends AdminController
             $fillable['redirect_only'] = $fillable['redirect_only'] ?? 0;
 
             //Check if need to alert admins and moderators about subject changes
-            if( $id ){
+            if( $id && isset($validated['full_edit']) && $validated['full_edit']){
                 if( ($fillable['adm_level'] != $item->adm_level) || ($fillable['parent_id'] != $item->parent_id) ) {
                     if( env('APP_ENV') != 'production' ) {
                         $emailList =[config('mail.local_to_mail')];
@@ -223,6 +223,13 @@ class PdoiResponseSubjectController extends AdminController
                 'placeholder' => __('validation.attributes.eik'),
                 'value' => $request->input('eik'),
                 'col' => 'col-md-3'
+            ),
+            'deliveryMethod' => array(
+                'type' => 'select',
+                'options' => optionsPdoiDeliveryMethods(true, '', trans_choice('custom.delivery_methods', 1)),
+                'default' => '',
+                'value' => request()->input('deliveryMethod'),
+                'col' => 'col-md-4'
             ),
             'manual' => array(
                 'type' => 'checkbox',

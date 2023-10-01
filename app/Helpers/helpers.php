@@ -399,119 +399,145 @@ if (!function_exists('optionsApplicationStatus')) {
      * @param string|int $anyName
      * @return array
      */
-    function optionsApplicationStatus(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
+    function optionsApplicationStatus(bool $any = false, string|int $anyValue = '', string|int $anyName = ''): array
+    {
+        $options = [];
+        if ($any) {
+            $options[] = ['value' => $anyValue, 'name' => $anyName];
+        }
+        foreach (\App\Enums\PdoiApplicationStatusesEnum::options() as $key => $value) {
+            $options[] = ['value' => $value, 'name' => __('custom.application.status.' . $key)];
+        }
+        return $options;
+    }
+}
+
+if (!function_exists('optionsPdoiDeliveryMethods')) {
+
+    /**
+     * return pdoi response subject's delivery methods
+     *
+     * @method optionsPdoiDeliveryMethods
+     *
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function optionsPdoiDeliveryMethods(bool $any = false, string|int $anyValue = '', string|int $anyName = ''): array
+    {
+        $options = [];
+        if ($any) {
+            $options[] = ['value' => $anyValue, 'name' => $anyName];
+        }
+        foreach (\App\Enums\PdoiSubjectDeliveryMethodsEnum::options() as $key => $value) {
+            $options[] = ['value' => $value, 'name' => __('custom.rzs.delivery_by.' . $key)];
+        }
+        return $options;
+    }
+}
+
+if (!function_exists('optionsFromModel')) {
+
+    /**
+     * return prepared options for search form from standard model option
+     *
+     * @method optionsFromModel
+     *
+     * @param $dbOptions
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function optionsFromModel($dbOptions, bool $any = false, string|int $anyValue = '', string|int $anyName = ''): array
+    {
+        $options = [];
+        if ($any) {
+            $options[] = ['value' => $anyValue, 'name' => $anyName];
+        }
+        foreach ($dbOptions as $option) {
+            $options[] = ['value' => $option->id, 'name' => $option->name];
+        }
+        return $options;
+    }
+}
+
+if (!function_exists('addSortToUrlQuery')) {
+
+    /**
+     * return url query with sort options
+     *
+     * @method addSortToUrlQuery
+     *
+     * @param array $requestFields
+     * @return string
+     */
+    function addSortToUrlQuery(array $requestFields, $sortBy, $sortDirection): string
+    {
+        $requestFields['sort'] = $sortBy;
+        $requestFields['ord'] = $sortDirection;
+        $urlQuery = '?';
+        $first = true;
+        foreach ($requestFields as $key => $value) {
+            $urlQuery .= (!$first ? '&' : '').$key.'='.$value;
+            $first = false;
+        }
+        return $urlQuery;
+    }
+}
+
+if (!function_exists('stripHtmlTags')) {
+
+    /**
+     * return striped html string
+     *
+     * @param string $html_string
+     * @param array $tags
+     * @return string
+     */
+    function stripHtmlTags(string $html_string, array $tags = [])
+    {
+        $tagsToStrip = sizeof($tags) ? $tags : ['p', 'ul', 'ol', 'li', 'b', 'i', 'u'];
+        return strip_tags($html_string, $tagsToStrip);
+    }
+}
+
+if (!function_exists('displayBytes')) {
+    /**
+     * Convert kilobytes to readable value
+     * @param $kilobytes
+     * @param int $precision
+     * @return string
+     */
+    function displayBytes($kilobytes, int $precision = 2): string
+    {
+        $base = log($kilobytes, 1024);
+        $suffixes = array('KB', 'MB', 'GB', 'TB');
+        return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
+    }
+}
+
+if (!function_exists('statisticApplicationGroupByOptions')) {
+    /**
+     * @param bool $any
+     * @param string|int $anyValue
+     * @param string|int $anyName
+     * @return array
+     */
+    function statisticApplicationGroupByOptions(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
     {
         $options = [];
         if( $any ) {
             $options[] = ['value' => $anyValue, 'name' => $anyName];
         }
-        foreach (\App\Enums\PdoiApplicationStatusesEnum::options() as $key => $value) {
-            $options[] = ['value' => $value, 'name' => __('custom.application.status.'.$key)];
-        }
+        $options[] = ['value' => 'subject', 'name' => trans_choice('custom.pdoi_response_subjects', 1)];
+        $options[] = ['value' => 'applicant_type', 'name' => __('custom.applicant_type')];
+        $options[] = ['value' => 'profile_type', 'name' => trans_choice('custom.profile_type', 1)];
+        $options[] = ['value' => 'status', 'name' => __('custom.status')];
+        $options[] = ['value' => 'country', 'name' => trans_choice('custom.country', 1)];
+        $options[] = ['value' => 'category', 'name' => trans_choice('custom.categories', 1)];
         return $options;
     }
-
-    if (!function_exists('optionsFromModel')) {
-
-        /**
-         * return prepared options for search form from standard model option
-         *
-         * @method optionsFromModel
-         *
-         * @param $dbOptions
-         * @param bool $any
-         * @param string|int $anyValue
-         * @param string|int $anyName
-         * @return array
-         */
-        function optionsFromModel($dbOptions, bool $any = false, string|int $anyValue = '', string|int $anyName = ''): array
-        {
-            $options = [];
-            if ($any) {
-                $options[] = ['value' => $anyValue, 'name' => $anyName];
-            }
-            foreach ($dbOptions as $option) {
-                $options[] = ['value' => $option->id, 'name' => $option->name];
-            }
-            return $options;
-        }
-    }
-
-    if (!function_exists('addSortToUrlQuery')) {
-
-        /**
-         * return url query with sort options
-         *
-         * @method addSortToUrlQuery
-         *
-         * @param array $requestFields
-         * @return string
-         */
-        function addSortToUrlQuery(array $requestFields, $sortBy, $sortDirection): string
-        {
-            $requestFields['sort'] = $sortBy;
-            $requestFields['ord'] = $sortDirection;
-            $urlQuery = '?';
-            $first = true;
-            foreach ($requestFields as $key => $value) {
-                $urlQuery .= (!$first ? '&' : '').$key.'='.$value;
-                $first = false;
-            }
-            return $urlQuery;
-        }
-    }
-
-    if (!function_exists('stripHtmlTags')) {
-
-        /**
-         * return striped html string
-         *
-         * @param string $html_string
-         * @param array $tags
-         * @return string
-         */
-        function stripHtmlTags(string $html_string, array $tags = [])
-        {
-            $tagsToStrip = sizeof($tags) ? $tags : ['p', 'ul', 'ol', 'li', 'b', 'i', 'u'];
-            return strip_tags($html_string, $tagsToStrip);
-        }
-    }
-
-    if (!function_exists('displayBytes')) {
-        /**
-         * Convert kilobytes to readable value
-         * @param $kilobytes
-         * @param int $precision
-         * @return string
-         */
-        function displayBytes($kilobytes, int $precision = 2): string
-        {
-            $base = log($kilobytes, 1024);
-            $suffixes = array('KB', 'MB', 'GB', 'TB');
-            return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
-        }
-    }
-
-    if (!function_exists('statisticApplicationGroupByOptions')) {
-        /**
-         * @param bool $any
-         * @param string|int $anyValue
-         * @param string|int $anyName
-         * @return array
-         */
-        function statisticApplicationGroupByOptions(bool $any = false, string|int $anyValue = '', string|int $anyName=''): array
-        {
-            $options = [];
-            if( $any ) {
-                $options[] = ['value' => $anyValue, 'name' => $anyName];
-            }
-            $options[] = ['value' => 'subject', 'name' => trans_choice('custom.pdoi_response_subjects', 1)];
-            $options[] = ['value' => 'applicant_type', 'name' => __('custom.applicant_type')];
-            $options[] = ['value' => 'profile_type', 'name' => trans_choice('custom.profile_type', 1)];
-            $options[] = ['value' => 'status', 'name' => __('custom.status')];
-            $options[] = ['value' => 'country', 'name' => trans_choice('custom.country', 1)];
-            $options[] = ['value' => 'category', 'name' => trans_choice('custom.categories', 1)];
-            return $options;
-        }
-    }
 }
+
