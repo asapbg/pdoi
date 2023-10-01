@@ -7,6 +7,7 @@ use App\Models\File;
 use App\Models\PdoiApplication;
 use App\Models\User;
 use App\Rules\AlphaSpace;
+use App\Rules\EgnRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -49,7 +50,7 @@ class PdoiApplicationApplyRequest extends FormRequest
             'address_publication' => ['nullable', 'numeric', 'in:1'],
             'phone_publication' => ['nullable', 'numeric', 'in:1'],
             'subjects' => ['required', 'array'],
-            'person_identity' => ['nullable', 'string', 'max:20'],
+            'person_identity' => ['nullable', 'string', 'max:20', new EgnRule()],
             'company_identity' => ['nullable', 'string', 'max:20'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],

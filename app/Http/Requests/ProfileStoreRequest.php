@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\DeliveryMethodsEnum;
 use App\Models\User;
 use App\Rules\AlphaSpace;
+use App\Rules\EgnRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,7 +36,7 @@ class ProfileStoreRequest extends FormRequest
                 ->ignore((int)auth()->user()->id)],
             'phone' => ['nullable', 'string', 'max:50'],
             'legal_form' => ['nullable', 'numeric', Rule::in(array_keys(User::getUserLegalForms()))],
-            'person_identity' => ['nullable', 'string', 'max:20'],
+            'person_identity' => ['nullable', 'string', new EgnRule()],
             'company_identity' => ['nullable', 'string', 'max:20'],
             'country' => ['required', 'numeric', 'exists:country,id'],
             'area' => ['required', 'numeric', 'exists:ekatte_area,id'],
