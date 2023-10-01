@@ -153,7 +153,7 @@ class EAuthentication
         $privkey = new CkPrivateKey();
         $success = $privkey->LoadPem(file_get_contents(config('eauth.certificate_private_key')));
 
-        if (!$success) {
+        if ($success != true) {
             Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$privkey->lastErrorText().PHP_EOL.'Response: '.$message);
             return null;
         }
@@ -161,7 +161,7 @@ class EAuthentication
         //  Prepare an RSA object w/ the private key...
         $rsa = new CkRsa();
         $success = $rsa->ImportPrivateKeyObj($privkey);
-        if (!$success) {
+        if ($success != true) {
             Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$rsa->lastErrorText().PHP_EOL.'Response: '.$message);
             return null;
         }
@@ -169,7 +169,7 @@ class EAuthentication
         //  RSA will be used to decrypt the xenc:EncryptedKey
         //  The bytes to be decrypted are in xenc:CipherValue (in base64 format)
         $encryptedAesKey = $xml->getChildContent('saml2:EncryptedAssertion|xenc:EncryptedData|ds:KeyInfo|xenc:EncryptedKey|xenc:CipherData|xenc:CipherValue');
-        if ( !$xml->get_LastMethodSuccess() ) {
+        if ( $xml->get_LastMethodSuccess() != true ) {
             Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: Encrypted AES key not found.'.PHP_EOL.'Response: '.$message);
             return null;
         }
@@ -186,14 +186,14 @@ class EAuthentication
 
         //  Note: The DecryptBd method is introduced in Chilkat v9.5.0.76
         $success = $rsa->DecryptBd($bdAesKey,true);
-        if ( !$success ) {
+        if ( $success != true ) {
             Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$rsa->lastErrorText().PHP_EOL.'Response: '.$message);
             return null;
         }
 
         //  Get the encrypted XML (in base64) to be decrypted w/ the AES key.
         $encrypted64 = $xml->getChildContent('saml2:EncryptedAssertion|xenc:EncryptedData|xenc:CipherData|xenc:CipherValue');
-        if ( !$xml->get_LastMethodSuccess() ) {
+        if ( $xml->get_LastMethodSuccess() != true ) {
             Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: Encrypted data not found.'.PHP_EOL.'Response: '.$message);
             return null;
         }
@@ -207,7 +207,7 @@ class EAuthentication
         $crypt->put_Charset('windows-1252');
         $sbAlg = new CkStringBuilder();
         $sbAlg->Append($xml->chilkatPath('saml2:EncryptedAssertion|xenc:EncryptedData|xenc:EncryptionMethod|(Algorithm)'));
-        if ( !$sbAlg->Contains('aes128-cbc',true) ) {
+        if ( $sbAlg->Contains('aes128-cbc',true) == true ) {
             $crypt->put_CryptAlgorithm('aes');
             $crypt->put_KeyLength(128);
             $crypt->put_CipherMode('cbc');
@@ -221,7 +221,7 @@ class EAuthentication
 
         //  AES decrypt...
         $success = $crypt->DecryptBd($bdEncrypted);
-        if ( !$success ) {
+        if ( $success != true ) {
             Log::error('['.Carbon::now().'] eAuthentication Error decrypt message: '.$crypt->lastErrorText().PHP_EOL.'Response: '.$message);
             return null;
         }
