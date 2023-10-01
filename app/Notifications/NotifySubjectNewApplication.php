@@ -144,9 +144,9 @@ class NotifySubjectNewApplication extends Notification
      */
     public static function sign($xmlString)
     {
-        file_put_contents('/home/web/sign/test.xml', $xmlString);
-        shell_exec('php '.config('eauth.sign_script'));
+        file_put_contents('/home/web/sign/seos_test.xml', $xmlString);
+        shell_exec('php '.config('seos.sign_script'));
         sleep(1);
-        return file_get_contents('/home/web/sign/signTest.xml');
+        return file_get_contents('/home/web/sign/seos_signTest.xml');
     }
 }
