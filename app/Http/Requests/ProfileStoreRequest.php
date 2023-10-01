@@ -58,7 +58,7 @@ class ProfileStoreRequest extends FormRequest
         if( request()->input('delivery_method') && (int)request()->input('delivery_method') === DeliveryMethodsEnum::SDES->value ) {
             if ( request()->input('legal_form') ) {
                 $personIdentity = request()->input('legal_form') == User::USER_TYPE_PERSON ? 'person_identity' : 'company_identity';
-                $rules[$personIdentity] = ['required', 'string', 'max:20', Rule::unique('users', $personIdentity)->ignore(auth()->user()->id)];
+                $rules[$personIdentity] = ['required', 'string', 'max:20', Rule::unique('users', $personIdentity)->ignore(auth()->user()->id), new EgnRule()];
             }
         }
 
