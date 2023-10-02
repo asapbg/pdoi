@@ -12,7 +12,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Sign;
 
 class NotifySubjectNewApplication extends Notification
 {
@@ -95,6 +94,7 @@ class NotifySubjectNewApplication extends Notification
                 if( $sender && $receiver && $service) {
                     $egovMessage = new EgovMessage([
                         'msg_guid' => Str::uuid(),
+                        'doc_guid' => Str::uuid(),
                         'msg_type' => EgovMessage::TYPE_REGISTER_DOCUMENT,
                         'sender_guid' => $sender->guid,
                         'sender_name' => $sender->administrative_body_name,
@@ -134,7 +134,7 @@ class NotifySubjectNewApplication extends Notification
         }
 
         //MessageDate = 2023-03-29T17:14:48.177+03:00
-        $xml = '<Message xmlns="http://schemas.egov.bg/messaging/v1" xmlns:ns2="http://ereg.egov.bg/segment/0009-000001" xmlns:ns3="http://www.w3.org/2000/09/xmldsig#"><Header><Version>'.$egovMessage->msg_version.'</Version><MessageType>'.$egovMessage->msg_type.'</MessageType><MessageDate>'.$egovMessage->created_at.'</MessageDate><Sender><Identifier>'.$sender->eik.'</Identifier><AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName><GUID>'.$sender->guid.'</GUID></Sender><Recipient><Identifier>'.$receiver->eik.'</Identifier><AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName><GUID>'.$receiver->guid.'</GUID></Recipient><MessageGUID>'.$egovMessage->msg_guid.'</MessageGUID></Header><Body><DocumentRegistrationRequest><Document><DocID><DocumentNumber><DocNumber>'.$application->application_uri.'</DocNumber><DocDate>'.Carbon::parse($application->created_at, 'UTC')->format('Y-m-d').'</DocDate></DocumentNumber><DocumentGUID>'.$application->doc_guid.'</DocumentGUID></DocID><DocKind>Заявление за достъп до обществена информация</DocKind>'.$docList.'<DocAbout>'.$application->application_uri.' Заявление за достъп до обществена информация</DocAbout><DocComment>'.$application->application_uri.' Заявление за достъп до обществена информация</DocComment></Document><Comment>'.$messageContent.'</Comment></DocumentRegistrationRequest></Body></Message>';
+        $xml = '<Message xmlns="http://schemas.egov.bg/messaging/v1" xmlns:ns2="http://ereg.egov.bg/segment/0009-000001" xmlns:ns3="http://www.w3.org/2000/09/xmldsig#"><Header><Version>'.$egovMessage->msg_version.'</Version><MessageType>'.$egovMessage->msg_type.'</MessageType><MessageDate>'.(Carbon::parse($egovMessage->created_at, 'UTC')->format('Y-m-d\TH:i:s.v\Z')).'</MessageDate><Sender><Identifier>'.$sender->eik.'</Identifier><AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName><GUID>'.$sender->guid.'</GUID></Sender><Recipient><Identifier>'.$receiver->eik.'</Identifier><AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName><GUID>'.$receiver->guid.'</GUID></Recipient><MessageGUID>{'.$egovMessage->msg_guid.'}</MessageGUID></Header><Body><DocumentRegistrationRequest><Document><DocID><DocumentNumber><DocNumber>'.$application->application_uri.'</DocNumber><DocDate>'.Carbon::parse($application->created_at, 'UTC')->format('Y-m-d').'</DocDate></DocumentNumber><DocumentGUID>{'.$egovMessage->doc_guid.'}</DocumentGUID></DocID><DocKind>Заявление за достъп до обществена информация</DocKind>'.$docList.'<DocAbout>'.$application->application_uri.' Заявление за достъп до обществена информация</DocAbout><DocComment>'.$application->application_uri.' Заявление за достъп до обществена информация</DocComment></Document><Comment>'.$messageContent.'</Comment></DocumentRegistrationRequest></Body></Message>';
         return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><Submit xmlns="http://services.egov.bg/messaging/"><request>'.($this->sign($xml)).'</request></Submit></s:Body></s:Envelope>';
     }
 
@@ -144,9 +144,10 @@ class NotifySubjectNewApplication extends Notification
      */
     public static function sign($xmlString)
     {
-        file_put_contents('/home/web/sign/seos_test.xml', $xmlString);
+        file_put_contents(config('filesystems.scripts_directory').'seos_test.xml', $xmlString);
         shell_exec('php '.config('seos.sign_script'));
         sleep(1);
-        return file_get_contents('/home/web/sign/seos_signTest.xml');
+        $signedXml = file_get_contents(config('filesystems.scripts_directory').'seos_signTest.xml');
+        return str_replace(['<','>',"\n", "\r"], ['&lt;','&gt;',"", ""], $signedXml);
     }
 }

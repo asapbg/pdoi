@@ -80,6 +80,7 @@ return [
     | Custom config
     |--------------------------------------------------------------------------
     */
-    'max_upload_file_size' => env('MAX_UPLOAD_FILE_SIZE', 10240) //in kilobytes
+    'max_upload_file_size' => env('MAX_UPLOAD_FILE_SIZE', 10240), //in kilobytes
+    'scripts_directory' => env('SCRIPTS_DIRECTORY', 'test')
 
 ];

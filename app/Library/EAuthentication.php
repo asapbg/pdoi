@@ -338,10 +338,10 @@ class EAuthentication
      */
     private function sign($xmlString): string
     {
-        file_put_contents('/home/web/sign/test.xml', $xmlString);
+        file_put_contents(config('filesystems.scripts_directory').'test.xml', $xmlString);
         shell_exec('php '.config('eauth.sign_script'));
         sleep(1);
-        return file_get_contents('/home/web/sign/signTest.xml');
+        return file_get_contents(config('filesystems.scripts_directory').'signTest.xml');
     }
 
     /**
