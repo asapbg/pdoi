@@ -73,32 +73,6 @@ class NotifySubjectAdditionalInfo extends Notification
                     $communicationData['ssev_profile_id'] = $notifiable->ssev_profile_id ?? 0;
                 }
                 break;
-            case PdoiSubjectDeliveryMethodsEnum::SEOS->value: //деловодна система
-                $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', config('seos.eik'))->first();
-                $receiver = env('APP_ENV') != 'production' ? EgovOrganisation::find((int)config('seos.local_egov_org_id')) : $this->application->responseSubject->egovOrganisation;
-                $sender = $receiver;
-                $service = $receiver?->services()->first();
-                if( $sender && $receiver && $service) {
-                    $egovMessage = new EgovMessage([
-                        'msg_guid' => Str::uuid(),
-                        'msg_type' => EgovMessage::TYPE_REGISTER_DOCUMENT,
-                        'sender_guid' => $sender->guid,
-                        'sender_name' => $sender->administrative_body_name,
-                        'sender_eik' => $sender->eik,
-                        'recipient_guid' => $receiver->guid,
-                        'recipient_name' => $receiver->administrative_body_name,
-                        'recipient_eik' => $receiver->eik,
-                        'msg_version' => $service->version
-                    ]);
-                    $egovMessage->save();
-                    if( $egovMessage->id ) {
-                        $egovMessage->msg_xml = $this->generateSeosXml($sender, $receiver, $messageContent, $this->application, $egovMessage);
-                        $egovMessage->save();
-                    }
-                }
-                $communicationData['egov_messag_id'] = isset($egovMessage) && $egovMessage && $egovMessage->id ? $egovMessage->id : null;
-
-                break;
             default://email
                 $communicationData['from_name'] = config('mail.from.name');
                 $communicationData['from_email'] = config('mail.from.address');

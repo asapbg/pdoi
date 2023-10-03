@@ -87,6 +87,12 @@ class NotifySubjectNewApplication extends Notification
             case PdoiSubjectDeliveryMethodsEnum::SEOS->value: //деловодна система
                 $communicationData['files']= $this->application->files ? $this->application->files->pluck('id')->toArray() : [];
                 $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', config('seos.eik'))->first();
+                $envProd = env('APP_ENV') == 'production';
+                $senderInfo = [
+                    'guid' => $envProd ? $sender->guid : '{B2A43E54-B6CB-4835-A6CC-D05692B3F7CD}',
+                    'eik' => $envProd ? $sender->eik : '0006950252000',
+                    'name' => $envProd ? $sender->administrative_body_name : 'Платформа за достъп до обществена информация'
+                ];
                 $receiver = env('APP_ENV') != 'production' ? EgovOrganisation::find((int)config('seos.local_egov_org_id')) : $this->application->responseSubject->egovOrganisation;
 
                 //$sender = $receiver;
@@ -96,9 +102,9 @@ class NotifySubjectNewApplication extends Notification
                         'msg_guid' => Str::uuid(),
                         'doc_guid' => Str::uuid(),
                         'msg_type' => EgovMessage::TYPE_REGISTER_DOCUMENT,
-                        'sender_guid' => $sender->guid,
-                        'sender_name' => $sender->administrative_body_name,
-                        'sender_eik' => $sender->eik,
+                        'sender_guid' => $senderInfo['guid'],
+                        'sender_name' => $senderInfo['eik'],
+                        'sender_eik' => $senderInfo['name'],
                         'recipient_guid' => $receiver->guid,
                         'recipient_name' => $receiver->administrative_body_name,
                         'recipient_eik' => $receiver->eik,
@@ -108,7 +114,7 @@ class NotifySubjectNewApplication extends Notification
                     ]);
                     $egovMessage->save();
                     if( $egovMessage->id ) {
-                        $egovMessage->msg_xml = $this->generateSeosXml($sender, $receiver, $messageContent, $this->application, $egovMessage);
+                        $egovMessage->msg_xml = $this->generateSeosXml($senderInfo, $receiver, $messageContent, $this->application, $egovMessage);
                         $egovMessage->save();
                     }
                 }
@@ -136,7 +142,7 @@ class NotifySubjectNewApplication extends Notification
         }
 
         //MessageDate = 2023-03-29T17:14:48.177+03:00
-        $xml = '<?xml version="1.0" encoding="UTF-8"?><Message xmlns="http://schemas.egov.bg/messaging/v1" xmlns:ns2="http://ereg.egov.bg/segment/0009-000001" xmlns:ns3="http://www.w3.org/2000/09/xmldsig#"><Header><Version>'.$egovMessage->msg_version.'</Version><MessageType>'.$egovMessage->msg_type.'</MessageType><MessageDate>'.(Carbon::parse('2022-03-22 17:14:48')->format('Y-m-d\TH:i:s.vP')).'</MessageDate><Sender><Identifier>'.$sender->eik.'</Identifier><AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName><GUID>'.$sender->guid.'</GUID></Sender><Recipient><Identifier>'.$receiver->eik.'</Identifier><AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName><GUID>'.$receiver->guid.'</GUID></Recipient><MessageGUID>{'.$egovMessage->msg_guid.'}</MessageGUID></Header><Body><DocumentRegistrationRequest><Document><DocID><DocumentNumber><DocNumber>'.$application->application_uri.'</DocNumber><DocDate>'.Carbon::parse($application->created_at, 'UTC')->format('Y-m-d').'</DocDate></DocumentNumber><DocumentGUID>{'.$egovMessage->doc_guid.'}</DocumentGUID></DocID><DocKind>'.$egovMessage->doc_vid.'</DocKind>'.$docList.'<DocAbout>'.$application->application_uri.' '.$egovMessage->doc_vid.'</DocAbout><DocComment>'.$application->application_uri.' '.$egovMessage->doc_vid.'</DocComment></Document><Comment>N/A</Comment></DocumentRegistrationRequest></Body></Message>';
+        $xml = '<?xml version="1.0" encoding="UTF-8"?><Message xmlns="http://schemas.egov.bg/messaging/v1" xmlns:ns2="http://ereg.egov.bg/segment/0009-000001" xmlns:ns3="http://www.w3.org/2000/09/xmldsig#"><Header><Version>'.$egovMessage->msg_version.'</Version><MessageType>'.$egovMessage->msg_type.'</MessageType><MessageDate>'.(Carbon::parse('2022-03-22 17:14:48')->format('Y-m-d\TH:i:s.vP')).'</MessageDate><Sender><Identifier>'.$sender['eik'].'</Identifier><AdministrativeBodyName>'.$sender['name'].'</AdministrativeBodyName><GUID>'.$sender['guid'].'</GUID></Sender><Recipient><Identifier>'.$receiver->eik.'</Identifier><AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName><GUID>'.$receiver->guid.'</GUID></Recipient><MessageGUID>{'.$egovMessage->msg_guid.'}</MessageGUID></Header><Body><DocumentRegistrationRequest><Document><DocID><DocumentNumber><DocNumber>'.$application->application_uri.'</DocNumber><DocDate>'.Carbon::parse($application->created_at, 'UTC')->format('Y-m-d').'</DocDate></DocumentNumber><DocumentGUID>{'.$egovMessage->doc_guid.'}</DocumentGUID></DocID><DocKind>'.$egovMessage->doc_vid.'</DocKind>'.$docList.'<DocAbout>'.$application->application_uri.' '.$egovMessage->doc_vid.'</DocAbout><DocComment>'.$application->application_uri.' '.$egovMessage->doc_vid.'</DocComment></Document><Comment>N/A</Comment></DocumentRegistrationRequest></Body></Message>';
         return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><Submit xmlns="http://services.egov.bg/messaging/"><request>'.($this->sign($xml)).'</request></Submit></s:Body></s:Envelope>';
     }
 
