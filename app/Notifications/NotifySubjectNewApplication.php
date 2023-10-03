@@ -98,7 +98,7 @@ class NotifySubjectNewApplication extends Notification
 
                 //$sender = $receiver;
                 $service = $receiver?->services()->first();
-                if( $sender && $receiver && $service) {
+                if( $senderInfo && $receiver && $service) {
                     $egovMessage = new EgovMessage([
                         'msg_guid' => Str::uuid(),
                         'doc_guid' => Str::uuid(),
