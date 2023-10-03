@@ -89,7 +89,7 @@ class NotifySubjectNewApplication extends Notification
                 $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', config('seos.eik'))->first();
                 $receiver = env('APP_ENV') != 'production' ? EgovOrganisation::find((int)config('seos.local_egov_org_id')) : $this->application->responseSubject->egovOrganisation;
 
-                $sender = $receiver;
+                //$sender = $receiver;
                 $service = $receiver?->services()->first();
                 if( $sender && $receiver && $service) {
                     $egovMessage = new EgovMessage([
@@ -102,7 +102,9 @@ class NotifySubjectNewApplication extends Notification
                         'recipient_guid' => $receiver->guid,
                         'recipient_name' => $receiver->administrative_body_name,
                         'recipient_eik' => $receiver->eik,
-                        'msg_version' => $service->version
+                        'msg_version' => $service->version,
+                        'msg_comment' => $messageContent,
+                        'doc_vid' => 'Заявление за достъп до обществена информация'
                     ]);
                     $egovMessage->save();
                     if( $egovMessage->id ) {
@@ -134,7 +136,7 @@ class NotifySubjectNewApplication extends Notification
         }
 
         //MessageDate = 2023-03-29T17:14:48.177+03:00
-        $xml = '<Message xmlns="http://schemas.egov.bg/messaging/v1" xmlns:ns2="http://ereg.egov.bg/segment/0009-000001" xmlns:ns3="http://www.w3.org/2000/09/xmldsig#"><Header><Version>'.$egovMessage->msg_version.'</Version><MessageType>'.$egovMessage->msg_type.'</MessageType><MessageDate>'.(Carbon::parse($egovMessage->created_at, 'UTC')->format('Y-m-d\TH:i:s.v\Z')).'</MessageDate><Sender><Identifier>'.$sender->eik.'</Identifier><AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName><GUID>'.$sender->guid.'</GUID></Sender><Recipient><Identifier>'.$receiver->eik.'</Identifier><AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName><GUID>'.$receiver->guid.'</GUID></Recipient><MessageGUID>{'.$egovMessage->msg_guid.'}</MessageGUID></Header><Body><DocumentRegistrationRequest><Document><DocID><DocumentNumber><DocNumber>'.$application->application_uri.'</DocNumber><DocDate>'.Carbon::parse($application->created_at, 'UTC')->format('Y-m-d').'</DocDate></DocumentNumber><DocumentGUID>{'.$egovMessage->doc_guid.'}</DocumentGUID></DocID><DocKind>Заявление за достъп до обществена информация</DocKind>'.$docList.'<DocAbout>'.$application->application_uri.' Заявление за достъп до обществена информация</DocAbout><DocComment>'.$application->application_uri.' Заявление за достъп до обществена информация</DocComment></Document><Comment>N/A</Comment></DocumentRegistrationRequest></Body></Message>';
+        $xml = '<?xml version="1.0" encoding="UTF-8"?><Message xmlns="http://schemas.egov.bg/messaging/v1" xmlns:ns2="http://ereg.egov.bg/segment/0009-000001" xmlns:ns3="http://www.w3.org/2000/09/xmldsig#"><Header><Version>'.$egovMessage->msg_version.'</Version><MessageType>'.$egovMessage->msg_type.'</MessageType><MessageDate>'.(Carbon::parse('2022-03-22 17:14:48')->format('Y-m-d\TH:i:s.vP')).'</MessageDate><Sender><Identifier>'.$sender->eik.'</Identifier><AdministrativeBodyName>'.$sender->administrative_body_name.'</AdministrativeBodyName><GUID>'.$sender->guid.'</GUID></Sender><Recipient><Identifier>'.$receiver->eik.'</Identifier><AdministrativeBodyName>'.$receiver->administrative_body_name.'</AdministrativeBodyName><GUID>'.$receiver->guid.'</GUID></Recipient><MessageGUID>{'.$egovMessage->msg_guid.'}</MessageGUID></Header><Body><DocumentRegistrationRequest><Document><DocID><DocumentNumber><DocNumber>'.$application->application_uri.'</DocNumber><DocDate>'.Carbon::parse($application->created_at, 'UTC')->format('Y-m-d').'</DocDate></DocumentNumber><DocumentGUID>{'.$egovMessage->doc_guid.'}</DocumentGUID></DocID><DocKind>'.$egovMessage->doc_vid.'</DocKind>'.$docList.'<DocAbout>'.$application->application_uri.' '.$egovMessage->doc_vid.'</DocAbout><DocComment>'.$application->application_uri.' '.$egovMessage->doc_vid.'</DocComment></Document><Comment>N/A</Comment></DocumentRegistrationRequest></Body></Message>';
         return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><Submit xmlns="http://services.egov.bg/messaging/"><request>'.($this->sign($xml)).'</request></Submit></s:Body></s:Envelope>';
     }
 
