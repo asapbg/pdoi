@@ -103,13 +103,13 @@ class NotifySubjectNewApplication extends Notification
                         'doc_guid' => Str::uuid(),
                         'msg_type' => EgovMessage::TYPE_REGISTER_DOCUMENT,
                         'sender_guid' => $senderInfo['guid'],
-                        'sender_name' => $senderInfo['eik'],
-                        'sender_eik' => $senderInfo['name'],
+                        'sender_name' => $senderInfo['name'],
+                        'sender_eik' => $senderInfo['eik'],
                         'recipient_guid' => $receiver->guid,
                         'recipient_name' => $receiver->administrative_body_name,
                         'recipient_eik' => $receiver->eik,
                         'msg_version' => $service->version,
-                        'msg_comment' => $messageContent,
+                        'msg_comment' => 'N/A',//$messageContent,
                         'doc_vid' => 'Заявление за достъп до обществена информация'
                     ]);
                     $egovMessage->save();
