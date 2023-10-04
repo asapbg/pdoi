@@ -111,7 +111,8 @@ class NotifySubjectNewApplication extends Notification
                         'recipient_eik' => $receiver->eik,
                         'msg_version' => $service->version,
                         'msg_comment' => 'N/A',//$messageContent,
-                        'doc_vid' => 'Заявление за достъп до обществена информация'
+                        'doc_vid' => 'Заявление за достъп до обществена информация',
+                        'doc_rn' => $this->application->application_uri
                     ]);
                     $egovMessage->save();
                     if( $egovMessage->id ) {
