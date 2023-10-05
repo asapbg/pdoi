@@ -38,7 +38,7 @@ Route::get('/set-cookie', [CommonController::class, 'setCookie']);
 Route::get('/reset-visual-options', [CommonController::class, 'resetVisualOptions']);
 //download public page file
 Route::get('/download/page/{file}', [CommonController::class, 'downloadPageFile'])->name('download.page.file');
-Route::get('/seos-callback', [CommonController::class, 'callbackRegisterEvent'])->name('download.page.file');
+Route::get('/seos-callback', [CommonController::class, 'callbackRegisterEvent']);
 
 //application
 Route::controller(PdoiApplicationFrontController::class)->group(function () {
