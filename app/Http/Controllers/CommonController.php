@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PageFileUploadRequest;
+use App\Models\Event;
 use App\Models\File;
 use App\Models\MenuSection;
 use App\Models\Page;
+use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\RzsSection;
 use App\Models\User;
+use App\Services\ApplicationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -254,5 +257,20 @@ class CommonController extends Controller
             Storage::disk('public_uploads')->delete($file->path, $file->filename);
         }
         return redirect($route)->with('success', 'Файлът е изтрит успешно');
+    }
+
+    public function callbackRegisterEvent(Request $request)
+    {
+        $appId = (int)$request->input('application_id');
+        $event = (int)$request->input('event');
+        //TODO create middleware for this request
+        $application = PdoiApplication::find((int)$appId);
+        if( $application ) {
+            $appService = new ApplicationService($application);
+            $appService->registerEvent($event);
+            echo '200';
+        } else {
+            echo '404';
+        }
     }
 }
