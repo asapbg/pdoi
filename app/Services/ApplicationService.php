@@ -60,6 +60,10 @@ class ApplicationService
                             $eventConfig->app_event == ApplicationEventsEnum::GIVE_INFO->value
                             && (!$this->application->lastEvent || $this->application->lastEvent->event_type != ApplicationEventsEnum::ASK_FOR_INFO->value)
                         )
+                        || ($this->application->status == PdoiApplicationStatusesEnum::RECEIVED->value
+                            && $eventConfig->app_event == ApplicationEventsEnum::SEND_TO_SEOS )
+                        || ($this->application->status == PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value
+                            && $eventConfig->app_event == ApplicationEventsEnum::APPROVE_BY_SEOS )
                     ) {
                         throw new \Exception('Not allowed next event to current one: '.$this->application->currentEvent->event->name);
                     }
