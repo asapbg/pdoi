@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\FilesystemException;
@@ -266,9 +267,14 @@ class CommonController extends Controller
         //TODO create middleware for this request
         $application = PdoiApplication::find((int)$appId);
         if( $application ) {
-            $appService = new ApplicationService($application);
-            $appService->registerEvent($event);
-            echo '200';
+            try {
+                $appService = new ApplicationService($application);
+                $appService->registerEvent($event);
+                echo '200';
+            } catch (\Exception $e){
+                Log::error('Callback SEOS error :'.$e);
+                echo '500';
+            }
         } else {
             echo '404';
         }
