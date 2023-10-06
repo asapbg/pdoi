@@ -221,7 +221,7 @@ class EventSeeder extends Seeder
                     'bg' => 'Подаване на заявление',
                     'en' => 'Submitting an application',
                 ],
-                'next_events' => [1,2,4,5,6],
+                'next_events' => [1,2,4,5,6,7],
                 'id' => 9,
                 'app_event' => 9,
                 'app_status' => 1,
