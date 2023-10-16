@@ -459,5 +459,8 @@ return [
     'statistic.terms.expired'                       => 'Изтекли',
     'create_object'                                  => 'Създаване на :object',
     'edit_object'                                   => 'Редакция на :object (:object_name)',
+    'acts_and_documents'                                     => 'Нормативни актове и документи',
+    //breadcrumb
+    'help_section'                                  => 'Помощ',
 ];
 

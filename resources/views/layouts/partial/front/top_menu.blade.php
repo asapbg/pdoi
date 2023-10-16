@@ -27,14 +27,17 @@
                         @include('front.partials.menu_section_link', ['section' => $ms])
                     @endforeach
                 @endif
-                <li class="nav-item px-1">
-                    <a class="nav-link" href="{{ route('section', ['slug' => 'documents']) }}">{{ trans_choice('custom.documents', 2) }}</a>
-                </li>
+{{--                <li class="nav-item px-1">--}}
+{{--                    <a class="nav-link" href="{{ route('section', ['slug' => 'documents']) }}">{{ trans_choice('custom.documents', 2) }}</a>--}}
+{{--                </li>--}}
                 <li class="nav-item px-1">
                     <a class="nav-link" href="{{ route('statistic.list') }}">{{ trans_choice('custom.statistics', 1) }}</a>
                 </li>
                 <li class="nav-item px-1">
                     <a class="nav-link" href="{{ route('page', ['section_slug' => 'info', 'slug' => \App\Models\Page::CONTACT_SYSTEM_PAGE]) }}">{{ trans_choice('custom.contacts', 2) }}</a>
+                </li>
+                <li class="nav-item px-1">
+                    <a class="nav-link" href="{{ route('help.index') }}">{{ __('custom.help') }}</a>
                 </li>
 {{--                <li class="nav-item dropdown">--}}
 {{--                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">--}}

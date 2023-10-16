@@ -73,14 +73,14 @@
                                     </div>
                                 @endif
                                 <div class="col-12 mb-3">
-                                    <div class="share-buttons d-inline-block me-3">
-                                        <div class="share-button d-inline-block p-2 rounded" role="button" data-color="#4267B2" data-selected="true" data-network="facebook" title="facebook" style="background-color: rgb(66, 103, 178);">
-                                            <img alt="facebook" src="https://platform-cdn.sharethis.com/img/facebook.svg">
-                                        </div>
-                                        <div class="share-button d-inline-block p-2 rounded" role="button" data-color="#1DA1F2" data-selected="true" data-network="twitter" title="twitter" style="background-color: rgb(29, 161, 242);">
-                                            <img alt="twitter" src="https://platform-cdn.sharethis.com/img/twitter.svg">
-                                        </div>
-                                    </div>
+{{--                                    <div class="share-buttons d-inline-block me-3">--}}
+{{--                                        <div class="share-button d-inline-block p-2 rounded" role="button" data-color="#4267B2" data-selected="true" data-network="facebook" title="facebook" style="background-color: rgb(66, 103, 178);">--}}
+{{--                                            <img alt="facebook" src="https://platform-cdn.sharethis.com/img/facebook.svg">--}}
+{{--                                        </div>--}}
+{{--                                        <div class="share-button d-inline-block p-2 rounded" role="button" data-color="#1DA1F2" data-selected="true" data-network="twitter" title="twitter" style="background-color: rgb(29, 161, 242);">--}}
+{{--                                            <img alt="twitter" src="https://platform-cdn.sharethis.com/img/twitter.svg">--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
                                     <p class="my-1 d-inline-block p-fs"><i class="fas fa-eye text-primary me-1"></i>{{ $application['cnt_visits'] }}</p>
                                 </div>
                             </div>

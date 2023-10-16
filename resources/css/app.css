@@ -26,7 +26,7 @@
     --breakpoint-lg: 992px;
     --breakpoint-xl: 1200px;
 
-    --app-link:#72afd2;
+    --app-link:#00539f;
     --menu-drop-down-link:#212529;
     --link-font-size:16px;
     --p-font-size:14px;
@@ -41,6 +41,24 @@
     url('../fonts/FiraSansBGR-Regular.woff2') format('woff2'),
     url('../fonts/FiraSansBGR-Regular.woff') format('woff'),
     url('../fonts/FiraSansBGR-Regular.ttf') format('truetype');
+}
+
+a {
+    color: var(--app-link);
+}
+
+.btn-primary{
+    --bs-btn-bg: var(--app-link);
+    --bs-btn-border-color: var(--app-link);
+}
+
+.pagination {
+    --bs-pagination-color: var(--app-link);
+    --bs-pagination-active-bg: var(--app-link);
+    --bs-pagination-active-border-color: var(--app-link);
+}
+.text-primary {
+    color: var(--app-link) !important;
 }
 
 body {
@@ -106,8 +124,8 @@ li.select2-results__option:empty {
 }
 .top-menu-nav a.nav-link.active, .top-menu-nav a.nav-link.active:hover,
 .top-menu-nav .dropdown-item.active, .top-menu-nav .dropdown-item:focus {
-    background-color: var(--app-link)!important;
-    color:#fff;
+    background-color: #fff!important;
+    color:#313131;
 }
 .top-menu-nav a.nav-link:hover{
     outline: 0;
@@ -141,6 +159,11 @@ li.visual-options i:first-child{
 
 li.visual-options i:last-child{
     padding-right:  var(--bs-navbar-nav-link-padding-x);
+}
+
+#top-panel {
+    background: #f7f7f7;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 1px 5px 0px;
 }
 /*END TOP NAVIGATION*/
 
@@ -300,7 +323,7 @@ main {
     /*background-size: cover;*/
     line-height: normal !important;
     font-size: 1em;
-    min-height: 50%;
+    min-height: calc(100vh - 483px);
 }
 
 /*TITLE*/

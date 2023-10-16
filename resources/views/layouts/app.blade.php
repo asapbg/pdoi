@@ -44,18 +44,21 @@
         @include('layouts.partial.front.header')
         @include('layouts.partial.front.top_menu')
     </header>
-    <div class="px-md-5 px-3 pt-1 pb-1 text-end social d-flex justify-content-end">
-        <div class="fb-share-button me-1"
-             data-href="{{ request()->url() }}"
-             data-layout="button" data-size="small">
-            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore"></a>
+    <div class="px-md-5 px-3 pt-1 pb-1 social d-flex justify-content-between align-items-center" id="top-panel">
+        @include('partials.breadcrumbs_front')
+        <div>
+            <div class="fb-share-button me-1"
+                 data-href="{{ request()->url() }}"
+                 data-layout="button" data-size="small">
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore"></a>
+            </div>
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button  me-1" data-lang="en" data-show-count="false"></a>
+            <a href="{{ config('feed.feeds.main.url') }}" id="rss-link"
+               class="text-decoration-none  me-1"
+               target="_blank" title="{{ __('custom.subscribe') }}">
+                <i class="fas fa-rss-square mr-2 bg-white"></i>
+            </a>
         </div>
-        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button  me-1" data-lang="en" data-show-count="false"></a>
-        <a href="{{ config('feed.feeds.main.url') }}" id="rss-link"
-           class="text-decoration-none  me-1"
-           target="_blank" title="{{ __('custom.subscribe') }}">
-            <i class="fas fa-rss-square mr-2 bg-white"></i>
-        </a>
     </div>
     <main class="px-md-5 px-3 pt-3 pb-md-3 pb-3">
         @foreach(['success', 'warning', 'danger', 'info'] as $msgType)

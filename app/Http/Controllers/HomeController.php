@@ -47,6 +47,8 @@ class HomeController extends Controller
             'seo_keywords' => $item->meta_keyword,
             'seo_description' => $item->meta_description
         ]);
+
+        $this->setTitles($item->name);
         return $this->view('front.page', compact('item', 'pages'));
     }
 
@@ -61,6 +63,7 @@ class HomeController extends Controller
             'seo_keywords' => $item->meta_keyword,
             'seo_description' => $item->meta_description
         ]);
+        $this->setTitles($item->name);
         return $this->view('front.page', compact('item'));
     }
 
@@ -87,6 +90,7 @@ class HomeController extends Controller
             'seo_keywords' => $item->meta_keyword,
             'seo_description' => $item->meta_description
         ]);
+        $this->setTitles($item->name);
         return $this->view('front.help.'.$item->system_name, compact('item'));
     }
 
