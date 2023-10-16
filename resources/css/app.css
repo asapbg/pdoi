@@ -130,7 +130,8 @@ li.select2-results__option:empty {
 .top-menu-nav a.nav-link:hover{
     outline: 0;
     text-decoration: none;
-    color: var(--app-link);
+    background-color: #fff!important;
+    color: #313131 !important;
 }
 
 .top-menu-nav .dropdown-toggle:after{
