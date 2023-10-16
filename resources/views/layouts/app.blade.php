@@ -55,7 +55,7 @@
             <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button  me-1" data-lang="en" data-show-count="false"></a>
             <a href="{{ config('feed.feeds.main.url') }}" id="rss-link"
                class="text-decoration-none  me-1"
-               target="_blank" title="{{ __('custom.subscribe') }}">
+               target="_blank" title="{{ __('custom.subscribe') }}"><span class="d-none">RSS</span>
                 <i class="fas fa-rss-square mr-2 bg-white"></i>
             </a>
         </div>
