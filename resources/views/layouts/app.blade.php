@@ -44,9 +44,9 @@
         @include('layouts.partial.front.header')
         @include('layouts.partial.front.top_menu')
     </header>
-    <div class="px-md-5 px-3 pt-1 pb-1 social d-flex justify-content-between align-items-center" id="top-panel">
+    <div class="container-fluid py-1 px-4 social d-flex justify-content-between align-items-center" id="top-panel">
         @include('partials.breadcrumbs_front')
-        <div>
+        <div class="d-flex justify-content-center align-items-center">
             <div class="fb-share-button me-1"
                  data-href="{{ request()->url() }}"
                  data-layout="button" data-size="small">
