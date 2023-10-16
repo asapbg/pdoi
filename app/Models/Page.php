@@ -17,7 +17,7 @@ class Page  extends ModelActivityExtend implements TranslatableContract
 
     const CONTACT_SYSTEM_PAGE = 'contact';
     const APPEAL_INFO_SYSTEM_PAGE = 'appeal_info';
-    const APPEAL_INFO_FILE = 'appeal_info.doc';
+    const APPEAL_INFO_FILE = 'appeal_info.docx';
 
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 

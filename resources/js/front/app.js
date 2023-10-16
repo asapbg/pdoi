@@ -176,7 +176,13 @@ $(function() {
                 vo_high_contrast = $('body').hasClass('high-contrast') ? 1 : 0;
                 if( vo_high_contrast ) {
                     $('.vo-reset').removeClass('d-none');
+                    $('#vo-contrast .low').removeClass('d-none');
+                    $('#vo-contrast .height').addClass('d-none');
+                } else{
+                    $('#vo-contrast .height').removeClass('d-none');
+                    $('#vo-contrast .low').addClass('d-none');
                 }
+                
                 setCookie('vo_high_contrast', vo_high_contrast);
             }
             if($(this).hasClass('vo-increase-text') && !vo_ajax ) {

@@ -93,7 +93,7 @@
         <hr class="m-0">
         <li class="visual-option vo-increase-text py-2" role="button"><i class="text-primary me-2">A+</i>{{ __('custom.increase_text') }}</li>
         <li class="visual-option vo-decrease-text py-2" role="button"><i class="text-primary me-2">A-</i>{{ __('custom.decrease_text') }}</li>
-        <li class="visual-option vo-contrast py-2" role="button"><i class="fa-solid fa-palette text-primary me-2"></i>{{ __('custom.height_contrast') }}</li>
+        <li class="visual-option vo-contrast py-2" role="button" id="vo-contrast"><i class="fa-solid fa-palette text-primary me-2"></i><span class="height @if($vo_high_contrast) d-none @endif">{{ __('custom.height_contrast') }}</span><span class="low @if(!$vo_high_contrast) d-none @endif">{{ __('custom.low_contrast') }}</span></li>
         <li class="visual-option vo-reset py-2" role="button"><i class="fas fa-sync-alt text-primary me-2"></i>{{ __('custom.clear') }}</li>
     </ul>
 </div>
