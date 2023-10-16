@@ -147,6 +147,7 @@ return [
     'create'                           => 'Създай',
     'created'                          => 'Създаване',
     'creation_of'                      => 'Създаване на ',
+    'view_of'                          => 'Преглед на ',
     'edit'                             => 'Редакция',
     'renew'                            => 'Възобновяване ',
     'edit_of'                          => 'Редакция на ',
@@ -462,5 +463,8 @@ return [
     'acts_and_documents'                                     => 'Нормативни актове и документи',
     //breadcrumb
     'help_section'                                  => 'Помощ',
+    'application'                                  => 'Заявления',
+    'my_application'                                  => 'Моите заявления',
+    'new_application'                                  => 'Подаване на завление',
 ];
 

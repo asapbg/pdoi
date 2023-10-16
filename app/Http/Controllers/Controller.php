@@ -93,10 +93,14 @@ class Controller extends BaseController
 
         $text = __('custom.list_with');
         $heading = $this->title_heading ?? "$text $this->title_plural";
-
         if ($segments[$links_count] == "create") {
             array_pop($segments);
             $heading = __('custom.creation_of').$this->title_singular;
+            $segments[] = $heading;
+        }
+        if ($segments[$links_count] == "view") {
+            array_pop($segments);
+            $heading = __('custom.view_of').$this->title_singular;
             $segments[] = $heading;
         }
         if ($segments[$links_count] == "edit") {

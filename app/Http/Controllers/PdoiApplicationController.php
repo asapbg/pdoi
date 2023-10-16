@@ -58,7 +58,8 @@ class PdoiApplicationController extends Controller
             $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
         }
         $titlePage =__('custom.searching');
-        return view('front.application.list', compact('applications', 'titlePage', 'filter'));
+        $this->setBreadcrumbsTitle($titlePage);
+        return $this->view('front.application.list', compact('applications', 'titlePage', 'filter'));
     }
 
     public function show(Request $request, int $id = 0)
@@ -70,7 +71,8 @@ class PdoiApplicationController extends Controller
         $item->number_of_visits += 1;
         $item->save();
         $application = (new PdoiApplicationShortResource($item))->resolve();
-        return view('front.application.view', compact('application'));
+        $this->setTitleSingular(trans_choice('custom.applications', 1));
+        return $this->view('front.application.view', compact('application'));
     }
 
     public function myApplications(Request $request)
@@ -90,7 +92,7 @@ class PdoiApplicationController extends Controller
         $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
         $myList = true;
         $titlePage =__('front.my_application.title');
-        return view('front.application.list', compact('applications', 'titlePage', 'myList', 'filter'));
+        return $this->view('front.application.list', compact('applications', 'titlePage', 'myList', 'filter'));
     }
 
     public function showMy(Request $request, int $id = 0)
@@ -117,8 +119,8 @@ class PdoiApplicationController extends Controller
                 'msg' => $lastEvent->add_text,
             );
         }
-
-        return view('front.my_application.view', compact('application', 'needInfoSection'));
+        $this->setTitleSingular(trans_choice('custom.applications', 1));
+        return $this->view('front.my_application.view', compact('application', 'needInfoSection'));
     }
 
     public function sendAdditionalInfo(StoreInfoEventRequest $request)
@@ -151,7 +153,7 @@ class PdoiApplicationController extends Controller
         }
 
         $application = (new PdoiApplicationResource($item))->resolve();
-        return view('front.my_application.view_full_history', compact('application'));
+        return $this->view('front.my_application.view_full_history', compact('application'));
     }
 
     public function create(Request $request)
@@ -179,7 +181,7 @@ class PdoiApplicationController extends Controller
         }
 
         $rzs = PdoiResponseSubject::optionsList();
-        return view('front.application.apply', compact('data', 'user', 'rzs', 'title'));
+        return $this->view('front.application.apply', compact('data', 'user', 'rzs', 'title'));
     }
 
     public function store(Request $request) {

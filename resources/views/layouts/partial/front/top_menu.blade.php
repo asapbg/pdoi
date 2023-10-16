@@ -8,11 +8,9 @@
                 <li class="nav-item px-1">
                     <a class="nav-link @if(request()->route()->getName() == 'home') active @endif" aria-current="page" href="{{ route('home') }}">Начало</a>
                 </li>
-                @if(auth()->user())
-                    <li class="nav-item px-1">
-                        <a class="nav-link @if(request()->route()->getName() == 'application.create') active @endif" href="{{ route('application.create') }}">Подаване на заявление</a>
-                    </li>
-                @endif
+                <li class="nav-item px-1">
+                    <a class="nav-link @if(request()->route()->getName() == 'application.create') active @endif" href="{{ route('application.create') }}">Подаване на заявление</a>
+                </li>
                 @if(auth()->user())
                     <li class="nav-item px-1">
                         <a class="nav-link @if(\Illuminate\Support\Str::contains(url()->current(), ['my-application'])) active @endif" href="{{ route('application.my') }}">Моите заявления</a>

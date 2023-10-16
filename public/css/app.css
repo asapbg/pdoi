@@ -339,7 +339,7 @@ main {
     /*background-size: cover;*/
     line-height: normal !important;
     font-size: 1em;
-    min-height: calc(100vh - 483px);
+    min-height: calc(100vh - 481px);
 }
 
 /*TITLE*/

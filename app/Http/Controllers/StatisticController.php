@@ -84,6 +84,7 @@ class StatisticController extends Controller
             $titlePeriod = __('custom.statistics.full_period');
         }
 
+        $this->setTitleSingular($titlePage);
         return $this->view('front.statistic.view', compact('titlePage', 'chartData', 'availablePeriods', 'type', 'extraChartData', 'titlePeriod'));
     }
 }

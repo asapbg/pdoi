@@ -64,6 +64,9 @@ class HomeController extends Controller
             'seo_description' => $item->meta_description
         ]);
         $this->setTitles($item->name);
+        if( $slug == 'contact' ) {
+            
+        }
         return $this->view('front.page', compact('item'));
     }
 

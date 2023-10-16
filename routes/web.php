@@ -43,13 +43,13 @@ Route::get('/seos-callback', [CommonController::class, 'callbackRegisterEvent'])
 //application
 Route::controller(PdoiApplicationFrontController::class)->group(function () {
     Route::get('/application','index')->name('application.list');
-    Route::get('/application/view/{id}','show')->name('application.show');
+    Route::get('/application/{id}/view','show')->name('application.show');
 });
 
 //statistics
 Route::controller(\App\Http\Controllers\StatisticController::class)->group(function () {
     Route::get('/statistic','index')->name('statistic.list');
-    Route::get('/statistic/view/{type}/{period?}','show')->name('statistic.view');
+    Route::get('/statistic/{type}/view/{period?}','show')->name('statistic.view');
 });
 
 Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\CustomRole::WEB_ACCESS_RULE)]], function() {
@@ -65,10 +65,10 @@ Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\Cus
     //application
     Route::controller(PdoiApplicationFrontController::class)->group(function () {
         Route::get( '/my-application','myApplications')->name('application.my');
-        Route::get( '/my-application/view/{id}','showMy')->name('application.my.show');
+        Route::get( '/my-application/{id}/view','showMy')->name('application.my.show');
         Route::post( '/my-application/send-info','sendAdditionalInfo')->name('application.my.send_info');
         Route::get( '/my-application/full-history/{id}','showMyFullHistory')->name('application.my.show.history');
-        Route::get('/application/new','create')->name('application.create');
+        Route::get('/new-application','create')->name('application.create');
         Route::post('/application/store','store')->name('application.store');
     });
 });
