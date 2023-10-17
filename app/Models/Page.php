@@ -27,7 +27,7 @@ class Page  extends ModelActivityExtend implements TranslatableContract
     //activity
     protected string $logName = "page";
 
-    protected $fillable = ['active', 'section_id', 'slug', 'ord er_idx', 'system_name'];
+    protected $fillable = ['active', 'section_id', 'slug', 'order_idx', 'system_name'];
 
     public function scopeIsActive($query)
     {
