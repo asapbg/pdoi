@@ -29,6 +29,7 @@
         var vo_font_percent = parseInt('<?php echo($vo_font_percent)?>');
         var vo_high_contrast = parseInt('<?php echo($vo_high_contrast)?>');
         var vo_ajax = false;
+        var GlobalLang = "{{ str_replace('_', '-', app()->getLocale()) }}";
     </script>
     @include('feed::links')
 </head>

@@ -182,7 +182,7 @@ $(function() {
                     $('#vo-contrast .height').removeClass('d-none');
                     $('#vo-contrast .low').addClass('d-none');
                 }
-                
+
                 setCookie('vo_high_contrast', vo_high_contrast);
             }
             if($(this).hasClass('vo-increase-text') && !vo_ajax ) {
@@ -218,7 +218,10 @@ $(function() {
                 format: 'dd.mm.yyyy',
                 todayHighlight: true,
                 orientation: "bottom left",
-                autoclose: true
+                autoclose: true,
+                weekStart: 1,
+                changeMonth: true,
+                changeYear: true,
             });
         }
 

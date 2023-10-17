@@ -66,15 +66,21 @@ mix.scripts([
     'resources/js/front/jquery_ui-1.13.2.min.js',
     // 'resources/js/front/bootstrap-5.3/bootstrap.min.js',
     'resources/js/front/bootstrap-5.3/bootstrap.bundle.min.js',
+    'resources/adminlte-3.2/plugins/bootstrap-timepicker/bootstrap-timepicker.min.js',
+    'resources/adminlte-3.2/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js',
+    'resources/adminlte-3.2/plugins/bootstrap-datepicker/bootstrap-datepicker.bg.min.js',
     'resources/js/front/select2.full.min.js',
     'resources/js/front/app.js',
     'resources/js/front/apply_application.js',
     'resources/js/partials/select2Ekatte.js',
+    'resources/adminlte-3.2/plugins/daterangepicker/daterangepicker.js',
 ], 'public/js/app.js');
 
 mix.styles([
     'resources/css/front/jquery_ui-1.13.2.min.css',
     'resources/css/front/bootstrap-5.3/bootstrap.min.css',
+    'resources/adminlte-3.2/plugins/bootstrap-timepicker/bootstrap-timepicker.min.css',
+    'resources/adminlte-3.2/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css',
     'resources/css/front/select2.min.css',
     'resources/css/app.css'
 ], 'public/css/app.css');
