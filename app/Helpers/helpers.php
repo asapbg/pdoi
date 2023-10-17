@@ -541,3 +541,36 @@ if (!function_exists('statisticApplicationGroupByOptions')) {
     }
 }
 
+if (!function_exists('fileIcon')) {
+    /**
+     * @param string $fileType
+     * @return string
+     */
+    function fileIcon($fileType): string
+    {
+        $icon = '<i class="fas fa-file-download text-secondary me-1"></i>';
+        switch ($fileType)
+        {
+            case 'application/pdf':
+            case 'pdf':
+                $icon = '<i class="fa-solid fa-file-pdf text-danger me-1"></i>';
+                break;
+            case 'text/csv':
+                $icon = '<i class="fa-solid fa-file-csv text-primary me-1"></i>';
+                break;
+            case 'application/msword':
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                $icon = '<i class="fa-solid fa-file-word text-info me-1"></i>';
+                break;
+            case 'application/vnd.ms-excel':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                $icon = '<i class="fa-solid fa-file-excel text-success me-1"></i>';
+            case 'application/rar':
+            case 'application/x-rar':
+                $icon = '<i class="fa-solid fa-file-zipper text-primary me-1"></i>';
+                break;
+        }
+        return $icon;
+    }
+}
+

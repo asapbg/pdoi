@@ -14,7 +14,7 @@
                     @if(isset($pages) && $pages->count())
                         @foreach($pages as $page)
                             <div class="mb-3">
-                                <a class="d-inline-block a-fs mb-1"href="{{ route('page', ['section_slug' => $page->section->slug, 'slug' => $page->slug]) }}">{{ $page->name }}</a>
+                                <a class="d-inline-block a-fs mb-1" href="{{ route('page', ['section_slug' => $page->section->slug, 'slug' => $page->slug]) }}">{{ $page->name }}</a>
                                 @if(!empty($page->short_content))
                                     <p class="p-fs">{{ $page->short_content }}</p>
                                 @endif
@@ -27,7 +27,7 @@
                         @foreach($item->files as $f)
                             <div class="row">
                                 <a class="w-100 mb-2" target="_blank" href="{{ route('download.page.file', ['file' => $f->id]) }}">
-                                    <i class="fas fa-file-download text-secondary me-1"></i> {{ $f->description }}
+                                    {!! fileIcon($f->content_type) !!} {{ $f->description }}
                                 </a>
                             </div>
                         @endforeach

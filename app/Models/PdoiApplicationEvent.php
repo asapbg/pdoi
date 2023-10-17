@@ -23,7 +23,11 @@ class PdoiApplicationEvent extends Model
                 if( $this->event_reason && $this->event_reason == PdoiApplicationStatusesEnum::NOT_APPROVED->value ) {
                     $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).($this->notApprovedReason ? ' - '.$this->notApprovedReason->name : '').')';
                 } else{
-                    $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).')';
+                    if( !$this->event_reason ) {
+                        $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->application->status)).')';
+                    } else{
+                        $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).')';
+                    }
                 }
                 break;
             case ApplicationEventsEnum::EXTEND_TERM->value:
