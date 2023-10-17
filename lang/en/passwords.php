@@ -13,6 +13,7 @@ return [
     |
     */
 
+    'password'  => 'Password must be at least eight characters long and match with \'Confirm password\'',
     'reset' => 'Your password has been reset!',
     'sent' => 'We have emailed your password reset link!',
     'throttled' => 'Please wait before retrying.',

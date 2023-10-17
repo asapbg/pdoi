@@ -3,7 +3,7 @@
         <div class="accordion-item">
             <h4 class="accordion-header">
                 <button class="accordion-button text-white py-1 pb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <i class="fa-solid fa-search me-2"></i> Филтри
+                    <i class="fa-solid fa-search me-2"></i> {{ trans_choice('custom.filters', 2) }}
                 </button>
             </h4>
             <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">

@@ -24,11 +24,11 @@
                     <div class="row mt-2">
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label for="username" class="form-label fw-semibold">{{ __('front.username_email') }}: <span class="required">*</span></label>
-                            <input name="username" id="username" class="form-control form-control-sm" type="text" value="{{ old('username', '') }}" required>
+                            <input name="username" id="username" class="form-control form-control-sm" type="text" value="{{ old('username', '') }}">
                         </div>
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label for="password" class="form-label fw-semibold">{{ __('validation.attributes.password') }}: <span class="required">*</span></label>
-                            <input name="password" id="password" class="form-control form-control-sm" type="password" required>
+                            <input name="password" id="password" class="form-control form-control-sm" type="password">
                         </div>
                     </div>
                     <div class="row">

@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label fw-semibold" for="names">{{ __('validation.attributes.names') }}: <span class="required">*</span></label>
-                            <input class="form-control form-control-sm @error('names') is-invalid @enderror" type="text" value="{{ old('names', '') }}" name="names" id="names" required autocomplete="off">
+                            <input class="form-control form-control-sm @error('names') is-invalid @enderror" type="text" value="{{ old('names', '') }}" name="names" id="names" autocomplete="off">
                             @error('names')
                             <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label fw-semibold" for="email">{{ __('validation.attributes.email') }}: <span class="required">*</span></label>
-                            <input class="form-control form-control-sm @error('email') is-invalid @enderror" type="email" value="{{ old('email', '') }}" name="email" id="email" required autocomplete="off">
+                            <input class="form-control form-control-sm @error('email') is-invalid @enderror" type="email" value="{{ old('email', '') }}" name="email" id="email" autocomplete="off">
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.password') }}: <span class="required">*</span></label>
-                            <input class="form-control form-control-sm @error('password') is-invalid @enderror" type="password" name="password" id="password" required autocomplete="off">
+                            <input class="form-control form-control-sm @error('password') is-invalid @enderror" type="password" name="password" id="password" autocomplete="off">
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.password_confirm') }}: <span class="required">*</span></label>
-                            <input class="form-control form-control-sm @error('password_confirmation') is-invalid @enderror" type="password" name="password_confirmation" id="password_confirmation" required autocomplete="off">
+                            <input class="form-control form-control-sm @error('password_confirmation') is-invalid @enderror" type="password" name="password_confirmation" id="password_confirmation" autocomplete="off">
                             @error('password_confirmation')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -52,9 +52,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <a href="" title="" class="d-inline-block col-12 text-left">Вече сте регистриран?</a>
+                        <a href="" title="" class="d-inline-block col-12 text-left">{{ __('front.already_have_account') }}</a>
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary mt-3">Регистрирай ме</button>
+                            <button type="submit" class="btn btn-primary mt-3">{{ __('custom.register') }}</button>
                         </div>
 
                     </div>

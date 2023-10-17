@@ -6,14 +6,14 @@
         <div class="collapse navbar-collapse justify-content-md-center" id="topMenuNav">
             <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                 <li class="nav-item px-1">
-                    <a class="nav-link @if(request()->route()->getName() == 'home') active @endif" aria-current="page" href="{{ route('home') }}">Начало</a>
+                    <a class="nav-link @if(request()->route()->getName() == 'home') active @endif" aria-current="page" href="{{ route('home') }}">{{ __('custom.home') }}</a>
                 </li>
                 <li class="nav-item px-1">
-                    <a class="nav-link @if(request()->route()->getName() == 'application.create') active @endif" href="{{ route('application.create') }}">Подаване на заявление</a>
+                    <a class="nav-link @if(request()->route()->getName() == 'application.create') active @endif" href="{{ route('application.create') }}">{{ __('front.application.title.apply') }}</a>
                 </li>
                 @if(auth()->user())
                     <li class="nav-item px-1">
-                        <a class="nav-link @if(\Illuminate\Support\Str::contains(url()->current(), ['my-application'])) active @endif" href="{{ route('application.my') }}">Моите заявления</a>
+                        <a class="nav-link @if(\Illuminate\Support\Str::contains(url()->current(), ['my-application'])) active @endif" href="{{ route('application.my') }}">{{ __('custom.my_application') }}</a>
                     </li>
                 @endif
                 <li class="nav-item px-1">
