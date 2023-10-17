@@ -64,9 +64,26 @@ class HomeController extends Controller
             'seo_description' => $item->meta_description
         ]);
         $this->setTitles($item->name);
-        if( $slug == 'contact' ) {
-            
+
+        return $this->view('front.page', compact('item'));
+    }
+
+    public function contact()
+    {
+        $item = Page::with(['translation', 'section', 'section.translation', 'files'])->where('slug', 'contact')->first();
+        if( !$item ) {
+            abort(Response::HTTP_NOT_FOUND);
         }
+
+        $this->setSeo([
+            'seo_title' => $item->meta_title,
+            'seo_keywords' => $item->meta_keyword,
+            'seo_description' => $item->meta_description
+        ]);
+        $this->setTitles($item->name);
+
+        $subjects = PdoiResponseSubject::getTree();
+
         return $this->view('front.page', compact('item'));
     }
 

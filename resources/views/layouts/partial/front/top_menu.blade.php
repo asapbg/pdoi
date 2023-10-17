@@ -32,7 +32,7 @@
                     <a class="nav-link" href="{{ route('statistic.list') }}">{{ trans_choice('custom.statistics', 1) }}</a>
                 </li>
                 <li class="nav-item px-1">
-                    <a class="nav-link" href="{{ route('page', ['section_slug' => 'info', 'slug' => \App\Models\Page::CONTACT_SYSTEM_PAGE]) }}">{{ trans_choice('custom.contacts', 2) }}</a>
+                    <a class="nav-link" href="{{ route('contacts') }}">{{ trans_choice('custom.contacts', 2) }}</a>
                 </li>
                 <li class="nav-item px-1">
                     <a class="nav-link" href="{{ route('help.index') }}">{{ __('custom.help') }}</a>

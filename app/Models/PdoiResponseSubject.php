@@ -130,7 +130,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
      * We use this to draw subjects tree template in modals and pages
      * @return array
      */
-    public static function getTree($filter)
+    public static function getTree($filter = [])
     {
         $tree = [];
         $subjects = DB::table('pdoi_response_subject')

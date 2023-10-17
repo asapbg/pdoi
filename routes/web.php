@@ -95,6 +95,7 @@ Route::get('help-section/{slug}', [\App\Http\Controllers\HomeController::class, 
 Route::get('help-section/download/{file}', [\App\Http\Controllers\HomeController::class, 'downloadHelpDoc'])->name('help.download');
 
 //Sections and pages
+Route::get('contacts', [\App\Http\Controllers\HomeController::class, 'contact'])->name('contacts');
 Route::get('{slug}', [\App\Http\Controllers\HomeController::class, 'section'])->name('section');
 Route::get('{section_slug}/{slug}', [\App\Http\Controllers\HomeController::class, 'page'])->name('page');
 
