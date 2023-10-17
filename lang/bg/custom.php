@@ -467,5 +467,8 @@ return [
     'application'                                  => 'Заявления',
     'my_application'                                  => 'Моите заявления',
     'new_application'                                  => 'Подаване на завление',
+    'administrator_moderators'                      => 'Администратор-модератор|Администратори-модератори',
+    'search_by_subject'                         => 'Търсене по Задължен субект',
+    'no_contact_found'                         => 'Не са намерени данни за контакт',
 ];
 

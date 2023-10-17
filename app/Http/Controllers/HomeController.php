@@ -82,9 +82,9 @@ class HomeController extends Controller
         ]);
         $this->setTitles($item->name);
 
-        $subjects = PdoiResponseSubject::getTree();
+        $contacts = PdoiResponseSubject::getTree();
 
-        return $this->view('front.page', compact('item'));
+        return $this->view('front.page', compact('item', 'contacts'));
     }
 
     public function help(Request $request)

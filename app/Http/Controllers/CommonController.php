@@ -62,6 +62,7 @@ class CommonController extends Controller
 
         if( $request->get('model') === 'User' ) {
             $entity->status = $status ? User::STATUS_ACTIVE : User::STATUS_INACTIVE;
+            $entity->$booleanType = $status;
         } else{
             if( $request->get('model') === 'Role' && !$status) {
                 $entity->syncPermissions([]);
@@ -278,5 +279,17 @@ class CommonController extends Controller
         } else {
             echo '404';
         }
+    }
+
+    public function getSubjectContactInfo(Request $request)
+    {
+        $id = $request->get('s');
+        $item = PdoiResponseSubject::find((int)$id);
+        if( !$item ) {
+            echo '<p class="text-danger">'.__('messages.record_not_found').'</p>';
+        }
+
+        $contacts = User::where('administrative_unit', '=', $item->id)->get();
+        return view('front.partials.contact_person', compact('contacts'));
     }
 }

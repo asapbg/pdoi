@@ -459,6 +459,22 @@ $(function() {
         // ==========================
         // END Upload file and add in table section
         //==========================
+
+        //==================================
+        // START Contact page subject info
+        //==================================
+        $('#subjectContact').on('change', function (){
+            if( parseInt($(this).val()) > 0 ){
+                $('#subjectContactResult').load($(this).data('url') + '?s=' + $(this).val());
+            } else {
+                $('#subjectContactResult').html('');
+            }
+
+        });
+        // ==================================
+        // START Contact page subject info
+        //==================================
+
     });
 });
 

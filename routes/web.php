@@ -39,6 +39,7 @@ Route::get('/reset-visual-options', [CommonController::class, 'resetVisualOption
 //download public page file
 Route::get('/download/page/{file}', [CommonController::class, 'downloadPageFile'])->name('download.page.file');
 Route::get('/seos-callback', [CommonController::class, 'callbackRegisterEvent']);
+Route::get('/subject/contacts', [CommonController::class, 'getSubjectContactInfo'])->name('subject.contact_info');
 
 //application
 Route::controller(PdoiApplicationFrontController::class)->group(function () {
