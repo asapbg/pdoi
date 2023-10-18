@@ -484,3 +484,7 @@ a.home-sub-items:hover {
     }
 }
 
+p.home-sub-items.m-0 {
+    padding: 7.5px 20px !important;
+}
+
