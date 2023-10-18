@@ -12,7 +12,7 @@ enum StatisticTypeEnum: int
 
     case TYPE_APPLICATION_MONTH = 1; //Статистика за подадени заявления по задължен субект, тип заявител и статус - месечна база
     case TYPE_APPLICATION_STATUS_SIX_MONTH = 2; //Брой заявления по задължен субект и статус за период
-    case TYPE_APPLICATION_STATUS_TOTAL = 3; //Брой заявления по задължен субект и статус (Общо)
+//    case TYPE_APPLICATION_STATUS_TOTAL = 3; //Брой заявления по задължен субект и статус (Общо)
 
     // Return enum name by value
     public static function keyByValue($searchVal): string

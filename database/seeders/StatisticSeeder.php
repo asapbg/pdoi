@@ -331,12 +331,12 @@ class StatisticSeeder extends Seeder
                 't1' => '2022-01-01 00:00:00',
                 't2' => '2022-06-30 23:59:59'
             ],
-            [
-                'type' => StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value,
-                'period' => '072023',
-                't1' => null,
-                't2' => Carbon::now()
-            ],
+//            [
+//                'type' => StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value,
+//                'period' => '072023',
+//                't1' => null,
+//                't2' => Carbon::now()
+//            ],
         );
 
         foreach ($statistics as $item) {

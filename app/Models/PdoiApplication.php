@@ -469,7 +469,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     ->orderBy('pdoi_response_subject_translations.subject_name');
                 break;
             case StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value:
-            case StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value:
+//            case StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value:
                 $query = DB::table('pdoi_application')
                     ->select([
                             DB::raw('pdoi_response_subject_translations.subject_name as name'),

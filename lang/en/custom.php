@@ -475,5 +475,6 @@ return [
     'to_all_applications'                       => 'full list',
     'more_statistics'                       => 'More statistics',
     'most_asked_institutions'               => 'Most asked institutions',
+    'institutions'                          => 'Институция|Институции',
 ];
 

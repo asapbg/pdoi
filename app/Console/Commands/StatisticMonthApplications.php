@@ -46,7 +46,7 @@ class StatisticMonthApplications extends Command
         $startPeriod = Carbon::now()->startOfMonth()->subMonths(1);
         $endPeriod = Carbon::now()->endOfMonth()->subMonths(1);
         $data = PdoiApplication::publicStatistic($type, $startPeriod, $endPeriod);
-dd($data);
+
         Statistic::create([
             'type' => $type,
             'period' => $statisticPeriod,

@@ -1,4 +1,5 @@
 @if(isset($filter) && count($filter))
+    @php($export = isset($filter['export']) && $filter['export'])
     <div class="accordion app-accordion mb-4 @if(isset($filterClass)){{ $filterClass }}@endif" id="accordionExample">
         <div class="accordion-item">
             <h4 class="accordion-header">
@@ -10,6 +11,7 @@
                 <div class="accordion-body">
                     <form class="row form-filter">
                         @foreach($filter as $key => $field)
+                            @continue($key == 'export')
                             <div class="mb-3 {{ $field['col'] ?? 'col-md-6' }} col-12 mb-3">
                                 <div class="input-group">
                                     @switch($field['type'])
@@ -76,6 +78,11 @@
                             <button type="submit" name="search" value="1" class="btn btn-sm btn-success d-inline w-auto">
                                 <i class="fa fa-search"></i> {{ __('custom.search') }}
                             </button>
+                            @if($export)
+                                <button type="submit" name="export" value="1" class="btn btn-sm btn-success d-inline w-auto">
+                                    <i class="fa fa-file-excel"></i> {{ __('custom.export') }}
+                                </button>
+                            @endif
                             @if(isset($listRouteName))
                                 <a href="{{ route($listRouteName) }}" class="btn btn-sm btn-default d-inline">
                                     <i class="fas fa-eraser"></i> {{ __('custom.clear') }}

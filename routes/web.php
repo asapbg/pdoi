@@ -50,7 +50,7 @@ Route::controller(PdoiApplicationFrontController::class)->group(function () {
 //statistics
 Route::controller(\App\Http\Controllers\StatisticController::class)->group(function () {
     Route::get('/statistic','index')->name('statistic.list');
-    Route::get('/statistic/{type}/view/{period?}','show')->name('statistic.view');
+    Route::get('/statistic/{type}/view','show')->name('statistic.view');
 });
 
 Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\CustomRole::WEB_ACCESS_RULE)]], function() {

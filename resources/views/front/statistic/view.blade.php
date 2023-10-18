@@ -24,12 +24,6 @@
             </div>
         @endif
         <div class="card card-light mb-4">
-            {{--            <div class="card-header app-card-header py-1 pb-0">--}}
-            {{--                <h4 class="fs-5">--}}
-            {{--                    <i class="fa-solid fa-file me-2"></i> {{ trans_choice('custom.applications', 2) }} ({{ $applications ? $applications['pagination']['total'] : 0}})--}}
-            {{--                    @include('front.partials.filter_search_info')--}}
-            {{--                </h4>--}}
-            {{--            </div>--}}
             <div class="card-body" style="height: 600px; overflow-y: scroll;">
                 <div id="chart">
 {{--                    <canvas id="chartCanvas" style="margin: 0 auto;width:100%;height:2000px;"></canvas>--}}
@@ -48,7 +42,6 @@
             let statisticType = parseInt(<?php echo $type; ?>);
             let data = <?php echo json_encode($chartData); ?>;
             if (statisticType === parseInt(<?php echo \App\Enums\StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value; ?>)
-                || statisticType === parseInt(<?php echo \App\Enums\StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value; ?>)
                 || statisticType === parseInt(<?php echo \App\Enums\StatisticTypeEnum::TYPE_APPLICATION_MONTH->value; ?>) ) {
                 const ctx = document.getElementById('chartCanvas').getContext('2d');
                 const chart = new Chart(ctx,

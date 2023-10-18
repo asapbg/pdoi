@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\StatisticTypeEnum;
+use App\Exports\StatisticExport;
+use App\Models\PdoiApplication;
 use App\Models\Statistic;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StatisticController extends Controller
 {
@@ -15,31 +19,31 @@ class StatisticController extends Controller
         return $this->view('front.statistic.index', compact('titlePage'));
     }
 
-    public function show(Request $request, int $type, string $period = '')
+    public function show(Request $request, int $type)
     {
+        $export = $request->filled('export');
+        $from = $request->filled('from') ? $request->input('from') : Carbon::now()->subMonth();
+        $to = $request->filled('to') ? $request->input('to') : Carbon::now();
+        $filter = $this->filters($request);
+
         $extraChartData = [];
         $chartData = ['labels' => [], 'datasets' => []];
-        $availablePeriods = [];
-        $periods = Statistic::where('type', '=', $type)->orderBy('id', 'desc')->get()->pluck('period');
-        if( $periods ) {
-            foreach ($periods as $p) {
-                $availablePeriods[$p] = match ($type) {
-                    StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value => substr($p, 0, 2) . '.' . substr($p, -4) . ' - ' . substr($p, 2, 2) . '.' . substr($p, -4),
-                    default => substr($p, 0, 2) . '.' . substr($p, 2),
-                };
-            }
-        }
 
         $titlePage = __('front.statistic.type.'.StatisticTypeEnum::keyByValue($type));
-        $q = Statistic::where('type', '=', $type);
-        if( !empty($period) ) {
-            $q->where('period', '=', $period);
-            $dbData = $q->first();
-        } else {
-            $dbData = $q->latest('id')->first();
+        $titlePeriod =__('custom.statistics.for_period', ['period' => displayDate($from).' - '.displayDate($to)]);
+        $data = PdoiApplication::publicStatistic($type, $from, $to);
+        $arrayData = json_decode($data, true);
+
+        if( $export ) {
+            $exportData['type'] = 'applications_by_subjects';
+            $exportData['data'] = [
+                'title' => $titlePage,
+                'period' => $titlePeriod,
+                'statistic' => $arrayData
+            ];
+            return Excel::download(new StatisticExport($exportData), 'statistic_'.$type.'_'.Carbon::now()->format('Y_m_d_H_i_s').'.xlsx');
         }
 
-        $arrayData = json_decode($dbData['json_data'], true);
 
         if( $arrayData ) {
             $statuses = PdoiApplicationStatusesEnum::values();
@@ -75,16 +79,27 @@ class StatisticController extends Controller
             $extraChartData['scaleY']['max'] += 2;
         }
 
-        $titlePeriod = '';
-        if( $type == StatisticTypeEnum::TYPE_APPLICATION_STATUS_SIX_MONTH->value ) {
-            $titlePeriod = __('custom.statistics.for_period', ['period' => substr($p, 0, 2) . '.' . substr($p, -4) . ' - ' . substr($p, 2, 2) . '.' . substr($p, -4)]);
-        } elseif ( $type == StatisticTypeEnum::TYPE_APPLICATION_MONTH->value ) {
-            $titlePeriod = __('custom.statistics.for_period', ['period' => substr($p, 0, 2) . '.' . substr($p, 2)]);
-        } else {
-            $titlePeriod = __('custom.statistics.full_period');
-        }
-
         $this->setTitleSingular($titlePage);
-        return $this->view('front.statistic.view', compact('titlePage', 'chartData', 'availablePeriods', 'type', 'extraChartData', 'titlePeriod'));
+        return $this->view('front.statistic.view', compact('titlePage', 'chartData', 'type',
+            'extraChartData', 'titlePeriod', 'filter'));
+    }
+
+    private function filters($request)
+    {
+        return array(
+            'from' => array(
+                'type' => 'datepicker',
+                'value' => $request->input('from') ?? displayDate(Carbon::now()->subMonth()),
+                'placeholder' => __('custom.begin_date'),
+                'col' => 'col-md-3'
+            ),
+            'to' => array(
+                'type' => 'datepicker',
+                'value' => $request->input('to') ?? displayDate(Carbon::now()),
+                'placeholder' => __('custom.end_date'),
+                'col' => 'col-md-3'
+            ),
+            'export' => true
+        );
     }
 }

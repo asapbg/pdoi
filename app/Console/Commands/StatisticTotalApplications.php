@@ -30,13 +30,15 @@ class StatisticTotalApplications extends Command
     protected $description = 'Статистика за подадените чрез платформата за достъп до обществена информация заявления - общо';
 
     /**
+     * @deprecated
      * Execute the console command.
      *
      * @return int
      */
     public function handle()
     {
-        $type = StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value;
+//        $type = StatisticTypeEnum::TYPE_APPLICATION_STATUS_TOTAL->value;
+        $type = 0;
         Log::info("Cron run statistic:applications_total");
         $statisticPeriod = date('mY', strtotime("-1 month"));
         $startPeriod = null;
