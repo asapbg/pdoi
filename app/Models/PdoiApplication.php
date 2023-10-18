@@ -502,4 +502,26 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         $data =  is_null($query) ? [] : $query->get()->map(fn ($row) => (array)$row)->toArray();
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
+
+    public static function lastApplicationsHomePage($limit = 0): array
+    {
+        return DB::select('
+            select
+                pdoi_application.id,
+                pdoi_application.created_at,
+                pdoi_application.names_publication,
+                pdoi_application.full_names,
+                pdoi_application.response_subject_id,
+                pdoi_application.not_registered_subject_eik,
+                pdoi_response_subject_translations.subject_name,
+                pdoi_application.not_registered_subject_name
+            from pdoi_application
+            join pdoi_response_subject on pdoi_response_subject.id = pdoi_application.response_subject_id
+            join pdoi_response_subject_translations
+                on pdoi_response_subject_translations.pdoi_response_subject_id = pdoi_response_subject.id and pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'
+            order by pdoi_application.id desc
+            '.($limit ? 'limit '.$limit : '').';
+        ');
+    }
+
 }

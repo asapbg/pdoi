@@ -221,6 +221,25 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         ');
     }
 
+    public static function mostAskedSubjects($limit = 0): array
+    {
+        return DB::select('
+            select A.*
+            from (
+                select
+                    max(pdoi_response_subject_translations.subject_name) as rzs_name,
+                    count(pdoi_application.id) as applications
+                from pdoi_response_subject
+                join pdoi_response_subject_translations
+                    on pdoi_response_subject_translations.pdoi_response_subject_id = pdoi_response_subject.id and pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'
+                join pdoi_application on pdoi_application.response_subject_id = pdoi_response_subject.id
+                group by pdoi_response_subject.id
+            ) as A
+            order by A.applications desc
+            '.($limit ? 'limit '.$limit : '').';
+        ');
+    }
+
     public static function isChildOf($parentId, $childId): bool
     {
         $check = DB::select('

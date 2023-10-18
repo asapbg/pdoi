@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PdoiApplicationShortCollection;
+use App\Http\Resources\PdoiApplicationShortResource;
 use App\Models\MenuSection;
 use App\Models\Page;
+use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,7 +32,25 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('front.home');
+        $lastApplications = 10;
+        $mostAsked = 10;
+        $applications = [];
+        $appQ = PdoiApplication::lastApplicationsHomePage($lastApplications);
+        if(sizeof($appQ)) {
+            foreach ($appQ as $application) {
+                $applications[] = [
+                    'id' => $application->id,
+                    'title' => __('custom.application_system_title',
+                        [
+                            'user' => ($application->names_publication ? $application->full_names : __('custom.anonymous_applicant') ),
+                            'subject' => $application->response_subject_id ? $application->subject_name : $application->not_registered_subject_name.'('.$application->not_registered_subject_eik.')',
+                            'apply_date' => displayDate($application->created_at)
+                        ]),
+                ];
+            }
+        }
+        $mostAskedSubjects = PdoiResponseSubject::mostAskedSubjects($mostAsked);
+        return view('front.home', compact('applications', 'mostAskedSubjects'));
     }
 
     public function section($slug) {

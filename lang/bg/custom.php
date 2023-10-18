@@ -470,6 +470,10 @@ return [
     'administrator_moderators'                      => 'Администратор-модератор|Администратори-модератори',
     'search_by_subject'                         => 'Търсене по Задължен субект',
     'no_contact_found'                         => 'Не са намерени данни за контакт',
-    'filters'                                   => 'Филтър|Филтри'
+    'filters'                                   => 'Филтър|Филтри',
+    'last_applications'                       => 'Последни заявления',
+    'to_all_applications'                       => 'Към всички заявления',
+    'more_statistics'                       => 'Още статистики',
+    'most_asked_institutions'                       => 'Най-питани институции',
 ];
 

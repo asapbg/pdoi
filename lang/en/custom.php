@@ -470,6 +470,10 @@ return [
     'administrator_moderators'                      => 'Administrator-moderator|Administrator-moderators',
     'search_by_subject'                         => 'Search by administration',
     'no_contact_found'                         => 'No contact information found',
-    'filters'                                   => 'Filter|Filters'
+    'filters'                                   => 'Filter|Filters',
+    'last_applications'                       => 'Last applications',
+    'to_all_applications'                       => 'full list',
+    'more_statistics'                       => 'More statistics',
+    'most_asked_institutions'               => 'Most asked institutions',
 ];
 

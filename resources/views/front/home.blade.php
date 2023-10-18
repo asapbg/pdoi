@@ -7,72 +7,55 @@
                 {{ __('auth.success_verify') }}
             </div>
         @endif
-        <div class="d-flex gap-md-4 flex-wrap justify-content-center">
-            <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                <a href="{{ route('application.create') }}" title="{{ __('front.apply_new_application') }}" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
-                    <span>
-                        <i class="fa-regular fa-file-lines text-warning" style="font-size: 55px;"></i>
-                    </span>
-                    <span class="d-inline-block flex-grow-1">
-                        {{ __('front.application') }}
-                        <span class="d-inline-block">{{ __('front.apply_new_application') }}</span>
-                    </span>
-                </a>
+        <div class="row d-flex justify-content-md-evenly">
+            <div class="card card-light mb-4 px-0 col-md-5">
+                <div class="card-header app-card-header py-1 pb-0">
+                    <h3 class="fs-5">
+                        <i class="fa-solid fa-file me-2"></i> {{ __('custom.last_applications') }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @if(isset($applications) && sizeof($applications))
+                            @foreach($applications as $item)
+                                <div class="col-12 mb-4 mb-3">
+                                    <a class="a-fs" href="{{ route('application.show', ['id' => $item['id']]) }}">{{  $item['title'] }}</a>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+                @if(isset($applications) && sizeof($applications))
+                    <div class="card-footer">
+                        <a href="{{ route('application.list') }}">{{ __('custom.to_all_applications') }}</a>
+                    </div>
+                @endif
             </div>
-            <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                <a href="{{ route('application.list') }}" title="{{ __('front.search_in_applications') }}" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
-                    <span>
-                        <i class="fa-solid fa-magnifying-glass text-success" style="font-size: 55px;"></i>
-                    </span>
-                    <span class="d-inline-block flex-grow-1">
-                        {{ __('custom.searching') }}
-                        <span class="d-inline-block">{{ __('front.search_in_applications') }}</span>
-                    </span>
-                </a>
-            </div>
-            <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                <a href="" title="" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
-                    <span>
-                        <i class="fa-regular fa-file-video text-primary-emphasis" style="font-size: 55px;"></i>
-                    </span>
-                    <span class="d-inline-block flex-grow-1">
-                        Видео инструкции
-                        <span class="d-inline-block">Инструкции за работа с платформата за достъп на обществена информация.</span>
-                    </span>
-                </a>
-            </div>
-            <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                <a href="{{ route('section', ['slug' => 'documents']) }}" title="{{ trans_choice('custom.documents', 2) }}" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
-                    <span>
-                        <i class="fa-solid fa-layer-group text-info-emphasis" style="font-size: 55px;"></i>
-                    </span>
-                    <span class="d-inline-block flex-grow-1">
-                         {{ trans_choice('custom.documents', 2) }}
-                        <span class="d-inline-block">{{ __('front.documents') }}</span>
-                    </span>
-                </a>
-            </div>
-            <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                <a href="{{ route('statistic.list') }}" title="{{ trans_choice('custom.statistics', 1) }}" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
-                    <span>
-                        <i class="fa-solid fa-chart-line text-danger" style="font-size: 55px;"></i>
-                    </span>
-                    <span class="d-inline-block flex-grow-1">
-                        {{ trans_choice('custom.statistics', 1) }}
-                        <span class="d-inline-block">&nbsp;</span>
-                    </span>
-                </a>
-            </div>
-            <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                <a href="{{ route('page', ['section_slug' => 'info', 'slug' => \App\Models\Page::CONTACT_SYSTEM_PAGE]) }}" title=""  class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
-                    <span>
-                        <i class="fa-regular fa-address-book text-primary" style="font-size: 55px;"></i>
-                    </span>
-                    <span class="d-inline-block flex-grow-1">
-                        {{ trans_choice('custom.contacts', 2) }}
-                        <span class="d-inline-block">&nbsp;</span>
-                    </span>
-                </a>
+            <div class="card card-light mb-4 px-0 col-md-5">
+                <div class="card-header app-card-header py-1 pb-0">
+                    <h3 class="fs-5">
+                        <i class="fa-solid fa-file me-2"></i> {{ __('custom.most_asked_institutions') }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @if(isset($mostAskedSubjects) && sizeof($mostAskedSubjects))
+                            <table>
+                                @foreach($mostAskedSubjects as $item)
+                                    <tr>
+                                        <td>{{ $item->rzs_name }}</td>
+                                        <td>{{ $item->applications }} {{ trans_choice('custom.applications', 2) }}</td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        @endif
+                    </div>
+                </div>
+                @if(isset($mostAskedSubjects) && sizeof($mostAskedSubjects))
+                    <div class="card-footer">
+                        <a href="{{ route('statistic.list') }}">{{ __('custom.more_statistics') }}</a>
+                    </div>
+                @endif
             </div>
         </div>
     </section>
