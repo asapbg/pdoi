@@ -8,18 +8,18 @@
             </div>
         @endif
         <div class="row d-flex justify-content-md-evenly">
-            <div class="card card-light mb-4 px-0 col-md-5">
+            <div class="card card-light mb-4 mt-4 px-0 col-md-5">
                 <div class="card-header app-card-header py-1 pb-0">
-                    <h3 class="fs-5">
-                        <i class="fa-solid fa-file me-2"></i> {{ __('custom.last_applications') }}
+                    <h3 class="fs-4 pt-2">
+                        <i class="fa-solid fa-file-import me-2"></i> {{ __('custom.last_applications') }}
                     </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         @if(isset($applications) && sizeof($applications))
                             @foreach($applications as $item)
-                                <div class="col-12 mb-4 mb-3">
-                                    <a class="a-fs" href="{{ route('application.show', ['id' => $item['id']]) }}">{{  $item['title'] }}</a>
+                                <div class="col-12 mb-3">
+                                    <a class="home-sub-items" href="{{ route('application.show', ['id' => $item['id']]) }}">{{  $item['title'] }}</a>
                                 </div>
                             @endforeach
                         @endif
@@ -27,33 +27,39 @@
                 </div>
                 @if(isset($applications) && sizeof($applications))
                     <div class="card-footer">
-                        <a href="{{ route('application.list') }}">{{ __('custom.to_all_applications') }}</a>
+                        <a href="{{ route('application.list') }}" class="btn btn-primary btn-sm">{{ __('custom.to_all_applications') }} <i class="fa-solid fa-arrow-right-long ms-2"></i></a>
                     </div>
                 @endif
             </div>
-            <div class="card card-light mb-4 px-0 col-md-5">
+            <div class="card card-light mb-4 mt-4 px-0 col-md-5">
                 <div class="card-header app-card-header py-1 pb-0">
-                    <h3 class="fs-5">
-                        <i class="fa-solid fa-file me-2"></i> {{ __('custom.most_asked_institutions') }}
+                    <h3 class="fs-4 pt-2">
+                        <i class="fa-solid fa-clipboard-question me-2"></i> {{ __('custom.most_asked_institutions') }}
                     </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         @if(isset($mostAskedSubjects) && sizeof($mostAskedSubjects))
-                            <table>
+{{--                            <table>--}}
                                 @foreach($mostAskedSubjects as $item)
-                                    <tr>
-                                        <td>{{ $item->rzs_name }}</td>
-                                        <td>{{ $item->applications }} {{ trans_choice('custom.applications', 2) }}</td>
-                                    </tr>
+                                    <div class="col-12 mb-3">
+                                        <p class="home-sub-items m-0">
+                                            <span>{{ $item->rzs_name }}</span>
+                                            <span class="home-sub-items-count">{{ $item->applications }} {{ trans_choice('custom.applications', 2) }}</span>
+                                        </p>
+                                    </div>
+{{--                                    <tr>--}}
+{{--                                        <td>{{ $item->rzs_name }}</td>--}}
+{{--                                        <td>{{ $item->applications }} {{ trans_choice('custom.applications', 2) }}</td>--}}
+{{--                                    </tr>--}}
                                 @endforeach
-                            </table>
+{{--                            </table>--}}
                         @endif
                     </div>
                 </div>
                 @if(isset($mostAskedSubjects) && sizeof($mostAskedSubjects))
                     <div class="card-footer">
-                        <a href="{{ route('statistic.list') }}">{{ __('custom.more_statistics') }}</a>
+                        <a href="{{ route('statistic.list') }}" class="btn btn-primary btn-sm rounded ">{{ __('custom.more_statistics') }} <i class="fa-solid fa-arrow-right-long ms-2"></i></a>
                     </div>
                 @endif
             </div>
