@@ -476,5 +476,6 @@ return [
     'more_statistics'                       => 'Още статистики',
     'most_asked_institutions'                       => 'Най-питани институции',
     'institutions'                          => 'Институция|Институции',
+    'queries'                          => 'Запитване|Запитвания',
 ];
 

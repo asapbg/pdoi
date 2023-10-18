@@ -428,6 +428,7 @@ a.home-sub-items, p.home-sub-items {
     border-left: 3px solid var(--app-link);
     border-radius: 3px;
     justify-content: space-between;
+    align-items: center;
 }
 
 a.home-sub-items:hover {

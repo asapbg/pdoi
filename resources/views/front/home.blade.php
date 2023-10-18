@@ -40,20 +40,14 @@
                 <div class="card-body">
                     <div class="row">
                         @if(isset($mostAskedSubjects) && sizeof($mostAskedSubjects))
-{{--                            <table>--}}
                                 @foreach($mostAskedSubjects as $item)
                                     <div class="col-12 mb-3">
                                         <p class="home-sub-items m-0">
                                             <span>{{ $item->rzs_name }}</span>
-                                            <span class="home-sub-items-count">{{ $item->applications }} {{ trans_choice('custom.applications', 2) }}</span>
+                                            <span class="home-sub-items-count">{{ $item->applications }} {{ mb_strtolower(trans_choice('custom.queries', 2)) }}</span>
                                         </p>
                                     </div>
-{{--                                    <tr>--}}
-{{--                                        <td>{{ $item->rzs_name }}</td>--}}
-{{--                                        <td>{{ $item->applications }} {{ trans_choice('custom.applications', 2) }}</td>--}}
-{{--                                    </tr>--}}
                                 @endforeach
-{{--                            </table>--}}
                         @endif
                     </div>
                 </div>
