@@ -61,7 +61,7 @@
             </a>
         </div>
     </div>
-    <main class="px-md-5 px-3 pt-3 pb-md-3 pb-3">
+    <main class="px-md-5 px-3 pt-3 pb-md-3 pb-3 @if(isset($mainClass)) {{ $mainClass }} @endif">
         @foreach(['success', 'warning', 'danger', 'info'] as $msgType)
             @if(Session::has($msgType))
                 <div class="alert alert-{{$msgType}} mt-1 alert-dismissible py-2" role="alert">{!! Session::get($msgType) !!}

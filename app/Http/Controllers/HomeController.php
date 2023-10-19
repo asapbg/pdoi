@@ -33,7 +33,7 @@ class HomeController extends Controller
     public function index()
     {
         $lastApplications = 10;
-        $mostAsked = 10;
+        $mostAsked = 9;
         $applications = [];
         $appQ = PdoiApplication::lastApplicationsHomePage($lastApplications);
         if(sizeof($appQ)) {
@@ -50,7 +50,11 @@ class HomeController extends Controller
             }
         }
         $mostAskedSubjects = PdoiResponseSubject::mostAskedSubjects($mostAsked);
-        return view('front.home', compact('applications', 'mostAskedSubjects'));
+        $mainClass = 'container';
+        $videoInstructionPage = Page::with(['translations'])
+            ->where('system_name', '=', Page::VIDEO_INSTRUCTION_PAGE)
+            ->first();
+        return view('front.home', compact('applications', 'mostAskedSubjects', 'mainClass', 'videoInstructionPage'));
     }
 
     public function section($slug) {
