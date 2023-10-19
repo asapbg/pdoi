@@ -104,6 +104,9 @@ li.select2-results__option:empty {
     display: none;
 }
 
+.breadcrumb-item {
+    font-size: 14px !important;
+}
 /*==========================*/
 /*START TOP NAVIGATIONS*/
 /*==========================*/
@@ -144,7 +147,7 @@ footer {
     outline: 0;
     text-decoration: none;
     background-color: #fff!important;
-    color: #313131 !important;
+    color: var(--app-link) !important;
 }
 
 .top-menu-nav .dropdown-toggle:after{
@@ -509,6 +512,7 @@ a.home-section-button {
     text-decoration: none;
     flex-direction: row;
     flex-wrap: nowrap;
+    box-shadow:rgba(99, 99, 99, 0.2) 1px 1px 8px 0px
 }
 
 a.home-section-button .home-icon i {

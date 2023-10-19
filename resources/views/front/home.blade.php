@@ -67,7 +67,7 @@
             </section>
             <hr class="mb-0 custom-hr" >
             <section class="py-5">
-                <h2 class="pt-2 mb-3 fw-bold">{{ __('custom.most_asked_institutions') }}</h2>
+                <h2 class="pb-2 mb-3 fw-bold">{{ __('custom.most_asked_institutions') }}</h2>
 {{--                    <div class="row">--}}
                     @if(isset($mostAskedSubjects) && sizeof($mostAskedSubjects))
                         @php($cnt = 1)
@@ -102,7 +102,7 @@
             </section>
             <hr class="custom-hr mb-0">
             <section class="py-5">
-                <h2 class="pt-2 mb-3 fw-bold">{{ __('custom.last_applications') }}</h2>
+                <h2 class="pb-2 mb-3 fw-bold">{{ __('custom.last_applications') }}</h2>
                 <div class="row mb-4">
                     @if(isset($applications) && sizeof($applications))
                         @foreach($applications as $item)
