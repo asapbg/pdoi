@@ -431,6 +431,9 @@ main {
     border-radius: 3px !important;
     margin-right: 4px;
 }
+.fb_iframe_widget iframe {
+    border-radius: 16px;
+}
 /*Home page block*/
 a.home-sub-items, p.home-sub-items {
     text-decoration: none;
