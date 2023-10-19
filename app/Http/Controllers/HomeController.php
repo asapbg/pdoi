@@ -113,7 +113,13 @@ class HomeController extends Controller
         $appealPage = Page::with(['translations'])
             ->where('system_name', '=', Page::APPEAL_INFO_SYSTEM_PAGE)
             ->first();
-        return $this->view('front.help.index', compact('appealPage'));
+        $videoInstructionPage = Page::with(['translations'])
+            ->where('system_name', '=', Page::VIDEO_INSTRUCTION_PAGE)
+            ->first();
+        $guideManualPage = Page::with(['translations'])
+            ->where('system_name', '=', Page::USER_MANUAL_PAGE)
+            ->first();
+        return $this->view('front.help.index', compact('appealPage', 'videoInstructionPage', 'guideManualPage'));
     }
 
     public function helpPage(Request $request, string $slug): \Illuminate\View\View

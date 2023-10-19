@@ -40,13 +40,112 @@ class PageSeeder extends Seeder
                 'system_name' => Page::CONTACT_SYSTEM_PAGE,
                 'name' => 'Контакти',
                 'content' => '<h4>Администратори на платформата</h4><p>Петя Цанкова - p.tsankova@government.bg</p><p>Поддръжка - pmo@asap.bg</p>'
-            ]
+            ],
+            [
+                'slug' => 'video-instruction',
+                'system_name' => Page::VIDEO_INSTRUCTION_PAGE,
+                'name' => 'Видео инструкции',
+                'content' => '<div class="row">
+        <div class="col-md-6 p-3">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Регистрация</button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                        <div class="accordion-body">
+                            <div class="video-container" style="position: relative;overflow: hidden;width: 100%;padding-top: 56.25%;">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/NF-zDMfmgY8?si=LFQlmPjAQy35CWqC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;width: 100%;height: 100%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button py-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Accordion Item #2</button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample" style="">
+                        <div class="accordion-body">
+                            <div class="video-container" style="position: relative;overflow: hidden;width: 100%;padding-top: 56.25%;">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/NF-zDMfmgY8?si=LFQlmPjAQy35CWqC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;width: 100%;height: 100%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button py-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Accordion Item #3</button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample" style="">
+                        <div class="accordion-body">
+                            <div class="video-container" style="position: relative;overflow: hidden;width: 100%;padding-top: 56.25%;">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/NF-zDMfmgY8?si=LFQlmPjAQy35CWqC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;width: 100%;height: 100%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 p-3">
+            <div class="accordion" id="accordionExamples">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOnes">
+                        <button class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOnes" aria-expanded="true" aria-controls="collapseOnes">Вход</button>
+                    </h2>
+                    <div id="collapseOnes" class="accordion-collapse collapse show" aria-labelledby="headingOnes" data-bs-parent="#accordionExamples" style="">
+                        <div class="accordion-body">
+                            <div class="video-container" style="position: relative;overflow: hidden;width: 100%;padding-top: 56.25%;">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/NF-zDMfmgY8?si=LFQlmPjAQy35CWqC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;width: 100%;height: 100%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwos">
+                        <button class="accordion-button py-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwos" aria-expanded="false" aria-controls="collapseTwos">Accordion Item #2</button>
+                    </h2>
+                    <div id="collapseTwos" class="accordion-collapse collapse" aria-labelledby="headingTwos" data-bs-parent="#accordionExamples" style="">
+                        <div class="accordion-body">
+                            <div class="video-container" style="position: relative;overflow: hidden;width: 100%;padding-top: 56.25%;">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/NF-zDMfmgY8?si=LFQlmPjAQy35CWqC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;width: 100%;height: 100%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThrees">
+                        <button class="accordion-button py-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThrees" aria-expanded="false" aria-controls="collapseThrees">Accordion Item #3</button>
+                    </h2>
+                    <div id="collapseThrees" class="accordion-collapse collapse" aria-labelledby="headingThrees" data-bs-parent="#accordionExamples" style="">
+                        <div class="accordion-body">
+                            <div class="video-container" style="position: relative;overflow: hidden;width: 100%;padding-top: 56.25%;">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/NF-zDMfmgY8?si=LFQlmPjAQy35CWqC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;width: 100%;height: 100%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>'
+            ],
+            [
+                'slug' => 'user-manual',
+                'system_name' => Page::USER_MANUAL_PAGE,
+                'name' => 'Потребителско ръководство',
+                'content' => 'Потребителско ръководство'
+            ],
         );
 
         foreach ($data as $page) {
             $dbPage = Page::where('slug', '=', $page['slug'])->first();
             if( $dbPage ) {
-                $this->command->line("Page ".$page['slug']." already exists in db");
+                foreach ($locales as $locale) {
+                    $dbPage->translateOrNew($locale['code'])->name = $page['name'];
+                    $dbPage->translateOrNew($locale['code'])->content = $page['content'];
+                }
+                $dbPage->save();
+                $this->command->info("Page with slug ".$page['slug']." updated successfully");
                 continue;
             }
 

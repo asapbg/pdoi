@@ -10,7 +10,7 @@
                     <div class="d-flex gap-md-4 flex-wrap justify-content-center">
                         @if(isset($appealPage) && $appealPage)
                         <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                            <a href="{{ route('help.page', ['slug' => $appealPage->slug]) }}" title="" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
+                            <a href="{{ route('help.page', ['slug' => $appealPage->slug]) }}" title="{{ $appealPage->name }}" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
                                 <span>
                                     <i class="fa-solid fa-gavel text-warning" style="font-size: 55px;"></i>
                                 </span>
@@ -20,14 +20,23 @@
                         </div>
                         @endif
                         <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
-                            <a href="" title="" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
+                            <a href="{{ route('help.page', ['slug' => $videoInstructionPage->slug]) }}" title="{{ $videoInstructionPage->name }}" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
                                 <span>
                                     <i class="fa-regular fa-file-lines text-success" style="font-size: 55px;"></i>
                                 </span>
-                                <span class="d-inline-block flex-grow-1">Инструкции
+                                <span class="d-inline-block flex-grow-1">{{ $videoInstructionPage->name }}
                                 </span>
                             </a>
                         </div>
+                            <div class="col-12 col-md-3 p-3 mb-md-3 mb-2 shadow-sm rounded bg-body-tertiary">
+                                <a href="{{ route('help.page', ['slug' => $guideManualPage->slug]) }}" title="{{ $guideManualPage->name }}" class="text-decoration-none w-100 h-100 d-flex flex-row gap-3 justify-content-sm-between align-items-center">
+                                <span>
+                                    <i class="fa-regular fa-question text-danger" style="font-size: 55px;"></i>
+                                </span>
+                                    <span class="d-inline-block flex-grow-1">{{ $guideManualPage->name }}
+                                </span>
+                                </a>
+                            </div>
                     </div>
                 </div>
             </div>
