@@ -18,19 +18,20 @@
             </div>
 
             <div class="col-lg-4 col-md-12">
-                <a href="{{ route('help.page', ['slug' => $videoInstructionPage->slug]) }}" title="{{ $videoInstructionPage->name }}" class="home-section-button mb-lg-0 mb-4 light-red">
+                <a href="{{ route('help.page', ['slug' => $videoInstructionPage->slug]) }}" title="{{ $videoInstructionPage->name }}" class="home-section-button mb-lg-0 mb-4 light-green">
                     <span class="home-icon">
-                        <i class="fa-regular fa-file-lines text-danger"></i>
+                        <i class="fa-solid fa-display text-success"></i>
                     </span>
                     <span class="home-section-button-txt">
                         {{ $videoInstructionPage->name }}
                     </span>
                 </a>
             </div>
+
             <div class="col-lg-4 col-md-12">
-                <a href="{{ route('help.page', ['slug' => $guideManualPage->slug]) }}" title="{{ $guideManualPage->name }}" class="home-section-button light-green">
+                <a href="{{ route('help.page', ['slug' => $guideManualPage->slug]) }}" title="{{ $guideManualPage->name }}" class="home-section-button light-red">
                     <span class="home-icon">
-                        <i class="fa-regular fa-question text-success"></i>
+                        <i class="fa-regular fa-question text-danger"></i>
                     </span>
                     <span class="home-section-button-txt">
                         {{ $guideManualPage->name }}
