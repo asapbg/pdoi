@@ -32,8 +32,8 @@
 {{--            </div>--}}
             <section class="py-5" >
                 <div class="row">
-                    <div class="col-md-4">
-                        <a href="{{ route('login') }}" class="home-section-button light-yellow">
+                    <div class="col-lg-4 col-md-12">
+                        <a href="{{ route('login') }}" class="home-section-button mb-lg-0 mb-4 light-yellow">
                             <span class="home-icon">
                                 <i class="fa-solid fa-right-from-bracket text-warning"></i>
                             </span>
@@ -43,8 +43,8 @@
                         </a>
                     </div>
 
-                    <div class="col-md-4">
-                        <a href="{{ route('register') }}" class="home-section-button light-red">
+                    <div class="col-lg-4 col-md-12">
+                        <a href="{{ route('register') }}" class="home-section-button mb-lg-0 mb-4 light-red">
                             <span class="home-icon">
                                 <i class="fa-solid fa-circle-user text-danger"></i>
                             </span>
@@ -53,7 +53,7 @@
                             </span>
                         </a>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-12">
                         <a href="{{ route('help.page', ['slug' => $videoInstructionPage->slug]) }}" title="{{ $videoInstructionPage->name }}" class="home-section-button light-green">
                             <span class="home-icon">
                                 <i class="fa-solid fa-display text-success"></i>
@@ -75,7 +75,7 @@
                                 @if($cnt == 1)
                                     <div class="row mb-4">
                                 @endif
-                                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0 request">
+                                    <div class="col-lg-4 col-md-12 d-flex align-items-stretch mt-4 mt-lg-0 request">
                                         <div class="icon-box w-100">
                                             <div class="icon">
                                                 <span>{{ $item->applications }}</span>

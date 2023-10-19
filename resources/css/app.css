@@ -515,6 +515,12 @@ a.home-section-button {
     box-shadow:rgba(99, 99, 99, 0.2) 1px 1px 8px 0px
 }
 
+/*@media (max-width: 991px) {*/
+/*    a.home-section-button {*/
+/*        margin-bottom: 20px !important;*/
+/*    }*/
+/*}*/
+
 a.home-section-button .home-icon i {
     font-size:50px;
 }
