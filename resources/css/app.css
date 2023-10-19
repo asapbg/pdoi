@@ -516,7 +516,8 @@ a.home-section-button {
     text-decoration: none;
     flex-direction: row;
     flex-wrap: nowrap;
-    box-shadow:rgba(99, 99, 99, 0.2) 1px 1px 8px 0px
+    box-shadow:rgba(99, 99, 99, 0.2) 1px 1px 8px 0px;
+    min-height: 100%;
 }
 
 /*@media (max-width: 991px) {*/
