@@ -520,6 +520,12 @@ a.home-section-button {
     min-height: 100%;
 }
 
+@media (max-width:767px) {
+    a.home-section-button {
+        justify-content: start !important;
+    }
+}
+
 /*@media (max-width: 991px) {*/
 /*    a.home-section-button {*/
 /*        margin-bottom: 20px !important;*/

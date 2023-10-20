@@ -32,8 +32,8 @@
 {{--            </div>--}}
             <section class="py-5" >
                 <div class="row">
-                    <div class="col-lg-4 col-md-12">
-                        <a href="{{ route('login') }}" class="home-section-button mb-lg-0 mb-4 light-yellow">
+                    <div class="col-lg-4 col-md-12 mb-lg-0 mb-4">
+                        <a href="{{ route('login') }}" class="home-section-button light-yellow">
                             <span class="home-icon">
                                 <i class="fa-solid fa-right-from-bracket text-warning"></i>
                             </span>
@@ -43,8 +43,8 @@
                         </a>
                     </div>
 
-                    <div class="col-lg-4 col-md-12">
-                        <a href="{{ route('register') }}" class="home-section-button mb-lg-0 mb-4 light-red">
+                    <div class="col-lg-4 col-md-12 mb-lg-0 mb-4 ">
+                        <a href="{{ route('register') }}" class="home-section-button light-red">
                             <span class="home-icon">
                                 <i class="fa-solid fa-circle-user text-danger"></i>
                             </span>

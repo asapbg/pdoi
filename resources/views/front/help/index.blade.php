@@ -6,8 +6,8 @@
             <h3 class="b-1 text-center">{{ __('custom.help') }}</h3>
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-12">
-                <a href="{{ route('help.page', ['slug' => $appealPage->slug]) }}" title="{{ $appealPage->name }}"  class="home-section-button mb-lg-0 mb-4 light-yellow">
+            <div class="col-lg-4 col-md-12 mb-lg-0 mb-4">
+                <a href="{{ route('help.page', ['slug' => $appealPage->slug]) }}" title="{{ $appealPage->name }}"  class="home-section-button light-yellow">
                     <span class="home-icon">
                         <i class="fa-solid fa-gavel text-warning"></i>
                     </span>
@@ -17,8 +17,8 @@
                 </a>
             </div>
 
-            <div class="col-lg-4 col-md-12">
-                <a href="{{ route('help.page', ['slug' => $videoInstructionPage->slug]) }}" title="{{ $videoInstructionPage->name }}" class="home-section-button mb-lg-0 mb-4 light-green">
+            <div class="col-lg-4 col-md-12 mb-lg-0 mb-4 ">
+                <a href="{{ route('help.page', ['slug' => $videoInstructionPage->slug]) }}" title="{{ $videoInstructionPage->name }}" class="home-section-button light-green">
                     <span class="home-icon">
                         <i class="fa-solid fa-display text-success"></i>
                     </span>
