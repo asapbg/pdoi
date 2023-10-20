@@ -477,5 +477,6 @@ return [
     'most_asked_institutions'               => 'Most asked institutions',
     'institutions'                          => 'Institution|Institutions',
     'queries'                          => 'Inquiry|Inquiries',
+    'support_asap'                     => 'Software development and support by ASAP',
 ];
 
