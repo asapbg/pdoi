@@ -66,7 +66,7 @@ class NotifySubjectAdditionalInfo extends Notification
         {
             case PdoiSubjectDeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
                 $eDeliveryConfig = config('e_delivery');
-                if( env('APP_ENV') != 'production' ) {
+                if( config('app.env') != 'production' ) {
                     $communicationData['ssev_profile_id'] = config('e_delivery.local_ssev_profile_id');
                 } else {
                     $communicationData['to_group'] = $eDeliveryConfig['group_ids']['egov'];

@@ -66,7 +66,7 @@ class NotifySubjectNewApplication extends Notification
         {
             case PdoiSubjectDeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
                 $eDeliveryConfig = config('e_delivery');
-                if( env('APP_ENV') != 'production' ) {
+                if( config('app.env') != 'production' ) {
                     $communicationData['ssev_profile_id'] = config('e_delivery.local_ssev_profile_id');
                 } else {
                     $communicationData['to_group'] = $eDeliveryConfig['group_ids']['egov'];
@@ -88,13 +88,13 @@ class NotifySubjectNewApplication extends Notification
             case PdoiSubjectDeliveryMethodsEnum::SEOS->value: //деловодна система
                 $communicationData['files']= $this->application->files ? $this->application->files->pluck('id')->toArray() : [];
                 $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', config('seos.eik'))->first();
-                $envProd = env('APP_ENV') == 'production';
+                $envProd = config('app.env') == 'production';
                 $senderInfo = [
                     'guid' => $envProd ? $sender->guid : '{B2A43E54-B6CB-4835-A6CC-D05692B3F7CD}',
                     'eik' => $envProd ? $sender->eik : '0006950252000',
                     'name' => $envProd ? $sender->administrative_body_name : 'Платформа за достъп до обществена информация'
                 ];
-                $receiver = env('APP_ENV') != 'production' ? EgovOrganisation::find((int)config('seos.local_egov_org_id')) : $this->application->responseSubject->egovOrganisation;
+                $receiver = config('app.env') != 'production' ? EgovOrganisation::find((int)config('seos.local_egov_org_id')) : $this->application->responseSubject->egovOrganisation;
 
                 //$sender = $receiver;
                 $service = $receiver?->services()->first();

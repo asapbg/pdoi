@@ -140,7 +140,7 @@ class PdoiResponseSubjectController extends AdminController
             //Check if need to alert admins and moderators about subject changes
             if( $id && isset($validated['full_edit']) && $validated['full_edit']){
                 if( ($fillable['adm_level'] != $item->adm_level) || ($fillable['parent_id'] != $item->parent_id) ) {
-                    if( env('APP_ENV') != 'production' ) {
+                    if( config('app.env') != 'production' ) {
                         $emailList =[config('mail.local_to_mail')];
                     } else {
                         $emailList = $item->getAlertUsersEmail();

@@ -54,7 +54,7 @@ class NotifyUserExtendTerm extends Notification
         {
             case DeliveryMethodsEnum::SDES->value: //система за сигурно електронно връчване
                 $eDeliveryConfig = config('e_delivery');
-                if( env('APP_ENV') != 'production' ) {
+                if( config('app.env') != 'production' ) {
                     $communicationData['ssev_profile_id'] = config('e_delivery.local_ssev_profile_id');
                 } else {
                     $communicationData['to_group'] = $notifiable->legal_form == User::USER_TYPE_PERSON ? $eDeliveryConfig['group_ids']['person'] : $eDeliveryConfig['group_ids']['company'];
