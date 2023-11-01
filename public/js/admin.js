@@ -2470,7 +2470,7 @@ $(function() {
                             }
                         }
                     } else {
-                        updateSelect2Options(settlementSelect, 'municipality', municipalitySelect.find(':selected').data('code'));
+                        updateSelect2Options(settlementSelect, 'full', municipalitySelect.find(':selected').data('area') + municipalitySelect.find(':selected').data('code'));
                     }
                 }
             });

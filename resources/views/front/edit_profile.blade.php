@@ -149,7 +149,7 @@
                                 @if(isset($settlements) && $settlements->count())
                                     @foreach($settlements as $row)
                                         <option value="{{ $row->id }}" @if($settlement == $row->id) selected="selected" @endif
-                                        data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}">{{ $row->name }}</option>
+                                        data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}" data-full="{{ $row->municipality }}">{{ $row->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
