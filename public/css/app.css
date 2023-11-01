@@ -436,11 +436,21 @@ main {
 .modal .modal-content{
     padding-bottom: 20px;
 }
-.modal .modal-body{
+/*.modal .modal-body{*/
+/*    max-height: 500px;*/
+/*    overflow-y: scroll;*/
+/*}*/
+/*END MODAL*/
+
+/*Subjects modal tree*/
+.modal .modal-body form#pdoiSubjectsTree{
     max-height: 500px;
     overflow-y: scroll;
 }
-/*END MODAL*/
+.no-footer .modal-body {
+    padding-bottom: 0;
+}
+
 
 /*START RSS FEED*/
 #rss-link {

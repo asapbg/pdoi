@@ -3086,7 +3086,8 @@ $(document).ready(function (e) {
             let subjectModal = new MyModal({
                 title: $(this).data('title'),
                 destroyListener: true,
-                bodyLoadUrl: $(this).data('url')
+                bodyLoadUrl: $(this).data('url'),
+                customClass: 'no-footer'
             });
 
             $(document).on('click', '#select-subject', function (){
@@ -3124,6 +3125,7 @@ $(document).ready(function (e) {
         _myModal.body = typeof obj.body != 'undefined' ? obj.body : '';
         _myModal.bodyLoadUrl = typeof obj.bodyLoadUrl != 'undefined' ? obj.bodyLoadUrl : null;
         _myModal.destroyListener = typeof obj.destroyListener != 'undefined' ? obj.destroyListener : false;
+        _myModal.customClass = typeof obj.customClass != 'undefined' ? obj.customClass : '';
         _myModal.modalObj = _myModal.init(_myModal);
         if( _myModal.destroyListener ) {
             _myModal.setDestroyListener(_myModal);
@@ -3137,7 +3139,7 @@ $(document).ready(function (e) {
     }
 
     MyModal.prototype.init = function (_myModal) {
-        let modalHtml = '<div id="' + _myModal.id + '" class="modal fade myModal" role="dialog" style="display: none">\n' +
+        let modalHtml = '<div id="' + _myModal.id + '" class="modal fade myModal '+ _myModal.customClass +'" role="dialog" style="display: none">\n' +
             '  <div class="modal-dialog">\n' +
             '    <!-- Modal content-->\n' +
             '    <div class="modal-content">\n' +

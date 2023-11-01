@@ -15,10 +15,12 @@
                 @endif
             @endif
         @endforeach
-        @if($canSelect)
-            <button type="button" class="btn btn-sm btn-primary mt-3" id="select-subject">{{ __('custom.select') }}</button>
-        @endif
     @else
         <p>Не са откити записи</p>
     @endif
 </form>
+@if(isset($subjects) && sizeof($subjects))
+    @if($canSelect)
+        <button type="button" class="btn btn-sm btn-primary" id="select-subject">{{ __('custom.select') }}</button>
+    @endif
+@endif

@@ -3,8 +3,8 @@
 @section('content')
     <section class="content container w-50 pt-md-5 pt-2">
         <div class="card card-light mb-1">
-            <div class="card-header app-card-header py-1 pb-0">
-                <h4 class="fs-5">{{ __('auth.verify_email') }}</h4>
+            <div class="card-header app-card-header py-2">
+                <h4 class="fs-5 m-0">{{ __('auth.verify_email') }}</h4>
             </div>
             <div class="card-body">
                 @if (session('resent'))

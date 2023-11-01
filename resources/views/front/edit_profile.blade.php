@@ -9,8 +9,8 @@
             @csrf
             @method('PUT')
             <div class="card card-light mb-4">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-user-large me-2"></i>{{ __('front.profile.base_info_section') }}</h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-user-large me-2"></i>{{ __('front.profile.base_info_section') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -95,8 +95,8 @@
                 </div>
             </div>
             <div class="card card-light mb-4">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-address-card me-2"></i> {{ __('front.profile.address_info_section') }}</h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-address-card me-2"></i> {{ __('front.profile.address_info_section') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -176,8 +176,8 @@
                 </div>
             </div>
             <div class="card card-light">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-gear me-2"></i> {{ __('front.settings') }}</h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-gear me-2"></i> {{ __('front.settings') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">

@@ -3,8 +3,8 @@
 @section('content')
     <section class="content container pt-md-5 pt-2" style="max-width: 400px;">
         <div class="card card-light mb-1">
-            <div class="card-header app-card-header py-1 pb-0">
-                <h4 class="fs-5">{{ __('custom.login') }}</h4>
+            <div class="card-header app-card-header py-2">
+                <h4 class="fs-5 m-0">{{ __('custom.login') }}</h4>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('login') }}">

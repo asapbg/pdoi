@@ -17,8 +17,8 @@
         <form id="info" enctype="multipart/form-data">
             @csrf
             <div class="card card-light mb-4">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-user-large me-2"></i> {{ __('front.application') }}</h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-user-large me-2"></i> {{ __('front.application') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -108,8 +108,8 @@
                 </div>
             </div>
             <div class="card card-light mb-4">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-address-card me-2"></i> {{ __('front.application.address_info_section') }}</h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-address-card me-2"></i> {{ __('front.application.address_info_section') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -234,8 +234,8 @@
                 </div>
             </div>
             <div class="card card-light mb-4">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-question me-2"></i> {{ __('front.application.request_field.description') }}: <span class="required">*</span></h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-question me-2"></i> {{ __('front.application.request_field.description') }}: <span class="required">*</span></h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -252,8 +252,8 @@
                 </div>
             </div>
             <div class="card card-light mb-4">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-file me-2"></i> {{ __('front.application.files_section') }}</h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-file me-2"></i> {{ __('front.application.files_section') }}</h4>
                 </div>
                 <div class="card-body">
                     <p>{{ __('front.application.files_description') }}</p>
@@ -280,8 +280,8 @@
                 </div>
             </div>
             <div class="card card-light">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-envelope me-2"></i> {{ __('front.application.answer_section') }}</h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-envelope me-2"></i> {{ __('front.application.answer_section') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -305,13 +305,13 @@
         </form>
         <form id="rzs" class="d-none">
             <div class="card card-light mb-4">
-                <div class="card-header app-card-header py-1 pb-0">
-                    <h4 class="fs-5"><i class="fa-solid fa-building me-2"></i> {{ __('front.application.pdoi_subject_section') }}</h4>
+                <div class="card-header app-card-header py-2">
+                    <h4 class="fs-5 m-0"><i class="fa-solid fa-building me-2"></i> {{ __('front.application.pdoi_subject_section') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group form-group-sm col-12 mb-3">
-                            <label class="form-label me-3 fw-semibold" for="subjects">
+                            <label class="form-label me-3 fw-semibold" for="subjects[]">
                                 {{ __('front.search_by_name_or_pick_from_list') }}
                                 <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject"
                                         data-title="{{ trans_choice('custom.pdoi_response_subjects',2) }}"
@@ -327,7 +327,7 @@
                                     @endforeach
                                 @endif
                             </select>
-                            <span id="error-subjects" class="text-danger">@error('subjects'){{ $message }}@enderror</span>
+                            <span id="error-subjects" class="text-danger mt-1">@error('subjects'){{ $message }}@enderror</span>
                         </div>
                     </div>
                 </div>

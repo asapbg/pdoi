@@ -3,8 +3,8 @@
 @section('content')
     <section class="content container w-25 pt-md-5 pt-2">
         <div class="card card-light mb-1">
-            <div class="card-header app-card-header py-1 pb-0">
-                <h4 class="fs-5">{{ __('eauth.with_e_auth') }}</h4>
+            <div class="card-header app-card-header py-2">
+                <h4 class="fs-5 m-0">{{ __('eauth.with_e_auth') }}</h4>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('eauth.user.create') }}">

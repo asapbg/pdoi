@@ -22,8 +22,8 @@
             </div>
         @endif
         <div class="card card-light mb-4">
-            <div class="card-header app-card-header py-1 pb-0">
-                <h4 class="fs-5">
+            <div class="card-header app-card-header py-2">
+                <h4 class="fs-5 m-0">
                     <i class="fa-solid fa-file me-2"></i> {{ trans_choice('custom.applications', 2) }} ({{ $applications ? $applications['pagination']['total'] : 0}})
                     @include('front.partials.filter_search_info')
                 </h4>

@@ -17,7 +17,9 @@ $(function() {
                         errorClass: 'is_invalid',
                         rules: formRules(currentBtn.data('validate')),
                         errorPlacement: function (error, element) {
-                            if( element.attr("name") != 'files[]' ) {
+                            if(element.attr("name") == 'subjects[]') {
+                                $("#error-subjects").html(error);
+                            } else if( element.attr("name") != 'files[]' ) {
                                 $("#error-" + element.attr("name")).html(error);
                             } else{
                                 error.insertAfter(element);
@@ -72,7 +74,7 @@ $(function() {
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     if (typeof data.errors != 'undefined') {
                         apllyErrorDiv.html(data.errors);
                         applayModal.hideModal(applayModal.id);

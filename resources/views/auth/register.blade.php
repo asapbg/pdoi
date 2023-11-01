@@ -7,8 +7,8 @@
         <!--            </div>-->
 
         <div class="card card-light mb-1">
-            <div class="card-header app-card-header py-1 pb-0">
-                <h4 class="fs-5">{{ __('custom.register') }}</h4>
+            <div class="card-header app-card-header py-2">
+                <h4 class="fs-5 m-0">{{ __('custom.register') }}</h4>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('register') }}">

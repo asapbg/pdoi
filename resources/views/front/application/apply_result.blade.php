@@ -1,7 +1,7 @@
 @if(isset($applicationsInfo) && sizeof($applicationsInfo))
     <div class="card card-light mb-4 w-50 m-auto">
-        <div class="card-header app-card-header py-1 pb-0">
-            <h4 class="fs-5">&nbsp;</h4>
+        <div class="card-header app-card-header py-2">
+            <h4 class="fs-5 m-0">&nbsp;</h4>
         </div>
         <div class="card-body">
             <div class="text-center">
