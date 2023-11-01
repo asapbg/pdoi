@@ -51,7 +51,7 @@ class PdoiApplicationController extends Controller
             $paginate = $filter['paginate'] ?? PdoiApplication::PAGINATE;
             $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translation',
                 'events', 'events.user', 'events.event', 'events.event.translation',
-                'lastFinalEvent', 'lastFinalEvent.visibleFiles'])
+                'lastFinalEvent', 'lastFinalEvent.visibleFiles', 'children'])
                 ->FilterBy($request->all())
                 ->SortedBy($sort,$sortOrd);
 
