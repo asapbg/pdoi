@@ -29,8 +29,8 @@ class UsersChangePassword extends Mailable
      */
     public function build()
     {
-        $from = env('MAIL_FROM_ADDRESS', "www@test.bg");
-        $baseUrl = env('APP_URL', "http://www.test/");
+        $from = config('mail.from.address');
+        $baseUrl = config('app.url');
         if(substr($baseUrl, -1) != "/") $baseUrl .= "/";
 
         return $this->from($from)

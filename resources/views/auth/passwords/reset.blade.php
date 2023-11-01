@@ -22,7 +22,7 @@
 
                     <div class="form-group row">
                         <label for="email"
-                               class="col-12 col-form-label">{{ __('E-Mail Address') }}</label>
+                               class="col-12 col-form-label">{{ __('auth.email') }}</label>
 
                         <div class="col-12">
                             <input id="email" type="email"
@@ -39,7 +39,7 @@
 
                     <div class="form-group row">
                         <label for="password"
-                               class="col-12 col-form-label">{{ __('Password') }}</label>
+                               class="col-12 col-form-label">{{ __('validation.attributes.password') }}</label>
 
                         <div class="col-12">
                             <input id="password" type="password"
@@ -56,7 +56,7 @@
 
                     <div class="form-group row">
                         <label for="password-confirm"
-                               class="col-12 col-form-label">{{ __('Confirm Password') }}</label>
+                               class="col-12 col-form-label">{{ __('validation.attributes.password_confirm') }}</label>
 
                         <div class="col-12">
                             <input id="password-confirm" type="password" class="form-control"
@@ -67,7 +67,7 @@
                     <div class="form-group row mb-0">
                         <div class="col-md-6 offset-md-4">
                             <button type="submit" class="mt-2 w-100 btn btn-primary">
-                                {{ __('Reset Password') }}
+                                {{ __('custom.update') }}
                             </button>
                         </div>
                     </div>

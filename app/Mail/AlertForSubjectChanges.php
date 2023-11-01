@@ -35,7 +35,7 @@ class AlertForSubjectChanges extends Mailable
      */
     public function build()
     {
-        $from = env('MAIL_FROM_ADDRESS', "www@test.bg");
+        $from = config('mail.from.address');
         $msg = '';
         if( isset($this->mailData['new_status']) ) {
             $msg .= ('Промяна в статуса: '.($this->mailData['new_status'] ? 'Активен' : 'Неактивен'));
