@@ -198,12 +198,12 @@
                             <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
                                 <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $item->response_date }}</p>
                                 {!! html_entity_decode($item->response) !!}
-                                @if($item->lastFinalEvent && $item->lastFinalEvent->visibleFiles->count())
+                                @if($item->lastFinalEvent && $item->lastFinalEvent->files->count())
                                     <hr>
                                     <p class="my-1 p-fs"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
                                     <table class="table table-sm mb-4">
                                         <tbody>
-                                        @foreach($item->lastFinalEvent->visibleFiles as $file)
+                                        @foreach($item->lastFinalEvent->files as $file)
                                             <tr>
                                                 <td>
                                                     {{ $loop->index + 1 }}
@@ -212,7 +212,7 @@
                                                            data-toggle="tooltip" title="{{ __('custom.download') }}"></i>
                                                     </a>
                                                 </td>
-                                                <td>{{ !empty($file->description) ? $file->description : 'Няма описание' }}</td>
+                                                <td>{{ !empty($file->description) ? $file->description : 'Няма описание' }} @if($file->visible_on_site){{ '(публикуван)' }}@endif</td>
                                             </tr>
                                         @endforeach
                                         </tbody>
