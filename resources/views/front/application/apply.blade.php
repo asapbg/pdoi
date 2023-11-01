@@ -258,16 +258,16 @@
                 <div class="card-body">
                     <p>{{ __('front.application.files_description') }}</p>
                     <span id="error-tmpFile" class="text-danger d-inline-block w-100"></span>
-                    <table class="table table-light table-sm table-bordered table-responsive" id="attachFiles">
+                    <table class="table table-light table-sm table-bordered table-responsive align-middle" id="attachFiles">
                         <thead>
                         <tr>
-                            <th></th>
                             <th>{{ __('front.file_name') }}</th>
                             <th>{{ __('front.description') }}</th>
                             <th>
                                 <div>
                                     <label for="tmpFile" class="form-label p-0 m-0">
-                                        <i class="fa-solid fa-upload text-primary p-1" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __('front.upload_btn') }}"></i>
+                                        <span class="btn btn-sm btn-primary" role="button"><i class="fas fa-plus"></i> {{ __('custom.add') }}</span>
+{{--                                        <i class="fa-solid fa-upload text-primary p-1" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __('front.upload_btn') }}"></i>--}}
                                     </label>
                                     <input class="form-control d-none do-not-ignore" type="file" name="tmpFile" id="tmpFile" data-container="attachFiles">
                                 </div>

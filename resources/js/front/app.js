@@ -396,14 +396,13 @@ $(function() {
                         let fileName = (uploadInput.val()).replace(/.*(\/|\\)/, '');
                         //add file row
                         fileListId.find('tbody').append('<tr class="file-row" id="file-row-'+ fileNumber +'" style="vertical-align: middle;">\n' +
-                            '                            <td></td>\n' +
                             '                            <td><span class="filename"></span>'+ fileName +'<span class="file-error d-block text-danger"></span></td>\n' +
                             '                            <td>\n' +
                             '                                <input type="text" name="file_description[]" class="form-control form-control-sm" value="">\n' +
                             '                            </td>\n' +
                             '                            <td>\n' +
                             // '                                <i class="fa-solid fa-download text-primary me-1" data-file="'+ fileNumber +'" role="button"></i>\n' +
-                            '                                <i class="fa-solid fa-circle-xmark text-warning me-1 remove-file" data-file="'+ fileNumber +'" role="button" data-bs-toggle="tooltip" title="Премахни"></i>\n' +
+                            '                                <i class="fa-solid fa-circle-xmark text-warning me-1 remove-file fs-5" data-file="'+ fileNumber +'" role="button" data-bs-toggle="tooltip" title="Премахни"></i>\n' +
                             // '                                <i class="fa-solid fa-trash text-danger me-1" data-file="'+ fileNumber +'" role="button" data-bs-toggle="tooltip" data-bs-title="{{ __(\'front.remove_btn\') }}"></i>\n' +
                             '                            </td>\n' +
                             '                        </tr>');
