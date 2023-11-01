@@ -182,7 +182,7 @@
                                                 <select class="form-select form-select-sm" id="next-event">
                                                     <option value="">{{ __('custom.available_actions') }}</option>
                                                     @foreach($item->currentEvent->event->nextEvents as $event)
-                                                        @if($event->app_event != \App\Enums\ApplicationEventsEnum::FORWARD->value || (\App\Enums\PdoiApplicationStatusesEnum::canForward((int)$item->status) && $item->response_subject_id ) )
+                                                        @if($event->app_event != \App\Enums\ApplicationEventsEnum::SEND_TO_SEOS->value && ($event->app_event != \App\Enums\ApplicationEventsEnum::FORWARD->value || (\App\Enums\PdoiApplicationStatusesEnum::canForward((int)$item->status) && $item->response_subject_id )) )
                                                             <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => (int)$event->id]) }}">@if($event->extendTimeReason){{ $event->extendTimeReason->name }}@else{{ $event->name }} @endif</option>
                                                         @endif
                                                     @endforeach

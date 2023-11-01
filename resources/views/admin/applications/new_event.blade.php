@@ -25,7 +25,9 @@
                                     <select name="final_status" class="form-control form-control-sm" required id="final_status">
                                         <option value=""></option>
                                         @foreach(\App\Enums\PdoiApplicationStatusesEnum::finalStatuses() as $status)
+                                            @if($status->value != \App\Enums\PdoiApplicationStatusesEnum::FORWARDED->value)
                                             <option value="{{ $status->value }}" @if($status->value == \App\Enums\PdoiApplicationStatusesEnum::NOT_APPROVED->value) data-refuse="1" @endif>{{ __('custom.application.status.'.$status->name) }}</option>
+                                               @endif
                                         @endforeach
                                     </select>
                                 </div>
