@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="form-group row mb-0">
-                        <div class="col-md-6 offset-md-4">
+                        <div class="col-md-6 offset-md-6">
                             <button type="submit" class="mt-2 w-100 btn btn-primary">
                                 {{ __('custom.update') }}
                             </button>

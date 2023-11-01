@@ -99,6 +99,14 @@ label.is_invalid {
     color:#fff;
 }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
+    font-size: 20px;
+    margin-right: 6px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+    margin-bottom: 5px;
+}
+
 /*fix hidden selct 2 option by empty text*/
 li.select2-results__option:empty {
     display: none;
