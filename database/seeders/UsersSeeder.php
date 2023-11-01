@@ -145,7 +145,7 @@ class UsersSeeder extends Seeder
             ],
             [
                 'role' => 'admin',
-                'names' => 'Админситратор',
+                'names' => 'Администратор',
                 'email' => 'admin@asap.bg',
             ],
             [
