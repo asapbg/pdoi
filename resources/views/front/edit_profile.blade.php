@@ -56,7 +56,7 @@
                                 <option value="0" @if(!$profilType) selected="selected" @endif>---</option>
                                 @if(isset($profileTypes) && $profileTypes->count())
                                     @foreach($profileTypes as $row)
-                                        <option value="{{ $row->id }}" @if($profilType == $row->id) selected="selected" @endif>{{ $row->name }}</option>
+                                        <option value="{{ $row->id }}" data-legal="{{ $row->legal_form }}" @if((int)$legalForm != (int)$row->legal_form) class="d-none" @endif @if($profilType == $row->id) selected="selected" @endif>{{ $row->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -200,4 +200,18 @@
 @push('scripts')
     <script src="{{ asset('jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('jquery-validation/localization/messages_' . app()->getLocale() . '.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $('input[name="legal_form"]').on('change', function (){
+                let legalForm = $('input[name="legal_form"]:checked').val();
+                $('select[name="profile_type"] option').each(function (){
+                    if(parseInt($(this).data('legal')) == parseInt(legalForm) || parseInt($(this).data('legal')) == 0) {
+                        $(this).removeClass('d-none');
+                    } else {
+                        $(this).addClass('d-none');
+                    }
+                });
+            });
+        });
+    </script>
 @endpush

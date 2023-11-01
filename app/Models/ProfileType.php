@@ -53,7 +53,7 @@ class ProfileType extends ModelActivityExtend implements TranslatableContract
             ->join('profile_type_translations', 'profile_type_translations.profile_type_id', '=', 'profile_type.id')
             ->where('profile_type.active', '=', 1)
             ->when((int)$legal_form, function ($q) use($legal_form){
-                return $q->wheer('profile_type.user_legal_form', '=', (int)$legal_form);
+                return $q->where('profile_type.user_legal_form', '=', (int)$legal_form);
             })
             ->where('profile_type_translations.locale', '=', app()->getLocale())
             ->orderBy('profile_type_translations.name', 'asc')

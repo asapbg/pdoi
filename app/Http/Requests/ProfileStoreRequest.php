@@ -46,7 +46,12 @@ class ProfileStoreRequest extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             'address_second' => ['nullable', 'string', 'max:255'],
             'delivery_method' => ['required', 'numeric', Rule::in(DeliveryMethodsEnum::values())],
+            'profile_type' => ['numeric'],
         ];
+
+        if( request()->input('profile_type') && (int)request()->input('profile_type') == 0 ) {
+            $rules['profile_type'][] = 'exists:profile_type,id';
+        }
 
         if( request()->input('person_identity') && !empty(request()->input('person_identity')) ) {
             $rules['person_identity'][] = Rule::unique('users', 'person_identity')->ignore(auth()->user()->id);
