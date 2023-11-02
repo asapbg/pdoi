@@ -97,7 +97,7 @@
                     <table class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>ID</th>
+{{--                            <th>ID</th>--}}
                             <th>{{__('validation.attributes.first_name')}}</th>
                             <th>{{__('validation.attributes.username')}}</th>
                             <th>{{__('validation.attributes.email')}}</th>
@@ -114,7 +114,7 @@
                         @if(isset($users) && $users->count() > 0)
                             @foreach($users as $user)
                                 <tr>
-                                    <td>{{$user->id}}</td>
+{{--                                    <td>{{$user->id}}</td>--}}
                                     <td>{{$user->fullname()}}</td>
                                     <td>{{$user->username}}</td>
                                     <td>{{$user->email}}</td>
