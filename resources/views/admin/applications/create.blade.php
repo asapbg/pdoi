@@ -202,7 +202,9 @@
                                 <select name="status" class="form-control form-control-sm">
                                     <option value=""></option>
                                     @foreach(\App\Enums\PdoiApplicationStatusesEnum::finalStatuses() as $status)
-                                        <option @if(old('status', '') == $status->value) selected @endif value="{{ $status->value }}">{{ __('custom.application.status.'.$status->name) }}</option>
+                                        @if(!in_array($status->value, [\App\Enums\PdoiApplicationStatusesEnum::FORWARDED->value, \App\Enums\PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value]))
+                                            <option @if(old('status', '') == $status->value) selected @endif value="{{ $status->value }}">{{ __('custom.application.status.'.$status->name) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 @error('status')
