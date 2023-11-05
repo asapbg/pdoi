@@ -221,7 +221,7 @@ class SyncIisda extends Command
                                     'eik' => $subject['UIC'] ?? 'N/A',
                                     'type' => $subject['Type'] ?? null,
                                     'nomer_register' => $subject['IdentificationNumber'],
-                                    'active' => $subject['IdentificationNumber'] === 'Active',
+                                    'active' => (int)($subject['Status'] == 'Active'),
                                     'adm_level' => $localSections[$subject['AdmStructureKind']] ?? 0,
                                     'subject_name' => $subject['Name'],
                                     'adm_register' => 1,

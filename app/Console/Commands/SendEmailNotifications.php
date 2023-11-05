@@ -59,6 +59,11 @@ class SendEmailNotifications extends Command
 
                 DB::beginTransaction();
                 try {
+                    $to = config('app.env') != 'production' ? config('mail.local_to_mail') : $messageData['to_email'];
+                    if( empty($to) ) {
+                        logError('Send email notification ID '.$item->id, 'Missing receiver email');
+                        continue;
+                    }
                     Mail::send([], [], function ($message) use ($messageData){
                         $message->from($messageData['from_email'])
                             ->to(config('app.env') != 'production' ? config('mail.local_to_mail') : $messageData['to_email'])

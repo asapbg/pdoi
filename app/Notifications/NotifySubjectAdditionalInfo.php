@@ -69,7 +69,7 @@ class NotifySubjectAdditionalInfo extends Notification
                 if( config('app.env') != 'production' ) {
                     $communicationData['ssev_profile_id'] = config('e_delivery.local_ssev_profile_id');
                 } else {
-                    $communicationData['to_group'] = $eDeliveryConfig['group_ids']['egov'];
+                    $communicationData['to_group'] = $notifiable->eik == '175370880' ? $eDeliveryConfig['group_ids']['company'] : $eDeliveryConfig['group_ids']['egov'];
                     $communicationData['to_identity'] = $notifiable->eik;
                     $communicationData['ssev_profile_id'] = $notifiable->ssev_profile_id ?? 0;
                 }
