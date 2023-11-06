@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
+use App\Http\Controllers\SsevController;
 use App\Mail\AlertForSubjectChanges;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
@@ -189,6 +190,26 @@ class SyncIisda extends Command
                                     $localSubject->municipality = $addressInfo ? $addressInfo['municipality'] : null;
                                     $localSubject->town = $addressInfo ? $addressInfo['town'] : null;
                                     $localSubject->save();
+
+                                    $delivery = $localSubject->delivery_method;
+
+                                    //Deactivate if missing delivery method
+                                    if( empty($localSubject->email) && (empty($localSubject->eik) || $localSubject->eik == 'N/A') ) {
+                                        $localSubject->delivery_method = 0;
+                                        $delivery = 0;
+                                    }
+                                    if( $localSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value && empty($localSubject->email) ) {
+                                        $localSubject->delivery_method = 0;
+                                        $delivery = 0;
+                                    }
+                                    if( $localSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SDES->value && !SsevController::getEgovProfile($localSubject->id, $localSubject->eik) ) {
+                                        $localSubject->delivery_method = 0;
+                                        $delivery = 0;
+                                    }
+                                    if( !$delivery ) {
+                                        $localSubject->active = 0;
+                                    }
+                                    $localSubject->save();
                                     $updated = true;
                                 }
                                 //update subject translation fields if need to
@@ -246,6 +267,17 @@ class SyncIisda extends Command
                             $newSubject = new PdoiResponseSubject($newRow);
                             $newSubject->save();
                             $newSubject->refresh();
+                            //Ste delivery method
+                            $newSubject->delivery_method = 0;
+                            if( !empty($newSubject->email) ) {
+                                $newSubject->delivery_method = PdoiSubjectDeliveryMethodsEnum::EMAIL->value;
+                            }
+                            if( !empty($newSubject->eik) && $newSubject->eik != 'N/A' ) {
+                                if( SsevController::getEgovProfile($newSubject->id, $newSubject->eik) ) {
+                                    $newSubject->delivery_method = PdoiSubjectDeliveryMethodsEnum::SDES->value;
+                                }
+                            }
+
                             foreach (config('available_languages') as $lang) {
                                 $newSubject->translateOrNew($lang['code'])->subject_name = $newRow['subject_name'];
                                 $newSubject->translateOrNew($lang['code'])->address = $address;
