@@ -6,6 +6,7 @@ use App\Enums\DeliveryMethodsEnum;
 use App\Models\User;
 use App\Rules\AlphaSpace;
 use App\Rules\EgnRule;
+use App\Rules\SsevProfileRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -28,6 +29,9 @@ class ProfileStoreRequest extends FormRequest
      */
     public function rules()
     {
+        $identityType = request()->input('legal_form');
+        $identityNumber = request()->input('legal_form') == User::USER_TYPE_PERSON ? !empty(request()->input('person_identity')) ?? request()->input('person_identity') : (!empty(request()->input('company_identity')) ? request()->input('company_identity') : '') ;
+
         $rules = [
             'names' => ['required', 'string', 'max:255', new AlphaSpace()],
             'username' => ['required', 'string', 'max:50', Rule::unique('users', 'username')
@@ -45,7 +49,7 @@ class ProfileStoreRequest extends FormRequest
             'post_code' => ['nullable', 'string', 'max:10'],
             'address' => ['required', 'string', 'max:255'],
             'address_second' => ['nullable', 'string', 'max:255'],
-            'delivery_method' => ['required', 'numeric', Rule::in(DeliveryMethodsEnum::values())],
+            'delivery_method' => ['required', 'numeric', Rule::in(DeliveryMethodsEnum::values()), new SsevProfileRule(auth()->user(), $identityType, $identityNumber)],
             'profile_type' => ['numeric'],
         ];
 

@@ -156,6 +156,7 @@ return [
         'password' => [
             'Illuminate\Validation\Rules\Password' => 'The password must contain',
         ],
+        'ssev_profile_not_exist' => 'Can\'t find (ССЕВ) profile',
     ],
 
     /*

@@ -143,6 +143,7 @@ return [
         'password' => [
             'Illuminate\Validation\Rules\Password' => 'Паролата трябва да съдържа',
         ],
+        'ssev_profile_not_exist' => 'Не съществува профил в ССЕВ',
     ],
 
     /*
