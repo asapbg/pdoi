@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Models\PdoiResponseSubject;
+use App\Rules\SsevEgovProfileRule;
+use App\Rules\SsevProfileRule;
 use App\Rules\SubjectValidDeliveryMethod;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,6 +29,7 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
      */
     public function rules()
     {
+        $identityNumber = !empty(request()->input('eik')) ? request()->input('eik') : '';
         $rules = [];
         if( request()->input('full_edit') ) {
             $rules = [
@@ -46,9 +49,8 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
 
         $rules['full_edit'] = ['required', 'numeric'];
         $rules['redirect_only'] = ['nullable', 'numeric'];
-        $rules['rzs_delivery_method'] = ['required', 'numeric', Rule::in(PdoiSubjectDeliveryMethodsEnum::values())];
+        $rules['rzs_delivery_method'] = ['required', 'numeric', Rule::in(PdoiSubjectDeliveryMethodsEnum::values()), new SsevEgovProfileRule(request()->input('id'), $identityNumber)];
         $rules['court'] = ['nullable', 'numeric', 'exists:pdoi_response_subject,id'];
-
 
         if( request()->input('rzs_delivery_method') ) {
             if( request()->input('full_edit') ) {
@@ -59,7 +61,7 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
                     $rules['eik'] = [Rule::exists('egov_organisation', 'eik')->where('status', '=', 1)];
                 }
             }
-            $rules['rzs_delivery_method'] = new SubjectValidDeliveryMethod(request()->input('id'), request()->input('full_edit'), request()->input('eik'), request()->input('email'));
+            $rules['rzs_delivery_method'][] = new SubjectValidDeliveryMethod(request()->input('id'), request()->input('full_edit'), request()->input('eik'), request()->input('email'));
         }
 
         if( request()->isMethod('put') ) {
@@ -78,7 +80,6 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
                 }
             }
         }
-
 
         return $rules;
     }
