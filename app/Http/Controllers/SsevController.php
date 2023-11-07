@@ -81,51 +81,46 @@ class SsevController extends Controller
     public static function getEgovProfile($pdoiSubjectId, $identityNumber = ''): int
     {
         $pdoiSubject = PdoiResponseSubject::find((int)$pdoiSubjectId);
-        if( !$pdoiSubject) {
+
+        if($pdoiSubjectId && !$pdoiSubject) {
             return  0;
         }
 
         $eDeliveryConfig = config('e_delivery');
-        if( !$pdoiSubject->ssev_profile_id ) {
-            $eDeliveryAuth = new EDeliveryAuth('/ed2*');
-            $token = $eDeliveryAuth->getToken();
 
-            if( is_null($token) ) {
-                return 0;
-            }
+        if( $pdoiSubject ) {
+            if( !$pdoiSubject->ssev_profile_id ) {
+                $eDeliveryAuth = new EDeliveryAuth('/ed2*');
+                $token = $eDeliveryAuth->getToken();
 
-            $eDeliveryService = new EDeliveryService($token, 'ed2');
-
-            $identity = [];
-            $identity[] = [
-                'groupId' => $eDeliveryConfig['group_ids']['egov'],
-                'identity' => !empty($identityNumber) ? $identityNumber : $pdoiSubject->eik,
-            ];
-
-            if( !sizeof($identity) ) {
-                $pdoiSubject->ssev_profile_id = null;
-                $pdoiSubject->save();
-                return 0;
-            }
-
-            $recipientProfile = 0;
-            foreach ($identity as $identityType){
-                if( $recipientProfile ) {
-                    continue;
+                if( is_null($token) ) {
+                    return 0;
                 }
-                $profileResponse = $eDeliveryService->getProfileData([
-                    'groupId' => $identityType['groupId'],
-                    'identity' => $identityType['identity'],
-                ]);
+
+                $eDeliveryService = new EDeliveryService($token, 'ed2');
+
+                $identity = [
+                    'groupId' => $identityNumber == '175370880' ? $eDeliveryConfig['group_ids']['company'] : $eDeliveryConfig['group_ids']['egov'],
+                    'identity' => !empty($identityNumber) ? $identityNumber : $pdoiSubject->eik,
+                ];
+
+                if( !sizeof($identity) ) {
+                    $pdoiSubject->ssev_profile_id = null;
+                    $pdoiSubject->save();
+                    return 0;
+                }
+
+                $recipientProfile = 0;
+                $profileResponse = $eDeliveryService->getProfileData($identity);
 
                 if( is_array($profileResponse) && isset($profileResponse['error']) ) {
                     Log::error('Get SSEV (eDelivery) profile info request error: '. $profileResponse['message']);
-                    continue;
+                    return 0;
                 }
                 $profile = json_decode($profileResponse, true);
                 if( !$profile || !isset($profile['profileId']) ) {
                     Log::error('Get SSEV (eDelivery) profile info response error: '. $profileResponse);
-                    continue;
+                    return 0;
                 }
                 $recipientProfile = $profile['profileId'];
             }
@@ -137,8 +132,47 @@ class SsevController extends Controller
                 $pdoiSubject->ssev_profile_id = null;
                 $pdoiSubject->save();
             }
+
+            return (int)$pdoiSubject->ssev_profile_id;
+        } else {
+            $eDeliveryAuth = new EDeliveryAuth('/ed2*');
+            $token = $eDeliveryAuth->getToken();
+
+            if( is_null($token) ) {
+                return 0;
+            }
+
+            $eDeliveryService = new EDeliveryService($token, 'ed2');
+
+            $identity = [
+                'groupId' => $identityNumber == '175370880' ? $eDeliveryConfig['group_ids']['company'] : $eDeliveryConfig['group_ids']['egov'],
+                'identity' => !empty($identityNumber) ? $identityNumber : '',
+            ];
+
+            if( !sizeof($identity) ) {
+                return 0;
+            }
+
+            $recipientProfile = 0;
+            $profileResponse = $eDeliveryService->getProfileData($identity);
+
+            if( is_array($profileResponse) && isset($profileResponse['error']) ) {
+                Log::error('Get SSEV (eDelivery) profile info request error: '. $profileResponse['message']);
+                return 0;
+            }
+            $profile = json_decode($profileResponse, true);
+            if( !$profile || !isset($profile['profileId']) ) {
+                Log::error('Get SSEV (eDelivery) profile info response error: '. $profileResponse);
+                return 0;
+            }
+            $recipientProfile = $profile['profileId'];
+
+            if( $recipientProfile ) {
+                return $recipientProfile;
+            } else{
+                return 0 ;
+            }
         }
 
-        return (int)$pdoiSubject->ssev_profile_id;
     }
 }
