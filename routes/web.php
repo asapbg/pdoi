@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test', [\App\Http\Controllers\Test::class, 'index']);
+//Route::get('/test', [\App\Http\Controllers\Test::class, 'index']);
 
 Auth::routes(['verify' => true]);
 
