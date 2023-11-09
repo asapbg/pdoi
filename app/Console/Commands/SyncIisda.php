@@ -49,6 +49,7 @@ class SyncIisda extends Command
         //Local subjects
         $dbSubjects = PdoiResponseSubject::select('pdoi_response_subject.id'
                 , 'pdoi_response_subject.adm_level'
+                , 'pdoi_response_subject.delivery_method'
                 , 'pdoi_response_subject.batch_id'
                 , 'pdoi_response_subject.nomer_register'
                 ,'pdoi_response_subject.eik', 'pdoi_response_subject.active'
@@ -135,6 +136,16 @@ class SyncIisda extends Command
                                 $updated = false;
                                 $localSubject = $localSubjects[$subject['IdentificationNumber']];
 
+                                $delivery = (int)$localSubject->delivery_method;
+                                $sendAdmMail = true; //if status change
+                                //alert users if change adm_level or status
+                                $newLevel = $localSections[$subject['AdmStructureKind']];
+                                $oldLevel = $localSubject->adm_level;
+                                $newStatus = (int)($subject['Status'] == 'Active');
+                                $oldStatus = $localSubject->active;
+                                $oldEmail = $localSubject->email;
+                                $oldEik = $localSubject->eik;
+
                                 //update subject base info if need to
                                 if( (int)$localSubject->batch_id != (int)$subject['BatchID']
                                     || $localSubject->section != $subject['AdmStructureKind']
@@ -152,13 +163,56 @@ class SyncIisda extends Command
                                         )
                                     )
                                 ) {
-                                    //alert users if change adm_level or status
-                                    $newLevel = $localSections[$subject['AdmStructureKind']];
-                                    $newStatus = (int)($subject['Status'] == 'Active');
-                                    if( $localSubject->adm_level != $newLevel
-                                        || $localSubject->active != $newStatus ) {
+                                    $localSubject->batch_id = (int)$subject['BatchID'];
+                                    $localSubject->eik = $subject['UIC'] ?? 'N/A';
+                                    $localSubject->type = $subject['Type'] ?? null;
+                                    $localSubject->adm_level = $newLevel;
+                                    // !!! Do not update status until delivery method check because we deactivate institutions without communication data and skip they iisda statuses
+//                                    $localSubject->active = $newStatus;
+                                    $localSubject->email = $addressInfo ? $addressInfo['email'] : null;
+                                    $localSubject->phone = $addressInfo ? $addressInfo['phone'] : null;
+                                    $localSubject->fax = $addressInfo ? $addressInfo['fax'] : null;
+                                    $localSubject->zip_code = $addressInfo ? $addressInfo['zip_code'] : null;
+                                    $localSubject->region = $addressInfo ? $addressInfo['region'] : null;
+                                    $localSubject->municipality = $addressInfo ? $addressInfo['municipality'] : null;
+                                    $localSubject->town = $addressInfo ? $addressInfo['town'] : null;
+                                    $localSubject->save();
+                                    $updated = true;
+
+                                    //Deactivate if missing delivery method by checking if we have all required information for current method of delivery
+                                    if( empty($localSubject->email) && (empty($localSubject->eik) || $localSubject->eik == 'N/A') ) {
+                                        $localSubject->delivery_method = 0;
+                                        $delivery = 0;
+                                    } else{
+                                        //If there is change in communication data check delivery method
+                                        if($oldEmail != $localSubject->email || $oldEik != $localSubject->eik) {
+                                            if( $localSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value && empty($localSubject->email) ) {
+                                                $localSubject->delivery_method = 0;
+                                                $delivery = 0;
+                                            }
+                                            if( $localSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SDES->value && !SsevController::getEgovProfile($localSubject->id, $localSubject->eik) ) {
+                                                $localSubject->delivery_method = 0;
+                                                $delivery = 0;
+                                            }
+                                        }
+                                    }
+
+                                    if( !$delivery ) {
+                                        //If no communication information we should ignore Iisda status
+                                        $localSubject->active = 0;
+                                        $sendAdmMail = $oldStatus;
+                                    } else{
+                                        $localSubject->active = $newStatus;
+                                    }
+                                    $localSubject->save();
+
+                                    //Send mail to admins
+                                    if( $oldLevel != $newLevel
+                                        || ($oldStatus != $newStatus && $sendAdmMail) ) {
+                                        echo 'send mail';
                                         if( config('app.env') != 'production' ) {
                                             $emailList =[config('mail.local_to_mail')];
+                                            echo 'send to me';
                                         } else {
                                             $emailList = $localSubject->getAlertUsersEmail();
                                         }
@@ -175,42 +229,6 @@ class SyncIisda extends Command
                                             Mail::to($emailList)->send(new AlertForSubjectChanges($mailData));
                                         }
                                     }
-
-//                                    Log::error('Update base: '.PHP_EOL. $localSubject. PHP_EOL. json_encode($addressInfo));
-                                    $localSubject->batch_id = (int)$subject['BatchID'];
-                                    $localSubject->eik = $subject['UIC'] ?? 'N/A';
-                                    $localSubject->type = $subject['Type'] ?? null;
-                                    $localSubject->adm_level = $newLevel;
-                                    $localSubject->active = $newStatus;
-                                    $localSubject->email = $addressInfo ? $addressInfo['email'] : null;
-                                    $localSubject->phone = $addressInfo ? $addressInfo['phone'] : null;
-                                    $localSubject->fax = $addressInfo ? $addressInfo['fax'] : null;
-                                    $localSubject->zip_code = $addressInfo ? $addressInfo['zip_code'] : null;
-                                    $localSubject->region = $addressInfo ? $addressInfo['region'] : null;
-                                    $localSubject->municipality = $addressInfo ? $addressInfo['municipality'] : null;
-                                    $localSubject->town = $addressInfo ? $addressInfo['town'] : null;
-                                    $localSubject->save();
-
-                                    $delivery = $localSubject->delivery_method;
-
-                                    //Deactivate if missing delivery method
-                                    if( empty($localSubject->email) && (empty($localSubject->eik) || $localSubject->eik == 'N/A') ) {
-                                        $localSubject->delivery_method = 0;
-                                        $delivery = 0;
-                                    }
-                                    if( $localSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value && empty($localSubject->email) ) {
-                                        $localSubject->delivery_method = 0;
-                                        $delivery = 0;
-                                    }
-                                    if( $localSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SDES->value && !SsevController::getEgovProfile($localSubject->id, $localSubject->eik) ) {
-                                        $localSubject->delivery_method = 0;
-                                        $delivery = 0;
-                                    }
-                                    if( !$delivery ) {
-                                        $localSubject->active = 0;
-                                    }
-                                    $localSubject->save();
-                                    $updated = true;
                                 }
                                 //update subject translation fields if need to
                                 $translationUpdate = false;
@@ -235,7 +253,10 @@ class SyncIisda extends Command
                                     $localSubject->save();
                                 }
                                 unset($localSubjects[$subject['IdentificationNumber']]);
-                                if($updated) { $updatedCnt +=1; }
+                                if($updated) {
+//                                    dd($localSubject, $delivery, $localSubject->delivery_method, $sendAdmMail, $newLevel, $oldLevel, $newStatus, $oldStatus, $oldEmail, $oldEik);
+                                    $updatedCnt +=1;
+                                }
                             } else {
                                 $toInsert[] = array(
                                     'batch_id' => $subject['BatchID'],
@@ -289,7 +310,9 @@ class SyncIisda extends Command
                     //deactivate local subject because we did\'t find them in sync array
                     if( sizeof($localSubjects) ) {
                         foreach ($localSubjects as $p) {
-                            $idArrayToDeactivate[] = $p->id;
+                            if( $p->active ) {
+                                $idArrayToDeactivate[] = $p->id;
+                            }
                         }
                         PdoiResponseSubject::whereIn('id', $idArrayToDeactivate)->update(['active' => 0]);
 
