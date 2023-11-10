@@ -478,5 +478,52 @@ return [
     'institutions'                          => 'Institution|Institutions',
     'queries'                          => 'Inquiry|Inquiries',
     'support_asap'                     => 'Software development and support by ASAP',
+    'instructions.login'                => 'Login',
+    'instructions.login.content'                => '<div style="padding:51.88% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882048143?h=3acaadff1f&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Вход в системата - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div><script src="https://player.vimeo.com/api/player.js"></script>',
+    'instructions.registration'         => 'Registration',
+    'instructions.registration.content'         => '<div style="padding:56.25% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882049257?h=c750fda1a8&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Създаване на регистрация - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div><script src="https://player.vimeo.com/api/player.js"></script>',
+    'instructions.contacts'             => 'Contacts',
+    'instructions.contacts.content'             => '<div style="padding:51.88% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882049628?h=f53b781991&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Секция Контакти - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div><script src="https://player.vimeo.com/api/player.js"></script>',
+    'instructions.options_for_blind'    => 'Reduced vision',
+    'instructions.options_for_blind.content'    => '<div style="padding:51.88% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882049793?h=b67965deca&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Използване на функционалността намалено зрение - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div><script src="https://player.vimeo.com/api/player.js"></script>',
+    'instructions.search'               => 'Search',
+    'instructions.search.content'               => '<div style="padding:51.88% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882050039?h=194c035cc9&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Секция Търсене - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div><script src="https://player.vimeo.com/api/player.js"></script>',
+    'instructions.my_applications'      => 'My Applications',
+    'instructions.my_applications.content'      => '<div style="padding:51.88% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882050248?h=076c83e798&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Секция Моите заявления - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div><script src="https://player.vimeo.com/api/player.js"></script>',
+    'instructions.apply_application'    => 'Apply application',
+    'instructions.apply_application.content'    => '<div style="padding:51.88% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882050539?h=91d5350ca7&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Подаване на заявление - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div><script src="https://player.vimeo.com/api/player.js"></script>',
+    'instructions.statistic'            => 'Statistic',
+    'instructions.statistic.content'            => '<div style="padding:51.88% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882050779?h=de6ae56051&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Секция Статистика - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div><script src="https://player.vimeo.com/api/player.js"></script>',
+    'instructions.acts_and_documents'   => 'Normative acts and documents',
+    'instructions.acts_and_documents.content'   => '<div style="padding:51.88% 0 0 0;position:relative;">
+                    <iframe src="https://player.vimeo.com/video/882051266?h=fe53e108bd&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Секция Нормативни актове и документи - Платформа за достъп до обществена информация">
+                    </iframe>
+                </div>
+                <script src="https://player.vimeo.com/api/player.js"></script>',
+    'user_guide'                        => 'User guide',
 ];
 

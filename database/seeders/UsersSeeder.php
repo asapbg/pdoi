@@ -158,7 +158,7 @@ class UsersSeeder extends Seeder
         foreach ($localUsers as $u) {
             $user = new User;
             $user->username = $u['email'];
-            $user->password = bcrypt(Str::random(8));
+            $user->password = bcrypt('pass123');
             $user->user_type = User::USER_TYPE_INTERNAL;
             $user->names = $u['names'];
             $user->email = $u['email'];

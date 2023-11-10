@@ -24,6 +24,8 @@ class File extends Model
     const PUBLIC_UPLOAD_DIR = 'pages/';
     const PUBLIC_UPLOAD_EXAMPLES_DIR = 'examples/';
 
+    const USER_GUIDE_FILE = 'user_guide.pdf';
+
     public function application(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(PdoiApplication::class, 'id', 'id_object');

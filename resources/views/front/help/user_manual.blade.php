@@ -10,6 +10,9 @@
                 <div class="row">
                     <div class="col-12">
                         {!! $item->content !!}
+                        <div class="row mt-3">
+                            <a href="{{ route('help.download', ['file' => \App\Models\File::USER_GUIDE_FILE]) }}"><i class="fas fa-file-pdf text-danger me-2"></i>{{ __('custom.user_guide') }}</a>
+                        </div>
                     </div>
                 </div>
             </div>
