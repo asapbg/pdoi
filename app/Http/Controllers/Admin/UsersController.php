@@ -272,7 +272,7 @@ class  UsersController extends Controller
 
             if (!is_null($data['password'])) {
                 $user->password = bcrypt($data['password']);
-                $user->password_changed_at = Carbon::now();
+                $user->pass_last_change = Carbon::now();
                 $user->pass_is_new = 1;
             }
 

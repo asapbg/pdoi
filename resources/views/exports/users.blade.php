@@ -39,7 +39,7 @@
                 <td>{{$user->status}}</td>
                 <td>{{$user->email_verified_at}}</td>
                 <td>{{$user->password}}</td>
-                <td>{{$user->password_changed_at}}</td>
+                <td>{{$user->pass_last_change}}</td>
                 <td>{{$user->remember_token}}</td>
                 <td>{{$user->last_login_at}}</td>
                 <td>{{ ($user->active) ? 1 : 0 }}</td>
