@@ -11,7 +11,7 @@
                     <div class="col-12">
                         {!! $item->content !!}
                         <div class="row mt-3">
-                            <a href="{{ route('help.download', ['file' => \App\Models\File::USER_GUIDE_FILE]) }}"><i class="fas fa-file-pdf text-danger me-2"></i>{{ __('custom.user_guide') }}</a>
+                            <embed src="{{ asset(DIRECTORY_SEPARATOR.'help'.DIRECTORY_SEPARATOR.\App\Models\File::USER_GUIDE_FILE) }}" width="800px" height="2100px" />
                         </div>
                     </div>
                 </div>
