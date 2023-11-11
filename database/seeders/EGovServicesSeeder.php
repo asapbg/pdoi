@@ -45,7 +45,7 @@ class EGovServicesSeeder extends Seeder
 
                 DB::commit();
             } catch (\Exception $e){
-                Log::error('Migration old egov organisations: '. $e->getMessage());
+                Log::error('Migration old egov organisations: '. $e);
                 DB::rollBack();
             }
         }

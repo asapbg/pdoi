@@ -40,7 +40,7 @@ class ApplicationEventSeeder extends Seeder
             from pdoi_event
             left join adm_users on adm_users.user_id = pdoi_event.user_reg
             where pdoi_event.id not in (1685,1686) -- events with not existing applications
-                and pdoi_event.application_id not in (6554,6743,7016,7021,7033,6647,7020,7087,7088,7086) -- this applications are skipped by ApplicationSeeder because they do not have user
+                and pdoi_event.application_id not in (6554,6743,7016,7021,7033,6647,7020,7087,7088,7086, 328) -- this applications are skipped by ApplicationSeeder because they do not have user
             order by pdoi_event.id
             ');
 
@@ -61,7 +61,7 @@ class ApplicationEventSeeder extends Seeder
 
                 DB::commit();
             } catch (\Exception $e){
-                Log::error('Migration old application events: '. $e->getMessage());
+                Log::error('Migration old application events: '. $e);
                 DB::rollBack();
             }
         }

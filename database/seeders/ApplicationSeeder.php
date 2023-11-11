@@ -70,7 +70,7 @@ class ApplicationSeeder extends Seeder
                 pdoi_application.user_last_mod
             from pdoi_application
             left join pdoi_app_themes on pdoi_app_themes.application_id = pdoi_application.id
-                where pdoi_application.id not in (6554,6743,7016,7021,7033,6647,7020,7087,7088,7086) -- application with not existing user_reg
+                where pdoi_application.id not in (6554,6743,7016,7021,7033,6647,7020,7087,7088,7086, 328) -- application with not existing user_reg
             group by pdoi_application.id
             order by pdoi_application.id asc
             ');
@@ -102,7 +102,7 @@ class ApplicationSeeder extends Seeder
 
                 DB::commit();
             } catch (\Exception $e){
-                Log::error('Migration old application: '. $e->getMessage());
+                Log::error('Migration old application: '. $e);
                 DB::rollBack();
             }
         }

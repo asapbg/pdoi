@@ -94,7 +94,7 @@ class EgovMessageFileSeeder extends Seeder
                 DB::commit();
             } catch (\Exception $e){
                 DB::rollBack();
-                Log::error('Migration old egov message files: '. $e->getMessage());
+                Log::error('Migration old egov message files: '. $e);
             }
         }
 

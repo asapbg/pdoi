@@ -50,7 +50,7 @@ class EgovMessageCorespSeeder extends Seeder
 
                 DB::commit();
             } catch (\Exception $e){
-                Log::error('Migration old egov message corespondents: '. $e->getMessage());
+                Log::error('Migration old egov message corespondents: '. $e);
                 DB::rollBack();
             }
         }

@@ -80,7 +80,7 @@ class EgovMessageSeeder extends Seeder
 
                 DB::commit();
             } catch (\Exception $e){
-                Log::error('Migration old egov message: '. $e->getMessage());
+                Log::error('Migration old egov message: '. $e);
                 DB::rollBack();
             }
         }

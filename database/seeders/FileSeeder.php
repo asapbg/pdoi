@@ -29,7 +29,7 @@ class FileSeeder extends Seeder
             DB::beginTransaction();
             try {
                 while ($minFileId < $maxFileId) {
-                    Log::error($minFileId.' - '.($minFileId + $this->fileAtOnes));
+                    //Log::error($minFileId.' - '.($minFileId + $this->fileAtOnes));
 
                     $oldFiles = DB::connection('old')->select("
                         select
@@ -58,7 +58,7 @@ class FileSeeder extends Seeder
                             (
                                 (files.id_object not in (1685,1686) and files.code_object = 14) -- events with not existing applications
                                 or
-                                (files.id_object not in (6554,6743,7016,7021,7033,6647,7020,7087,7088,7086) and files.code_object = 13)  -- this applications are skipped by ApplicationSeeder because they do not have user
+                                (files.id_object not in (6554,6743,7016,7021,7033,6647,7020,7087,7088,7086, 328) and files.code_object = 13)  -- this applications are skipped by ApplicationSeeder because they do not have user
                             )
                             and files.id > ".$minFileId."
                             and files.id <= ".($minFileId + $this->fileAtOnes)."
@@ -90,7 +90,7 @@ class FileSeeder extends Seeder
                 DB::commit();
             } catch (\Exception $e){
                 DB::rollBack();
-                Log::error('Migration old files: '. $e->getMessage());
+                Log::error('Migration old files: '. $e);
             }
         }
 

@@ -121,7 +121,7 @@ class UsersSeeder extends Seeder
 
                     DB::commit();
                 } catch (\Exception $e){
-                    Log::error('Migration old users: '. $e->getMessage());
+                    Log::error('Migration old users: '. $e);
                     DB::rollBack();
                 }
             }
