@@ -525,5 +525,6 @@ return [
                 </div>
                 <script src="https://player.vimeo.com/api/player.js"></script>',
     'user_guide'                        => 'Ръководство',
+    'asap_support'                                  => 'При технически проблем/срив в платформата'
 ];
 
