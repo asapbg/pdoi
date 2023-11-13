@@ -498,6 +498,7 @@ if (!function_exists('stripHtmlTags')) {
      */
     function stripHtmlTags(string $html_string, array $tags = [])
     {
+        $html_string = str_replace('style', 'tyle', $html_string);
         $tagsToStrip = sizeof($tags) ? $tags : ['p', 'ul', 'ol', 'li', 'b', 'i', 'u'];
         return strip_tags($html_string, $tagsToStrip);
     }

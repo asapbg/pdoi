@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{ trans_choice('custom.applications', 1) }} - {{ $application->application_uri }}</title>
+    <style>body { font-family: DejaVu Sans, sans-serif !important; }</style>
 </head>
 <body style="text-align: center;font-size: 34px; padding-left: 50px; padding-right: 50px;">
 <div style="font-size: 22px;">
@@ -46,7 +47,7 @@
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr>
-            <td colspan="5" style="text-align: justify;">
+            <td colspan="5" style="text-align: justify; font-family: DejaVu Sans, sans-serif !important;">
                 {!! html_entity_decode($application->request) !!}
             </td>
         </tr>
