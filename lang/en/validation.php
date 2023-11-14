@@ -313,6 +313,7 @@ return [
         'address_bg'                => 'Address (BG)',
         'address_en'                => 'Address (EN)',
         'extra_info'                => 'Additional information',
+        'subjects'                  => 'Institution',
     ],
 
 ];

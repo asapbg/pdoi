@@ -49,7 +49,7 @@ class PdoiApplicationApplyRequest extends FormRequest
             'names_publication' => ['nullable', 'numeric', 'in:1'],
             'address_publication' => ['nullable', 'numeric', 'in:1'],
             'phone_publication' => ['nullable', 'numeric', 'in:1'],
-            'subjects' => ['required', 'array'],
+            'subjects' => ['required', 'array', 'max:10'],
             'person_identity' => ['nullable', 'string', 'max:20', new EgnRule()],
             'company_identity' => ['nullable', 'string', 'max:20'],
             'file_description' => ['array'],
