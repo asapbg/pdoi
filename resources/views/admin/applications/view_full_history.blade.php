@@ -16,7 +16,7 @@
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.reg_number') }}:  <span class="text-primary">{{ $item->application_uri }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.status') }}:  <span class="text-primary">{{ $item->statusName }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.last_event') }}:  <span class="text-primary">{{ $item->currentEvent->event->name }}</span></div>
-                                <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $item->response_subject_id ? $item->responseSubject->subject_name : $item->nonRegisteredSubjectName }}</span></div>
+                                <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">@if($item->response_subject_id) <a href="{{route('admin.rzs.edit', ['item' => $item->responseSubject])}}" target="_blank">{{ $item->responseSubject->subject_name }}</a>@else {{ $item->nonRegisteredSubjectName }} @endif</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ !$item->manual ? __('custom.date_apply') : __('custom.date_public') }}: <span class="text-primary">{{ displayDate($item->created_at) }}</span></div>
                                 @if(!$item->manual)
                                     <div class="col-md-4 col-12 fw-bold">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($item->response_end_time) }}</span></div>
@@ -144,7 +144,7 @@
                                                 <span class="font-weight-bold pl-0"><i class="far fa-calendar-check mr-2 text-primary"></i>{{ $event->eventReasonName }}</span>
                                                 <hr>
                                                 <div class="col-md-2 col-12 font-weight-semibold">{{ __('custom.date') }}:  <span class="text-primary">{{ displayDateTime($event->created_at) }}</span></div>
-                                                <div class="col-md-8 col-12 font-weight-semibold">{{ trans_choice('custom.users', 1) }}: @if($event->user_reg > 0)<span class="text-primary">{{ $event->user->names }}</span>@endif <span class="fst-italic text-primary">({{ $event->user_reg > 0 ? ($event->user->user_type == \App\Models\User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') ) : 'Системен' }})</span></div>
+                                                <div class="col-md-8 col-12 font-weight-semibold">{{ trans_choice('custom.users', 1) }}: @if($event->user_reg > 0)<span class="text-primary"><a href="{{ route('admin.users.edit', ['user' => $event->user]) }}" target="_blank">{{ $event->user->names }}</a></span>@endif <span class="fst-italic text-primary">({{ $event->user_reg > 0 ? ($event->user->user_type == \App\Models\User::USER_TYPE_EXTERNAL ? __('custom.applicant') : __('custom.admin') ) : 'Системен' }})</span></div>
                                                 @if(!empty($event->old_resp_subject_id) || !empty($event->new_resp_subject_id))
                                                     <div class="col-12 mt-2"></div>
                                                     @if(!empty($event->old_resp_subject_id))
