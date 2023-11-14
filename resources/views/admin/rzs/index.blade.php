@@ -57,6 +57,14 @@
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                         @endcan
+                                        @canany('view', $item)
+                                            <a href="{{ route( 'admin.rzs.view' , [$item]) }}"
+                                               class="btn btn-sm btn-warning"
+                                               data-toggle="tooltip"
+                                               title="{{ __('custom.view') }}">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        @endcan
 {{--                                        @can('delete', $item)--}}
 {{--                                                <a href="javascript:;"--}}
 {{--                                                   class="btn btn-sm btn-danger js-toggle-delete-resource-modal hidden"--}}

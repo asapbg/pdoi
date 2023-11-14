@@ -60,6 +60,21 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return $this->hasOne(EgovOrganisation::class, 'eik', 'eik');
     }
 
+    public function regionObj(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EkatteArea::class, 'id', 'region');
+    }
+
+    public function municipalityObj(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EkatteMunicipality::class, 'id', 'municipality');
+    }
+
+    public function townObj(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EkatteSettlement::class, 'id', 'town');
+    }
+
     public static function translationFieldsProperties(): array
     {
         return array(

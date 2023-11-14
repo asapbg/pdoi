@@ -98,6 +98,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
     Route::controller(PdoiResponseSubjectControllerAlias::class)->group(function () {
         Route::get('/rzs-subjects',                'index')->name('rzs')->middleware('can:viewAny,App\Models\PdoiResponseSubject');
         Route::get('/rzs-subjects/edit/{item?}',         'edit')->name('rzs.edit');
+        Route::get('/rzs-subjects/view/{item?}',         'show')->name('rzs.view');
         Route::match(['post', 'put'], '/rzs-subjects/store/{item?}',         'store')->name('rzs.store');
         Route::get('/rzs-subjects/{subject}/delete',  'delete')->name('rzs.delete');
         Route::match(['get', 'post'],'/rzs-subjects/import',  'import')->name('rzs.import');

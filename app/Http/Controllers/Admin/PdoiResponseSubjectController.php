@@ -114,6 +114,11 @@ class PdoiResponseSubjectController extends AdminController
             'courtSubjects', 'subjects', 'editOptions'));
     }
 
+    public function show(Request $request, PdoiResponseSubject $item)
+    {
+        return $this->view('admin.rzs.view', compact('item'));
+    }
+
     public function store(PdoiResponseSubjectStoreRequest $request, PdoiResponseSubject $item)
     {
 //        $r = new PdoiResponseSubjectStoreRequest();
