@@ -32,27 +32,40 @@
 {{--            </div>--}}
             <section class="py-5" >
                 <div class="row">
-                    <div class="col-lg-4 col-md-12 mb-lg-0 mb-4">
-                        <a href="{{ route('login') }}" class="home-section-button light-yellow">
-                            <span class="home-icon">
-                                <i class="fa-solid fa-right-from-bracket text-warning"></i>
-                            </span>
-                            <span class="home-section-button-txt">
-                                {{ __('custom.login') }}
-                            </span>
-                        </a>
-                    </div>
+                    @if(!auth()->user())
+                        <div class="col-lg-4 col-md-12 mb-lg-0 mb-4">
+                            <a href="{{ route('login') }}" class="home-section-button light-yellow">
+                                <span class="home-icon">
+                                    <i class="fa-solid fa-right-from-bracket text-warning"></i>
+                                </span>
+                                <span class="home-section-button-txt">
+                                    {{ __('custom.login') }}
+                                </span>
+                            </a>
+                        </div>
 
-                    <div class="col-lg-4 col-md-12 mb-lg-0 mb-4 ">
-                        <a href="{{ route('register') }}" class="home-section-button light-red">
-                            <span class="home-icon">
-                                <i class="fa-solid fa-circle-user text-danger"></i>
-                            </span>
-                            <span class="home-section-button-txt">
-                                {{ __('custom.register') }}
-                            </span>
-                        </a>
-                    </div>
+                        <div class="col-lg-4 col-md-12 mb-lg-0 mb-4 ">
+                            <a href="{{ route('register') }}" class="home-section-button light-red">
+                                <span class="home-icon">
+                                    <i class="fa-solid fa-circle-user text-danger"></i>
+                                </span>
+                                <span class="home-section-button-txt">
+                                    {{ __('custom.register') }}
+                                </span>
+                            </a>
+                        </div>
+                    @elseif(auth()->user()->user_type == \App\Models\User::USER_TYPE_INTERNAL)
+                        <div class="col-lg-8 col-md-12 mb-lg-0 mb-4">
+                            <a href="{{ route('admin.home') }}" class="home-section-button light-yellow">
+                                <span class="home-icon">
+                                    <i class="fa-solid fa-right-from-bracket text-warning"></i>
+                                </span>
+                                <span class="home-section-button-txt">
+                                    {{ __('front.to_admin_panel') }}
+                                </span>
+                            </a>
+                        </div>
+                    @endif
                     <div class="col-lg-4 col-md-12">
                         <a href="{{ route('help.page', ['slug' => $videoInstructionPage->slug]) }}" title="{{ $videoInstructionPage->name }}" class="home-section-button light-green">
                             <span class="home-icon">
