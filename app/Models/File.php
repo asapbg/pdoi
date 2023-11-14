@@ -25,6 +25,7 @@ class File extends Model
     const PUBLIC_UPLOAD_EXAMPLES_DIR = 'examples/';
 
     const USER_GUIDE_FILE = 'user_guide.pdf';
+    const ADMIN_GUIDE_FILE = 'Pitay_User_Guide_Admin.pdf';
 
     public function application(): \Illuminate\Database\Eloquent\Relations\HasOne
     {

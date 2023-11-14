@@ -40,6 +40,8 @@ Route::group(['middleware' => ['auth', 'administration']], function() {
 // Admin
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'administration']], function() {
 
+    Route::get('/admin', [AdminHomeController::class, 'guide'])->name('help.guide');
+
     Route::controller(CommonController::class)->group(function () {
         Route::get('/download/{file}', 'downloadFile')->name('download.file');
         Route::get('/delete/{file}', 'deleteFile')->name('delete.file');

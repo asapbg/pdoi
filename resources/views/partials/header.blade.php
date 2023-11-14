@@ -23,6 +23,12 @@
                 </li>
             </ul>
         </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" style="font-size: 20px;" href="{{ route('admin.help.guide') }}" target="_blank">
+                <i class="fas fa-file-pdf text-white"></i>
+                Ръководство за работа
+            </a>
+        </li>
     </ul>
 
     <div class="navbar-nav mx-auto">

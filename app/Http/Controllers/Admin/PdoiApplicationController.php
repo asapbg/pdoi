@@ -38,7 +38,7 @@ class PdoiApplicationController extends Controller
         $filter = $this->filters($request);
         $requestFilter = $request->all();
         $items = null;
-        if( isset($requestFilter['search']) ) {
+//        if( isset($requestFilter['search']) ) {
             $paginate = $filter['paginate'] ?? PdoiApplication::PAGINATE;
             $items = PdoiApplication::with(['responseSubject', 'responseSubject.translations', 'parent'])
                 ->FilterBy($requestFilter)
@@ -46,7 +46,7 @@ class PdoiApplicationController extends Controller
                 ->orderBy('id', 'desc')
                 ->orderBy('parent_id', 'asc')
                 ->paginate($paginate);
-        }
+//        }
         $listRouteName = 'admin.application';
         return $this->view('admin.applications.index', compact('items', 'filter', 'listRouteName'));
     }

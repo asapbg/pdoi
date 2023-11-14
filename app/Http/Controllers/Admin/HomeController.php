@@ -17,4 +17,9 @@ class HomeController extends Controller
     {
         return view('admin.home');
     }
+
+    public function guide()
+    {
+        return view('admin.help.guide');
+    }
 }
