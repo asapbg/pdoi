@@ -56,7 +56,6 @@ class SendEmailNotifications extends Command
                     logError('Send email notification ID '.$item->id, 'Invalid json message data');
                     continue;
                 }
-
                 DB::beginTransaction();
                 try {
                     $to = config('app.env') != 'production' ? config('mail.local_to_mail') : $messageData['to_email'];
@@ -64,12 +63,19 @@ class SendEmailNotifications extends Command
                         logError('Send email notification ID '.$item->id, 'Missing receiver email');
                         continue;
                     }
-                    Mail::send([], [], function ($message) use ($messageData){
+
+                    $application = PdoiApplication::find((int)$messageData['application_id']);
+                    $appService = new ApplicationService($application);
+                    $appService->communicationCallback($item);
+
+                    $toMail = isset($messageData['to_email']) && !empty($messageData['to_email']) ? $messageData['to_email'] : 'pmo@asap.bg';
+                    $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['message'])));
+                    Mail::send([], [], function ($message) use ($messageData, $toMail, $myMessage){
                         $message->from($messageData['from_email'])
-                            ->to(config('app.env') != 'production' ? config('mail.local_to_mail') : $messageData['to_email'])
+                            ->to(config('app.env') != 'production' ? config('mail.local_to_mail') : $toMail)
                             ->subject($messageData['subject'])
-                            ->html($messageData['message'])
-                            ->text($messageData['message']);
+//                            ->html($messageData['message'])
+                            ->text($myMessage);
 
                         if( isset($messageData['files']) && sizeof($messageData['files']) ) {
                             $files = File::whereIn('id', $messageData['files'])->get();
@@ -80,9 +86,6 @@ class SendEmailNotifications extends Command
                             }
                         }
                     });
-                    $application = PdoiApplication::find((int)$messageData['application_id']);
-                    $appService = new ApplicationService($application);
-                    $appService->communicationCallback($item);
 
                     DB::table('notifications')
                         ->where('id', $item->id)
@@ -95,7 +98,7 @@ class SendEmailNotifications extends Command
                         ->where('id', $item->id)
                         ->update(['cnt_send' => ($item->cnt_send + 1)]);
                 }
-
+                exit;
             }
         }
     }
