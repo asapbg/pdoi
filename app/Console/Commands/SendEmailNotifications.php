@@ -54,51 +54,51 @@ class SendEmailNotifications extends Command
                 $messageData = json_decode($item->data, true);
                 if( !$messageData ) {
                     logError('Send email notification ID '.$item->id, 'Invalid json message data');
-                    continue;
-                }
-                DB::beginTransaction();
-                try {
-                    $to = config('app.env') != 'production' ? config('mail.local_to_mail') : $messageData['to_email'];
-                    if( empty($to) ) {
-                        logError('Send email notification ID '.$item->id, 'Missing receiver email');
-                        continue;
-                    }
+                } else {
+                    DB::beginTransaction();
+                    try {
+                        $to = config('app.env') != 'production' ? config('mail.local_to_mail') : ($messageData['to_email'] ?? 'pmo@asap.bg') ;
+                        if( empty($to) ) {
+                            //logError('Send email notification ID '.$item->id, 'Missing receiver email');
+                            //continue;
+                            $to = 'pmo@asap.bg';
+                        }
 
-                    $application = PdoiApplication::find((int)$messageData['application_id']);
-                    $appService = new ApplicationService($application);
-                    $appService->communicationCallback($item);
+                        $application = PdoiApplication::find((int)$messageData['application_id']);
+                        $appService = new ApplicationService($application);
+                        $appService->communicationCallback($item);
 
-                    $toMail = isset($messageData['to_email']) && !empty($messageData['to_email']) ? $messageData['to_email'] : 'pmo@asap.bg';
-                    $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['message'])));
-                    Mail::send([], [], function ($message) use ($messageData, $toMail, $myMessage){
-                        $message->from($messageData['from_email'])
-                            ->to(config('app.env') != 'production' ? config('mail.local_to_mail') : $toMail)
-                            ->subject($messageData['subject'])
+                        $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['message'])));
+                        Mail::send([], [], function ($message) use ($messageData, $to, $myMessage){
+                            $message->from($messageData['from_email'])
+                                ->to($to)
+                                ->subject($messageData['subject'])
 //                            ->html($messageData['message'])
-                            ->text($myMessage);
+                                ->text($myMessage);
 
-                        if( isset($messageData['files']) && sizeof($messageData['files']) ) {
-                            $files = File::whereIn('id', $messageData['files'])->get();
-                            if( $files->count() ){
-                                foreach ($files as $f) {
-                                    $message->attach(base_path().Storage::disk('local')->url('app'.DIRECTORY_SEPARATOR.$f->path));
+                            if( isset($messageData['files']) && sizeof($messageData['files']) ) {
+                                $files = File::whereIn('id', $messageData['files'])->get();
+                                if( $files->count() ){
+                                    foreach ($files as $f) {
+                                        $message->attach(base_path().Storage::disk('local')->url('app'.DIRECTORY_SEPARATOR.$f->path));
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
 
-                    DB::table('notifications')
-                        ->where('id', $item->id)
-                        ->update(['is_send' => 1, 'cnt_send' => ($item->cnt_send + 1)]);
-                    DB::commit();
-                } catch (\Exception $e) {
-                    logError('Send email notification ID '.$item->id, $e->getMessage());
-                    DB::rollBack();
-                    DB::table('notifications')
-                        ->where('id', $item->id)
-                        ->update(['cnt_send' => ($item->cnt_send + 1)]);
+                        DB::table('notifications')
+                            ->where('id', $item->id)
+                            ->update(['is_send' => 1, 'cnt_send' => ($item->cnt_send + 1)]);
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        logError('Send email notification ID '.$item->id, $e->getMessage());
+                        DB::rollBack();
+                        DB::table('notifications')
+                            ->where('id', $item->id)
+                            ->update(['cnt_send' => ($item->cnt_send + 1)]);
+                    }
                 }
-                exit;
+
             }
         }
     }
