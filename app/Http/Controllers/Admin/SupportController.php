@@ -20,6 +20,7 @@ class SupportController extends Controller
         }
         $application = $request->filled('application') && !empty($request->input('application')) ? $request->input('application') : null;
         $email = $request->filled('email') && !empty($request->input('email')) ? $request->input('email') : null;
+        $sended = $request->filled('not_send') && $request->input('not_send') ? 0 : -1;
         //        dd($application, $email);
         $q = DB::table('notifications');
         if( $application ) {
@@ -27,6 +28,9 @@ class SupportController extends Controller
         }
         if( $email ) {
             $q->whereRaw('data like \'%to_email":"'.$email.'%\'');
+        }
+        if( $sended == 0 ) {
+            $q->where('is_send',  '=', 0);
         }
 
         $items = $q->orderBy('created_at')

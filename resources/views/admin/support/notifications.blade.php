@@ -21,6 +21,10 @@
                                        placeholder="E-mail"
                                        value="{{ old('email', $filter['email'] ?? '') }}" >
                             </div>
+                            <div class="col-md-4 d-flex flex-row">
+                                <input type="checkbox" name="not_send" class="custom-checkbox mr-2"
+                                       value="1" @if(old('not_send', 0 ) == 1) checked @endif> Неизпратени
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-sm btn-success mt-2">Търсене</button>
                     </div>
