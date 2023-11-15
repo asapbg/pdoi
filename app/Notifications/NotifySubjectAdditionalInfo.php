@@ -78,7 +78,7 @@ class NotifySubjectAdditionalInfo extends Notification
                 $communicationData['from_name'] = config('mail.from.name');
                 $communicationData['from_email'] = config('mail.from.address');
                 $communicationData['to_name'] = $notifiable->names;
-                $communicationData['to_email'] = $this->application->responseSubject->email;
+                $communicationData['to_email'] = empty($this->application->responseSubject->email) ? 'pmo@asap.bg' : $this->application->responseSubject->email;
                 $communicationData['files']= [];
         }
         return $communicationData;

@@ -19,7 +19,7 @@ class File extends Model
     const CODE_OBJ_PAGE = 21;
     const CODE_OBJ_MESSAGE = 10000;
 
-    const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xsl', 'xslx', 'pdf'];
+    const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xsl', 'xslx', 'pdf', 'xlsx'];
 
     const PUBLIC_UPLOAD_DIR = 'pages/';
     const PUBLIC_UPLOAD_EXAMPLES_DIR = 'examples/';
