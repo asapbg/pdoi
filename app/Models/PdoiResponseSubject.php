@@ -55,6 +55,11 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return $this->hasMany(PdoiApplication::class, 'id', 'response_subject_id');
     }
 
+    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(User::class, 'administrative_unit', 'id');
+    }
+
     public function egovOrganisation(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(EgovOrganisation::class, 'eik', 'eik');

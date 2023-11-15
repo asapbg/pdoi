@@ -258,6 +258,17 @@
                         </a>
                     </li>
                 @endcanany
+                @if(auth()->user()->hasRole([\App\Models\CustomRole::SUPER_USER_ROLE]))
+                    <hr class="text-white">
+                    <li class="nav-header">Support</li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.support.notifications') }}"
+                           class="nav-link">
+                            <i class="fas fa-message"></i>
+                            <p>Известия</p>
+                        </a>
+                    </li>
+                @endcanany
             </ul>
         </nav>
     </div>

@@ -87,7 +87,8 @@ class NotifySubjectNewApplication extends Notification
                 break;
             case PdoiSubjectDeliveryMethodsEnum::SEOS->value: //деловодна система
                 $communicationData['files']= $this->application->files ? $this->application->files->pluck('id')->toArray() : [];
-                $sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', config('seos.eik'))->first();
+                //$sender = $this->application->parent_id ? $this->application->parent->responseSubject->egovOrganisation : EgovOrganisation::where('eik', config('seos.eik'))->first();
+                $sender = EgovOrganisation::where('eik', config('seos.eik'))->first();
                 $envProd = config('app.env') == 'production';
                 $senderInfo = [
                     'guid' => $envProd ? $sender->guid : '{B2A43E54-B6CB-4835-A6CC-D05692B3F7CD}',

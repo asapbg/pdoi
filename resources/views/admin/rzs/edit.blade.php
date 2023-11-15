@@ -22,6 +22,7 @@
                         @if(!$item->id || (isset($editOptions) && isset($editOptions['settings']) && $editOptions['settings']))
                             @include('admin.rzs.edit_settings_section')
                         @endif
+                        @include('admin.rzs.users', ['users' => $item->users])
                         <div class="form-group row">
                             <div class="col-md-6 col-md-offset-3">
                                 <button id="save" type="submit" class="btn btn-success">{{ __('custom.save') }}</button>

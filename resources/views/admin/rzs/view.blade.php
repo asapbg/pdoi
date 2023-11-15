@@ -115,6 +115,8 @@
                         </div>
                     </div>
 
+                    @include('admin.rzs.users', ['users' => $item->users])
+
                 </div>
             </div>
         </div>

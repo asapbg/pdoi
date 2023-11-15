@@ -31,4 +31,12 @@ class EgovMessage extends ModelActivityExtend
     public function getModelName() {
         return $this->msg_guid;
     }
+
+    public function sender() {
+        return $this->hasOne(EgovOrganisation::class, 'eik', 'sender_eik');
+    }
+    public function recipient() {
+        return $this->hasOne(EgovOrganisation::class, 'eik', 'recipient_eik');
+    }
+
 }
