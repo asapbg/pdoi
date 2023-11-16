@@ -75,12 +75,12 @@ class ApplicationService
                 if ($eventConfig->days) {
                     //event waiting time
                     $eventEndDate = match ((int)$eventConfig->app_event){
-                        ApplicationEventsEnum::ASK_FOR_INFO->value => Carbon::now()->addDays($eventConfig->days),
+                        ApplicationEventsEnum::ASK_FOR_INFO->value => Carbon::now()->addDays($eventConfig->days)->endOfDay(),
                         default => null
                     };
                     //extending response time for application
                     $extendTermDate = match ((int)$eventConfig->app_event){
-                        ApplicationEventsEnum::EXTEND_TERM->value => Carbon::parse($this->application->response_end_time)->addDays($eventConfig->days),
+                        ApplicationEventsEnum::EXTEND_TERM->value => Carbon::parse($this->application->response_end_time)->addDays($eventConfig->days)->endOfDay(),
                         default => null
                     };
                     if( $eventEndDate ) {
@@ -325,17 +325,17 @@ class ApplicationService
             if( $event->app_event == ApplicationEventsEnum::SEND->value &&
                 (!$this->application->parent_id || $this->application->response_subject_id != $this->application->parent->response_subject_id ) ) {
                 //потвърдено от деловодна система
-                $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_APPLY);
+                $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_APPLY)->endOfDay();
             } elseif ( $event->app_event == ApplicationEventsEnum::APPROVE_BY_SEOS->value) {
                 //потвърдено от деловодна система
                 $this->application->registration_date = Carbon::now();
                 if(!$this->application->parent_id || $this->application->response_subject_id != $this->application->parent->response_subject_id ) {
-                    $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION);
+                    $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
                 }
             } elseif( $event->app_event == ApplicationEventsEnum::GIVE_INFO->value ) {
                 //Предоставяне на допълнителна информация
                 //крайния срок се удължава като се изчислява 14 дни от датата на уточняването на предмета на исканата обществена информация
-                $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_GIVE_INFORMATION);
+                $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_GIVE_INFORMATION)->endOfDay();
             }
         }
         $this->application->save();
@@ -388,7 +388,7 @@ class ApplicationService
                     $this->application->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
                     $this->application->status_date = Carbon::now();
                     $this->application->registration_date = Carbon::now();
-                    $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION);
+                    $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
                     $this->application->save();
                     $this->application->refresh();
                     $this->application->applicant->notify(new NotifyUserForAppStatus($this->application));
