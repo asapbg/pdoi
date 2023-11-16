@@ -140,9 +140,11 @@ class NotifySubjectNewApplication extends Notification
         //add files
         $docList = '';
         if($application->files) {
+            $docList .= '<DocAttachmentList>';
             foreach ($application->files as $f) {
-                $docList .= '<DocAttachmentList><Attachment><AttFileName>'.$f->filename.'</AttFileName><AttBody>'.base64_encode(Storage::disk('local')->get($f->path)).'</AttBody><AttMIMEType>text/unknown</AttMIMEType></Attachment></DocAttachmentList>';
+                $docList .= '<Attachment><AttFileName>'.$f->filename.'</AttFileName><AttBody>'.base64_encode(Storage::disk('local')->get($f->path)).'</AttBody><AttMIMEType>text/unknown</AttMIMEType></Attachment>';
             }
+            $docList .= '</DocAttachmentList>';
         }
 
         //MessageDate = 2023-03-29T17:14:48.177+03:00
