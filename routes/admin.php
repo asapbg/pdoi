@@ -29,7 +29,8 @@ Route::match(['get'],'/admin/logout', [AdminLoginControllerAlias::class, 'logout
 // Common routes
 Route::group(['middleware' => ['auth', 'administration']], function() {
 
-    Route::get('/admin', [AdminHomeController::class, 'index'])->name('admin.home');
+    //Route::get('/admin', [AdminHomeController::class, 'index'])->name('admin.home');
+    Route::get('/admin', [\App\Http\Controllers\Admin\PdoiApplicationController::class, 'index'])->name('admin.home');
 
     Route::controller(CommonController::class)->group(function () {
         Route::get('/toggle-boolean', 'toggleBoolean')->name('toggle-boolean');
