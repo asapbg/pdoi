@@ -298,7 +298,7 @@ class CommonController extends Controller
             echo '<p class="text-danger">'.__('messages.record_not_found').'</p>';
         }
 
-        $contacts = User::where('administrative_unit', '=', $item->id)->get();
+        $contacts = User::IsActive()->where('administrative_unit', '=', $item->id)->get();
         return view('front.partials.contact_person', compact('contacts'));
     }
 }
