@@ -176,7 +176,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     protected function active(): Attribute
     {
         return Attribute::make(
-            get: fn () => !($this->status == self::STATUS_INACTIVE),
+            get: fn () => !in_array($this->status,[self::STATUS_INACTIVE, self::STATUS_BLOCKED]),
         );
     }
 
@@ -197,7 +197,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     public function scopeIsInactive($query)
     {
-        $query->where('users.status', self::STATUS_INACTIVE)
+        $query->whereIn('users.status', [self::STATUS_INACTIVE, self::STATUS_BLOCKED])
             ->where('users.active', 0);
     }
 

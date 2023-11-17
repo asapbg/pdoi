@@ -220,6 +220,12 @@ class  UsersController extends Controller
                 $validated['pass_last_change'] = Carbon::now();
                 $validated['pass_is_new'] = 1;
             }
+            if(isset($validated['status']) && (in_array((int)$validated['status'], [User::STATUS_BLOCKED, User::STATUS_INACTIVE])) ) {
+                $validated['active']  = 0;
+            }
+            if(isset($validated['status']) && (in_array((int)$validated['status'], [User::STATUS_ACTIVE, User::STATUS_REG_IN_PROCESS])) ) {
+                $validated['active']  = 1;
+            }
             $user->fill($validated);
             $user->save();
 
