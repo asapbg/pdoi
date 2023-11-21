@@ -146,7 +146,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
      */
     public function scopeExpiredAndActive($query)
     {
-        $query->where('pdoi_application.response_end_time', '<', Carbon::now())
+        $query->where('pdoi_application.response_end_time', '<', Carbon::now()->startOfDay()->format('Y-m-d H:i:s'))
             ->whereIn('pdoi_application.status', PdoiApplicationStatusesEnum::notCompleted());
     }
 
