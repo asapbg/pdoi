@@ -101,6 +101,7 @@ class LoginController extends Controller
 
         if ($this->hasTooManyLoginAttempts($request)) {
             $user->status = User::STATUS_BLOCKED;
+            $user->active = 0;
             $user->save();
             $this->fireLockoutEvent($request);
 
