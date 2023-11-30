@@ -591,3 +591,15 @@ if (!function_exists('fileIcon')) {
     }
 }
 
+if (!function_exists('clearText')) {
+    /**
+     * @param string $text
+     * @return string
+     */
+    function clearText($text): string
+    {
+        return str_replace(['&nbsp;'], '', $text);
+    }
+}
+
+

@@ -69,6 +69,7 @@ class SendEmailNotifications extends Command
                         $appService->communicationCallback($item);
 
                         $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['message'])));
+                        $myMessage = clearText($myMessage);
                         Mail::send([], [], function ($message) use ($messageData, $to, $myMessage){
                             $message->from($messageData['from_email'])
                                 ->to($to)

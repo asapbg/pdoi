@@ -36,6 +36,10 @@
                                 <a class="a-fs" href="{{ route($applicationRouteName, ['id' => $item['id']]) }}">@if(isset($myList) && $myList){{ $item['my_title'] }}@else{{ $item['title'] }}@endif</a>
                                 <p class="my-1 p-fs"><i class="fas fa-building text-primary me-1"></i>{{ $item['subject'] }}</p>
                                 <p class="my-1 p-fs">{{ __('custom.reg_number') }}: {{ $item['uri'] }}</p>
+                                @php($itemContent = clearText(strip_tags(html_entity_decode($item['request']))))
+                                <div class="my-2">
+                                    {{ mb_substr($itemContent, 0, 100) }}@if(strlen($itemContent) > 100){{ '...' }}@endif
+                                </div>
                                 <p class="my-1 p-fs">{{ __('custom.date_apply') }}: {{ displayDate($item['created_at']) }} | {{ __('custom.status') }}: {{ $item['statusName'] }} | <i class="fas fa-eye text-primary me-1"></i>{{ $item['cnt_visits'] }}</p>
                             </div>
                         @endforeach
