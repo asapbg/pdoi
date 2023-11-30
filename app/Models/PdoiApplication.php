@@ -510,6 +510,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                 pdoi_application.id,
                 pdoi_application.created_at,
                 pdoi_application.names_publication,
+                pdoi_application.applicant_type,
                 pdoi_application.full_names,
                 pdoi_application.response_subject_id,
                 pdoi_application.not_registered_subject_eik,

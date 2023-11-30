@@ -8,6 +8,7 @@ use App\Models\MenuSection;
 use App\Models\Page;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +43,7 @@ class HomeController extends Controller
                     'id' => $application->id,
                     'title' => __('custom.application_system_title',
                         [
-                            'user' => ($application->names_publication ? $application->full_names : __('custom.anonymous_applicant') ),
+                            'user' => ($application->names_publication ? $application->full_names : __('custom.users.legal_form.'.$application->applicant_type) ),
                             'subject' => $application->response_subject_id ? $application->subject_name : $application->not_registered_subject_name.'('.$application->not_registered_subject_eik.')',
                             'apply_date' => displayDate($application->created_at)
                         ]),

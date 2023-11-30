@@ -8,28 +8,6 @@
             </div>
         @endif
         <div class="row d-flex justify-content-md-evenly">
-{{--            <div class="card card-light mb-4 mt-4 px-0 col-md-5">--}}
-{{--                <div class="card-header app-card-header py-1 pb-0">--}}
-{{--                    <h3 class="fs-4 pt-2">--}}
-{{--                        <i class="fa-solid fa-file-import me-2"></i> {{ __('custom.last_applications') }}--}}
-{{--                    </h3>--}}
-{{--                </div>--}}
-{{--                <div class="card-body">--}}
-{{--                    <div class="row">--}}
-{{--                        @if(isset($applications) && sizeof($applications))--}}
-{{--                            @foreach($applications as $item)--}}
-{{--                                <div class="col-12 mb-3">--}}
-{{--                                    <a class="home-sub-items" href="{{ route('application.show', ['id' => $item['id']]) }}">{{  $item['title'] }}</a>--}}
-{{--                                </div>--}}
-{{--                            @endforeach--}}
-{{--                        @endif--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                @if(isset($applications) && sizeof($applications))--}}
-{{--                    <div class="card-footer">--}}
-{{--                    </div>--}}
-{{--                @endif--}}
-{{--            </div>--}}
             <section class="py-5" >
                 <div class="row">
                     @if(!auth()->user())
