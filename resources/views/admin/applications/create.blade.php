@@ -136,7 +136,7 @@
                                     @if(isset($settlements) && $settlements->count())
                                         @foreach($settlements as $row)
                                             <option value="{{ $row->id }}" @if(old('settlement_id', '') == $row->id) selected="selected" @endif
-                                            data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}">{{ $row->name }}</option>
+                                            data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}" data-full="{{ $row->municipality }}">{{ $row->name }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -202,9 +202,9 @@
                                 <select name="status" class="form-control form-control-sm">
                                     <option value=""></option>
                                     @foreach(\App\Enums\PdoiApplicationStatusesEnum::finalStatuses() as $status)
-                                        @if(!in_array($status->value, [\App\Enums\PdoiApplicationStatusesEnum::FORWARDED->value, \App\Enums\PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value]))
+{{--                                        @if(!in_array($status->value, [\App\Enums\PdoiApplicationStatusesEnum::FORWARDED->value, \App\Enums\PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value]))--}}
                                             <option @if(old('status', '') == $status->value) selected @endif value="{{ $status->value }}">{{ __('custom.application.status.'.$status->name) }}</option>
-                                        @endif
+{{--                                        @endif--}}
                                     @endforeach
                                 </select>
                                 @error('status')

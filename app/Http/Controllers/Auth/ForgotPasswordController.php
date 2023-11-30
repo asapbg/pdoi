@@ -25,6 +25,12 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
+    public function showLinkRequestForm()
+    {
+        $this->setBreadcrumbsTitle(__('auth.forgot_password'));
+        return $this->view('auth.passwords.email');
+    }
+    
     public function confirmPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [

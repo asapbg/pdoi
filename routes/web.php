@@ -15,6 +15,8 @@ Route::feeds();
 
 include 'eauth.php';
 
+Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLogin'])->name('login');
+Route::get('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'showRegister'])->name('register');
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('front.logout');
 

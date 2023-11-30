@@ -60,6 +60,11 @@ class LoginController extends Controller
         return 'username';
     }
 
+    public function showLogin(){
+        $this->setBreadcrumbsTitle(__('custom.login'));
+        return $this->view('auth.login');
+    }
+
     /**
      * Attempt to log in a user
      *

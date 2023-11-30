@@ -53,16 +53,22 @@ class PageSeeder extends Seeder
                 'name' => 'Потребителско ръководство',
                 'content' => 'Потребителско ръководство'
             ],
+            [
+                'slug' => 'faq',
+                'system_name' => Page::FAQ_PAGE,
+                'name' => 'Често задавани въпроси',
+                'content' => 'Често задавани въпроси'
+            ],
         );
 
         foreach ($data as $page) {
             $dbPage = Page::where('slug', '=', $page['slug'])->first();
             if( $dbPage ) {
-                foreach ($locales as $locale) {
-                    $dbPage->translateOrNew($locale['code'])->name = $page['name'];
-                    $dbPage->translateOrNew($locale['code'])->content = $page['content'];
-                }
-                $dbPage->save();
+//                foreach ($locales as $locale) {
+//                    $dbPage->translateOrNew($locale['code'])->name = $page['name'];
+//                    $dbPage->translateOrNew($locale['code'])->content = $page['content'];
+//                }
+//                $dbPage->save();
                 $this->command->info("Page with slug ".$page['slug']." updated successfully");
             } else{
                 $item = Page::create([

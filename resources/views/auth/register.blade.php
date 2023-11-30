@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <a href="" title="" class="d-inline-block col-12 text-left">{{ __('front.already_have_account') }}</a>
+                        <a href="{{ route('login') }}" title="" class="d-inline-block col-12 text-left">{{ __('front.already_have_account') }}</a>
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary mt-3">{{ __('custom.register') }}</button>
                         </div>

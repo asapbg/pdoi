@@ -6,7 +6,7 @@
             <h3 class="b-1 text-center">{{ __('custom.help') }}</h3>
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-12 mb-lg-0 mb-4">
+            <div class="col-lg-4 col-md-12 mb-4">
                 <a href="{{ route('help.page', ['slug' => $appealPage->slug]) }}" title="{{ $appealPage->name }}"  class="home-section-button light-yellow">
                     <span class="home-icon">
                         <i class="fa-solid fa-gavel text-warning"></i>
@@ -17,7 +17,7 @@
                 </a>
             </div>
 
-            <div class="col-lg-4 col-md-12 mb-lg-0 mb-4 ">
+            <div class="col-lg-4 col-md-12 mb-4 ">
                 <a href="{{ route('help.page', ['slug' => $videoInstructionPage->slug]) }}" title="{{ $videoInstructionPage->name }}" class="home-section-button light-green">
                     <span class="home-icon">
                         <i class="fa-solid fa-display text-success"></i>
@@ -28,13 +28,24 @@
                 </a>
             </div>
 
-            <div class="col-lg-4 col-md-12">
+            <div class="col-lg-4 col-md-12 mb-4 ">
                 <a href="{{ route('help.page', ['slug' => $guideManualPage->slug]) }}" title="{{ $guideManualPage->name }}" class="home-section-button light-red">
                     <span class="home-icon">
-                        <i class="fa-regular fa-question text-danger"></i>
+                        <i class="fa-regular fa-file-alt text-danger"></i>
                     </span>
                     <span class="home-section-button-txt">
                         {{ $guideManualPage->name }}
+                    </span>
+                </a>
+            </div>
+
+            <div class="col-lg-4 col-md-12 ">
+                <a href="{{ route('help.page', ['slug' => $faqPage->slug]) }}" title="{{ $faqPage->name }}" class="home-section-button light-blue">
+                    <span class="home-icon">
+                        <i class="fa-regular fa-question text-primary"></i>
+                    </span>
+                    <span class="home-section-button-txt">
+                        {{ $faqPage->name }}
                     </span>
                 </a>
             </div>

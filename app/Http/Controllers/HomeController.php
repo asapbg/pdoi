@@ -124,7 +124,10 @@ class HomeController extends Controller
         $guideManualPage = Page::with(['translations'])
             ->where('system_name', '=', Page::USER_MANUAL_PAGE)
             ->first();
-        return $this->view('front.help.index', compact('appealPage', 'videoInstructionPage', 'guideManualPage'));
+        $faqPage = Page::with(['translations'])
+            ->where('system_name', '=', Page::FAQ_PAGE)
+            ->first();
+        return $this->view('front.help.index', compact('appealPage', 'videoInstructionPage', 'guideManualPage', 'faqPage'));
     }
 
     public function helpPage(Request $request, string $slug): \Illuminate\View\View

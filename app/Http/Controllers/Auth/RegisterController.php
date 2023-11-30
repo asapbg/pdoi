@@ -50,6 +50,11 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegister()
+    {
+        $this->setBreadcrumbsTitle(__('custom.register'));
+        return $this->view('auth.register');
+    }
     /**
      * Get a validator for an incoming registration request.
      *
