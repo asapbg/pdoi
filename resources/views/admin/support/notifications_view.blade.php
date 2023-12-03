@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('content')
-
     <section class="content">
         <div class="container-fluid">
             <div class="card">
@@ -9,25 +8,35 @@
                     <div class="row mb-4">
                         <h5 class="bg-primary py-1 px-2 mb-4">Message data</h5>
                         <div class="col-12 mt-1">
-                            {{ $item->data }}
+                            <pre>@php(print_r(json_decode($item->data)))</pre>
                         </div>
                         <h5 class="bg-primary py-1 px-2 my-4">Notification Error</h5>
                         @if($msgErrors && $msgErrors->count())
-                            @foreach($msgErrors as $key => $er)
-                                <div class="col-12 mt-1">
-                                    <div class="form-group">
-                                        <label class="col-sm-12 control-label">#{{ ($key + 1) }} | {{ displayDateTime($er->created_at) }}</label>
-                                        <div class="col-12 mt-1">
-                                            {{ $er->content }}
+                            <div class="accordion" id="accordionExample">
+                                @foreach($msgErrors as $key => $er)
+                                    <div class="card">
+                                        <div class="card-header" id="heading{{ $key }}">
+                                            <h2 class="mb-0">
+                                                <button class="btn btn-link btn-block text-left @if(!$loop->first) collapsed @endif" type="button" data-toggle="collapse" data-target="#collapse{{ $key }}" aria-expanded="@if($loop->first){{ 'true' }}@else{{ 'false' }}@endif" aria-controls="collapse{{ $key }}">
+                                                    #{{ ($key + 1) }} | {{ displayDateTime($er->created_at) }}
+                                                </button>
+                                            </h2>
+                                        </div>
+
+                                        <div id="collapse{{ $key }}" class="collapse @if($loop->first) show @endif" aria-labelledby="heading{{ $key }}" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                {{ $er->content }}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         @else
                             No error
                         @endif
 
                         @if(isset($egovMessage) && $egovMessage)
+                            <h5 class="bg-primary py-1 px-2 my-4">Egov message</h5>
                             <div class="col-12 mt-1">
                                 <strong>sender_guid</strong>: {{ $egovMessage->sender_guid }}<br>
                                 <strong>sender_name</strong>: {{ $egovMessage->sender_name }}<br>
@@ -41,7 +50,8 @@
                                 <strong>comm_status</strong>: {{ $egovMessage->comm_status }}<br>
                                 <strong>comm_error</strong>: {{ $egovMessage->comm_error }}<br>
                                 <strong>created_at</strong>: {{ $egovMessage->created_at }}<br>
-                                <strong>msg_xml</strong>: {{ $egovMessage->msg_xml }}<br>
+                                <strong>msg_xml</strong>: <br>
+{{--                                <pre>{{ $egovMessage->msg_xml }}</pre><br>--}}
                             </div>
                             <h5 class="bg-primary py-1 px-2 mb-4">Service Urls</h5>
                             <div class="col-12 mt-1">

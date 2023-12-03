@@ -57,13 +57,14 @@ class SupportController extends Controller
         if( !$item ) {
             abort(404);
         }
+
         $msgErrors = DB::table('notification_error')
             ->where('notification_id', '=', $item->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
         $egovMessage = null;
-        if( $item->type_channel == PdoiSubjectDeliveryMethodsEnum::SDES->value ) {
+        if( $item->type_channel == PdoiSubjectDeliveryMethodsEnum::SEOS->value ) {
             $egovMessage = EgovMessage::with(['sender', 'recipient', 'recipient.services'])->find($item->egov_message_id);
         }
         $this->setBreadcrumbsTitle('Преглед известие');
