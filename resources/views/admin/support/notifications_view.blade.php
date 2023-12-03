@@ -47,6 +47,10 @@
                                 <strong>msg_type</strong>: {{ $egovMessage->msg_type }}<br>
                                 <strong>msg_status</strong>: {{ $egovMessage->msg_status }}<br>
                                 <strong>msg_status_dat</strong>: {{ $egovMessage->msg_status_dat }}<br>
+                                <strong>msg_reg_dat</strong>: {{ $egovMessage->msg_reg_dat }}<br>
+                                <strong>doc_guid</strong>: {{ $egovMessage->doc_guid }}<br>
+                                <strong>doc_date</strong>: {{ $egovMessage->doc_date }}<br>
+                                <strong>doc_rn</strong>: {{ $egovMessage->doc_rn }}<br>
                                 <strong>comm_status</strong>: {{ $egovMessage->comm_status }}<br>
                                 <strong>comm_error</strong>: {{ $egovMessage->comm_error }}<br>
                                 <strong>created_at</strong>: {{ $egovMessage->created_at }}<br>
