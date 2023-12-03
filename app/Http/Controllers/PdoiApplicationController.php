@@ -11,6 +11,7 @@ use App\Http\Requests\StoreInfoEventRequest;
 use App\Http\Resources\PdoiApplicationResource;
 use App\Http\Resources\PdoiApplicationShortCollection;
 use App\Http\Resources\PdoiApplicationShortResource;
+use App\Mail\ModeratorNewApplication;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\EkatteArea;
@@ -288,6 +289,11 @@ class PdoiApplicationController extends Controller
                 }
                 $newApplication->refresh();
                 $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
+
+                $emailList = $subject->getModeratorsEmail();
+                if( sizeof($emailList) ) {
+                    Mail::to($emailList)->send(new ModeratorNewApplication(route('admin.application.view', ['item' => $newApplication->id])));
+                }
 
                 //return info for each generated application
                 $data['applicationsInfo'][] = array(

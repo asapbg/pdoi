@@ -6,6 +6,7 @@ use App\Enums\ApplicationEventsEnum;
 use App\Enums\MailTemplateTypesEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
+use App\Mail\ModeratorNewApplication;
 use App\Models\Event;
 use App\Models\File;
 use App\Models\MailTemplates;
@@ -21,6 +22,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ApplicationService
@@ -267,6 +269,12 @@ class ApplicationService
         $appService->generatePdf($newApplication);
         $newApplication->refresh();
         $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
+
+        $emailList = $subject->getModeratorsEmail();
+        if( sizeof($emailList) ) {
+            Mail::to($emailList)->send(new ModeratorNewApplication(route('admin.application.view', ['item' => $newApplication->id])));
+        }
+
         sleep(1);
 
         return $newApplication;

@@ -300,4 +300,23 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return $emails;
     }
 
+    /**
+     * Return all emails of users connected with current subject with changes
+     * @return array
+     */
+    public function getModeratorsEmail(): array
+    {
+        $emails = [];
+        $users = User::IsActive()->where(function ($q){
+            $q->where(function ($q){
+                $q->where('administrative_unit', $this->id)->role('admin_moderator');
+            });
+        })->get();
+
+        if( $users ) {
+            $emails = $users->pluck('email')->toArray();
+        }
+        return $emails;
+    }
+
 }
