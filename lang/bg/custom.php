@@ -434,6 +434,7 @@ return [
     'pages.appeal_info'                             => 'Системна страница - съдържаща указания за обжалване на заявление',
     'pages.contact'                             => 'Системна страница - съдържаща информация за контакт',
     'pages.faq'                             => 'Системна страница - Често задавани въпроси',
+    'pages.admin-faq'                             => 'Системна страница - Помощна информация за админстратори/модератори',
     // settings
     'settings'                                   => 'Настройки|Настройки',
     'settings.sections.general'                   => 'Общи',
@@ -478,7 +479,7 @@ return [
     'most_asked_institutions'                       => 'Най-питани институции',
     'institutions'                          => 'Институция|Институции',
     'queries'                          => 'Запитване|Запитвания',
-    'support_asap'                                  => 'Софтуерна разработка и поддръжка от ASAP',
+    'support_asap'                                  => 'Софтуерна разработка и поддръжка от АСАП ЕООД',
     'instructions.login'                => 'Вход',
     'instructions.login.content'                => '<div style="padding:51.88% 0 0 0;position:relative;">
                     <iframe src="https://player.vimeo.com/video/882048143?h=3acaadff1f&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Вход в системата - Платформа за достъп до обществена информация">

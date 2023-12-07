@@ -121,6 +121,21 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         );
     }
 
+    protected function fullTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => __('custom.application_system_title',
+                [
+                    'user' => ($this->names_publication ? $this->full_names : __('custom.users.legal_form.'.$this->applicant_type) ),
+                    'subject' => $this->response_subject_id ? $this->subject_name : $this->not_registered_subject_name.'('.$this->not_registered_subject_eik.')',
+                    'apply_date' => displayDate($this->created_at)
+                ]
+            )
+        );
+    }
+
+
+
     public function scopeByUserSubjects($query)
     {
         //if user has full permission skip else

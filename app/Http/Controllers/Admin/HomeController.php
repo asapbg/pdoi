@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Page;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -21,5 +22,11 @@ class HomeController extends Controller
     public function guide()
     {
         return view('admin.help.guide');
+    }
+
+    public function faq()
+    {
+        $page = Page::where('slug', '=', Page::ADMIN_PAGE)->first();
+        return view('admin.help.guide', compact('page'));
     }
 }

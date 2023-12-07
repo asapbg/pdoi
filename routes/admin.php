@@ -44,6 +44,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
     Route::get('/support-notifications', [\App\Http\Controllers\Admin\SupportController::class, 'notifications'])->name('support.notifications');
     Route::get('/support-notifications/{id}/view', [\App\Http\Controllers\Admin\SupportController::class, 'notificationView'])->name('support.notifications.view');
     Route::get('/admin', [AdminHomeController::class, 'guide'])->name('help.guide');
+    Route::get('/help', [AdminHomeController::class, 'faq'])->name('help.faq');
 
     Route::controller(CommonController::class)->group(function () {
         Route::get('/download/{file}', 'downloadFile')->name('download.file');

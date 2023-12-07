@@ -29,6 +29,12 @@
                 Ръководство за работа
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" style="font-size: 20px;" href="{{ route('admin.help.faq') }}" target="_blank">
+                <i class="fas fa-question-circle text-white"></i>
+                Помощ
+            </a>
+        </li>
     </ul>
 
     <div class="navbar-nav mx-auto">

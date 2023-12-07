@@ -141,7 +141,7 @@ class SyncIisda extends Command
                                 //alert users if change adm_level or status
                                 $newLevel = $localSections[$subject['AdmStructureKind']];
                                 $oldLevel = $localSubject->adm_level;
-                                $newStatus = (int)($subject['Status'] == 'Active');
+                                //$newStatus = (int)($subject['Status'] == 'Active');
                                 $oldStatus = $localSubject->active;
                                 $oldEmail = $localSubject->email;
                                 $oldEik = $localSubject->eik;
@@ -151,7 +151,7 @@ class SyncIisda extends Command
                                     || $localSubject->section != $subject['AdmStructureKind']
                                     || $localSubject->eik != ($subject['UIC'] ?? 'N/A')
                                     || $localSubject->type != ($subject['Type'] ?? null)
-                                    || ((int)$localSubject->active != (int)($subject['Status'] == 'Active'))
+                                    //|| ((int)$localSubject->active != (int)($subject['Status'] == 'Active'))
                                     || ( $addressInfo && (
                                         $addressInfo['email'] != $localSubject->email
                                         || $addressInfo['phone'] != $localSubject->phone
@@ -200,35 +200,36 @@ class SyncIisda extends Command
                                     if( !$delivery ) {
                                         //If no communication information we should ignore Iisda status
                                         $localSubject->active = 0;
-                                        $sendAdmMail = $oldStatus;
-                                    } else{
-                                        $localSubject->active = $newStatus;
+                                        //$sendAdmMail = $oldStatus;
                                     }
+//                                    else{
+//                                        $localSubject->active = $newStatus;
+//                                    }
                                     $localSubject->save();
 
                                     //Send mail to admins
-                                    if( $oldLevel != $newLevel
-                                        || ($oldStatus != $newStatus && $sendAdmMail) ) {
-                                        echo 'send mail';
-                                        if( config('app.env') != 'production' ) {
-                                            $emailList =[config('mail.local_to_mail')];
-                                            echo 'send to me';
-                                        } else {
-                                            $emailList = $localSubject->getAlertUsersEmail();
-                                        }
-                                        if( sizeof($emailList) ) {
-                                            $mailData = array(
-                                                'subject' => $localSubject
-                                            );
-                                            if( $localSubject->adm_level != $newLevel ) {
-                                                $mailData['new_level'] = $newLevel;
-                                            }
-                                            if( $localSubject->active != $newStatus ) {
-                                                $mailData['new_status'] = $newStatus;
-                                            }
-                                            Mail::to($emailList)->send(new AlertForSubjectChanges($mailData));
-                                        }
-                                    }
+//                                    if( $oldLevel != $newLevel
+//                                        || ($oldStatus != $newStatus && $sendAdmMail) ) {
+//                                        echo 'send mail';
+//                                        if( config('app.env') != 'production' ) {
+//                                            $emailList =[config('mail.local_to_mail')];
+//                                            echo 'send to me';
+//                                        } else {
+//                                            $emailList = $localSubject->getAlertUsersEmail();
+//                                        }
+//                                        if( sizeof($emailList) ) {
+//                                            $mailData = array(
+//                                                'subject' => $localSubject
+//                                            );
+//                                            if( $localSubject->adm_level != $newLevel ) {
+//                                                $mailData['new_level'] = $newLevel;
+//                                            }
+//                                            if( $localSubject->active != $newStatus ) {
+//                                                $mailData['new_status'] = $newStatus;
+//                                            }
+//                                            Mail::to($emailList)->send(new AlertForSubjectChanges($mailData));
+//                                        }
+//                                    }
                                 }
                                 //update subject translation fields if need to
                                 $translationUpdate = false;

@@ -18,12 +18,7 @@ class PdoiApplicationShortResource extends JsonResource
         return [
             'id' => $this->id,
             'uri' => $this->application_uri,
-            'title' => __('custom.application_system_title',
-                [
-                    'user' => ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ),
-                    'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
-                    'apply_date' => displayDate($this->created_at)
-                ]),
+            'title' => $this->fullTitle,
             'my_title' => __('custom.own_application_system_title',
                 [
                     'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,

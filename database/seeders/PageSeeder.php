@@ -59,6 +59,12 @@ class PageSeeder extends Seeder
                 'name' => 'Често задавани въпроси',
                 'content' => 'Често задавани въпроси'
             ],
+            [
+                'slug' => 'admin-faq',
+                'system_name' => Page::ADMIN_PAGE,
+                'name' => 'Помощна информация (администарция)',
+                'content' => 'Помощна информация (администарция)'
+            ],
         );
 
         foreach ($data as $page) {
