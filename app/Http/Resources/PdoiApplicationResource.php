@@ -20,7 +20,7 @@ class PdoiApplicationResource extends JsonResource
             'uri' => $this->application_uri,
             'title' => __('custom.application_system_title',
                 [
-                    'user' => ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ),
+                    'user' => ($this->names_publication ? $this->names : __('custom.users.legal_form.'.$this->applicant_type) ),
                     'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
                     'apply_date' => displayDate($this->created_at)
                 ]),
@@ -66,7 +66,7 @@ class PdoiApplicationResource extends JsonResource
                         'user_name' => auth()->user() && $item->user ?
                             (auth()->user()->id == $item->user_reg ? 'Аз'
                                 : ($item->user->user_type == User::USER_TYPE_INTERNAL ? $item->user->names
-                                    : ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ) )
+                                    : ($this->names_publication ? $this->names : __('custom.users.legal_form.'.$this->applicant_type) ) )
                             )
                             : '',
                         'user_type' => auth()->user() ?

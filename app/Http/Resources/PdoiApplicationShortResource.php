@@ -32,7 +32,7 @@ class PdoiApplicationShortResource extends JsonResource
             'statusName' => $this->statusName,
             'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
             'term' => $this->response_end_time,
-            'user_name' => $this->names_publication ? $this->full_names : __('custom.anonymous_applicant'),
+            'user_name' => $this->names_publication ? $this->full_names : __('custom.users.legal_form.'.$this->applicant_type),
             'phone' => $this->phone_publication ? $this->phone : null,
             'email' => $this->email_publication ? $this->email : null,
             'address' => $this->address_publication ? $this->address.($this->address_second ? ', '.$this->address_second : '') : null,
@@ -44,7 +44,7 @@ class PdoiApplicationShortResource extends JsonResource
                         'user_name' => auth()->user() && $item->user ?
                             (auth()->user()->id == $item->user_reg ? 'Аз'
                                 : ($item->user->user_type == User::USER_TYPE_INTERNAL ? $item->user->names
-                                    : ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ) )
+                                    : ($this->names_publication ? $this->names : __('custom.users.legal_form.'.$this->applicant_type) ) )
                             )
                             : '',
                         'user_type' => auth()->user() ?

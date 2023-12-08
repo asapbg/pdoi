@@ -50,14 +50,14 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             'id' => $this->id,
             'title' => __('custom.application_system_title',
                 [
-                    'user' => ($this->names_publication ? $this->names : __('custom.anonymous_applicant') ),
+                    'user' => ($this->names_publication ? $this->names : __('custom.users.legal_form.'.$this->applicant_type) ),
                     'subject' => $this->responseSubject->subject_name,
                     'apply_date' => displayDate($this->created_at)
                 ]),
             'summary' => html_entity_decode($this->request).PHP_EOL.__('custom.status').': '.$this->statusName,
             'updated' => $this->updated_at ?? $this->created_at,
             'link' => route('application.show', ['id' => $this->id]),
-            'authorName' => $this->names_publication ? $this->full_names : __('custom.anonymous_applicant'),
+            'authorName' => $this->names_publication ? $this->full_names : __('custom.users.legal_form.'.$this->applicant_type),
             'authorEmail' => $this->email_publication ? $this->email : ''
         ]);
     }
