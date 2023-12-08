@@ -30,6 +30,7 @@
                             <th>{{__('validation.attributes.name')}}</th>
                             <th>{{__('validation.attributes.adm_level')}}</th>
                             <th>{{__('validation.attributes.address')}}</th>
+                            <th>{{__('validation.attributes.delivery_method')}}</th>
                             <th>{{__('custom.active_m')}}</th>
                             <th>{{__('custom.actions')}}</th>
                         </tr>
@@ -43,6 +44,7 @@
                                     <td>{{ $item->subject_name }}</td>
                                     <td>{{ $item->section ? $item->section->name : '' }}</td>
                                     <td>{{ $item->address }}</td>
+                                    <td>{{ __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($item->delivery_method)) }}</td>
                                     <td>
                                         @if(isset($toggleBooleanModel))
                                             @includeIf('partials.toggle-boolean', ['object' => $item, 'model' => $toggleBooleanModel])
