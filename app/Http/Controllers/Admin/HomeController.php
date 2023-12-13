@@ -27,6 +27,6 @@ class HomeController extends Controller
     public function faq()
     {
         $page = Page::where('slug', '=', Page::ADMIN_PAGE)->first();
-        return view('admin.help.guide', compact('page'));
+        return view('admin.help.faq', compact('page'));
     }
 }
