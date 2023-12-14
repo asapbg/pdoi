@@ -144,7 +144,7 @@
                                                         <tr>
                                                             <td>
                                                                 {{ $loop->index + 1 }}
-                                                                <a class="btn btn-sm btn-secondary ml-2" type="button" href="{{ route('admin.download.file', ['file' => $ef['id']]) }}">
+                                                                <a class="btn btn-sm btn-secondary ml-2" type="button" href="{{ route('download.file', ['file' => $ef['id']]) }}">
                                                                     <i class="fas fa-download me-1 download-file" data-file="$file->id" role="button"
                                                                        data-toggle="tooltip" title="{{ __('custom.download') }}"></i>
                                                                 </a>
