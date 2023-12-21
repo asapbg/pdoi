@@ -79,6 +79,8 @@
                                     </div>
                                     @if($event->files)
                                         <h5 class="bg-primary py-1 px-2 mb-4">{{ trans_choice('custom.documents',1) }}</h5>
+                                        <p class="text-info fw-bold">Максимален размер на файл: {{ displayBytes(config('filesystems.max_upload_file_size')) }}
+                                            <br>Разрешени формати: {{ implode(',', \App\Models\File::ALLOWED_FILE_EXTENSIONS) }}</p>
                                         <table class="table table-light table-sm table-bordered mb-4" id="attachFiles">
                                             <thead>
                                             <tr>
@@ -168,6 +170,8 @@
                                     </div>
                                     @if($event->files)
                                         <h5 class="bg-primary py-1 px-2 mb-4">{{ trans_choice('custom.documents',1) }}</h5>
+                                        <p class="text-info fw-bold">Максимален размер на файл: {{ displayBytes(config('filesystems.max_upload_file_size')) }}
+                                            <br>Разрешени формати: {{ implode(',', \App\Models\File::ALLOWED_FILE_EXTENSIONS) }}</p>
                                         <table class="table table-light table-sm table-bordered mb-4" id="attachFiles">
                                             <thead>
                                             <tr>

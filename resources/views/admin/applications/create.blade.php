@@ -220,6 +220,17 @@
                                 @enderror
                             </div>
                             <h5 class="bg-primary py-1 px-2 mb-4">{{ trans_choice('custom.documents',1) }}</h5>
+                            @php($err = 0)
+                            @php($inx = 0)
+                            @while($inx < 20 || $err)
+                                @error('files.'.$inx)
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @php($inx = 20)
+                                @enderror
+                                @php($inx += 1)
+                            @endwhile
+                            <p class="text-info fw-bold">Максимален размер на файл: {{ displayBytes(config('filesystems.max_upload_file_size')) }}
+                                <br>Разрешени формати: {{ implode(',', \App\Models\File::ALLOWED_FILE_EXTENSIONS) }}</p>
                             <table class="table table-light table-sm table-bordered mb-4" id="attachFiles">
                                 <thead>
                                 <tr>
