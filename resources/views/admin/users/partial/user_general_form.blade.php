@@ -5,7 +5,7 @@
     </label>
     <div class="col-12">
         @php($usersTypes = isset($item) ? optionsUserTypes() : optionsUserTypes(true))
-        <select id="user_type" name="user_type"  class="form-control form-control-sm" @if(isset($item)) disabled @endif>
+        <select id="user_type" name="user_type"  class="form-control form-control-sm">
             @foreach($usersTypes as $val => $name)
                 <option value="{{ $val }}" @if(old('user_type', (isset($item) ? $item->user_type : '')) == $val) selected @endif>{{ $name }}</option>
             @endforeach
@@ -84,7 +84,7 @@
     </div>
 </div>
 
-@if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)
+{{--@if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)--}}
     <div class="form-group @if(old('user_type', (isset($item) ? $item->user_type : '')) != \App\Models\User::USER_TYPE_INTERNAL) d-none @endif">
         <label class="col-sm-12 control-label" for="email">
             {{ __('validation.attributes.administrative_unit') }}
@@ -103,7 +103,7 @@
             @enderror
         </div>
     </div>
-@endif
+{{--@endif--}}
 
 <div class="form-group">
     <label class="col-sm-12 control-label" for="lang">
@@ -160,7 +160,7 @@
     </div>
 @endif
 
-@if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)
+{{--@if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)--}}
     @push('scripts')
         <script type="text/javascript">
             $(document).ready(function (){
@@ -175,4 +175,4 @@
             });
         </script>
     @endpush
-@endif
+{{--@endif--}}

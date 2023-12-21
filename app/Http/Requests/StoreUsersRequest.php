@@ -40,9 +40,9 @@ class StoreUsersRequest extends FormRequest
             'lang'                  => ['required' ,'string'],
         ];
 
-        if( request()->isMethod('post') ) {
+//        if( request()->isMethod('post') ) {
             $rules['user_type'] = ['required' ,'numeric', 'gt:0'];
-        }
+//        }
 
         if( request()->isMethod('post') ) {
             $rules['email'][] = 'unique:users,email';
