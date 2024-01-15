@@ -233,6 +233,23 @@ class ApplicationService
             }
         }
 
+        //Attach forward events files from original application
+        if( $this->application->lastEvent && in_array($this->application->lastEvent->event_type,
+                [ApplicationEventsEnum::FORWARD->value,
+                    ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value,
+                    ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value,
+                    ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value])
+        ) {
+            if( $this->application->lastEvent->files->count()){
+                foreach ($this->application->lastEvent->files as $f) {
+                    $newFile = $f->replicate();
+                    $newFile->code_object = File::CODE_OBJ_APPLICATION;
+                    $newFile->id_object = $newApplication->id;
+                    $newFile->save();
+                }
+            }
+        }
+
         //TODO communication for not existing subject
         //communication to subject if existing in platform
         if( isset($data['new_resp_subject_id']) ) {

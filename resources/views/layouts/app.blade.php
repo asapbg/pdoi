@@ -35,7 +35,7 @@
     @include('feed::links')
 </head>
 <body class="@if($vo_high_contrast) high-contrast @endif">
-
+-
 <!-- Load Facebook SDK for JavaScript -->
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0" nonce="CtkaNgxl"></script>
