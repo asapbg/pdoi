@@ -86,6 +86,9 @@ class SyncIisda extends Command
         //Get list and base info
         $dataSoap= $this->dataSoapSearchBatchesIdentificationInfo();
         $responseArray = $this->getSoap($dataSoap);
+        $responseArrayJson = json_encode($responseArray,JSON_UNESCAPED_UNICODE);
+        file_put_contents(storage_path('iisda_batch_list.json'), $responseArrayJson);
+
         if( $responseArray ) {
             if( isset($responseArray['error']) && $responseArray['error'] ) {
                 return Command::FAILURE;
