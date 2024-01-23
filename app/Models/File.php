@@ -19,7 +19,8 @@ class File extends Model
     const CODE_OBJ_PAGE = 21;
     const CODE_OBJ_MESSAGE = 10000;
 
-    const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xsl', 'xslx', 'pdf', 'xlsx'];
+    const ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'xls', 'xlsx', 'pdf', 'p7s', 'p7m'];
+    const ALLOWED_FILE_EXTENSIONS_MIMES_TYPE = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'application/pkcs7-signature', 'application/pkcs7-mime'];
 
     const PUBLIC_UPLOAD_DIR = 'pages/';
     const PUBLIC_UPLOAD_EXAMPLES_DIR = 'examples/';
