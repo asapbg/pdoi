@@ -198,7 +198,7 @@ class CommonController extends Controller
                 'id_object' => $objectId,
                 'code_object' => $typeObject,
                 'filename' => $fileNameToStore,
-                'content_type' => $validated['file']->getClientMimeType(),
+                'content_type' => $validated['file']->getClientMimeType() != 'application/octet-stream' ? $validated['file']->getClientMimeType() : $validated['file']->getMimeType(),
                 'path' => File::PUBLIC_UPLOAD_DIR.$fileNameToStore,
                 'description' => $validated['description'],
                 'user_reg' => $request->user()->id,

@@ -245,7 +245,7 @@ class PdoiApplicationController extends Controller
                         $newFile = new File([
                             'code_object' => File::CODE_OBJ_APPLICATION,
                             'filename' => $fileNameToStore,
-                            'content_type' => $file->getClientMimeType(),
+                            'content_type' => $file->getClientMimeType() != 'application/octet-stream' ? $file->getClientMimeType() : $file->getMimeType(),
                             'path' => $newApplication->fileFolder.$fileNameToStore,
                             'description' => $validated['file_description'][$key],
                             'user_reg' => $user->id,

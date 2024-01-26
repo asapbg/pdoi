@@ -375,7 +375,7 @@ class ApplicationService
             $newFile = new File([
                 'code_object' => File::CODE_OBJ_EVENT,
                 'filename' => $fileNameToStore,
-                'content_type' => $file->getClientMimeType(),
+                'content_type' => $file->getClientMimeType() != 'application/octet-stream' ? $file->getClientMimeType() : $file->getMimeType(),
                 'path' => $this->application->fileFolder.$fileNameToStore,
                 'description' => $descriptions[$key] ?? null,
                 'user_reg' => $this->userId,

@@ -26,7 +26,7 @@ class FileClientMimeType implements Rule
      */
     public function passes($attribute, $value)
     {
-        if(!in_array($value->getClientMimeType(), $this->mimeTypes)){
+        if(!in_array($value->getClientMimeType(), $this->mimeTypes) && !in_array($value->getMimeType(), $this->mimeTypes)){
             return false;
         }
         return true;
