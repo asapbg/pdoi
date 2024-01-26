@@ -56,30 +56,34 @@
                                     </div>
                                     <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.mail_templates.placeholders.to_name') }}:</label>
-                                        <input type="text" class="form-control form-control-sm" name="to_name" value="" id="to_name">
+                                        <input type="text" class="form-control form-control-sm" name="to_name" value="{{ old('to_name', '') }}" id="to_name">
                                         <span class="text-danger" id="error-to_name"></span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.user_request') }}: <span class="required">*</span></label>
-                                        <textarea class="col-12 form-control summernote-custom-clone"></textarea>
-                                        <input type="hidden" class="do-not-ignore summernote-val" name="subject_user_request" value="" id="subject_user_request">
+                                        <textarea class="col-12 form-control summernote-custom-clone">@if(!empty(old('subject_user_request', ''))){!! old('subject_user_request') !!}@endif</textarea>
+                                        <input type="hidden" class="do-not-ignore summernote-val" name="subject_user_request" value="@if(!empty(old('subject_user_request', ''))){!! old('subject_user_request') !!}@endif" id="subject_user_request">
                                         <span class="text-danger" id="error-subject_user_request"></span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{!! __('custom.comment_to_new_subject') !!}:</label>
-                                        <textarea class="col-12 form-control summernote-standard-clone"></textarea>
-                                        <input type="hidden" class="do-not-ignore summernote-val" name="add_text" value="" id="add_text">
+                                        <textarea class="col-12 form-control summernote-standard-clone">@if(!empty(old('add_text', ''))){!! old('add_text') !!}@endif</textarea>
+                                        <input type="hidden" class="do-not-ignore summernote-val" name="add_text" value="@if(!empty(old('add_text', ''))){!! old('add_text') !!}@endif" id="add_text">
                                         <span class="text-danger" id="error-add_text"></span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{!! __('custom.request_to_current_subject') !!}:</label>
-                                        <textarea class="col-12 form-control summernote-standard-clone"></textarea>
-                                        <input type="hidden" class="do-not-ignore summernote-val" name="current_subject_user_request" value="" id="current_subject_user_request">
+                                        <textarea class="col-12 form-control summernote-standard-clone">@if(!empty(old('current_subject_user_request', ''))){!! old('current_subject_user_request') !!}@endif</textarea>
+                                        <input type="hidden" class="do-not-ignore summernote-val" name="current_subject_user_request" value="@if(!empty(old('current_subject_user_request', ''))){!! old('current_subject_user_request') !!}@endif" id="current_subject_user_request">
                                         <span class="text-danger" id="error-current_subject_user_request"></span>
                                     </div>
                                     @if($event->files)
                                         <h5 class="bg-primary py-1 px-2 mb-4">{{ trans_choice('custom.documents',1) }}</h5>
+                                        @error('files')
+                                        <span class="d-block text-danger">{{ $message }}</span>
+                                        @enderror
                                         <p class="text-info fw-bold">Максимален размер на файл: {{ displayBytes(config('filesystems.max_upload_file_size')) }}
+                                            <br>Максимален брой файлове: {{ config('filesystems.max_file_uploads') }}
                                             <br>Разрешени формати: {{ implode(',', \App\Models\File::ALLOWED_FILE_EXTENSIONS) }}</p>
                                         <table class="table table-light table-sm table-bordered mb-4" id="attachFiles">
                                             <thead>
@@ -131,12 +135,12 @@
                                     </div>
                                     <div class="col-md-3 col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.new_pdoi_subject') }} ({{ __('validation.attributes.eik') }}): <span class="required">*</span></label>
-                                        <input type="text" name="new_resp_subject_eik" value="" class="form-control form-control-sm @error('new_resp_subject_eik') is-invalid @endif">
+                                        <input type="text" name="new_resp_subject_eik" value="{{ old('new_resp_subject_eik', '') }}" class="form-control form-control-sm @error('new_resp_subject_eik') is-invalid @endif">
                                         <span class="text-danger" id="error-new_resp_subject_eik"></span>
                                     </div>
                                     <div class="col-md-6 col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.new_pdoi_subject') }} ({{ __('validation.attributes.name') }}): <span class="required">*</span></label>
-                                        <input type="text" name="new_resp_subject_name" value="" class="form-control form-control-sm @error('new_resp_subject_name') is-invalid @endif">
+                                        <input type="text" name="new_resp_subject_name" value="{{ old('new_resp_subject_name', '') }}" class="form-control form-control-sm @error('new_resp_subject_name') is-invalid @endif">
                                         <span class="text-danger" id="error-new_resp_subject_name"></span>
                                     </div>
                                     <div class="col-md-3 col-12 mb-3">
@@ -147,30 +151,34 @@
                                     </div>
                                     <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.mail_templates.placeholders.to_name') }}:</label>
-                                        <input type="text" class="form-control form-control-sm" name="to_name" value="" id="to_name">
+                                        <input type="text" class="form-control form-control-sm" name="to_name" value="{{ old('to_name', '') }}" id="to_name">
                                         <span class="text-danger" id="error-to_name"></span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.user_request') }}:</label>
-                                        <textarea class="col-12 form-control summernote-custom-clone"></textarea>
-                                        <input type="hidden" class="do-not-ignore summernote-val" name="subject_user_request" value="" id="subject_user_request">
+                                        <textarea class="col-12 form-control summernote-custom-clone">@if(!empty(old('subject_user_request', ''))){!! old('subject_user_request') !!}@endif</textarea>
+                                        <input type="hidden" class="do-not-ignore summernote-val" name="subject_user_request" value="@if(!empty(old('subject_user_request', ''))){!! old('subject_user_request') !!}@endif" id="subject_user_request">
                                         <span class="text-danger" id="error-subject_user_request"></span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{!! __('custom.comment_to_new_subject') !!}:</label>
-                                        <textarea class="col-12 form-control summernote-standard-clone"></textarea>
-                                        <input type="hidden" class="do-not-ignore summernote-val" name="add_text" value="" id="add_text">
+                                        <textarea class="col-12 form-control summernote-standard-clone">@if(!empty(old('add_text', ''))){!! old('add_text') !!}@endif</textarea>
+                                        <input type="hidden" class="do-not-ignore summernote-val" name="add_text" value="@if(!empty(old('add_text', ''))){!! old('add_text') !!}@endif" id="add_text">
                                         <span class="text-danger" id="error-add_text"></span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{!! __('custom.request_to_current_subject') !!}:</label>
-                                        <textarea class="col-12 form-control summernote-standard-clone"></textarea>
-                                        <input type="hidden" class="do-not-ignore summernote-val" name="current_subject_user_request" value="" id="current_subject_user_request">
+                                        <textarea class="col-12 form-control summernote-standard-clone">@if(!empty(old('current_subject_user_request', ''))){!! old('current_subject_user_request') !!}@endif</textarea>
+                                        <input type="hidden" class="do-not-ignore summernote-val" name="current_subject_user_request" value="@if(!empty(old('current_subject_user_request', ''))){!! old('current_subject_user_request') !!}@endif" id="current_subject_user_request">
                                         <span class="text-danger" id="error-current_subject_user_request"></span>
                                     </div>
                                     @if($event->files)
                                         <h5 class="bg-primary py-1 px-2 mb-4">{{ trans_choice('custom.documents',1) }}</h5>
+                                    @error('files')
+                                        <span class="d-block text-danger">{{ $message }}</span>
+                                    @enderror
                                         <p class="text-info fw-bold">Максимален размер на файл: {{ displayBytes(config('filesystems.max_upload_file_size')) }}
+                                            <br>Максимален брой файлове: {{ config('filesystems.max_file_uploads') }}
                                             <br>Разрешени формати: {{ implode(',', \App\Models\File::ALLOWED_FILE_EXTENSIONS) }}</p>
                                         <table class="table table-light table-sm table-bordered mb-4" id="attachFiles">
                                             <thead>

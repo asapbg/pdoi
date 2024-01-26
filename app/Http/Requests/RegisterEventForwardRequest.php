@@ -36,7 +36,7 @@ class RegisterEventForwardRequest extends FormRequest
             'current_subject_user_request' => ['nullable', 'string', 'min:3'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
-            'files' => ['array'],
+            'files' => ['array', 'max:'.config('filesystems.max_file_uploads')],
             'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), new FileClientMimeType(File::ALLOWED_FILE_EXTENSIONS_MIMES_TYPE)], //, 'mimetypes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS_MIMES_TYPE)
         ];
 

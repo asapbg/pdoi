@@ -81,6 +81,8 @@ return [
     |--------------------------------------------------------------------------
     */
     'max_upload_file_size' => env('MAX_UPLOAD_FILE_SIZE', 10240), //in kilobytes
+//    'max_file_uploads' => env('MAX_FILE_UPLOADS', ini_get('max_file_uploads')),
+    'max_file_uploads' => 2,
     'scripts_directory' => env('SCRIPTS_DIRECTORY', 'test')
 
 ];

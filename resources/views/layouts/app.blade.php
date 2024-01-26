@@ -27,6 +27,7 @@
     <script type="text/javascript">
         var max_upload_file_size = parseInt(<?php echo config('filesystems.max_upload_file_size')?>) * 1024; //kb to b
         var allowed_file_extensions = '<?php echo(implode('|', \App\Models\File::ALLOWED_FILE_EXTENSIONS))?>';
+        var max_upload_file = parseInt(<?php echo config('filesystems.max_file_uploads')?>);
         var vo_font_percent = parseInt('<?php echo($vo_font_percent)?>');
         var vo_high_contrast = parseInt('<?php echo($vo_high_contrast)?>');
         var vo_ajax = false;

@@ -45,7 +45,7 @@ class AdminCreateApplicationRequest extends FormRequest
             'request' => ['required', 'string', 'min:3'],
             'response' => ['required', 'string', 'min:3'],
             'response_subject_id' => ['required', 'numeric', 'exists:pdoi_response_subject,id'],
-            'files' => ['array'],
+            'files' => ['array', 'max:'.config('filesystems.max_file_uploads')],
             'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), 'mimes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS)],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],

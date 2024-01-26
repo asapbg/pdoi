@@ -37,7 +37,7 @@ class RegisterEventRequest extends FormRequest
             'refuse_reason' => ['nullable', 'numeric', 'exists:reason_refusal,id'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
-            'files' => ['array'],
+            'files' => ['array', 'max:'.config('filesystems.max_file_uploads')],
             'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), new FileClientMimeType(File::ALLOWED_FILE_EXTENSIONS_MIMES_TYPE)], //'mimetypes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS_MIMES_TYPE)
             'file_visible' => ['array'],
             'file_visible.*' => ['nullable', 'numeric'],

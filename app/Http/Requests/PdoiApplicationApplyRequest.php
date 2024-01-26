@@ -54,7 +54,7 @@ class PdoiApplicationApplyRequest extends FormRequest
             'company_identity' => ['nullable', 'string', 'max:20'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
-            'files' => ['array'],
+            'files' => ['array', 'max:'.config('filesystems.max_file_uploads')],
             'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), 'mimes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS)],
         ];
 

@@ -144,6 +144,9 @@ return [
             'Illuminate\Validation\Rules\Password' => 'Паролата трябва да съдържа',
         ],
         'ssev_profile_not_exist' => 'Не съществува профил в ССЕВ',
+        'files' => [
+            'max' => 'Максималният брой файлове за кавчане е :max'
+        ]
     ],
 
     /*
