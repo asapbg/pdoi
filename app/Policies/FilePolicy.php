@@ -41,7 +41,8 @@ class FilePolicy
     public function delete(User $user, File $file)
     {
         if( ($file->code_object == File::CODE_OBJ_MENU_SECTION
-            || $file->code_object != File::CODE_OBJ_PAGE) ) {
+            || $file->code_object == File::CODE_OBJ_PAGE)
+        ) {
             return true;
         }
         return false;

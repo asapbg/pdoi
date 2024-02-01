@@ -157,7 +157,6 @@
                                                         <i class="fas fa-trash me-1" role="button"
                                                            data-toggle="tooltip" title="{{ __('custom.delete') }}"></i>
                                                     </a>
-                                                    delete
                                                 </td>
                                             </tr>
                                         @endforeach
