@@ -225,7 +225,7 @@
     <script src="{{ asset('jquery-validation/custom_file_validation.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function (){
-            let applicationRequest = '<?php echo html_entity_decode($application->request)?>';
+            let applicationRequest = <?php echo json_encode(html_entity_decode($application->request));?>;
             let formInPlatform = $('#formInPlatform');
             let formOutPlatform = $('#formOutPlatform');
 
