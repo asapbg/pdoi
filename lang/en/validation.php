@@ -130,7 +130,7 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
-    'alpha_space' => ':attribute must contain only letters and a space',
+    'alpha_space' => ':attribute must contain only letters,space and dash',
 
     /*
     |--------------------------------------------------------------------------
