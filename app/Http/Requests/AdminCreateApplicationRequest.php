@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\File;
 use App\Models\User;
 use App\Rules\AlphaSpace;
+use App\Rules\FileClientMimeType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -46,7 +47,7 @@ class AdminCreateApplicationRequest extends FormRequest
             'response' => ['required', 'string', 'min:3'],
             'response_subject_id' => ['required', 'numeric', 'exists:pdoi_response_subject,id'],
             'files' => ['array', 'max:'.config('filesystems.max_file_uploads')],
-            'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), 'mimes:'.implode(',', File::ALLOWED_FILE_EXTENSIONS)],
+            'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), new FileClientMimeType(File::ALLOWED_FILE_EXTENSIONS_MIMES_TYPE)],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
             'file_visible' => ['array'],
