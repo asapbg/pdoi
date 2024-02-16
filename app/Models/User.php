@@ -48,7 +48,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     //
     const ALLOWED_UPDATE_FROM_APPLICATION = ['legal_form', 'names', 'email', 'address', 'address_second', 'delivery_method'
         , 'person_identity', 'company_identity', 'phone', 'post_code', 'country_id', 'ekatte_area_id'
-        , 'ekatte_municipality_id', 'ekatte_settlement_id'];
+        , 'ekatte_municipality_id', 'ekatte_settlement_id', 'is_public_contact'];
 
     /**
      * The attributes that are mass assignable.
@@ -193,6 +193,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
     {
         $query->where('users.status', '<>', self::STATUS_INACTIVE)
             ->where('users.active', 1);
+    }
+
+    public function scopeIsContactVisible($query): void
+    {
+        $query->where('users.is_public_contact', 1);
     }
 
     public function scopeIsInactive($query)

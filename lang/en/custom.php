@@ -527,6 +527,8 @@ return [
                 </div>
                 <script src="https://player.vimeo.com/api/player.js"></script>',
     'user_guide'                        => 'User guide',
-    'asap_support'                      => 'Technical support'
+    'asap_support'                      => 'Technical support',
+    'user_is_public_contact' => 'Visible in \'Contacts\'',
+    'user_is_public_contact.tooltip' => 'User\'s contact data will be visible in public section \'Contacts\'',
 ];
 

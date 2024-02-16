@@ -6,6 +6,7 @@
                 <td>{{ __('custom.name') }}</td>
                 <td>{{ __('custom.email') }}</td>
                 <td>{{ __('custom.phone') }}</td>
+                <td>{{ __('custom.user_is_public_contact') }}</td>
             </tr>
         </thead>
         <tbody>
@@ -17,6 +18,7 @@
                         </td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
+                        <td><i class="fas {{ $user->is_public_contact ? ' fa-check text-success' : ' fa-minus text-danger' }}"></i></td>
                     </tr>
                 @endforeach
             @else

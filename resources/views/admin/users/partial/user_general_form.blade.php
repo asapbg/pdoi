@@ -160,6 +160,19 @@
     </div>
 @endif
 
+
+<div class="form-group d-none" id="public_contact">
+    <span class="col-sm-12 control-label">&nbsp;</span>
+    <div class="icheck-primary col-12">
+        <input class="form-check-input" type="checkbox" name="is_public_contact"
+               id="is_public_contact" {{ old('is_public_contact', (isset($item) && $item && $item->is_public_contact) ? 'checked' : '') }} value="1">
+        <label class="form-check-label" for="is_public_contact">
+            {{ __('custom.user_is_public_contact') }} <i class="fas fa-info-circle text-info" data-toggle="tooltip" title="{{ __('custom.user_is_public_contact.tooltip') }}"></i>
+        </label>
+    </div>
+</div>
+
+
 {{--@if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)--}}
     @push('scripts')
         <script type="text/javascript">
@@ -168,10 +181,12 @@
                 $('#user_type').on('change', function (){
                     if( parseInt($('#user_type').val()) === internalUserType ) {
                         $('#administrative_unit').closest('.form-group').removeClass('d-none');
+                        $('#public_contact').removeClass('d-none');
                     } else {
-                        $('#administrative_unit').closest('.form-group').addClass('d-none');
+                        $('#public_contact').addClass('d-none');
                     }
                 });
+                $('#user_type').trigger('change');
             });
         </script>
     @endpush

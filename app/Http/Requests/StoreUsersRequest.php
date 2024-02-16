@@ -38,6 +38,7 @@ class StoreUsersRequest extends FormRequest
             'phone'                 => ['nullable' ,'string', 'max:50'],
             'administrative_unit'   => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
             'lang'                  => ['required' ,'string'],
+            'is_public_contact'     => ['nullable' ,'numeric'],
         ];
 
 //        if( request()->isMethod('post') ) {

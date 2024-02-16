@@ -142,6 +142,7 @@ class  UsersController extends Controller
 
         try {
             $user = User::make($data);
+            $user->is_public_contact = (int)(isset($data['is_public_contact']));
             if ($must_change_password) {
                 $message = trans_choice('custom.users', 1)." {$data['username']} ".__('messages.created_successfully_m').". ".__('messages.email_send');
                 Mail::to($data['email'])->send(new UsersChangePassword($user));
@@ -207,7 +208,6 @@ class  UsersController extends Controller
         $validated = $request->validated();
         $roles = $validated['roles'] ?? [];
         $permissions = $validated['permissions'] ?? [];
-
         foreach (['_token','password_confirmation','roles', 'permissions'] as $key){
             unset($validated[$key]);
         }
@@ -226,6 +226,7 @@ class  UsersController extends Controller
             if(isset($validated['status']) && (in_array((int)$validated['status'], [User::STATUS_ACTIVE, User::STATUS_REG_IN_PROCESS])) ) {
                 $validated['active']  = 1;
             }
+            $validated['is_public_contact'] = $validated['is_public_contact'] ?? 0;
             $user->fill($validated);
             $user->save();
 

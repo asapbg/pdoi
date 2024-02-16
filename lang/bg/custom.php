@@ -528,6 +528,8 @@ return [
                 <script src="https://player.vimeo.com/api/player.js"></script>',
     'user_guide'                        => 'Ръководство',
     'asap_support'                                  => 'При технически проблем/срив в платформата',
-    'support_notifications' => 'Известия'
+    'support_notifications' => 'Известия',
+    'user_is_public_contact' => 'Видим в \'Контакти\'',
+    'user_is_public_contact.tooltip' => 'Контактните данни на потребителя ще бъдат видими в публичната секция \'Контакти\'',
 ];
 
