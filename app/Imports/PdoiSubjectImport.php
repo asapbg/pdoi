@@ -3,11 +3,14 @@
 namespace App\Imports;
 
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
+use App\Http\Controllers\SsevController;
+use App\Models\Egov\EgovOrganisation;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
 use App\Models\PdoiResponseSubject;
 use App\Models\RzsSection;
+use App\Rules\SsevEgovProfileRule;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -71,7 +74,30 @@ class PdoiSubjectImport implements ToCollection
             }
 
             $validated = $validator->validated();
-            $existingItem = PdoiResponseSubject::IsManual()->where('eik', $validated[0])->first();
+            //validation rules delivery method
+            $errorDelivery = array();
+            $deliveryMethod = (int)$validated[10];
+            if($deliveryMethod == PdoiSubjectDeliveryMethodsEnum::SEOS->value){
+                if(empty($validated[0]) || !EgovOrganisation::where('eik', '=', trim($validated[0]))->first()){
+                    $errorDelivery[] = 'Методът на пренасочване изисква съществуването на организация/участник в СЕОС регистъра с този ЕИК';
+                }
+            } elseif ($deliveryMethod == PdoiSubjectDeliveryMethodsEnum::SDES->value) {
+                if(empty($validated[0]) || !SsevController::getEgovProfile(0, trim($validated[0]))){
+                    $errorDelivery[] = 'Не съществува профил в ССЕВ';
+                }
+            }
+            //email is required so delivery method is ok
+            if( !empty($errorDelivery) ) {
+                $errors[$row_number + 1] = $errorDelivery;
+                continue;
+            }
+
+            if(!empty(trim($validated[2]))){
+                $existingItem = PdoiResponseSubject::IsManual()->where('email', strtolower(trim($validated[2])))->first();
+            } else{
+                $existingItem = null;
+            }
+
             $admLevel = array_keys($this->admLevels, $validated[3]);
             $parent = array_keys($this->responseSubjects, $validated[4]);
             $area = array_keys($this->areas, $validated[6]);
@@ -80,7 +106,7 @@ class PdoiSubjectImport implements ToCollection
             $court = array_keys($this->responseSubjects, $validated[11]);
 
             $fields = [
-                'email' => $validated[2],
+                'eik' => empty($validated[0]) ? 'N/A' : $validated[0],
                 'adm_level' => sizeof($admLevel) ? $admLevel[0] : null,
                 'parent_id' => sizeof($parent) ? $parent[0] : null,
                 'active' => (int)$validated[5],
@@ -102,7 +128,7 @@ class PdoiSubjectImport implements ToCollection
                 $existingItem->save();
                 $hasUpdates += 1;
             } else {
-                $fields['eik'] = $validated[0];
+                $fields['email'] = strtolower(trim($validated[2]));
                 $fields['adm_register'] = 0;//manual
                 $newItem = PdoiResponseSubject::create($fields);
                 if( $newItem ) {
@@ -140,9 +166,9 @@ class PdoiSubjectImport implements ToCollection
     private function rules()
     {
         return [
-            '0' => ['required', 'digits_between:1,13'],
+            '0' => ['nullable', 'digits_between:1,13'],
             '1' => ['required', 'string', 'max:255'],
-            '2' => ['nullable', 'email', 'max:255', 'required_if:10,1'],
+            '2' => ['required', 'email', 'max:255', 'required_if:10,1'],
             '3' => ['required', 'numeric', Rule::in($this->admLevelsRuleIn)],
             '4' => ['nullable', 'digits_between:1,13', Rule::in($this->responseSubjectsRuleIn)],
             '5' => ['required', 'numeric', 'in:0,1'],
@@ -152,7 +178,8 @@ class PdoiSubjectImport implements ToCollection
             '9' => ['required', 'string', 'max:255'],
             '10' => ['required', 'numeric', Rule::in(PdoiSubjectDeliveryMethodsEnum::values())],
             '11' => ['nullable', 'digits_between:1,13', Rule::in($this->responseSubjectsRuleIn)],
-            '12' => ['nullable', 'required_without:11', 'string', 'max:255'],
+//            '12' => ['nullable', 'required_without:11', 'string', 'max:255'],
+            '12' => ['nullable', 'string', 'max:255'],
             '13' => ['required', 'numeric', 'in:0,1'],
         ];
     }
