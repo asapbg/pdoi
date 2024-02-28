@@ -271,8 +271,8 @@ class CommonController extends Controller
         $application = PdoiApplication::find((int)$appId);
         if( $application ) {
             try {
-                //Sometimes we document is registered, but we fail to update application.
-                // In this case cro will try to register application and status will be DS_ALREADY_RECEIVED.
+                //Sometimes document is registered, but we fail to update application.
+                // In this case cron will try to register application and status will be DS_ALREADY_RECEIVED.
                 // We need to update application in our platform and set notification as send
                 // to continue application process
                 if( ($event == ApplicationEventsEnum::SEND_TO_SEOS->value && $application->status == PdoiApplicationStatusesEnum::RECEIVED->value)

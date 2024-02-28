@@ -319,4 +319,23 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         return $emails;
     }
 
+    /**
+     * Return all emails of users connected with current subject
+     * @return array
+     */
+    public function getConnectedUsersEmails(): array
+    {
+        $emails = [];
+        $users = User::IsActive()->where(function ($q){
+            $q->where(function ($q){
+                $q->where('administrative_unit', $this->id);
+            });
+        })->get();
+
+        if( $users ) {
+            $emails = $users->pluck('email')->toArray();
+        }
+        return $emails;
+    }
+
 }
