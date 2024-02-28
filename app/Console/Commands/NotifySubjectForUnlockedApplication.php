@@ -53,7 +53,7 @@ class NotifySubjectForUnlockedApplication extends Command
                         if( sizeof($emailList) ) {
                             $foundMails = true;
                             foreach ($emailList as $mail){
-                                //Mail::to($mail)->send(new SeosUnlockedApplication($app));
+                                Mail::to($mail)->send(new SeosUnlockedApplication($app));
                                 sleep(2);
                             }
                         }
