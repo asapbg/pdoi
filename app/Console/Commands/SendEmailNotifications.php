@@ -53,20 +53,20 @@ class SendEmailNotifications extends Command
             foreach ($notifications as $item) {
                 $messageData = json_decode($item->data, true);
                 if( !$messageData ) {
-                    logError('Send email notification ID '.$item->id, 'Invalid json message data');
+                    Log::error('Send email notification ID '.$item->id. ': '.'Invalid json message data');
                 } else {
                     DB::beginTransaction();
                     try {
                         $to = config('app.env') != 'production' ? config('mail.local_to_mail') : ($messageData['to_email'] ?? 'pmo@asap.bg') ;
                         if( empty($to) ) {
-                            //logError('Send email notification ID '.$item->id, 'Missing receiver email');
-                            //continue;
                             $to = 'pmo@asap.bg';
                         }
 
                         $application = PdoiApplication::find((int)$messageData['application_id']);
-                        $appService = new ApplicationService($application);
-                        $appService->communicationCallback($item);
+                        if($application){
+                            $appService = new ApplicationService($application);
+                            $appService->communicationCallback($item);
+                        }
 
                         $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['message'])));
                         $myMessage = clearText($myMessage);
@@ -92,8 +92,15 @@ class SendEmailNotifications extends Command
                             ->update(['is_send' => 1, 'cnt_send' => ($item->cnt_send + 1)]);
                         DB::commit();
                     } catch (\Exception $e) {
-                        logError('Send email notification ID '.$item->id, $e->getMessage());
+                        Log::error('Send email notification ID '.$item->id.': '.$e);
                         DB::rollBack();
+
+                        DB::table('notification_error')->insert([
+                            'notification_id' => $item->id,
+                            'content' => $e,
+                            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+
+                        ]);
                         DB::table('notifications')
                             ->where('id', $item->id)
                             ->update(['cnt_send' => ($item->cnt_send + 1)]);
