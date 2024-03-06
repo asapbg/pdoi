@@ -405,18 +405,21 @@ class ApplicationService
             switch ($notification->type_channel)
             {
                 case PdoiSubjectDeliveryMethodsEnum::SEOS->value://деловодна система
+                    //We use other callback for this channel
                     $this->registerEvent(ApplicationEventsEnum::SEND_TO_SEOS->value);//изпратено към деловодна система
                     //TODO fix me simulation
                     $this->registerEvent(ApplicationEventsEnum::APPROVE_BY_SEOS->value);//потвърдено от деловодна система
                     break;
                 default://email, //Система за сигурно връчване. for СЕОС there is separate script which send messages and set next values
-                    $this->application->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
-                    $this->application->status_date = Carbon::now();
-                    $this->application->registration_date = Carbon::now();
-                    $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
-                    $this->application->save();
-                    $this->application->refresh();
-                    $this->application->applicant->notify(new NotifyUserForAppStatus($this->application));
+                    if($this->application->status == PdoiApplicationStatusesEnum::RECEIVED->value){
+                        $this->application->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
+                        $this->application->status_date = Carbon::now();
+                        $this->application->registration_date = Carbon::now();
+                        $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
+                        $this->application->save();
+                        $this->application->refresh();
+                        $this->application->applicant->notify(new NotifyUserForAppStatus($this->application));
+                    }
             }
         }
     }
