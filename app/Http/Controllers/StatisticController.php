@@ -8,6 +8,7 @@ use App\Exports\StatisticExport;
 use App\Models\PdoiApplication;
 use App\Models\Statistic;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -101,5 +102,51 @@ class StatisticController extends Controller
             ),
             'export' => true
         );
+    }
+
+    /**
+     * @param Request $request
+     * @param int $type
+     * @return JsonResponse
+     */
+    public function apiStats(Request $request, int $type)
+    {
+        $from = $request->filled('from') ? $request->input('from') : Carbon::now()->subMonth();
+        $to = $request->filled('to') ? $request->input('to') : Carbon::now();
+
+        $titlePage = __('front.statistic.type.'.StatisticTypeEnum::keyByValue($type));
+        $titlePeriod =__('custom.statistics.for_period', ['period' => displayDate($from).' - '.displayDate($to)]);
+        $data = PdoiApplication::publicStatistic($type, $from, $to);
+        $arrayData = json_decode($data, true);
+
+        $total = [];
+        $r_key = 1;
+        $response[$r_key][$titlePage] = $titlePeriod;
+        $r_key++;
+        foreach ($arrayData as $datum) {
+
+            $response[$r_key][trans_choice('custom.institutions', 1)] = $datum['name'];
+
+            foreach(PdoiApplicationStatusesEnum::options() as $name => $key) {
+
+                $val = $datum['cnt_'.$key] ?? 0;
+                if (!isset($total[$key])) {
+                    $total[$key] = 0;
+                }
+                $total[$key] += $val;
+
+                $response[$r_key][__('custom.application.status.'.$name)] = $val;
+            }
+
+            $r_key++;
+        }
+        $r_key++;
+        $response[$r_key][trans_choice('custom.institutions', 1)] = "Общо";
+        foreach(PdoiApplicationStatusesEnum::options() as $name => $key) {
+            $response[$r_key][__('custom.application.status.'.$name)] = $total[$key];
+        }
+
+        return response()->json($response);
+
     }
 }
