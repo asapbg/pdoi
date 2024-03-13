@@ -12,6 +12,16 @@
                         @csrf
                         <div class="row mb-4">
                             <h5 class="bg-primary py-1 px-2">{{ __('custom.general_info') }}</h5>
+                            <div class="form-group form-group-sm col-md-4 col-12 mb-3">
+                                <label class="form-label w-100">
+                                    {{ __('validation.attributes.date_from') }}: <span class="required">*</span>
+                                </label>
+                                <input class="form-control form-control-sm datepicker @error('created_at') is-invalid @enderror" type="text" name="created_at"
+                                       value="{{ old('created_at', '') }}" >
+                                @error('created_at')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
                             <div class="form-group form-group-sm col-12 mb-3">
                                 <label class="form-label me-3 ">{{ __('validation.attributes.legal_form') }}: <span class="required">*</span></label> <br>
                                 <label class="form-label me-3" role="button">
