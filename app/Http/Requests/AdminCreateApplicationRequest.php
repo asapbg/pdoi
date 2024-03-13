@@ -29,6 +29,7 @@ class AdminCreateApplicationRequest extends FormRequest
     public function rules()
     {
         return [
+            'created_at' => ['required', 'date'],
             'applicant_type' => ['required', 'numeric', Rule::in(array_keys(User::getUserLegalForms()))],
             'profile_type' => ['nullable', 'numeric', 'exists:profile_type,id'],
             'full_names' => ['required', 'string', 'max:255', new AlphaSpace()],
