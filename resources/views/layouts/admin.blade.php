@@ -17,10 +17,10 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script>
+    <script nonce="2726c7f26c">
         GlobalLang = "{{ str_replace('_', '-', app()->getLocale()) }}";
     </script>
-    <script type="text/javascript">
+    <script nonce="2726c7f26c" type="text/javascript">
         var max_upload_file_size = parseInt(<?php echo config('filesystems.max_upload_file_size')?>) * 1024; //kb to b
         var allowed_file_extensions = '<?php echo(implode('|', \App\Models\File::ALLOWED_FILE_EXTENSIONS))?>';
         var max_upload_file = parseInt(<?php echo config('filesystems.max_file_uploads')?>);
