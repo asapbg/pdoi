@@ -61,7 +61,7 @@
 @push('scripts')
     <script src="{{ asset('jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('jquery-validation/localization/messages_' . app()->getLocale() . '.js') }}"></script>
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function(){
             $('#decision').on('change', function(){
                 let reopen = $('#decision option:selected').data('reopen');

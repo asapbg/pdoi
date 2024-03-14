@@ -290,7 +290,7 @@
     </section>
 @endsection
 @push('scripts')
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
             $('#next-event').on('change', function (){
                 $('#apply_event').attr('href', $(this).val());

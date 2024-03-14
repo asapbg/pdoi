@@ -83,7 +83,7 @@
 
 </div>
 
-<script src="{{ asset('js/admin.js') }}"></script>
+<script src="{{ asset('js/admin.js') }}"  nonce="2726c7f26c"></script>
 @stack('scripts')
 
 </body>

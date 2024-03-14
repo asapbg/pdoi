@@ -137,7 +137,7 @@
     </section>
 @endsection
 @push('scripts')
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
             let reasonRefuseSelect = $('#refuse_reason');
             let finalDecisionSelect = $('#final_status');

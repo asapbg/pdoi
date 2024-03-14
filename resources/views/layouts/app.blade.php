@@ -24,7 +24,7 @@
     <link href="{{ asset('fontawesome-6.4.0/css/all.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @stack('styles')
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         var max_upload_file_size = parseInt(<?php echo config('filesystems.max_upload_file_size')?>) * 1024; //kb to b
         var allowed_file_extensions = '<?php echo(implode('|', \App\Models\File::ALLOWED_FILE_EXTENSIONS))?>';
         var max_upload_file = parseInt(<?php echo config('filesystems.max_file_uploads')?>);
@@ -80,7 +80,7 @@
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 @if($vo_font_percent)
-<script type="text/javascript">
+<script type="text/javascript"  nonce="2726c7f26c">
    $(document).ready(function (){
        setDomElFontSize(vo_font_percent, true);
    });

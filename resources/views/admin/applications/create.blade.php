@@ -278,7 +278,7 @@
     </section>
 @endsection
 @push('scripts')
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
             $('input[name="applicant_type"]').on('change', function (){
                 let legalForm = parseInt($('input[name=applicant_type]:checked').val());

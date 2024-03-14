@@ -200,7 +200,7 @@
 @push('scripts')
     <script src="{{ asset('jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('jquery-validation/localization/messages_' . app()->getLocale() . '.js') }}"></script>
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
             $('input[name="legal_form"]').on('change', function (){
                 let legalForm = $('input[name="legal_form"]:checked').val();

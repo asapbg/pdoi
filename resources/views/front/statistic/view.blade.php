@@ -37,7 +37,7 @@
     <script src="{{ asset('\js\chart_js_v4.3.3.js') }}"></script>
     <script src="{{ asset('\js\hammer_2.0.7.js') }}"></script>
     <script src="{{ asset('\js\chart_js_plugin_zoom_2.0.1.js') }}"></script>
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function () {
             let statisticType = parseInt(<?php echo $type; ?>);
             let data = <?php echo json_encode($chartData); ?>;

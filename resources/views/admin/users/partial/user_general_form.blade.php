@@ -175,7 +175,7 @@
 
 {{--@if(!isset($item) || $item->user_type == \App\Models\User::USER_TYPE_INTERNAL)--}}
     @push('scripts')
-        <script type="text/javascript">
+        <script type="text/javascript"  nonce="2726c7f26c">
             $(document).ready(function (){
                 let internalUserType = parseInt(<?php echo \App\Models\User::USER_TYPE_INTERNAL; ?>);
                 $('#user_type').on('change', function (){

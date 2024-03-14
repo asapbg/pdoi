@@ -29,7 +29,7 @@
 @endif
 
 @push('scripts')
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
             $('.clear-search-param').on('click', function (){
                 // if($(this).data('type'))

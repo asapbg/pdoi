@@ -223,7 +223,7 @@
     <script src="{{ asset('jquery-validation/additional-methods.min.js') }}"></script>
     <script src="{{ asset('jquery-validation/localization/messages_' . app()->getLocale() . '.js') }}"></script>
     <script src="{{ asset('jquery-validation/custom_file_validation.js') }}"></script>
-    <script type="text/javascript">
+    <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
             let applicationRequest = <?php echo json_encode(html_entity_decode($application->request));?>;
             let formInPlatform = $('#formInPlatform');
