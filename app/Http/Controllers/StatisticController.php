@@ -117,25 +117,29 @@ class StatisticController extends Controller
         $titlePage = __('front.statistic.type.'.StatisticTypeEnum::keyByValue($type));
         $titlePeriod =__('custom.statistics.for_period', ['period' => displayDate($from).' - '.displayDate($to)]);
         $data = PdoiApplication::publicStatistic($type, $from, $to);
-        $arrayData = json_decode($data, true);
+        $results = json_decode($data, true);
 
         $total = [];
         $r_key = 1;
-        $response[$r_key][$titlePage] = $titlePeriod;
-        $r_key++;
-        foreach ($arrayData as $datum) {
 
-            $response[$r_key][trans_choice('custom.institutions', 1)] = $datum['name'];
+        $response[$r_key]['INSTITUTION'] = "Институция";
+        foreach(PdoiApplicationStatusesEnum::options() as $name => $key) {
+            $response[$r_key][$name] = __('custom.application.status.'.$name);
+        }
+        $r_key++;
+        foreach ($results as $result) {
+
+            $response[$r_key]['INSTITUTION'] = $result['name'];
 
             foreach(PdoiApplicationStatusesEnum::options() as $name => $key) {
 
-                $val = $datum['cnt_'.$key] ?? 0;
+                $val = $result['cnt_'.$key] ?? 0;
                 if (!isset($total[$key])) {
                     $total[$key] = 0;
                 }
                 $total[$key] += $val;
 
-                $response[$r_key][__('custom.application.status.'.$name)] = $val;
+                $response[$r_key][$name] = $val;
             }
 
             $r_key++;
@@ -143,7 +147,7 @@ class StatisticController extends Controller
         $r_key++;
         $response[$r_key][trans_choice('custom.institutions', 1)] = "Общо";
         foreach(PdoiApplicationStatusesEnum::options() as $name => $key) {
-            $response[$r_key][__('custom.application.status.'.$name)] = $total[$key];
+            $response[$r_key][$name] = $total[$key];
         }
 
         return response()->json($response);
