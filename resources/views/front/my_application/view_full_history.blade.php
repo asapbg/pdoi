@@ -167,7 +167,7 @@
                 <div class="form-group row">
                     <div class="col-md-6 col-md-offset-3">
                         <a href="{{ url()->previous() }}" class="btn btn-sm btn-primary">{{ __('custom.back') }}</a>
-                        <button class="btn btn-sm btn-success" href="" onclick="window.print();return false;"><i class="text-white fas fa-print me-1"></i>{{ __('custom.print') }}</button>
+                        <button class="btn btn-sm btn-success  print-window"><i class="text-white fas fa-print me-1"></i>{{ __('custom.print') }}</button>
                     </div>
                 </div>
             </div>

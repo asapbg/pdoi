@@ -166,6 +166,10 @@ $(function() {
 
         $.datepicker.setDefaults( $.datepicker.regional[typeof GlobalLang != 'undefined' ? GlobalLang : ''] );
 
+        $('body').on('click', '.print-window', function (){
+            window.print();
+        });
+
         //blind options
         $('#visual-option-div').on("click", '#vo-close', function() {
             $('#vo-option-btn').click();
