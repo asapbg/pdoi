@@ -39,7 +39,7 @@
 -
 <!-- Load Facebook SDK for JavaScript -->
 <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0" nonce="2726c7f26c"></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0"></script>
 <!-- END Load Facebook SDK for JavaScript -->
 
 <div id="app">
@@ -77,7 +77,7 @@
     @include('layouts.partial.front.footer')
 </div>
 <!-- Scripts -->
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8" nonce="2726c7f26c"></script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script src="{{ asset('js/app.js') }}" nonce="2726c7f26c"></script>
 @if($vo_font_percent)
 <script type="text/javascript"  nonce="2726c7f26c">
