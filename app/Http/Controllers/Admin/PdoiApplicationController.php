@@ -116,7 +116,7 @@ class PdoiApplicationController extends Controller
                 $appService = new ApplicationService($application);
                 $appService->registerEvent($event->app_event, $eventData, true);
                 DB::commit();
-                return redirect(route('admin.application'))->with('success', __('messages.created_successfully_m'));
+                return redirect(route('admin.application'))->with('success', trans_choice('custom.applications', 1).' '. __('messages.created_successfully_m'));
             } catch (\Exception $e){
                 DB::rollBack();
                 logError('Create manual application', 'data: '.json_encode($validated).' | Error: '.$e->getMessage());
