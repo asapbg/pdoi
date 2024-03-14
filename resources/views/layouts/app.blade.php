@@ -39,7 +39,7 @@
 -
 <!-- Load Facebook SDK for JavaScript -->
 <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0" nonce="CtkaNgxl"></script>
+<script nonce="2726c7f26c" async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0" nonce="CtkaNgxl"></script>
 <!-- END Load Facebook SDK for JavaScript -->
 
 <div id="app">
