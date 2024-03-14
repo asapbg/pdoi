@@ -78,7 +78,7 @@
 </div>
 <!-- Scripts -->
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" nonce="2726c7f26c"></script>
-<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/app.js') }}" nonce="2726c7f26c"></script>
 @if($vo_font_percent)
 <script type="text/javascript"  nonce="2726c7f26c">
    $(document).ready(function (){
