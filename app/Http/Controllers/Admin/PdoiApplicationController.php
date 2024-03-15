@@ -285,7 +285,7 @@ class PdoiApplicationController extends Controller
         }
 
         if( $appService->registerEvent($event->app_event, $validated) ) {
-            return redirect(route('admin.application.view', ['item' => $application->id]))->with('success', __('Успено завършено регистриране на събитие '.$event->name));
+            return redirect(route('admin.application.view', ['item' => $application->id]))->with('success', __('Успешно завършено регистриране на събитие '.$event->name));
         } else {
             back()->with('danger', __('custom.system_error'));
         }
