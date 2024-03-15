@@ -2789,7 +2789,11 @@ function ConfirmToggleBoolean(booleanType, entityId, message, title = false) {
         $("#modal-confirm .modal-title").html(title);
     }
     $("#modal-confirm .modal-body p").html(message);
-    $("#modal-confirm button.btn-success").attr('onclick', "ToggleBoolean('"+booleanType+"','"+entityId+"')");
+    // $("#modal-confirm button.btn-success").attr('onclick', "ToggleBoolean('"+booleanType+"','"+entityId+"')");
+    //Working with Content-Security-Policy
+    $("#modal-confirm button.btn-success").addClass('toggle-boolean-confirm');
+    $("#modal-confirm button.btn-success").attr('data-btype', booleanType);
+    $("#modal-confirm button.btn-success").attr('data-entityid', entityId);
     $("#modal-confirm button.btn-success").attr('data-dismiss', "modal");
     $("#modal-confirm").modal('show');
 }
@@ -2853,6 +2857,21 @@ $(document).ready(function (e) {
             }
         });
     }
+
+    $(document).on('click', '.logout-link', function (event){
+        event.preventDefault();
+        document.getElementById('logout-form').submit();
+    });
+
+    $(document).on('click', '.toggle-boolean', function (event){
+        let domEl = $(event.target);
+        ConfirmToggleBoolean(domEl.data('btype'), domEl.data('entityid'), domEl.data('message'));
+    });
+
+    $(document).on('click', '.toggle-boolean-confirm', function (event){
+        let domEl = $(event.target);
+        ToggleBoolean(domEl.data('btype'), domEl.data('entityid'));
+    });
 
     $('.toggle').on('click', function (e) {
         e.preventDefault();

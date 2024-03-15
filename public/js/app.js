@@ -199,7 +199,6 @@ $(function() {
         $.datepicker.setDefaults( $.datepicker.regional[typeof GlobalLang != 'undefined' ? GlobalLang : ''] );
 
         $('body').on('click', '.print-window', function (){
-            console.log('ok');
             window.print();
         });
 

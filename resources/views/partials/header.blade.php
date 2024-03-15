@@ -60,8 +60,7 @@
                 <span class="hidden-xs">{{ $name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
-                <a class="dropdown-item dropdown-footer" href="javascript:;"
-                   onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                <a class="dropdown-item dropdown-footer logout-link" href="javascript:;">
                     Изход <i class="fas fa-sign-out-alt"></i>
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
