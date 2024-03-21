@@ -306,8 +306,8 @@ class EAuthentication
                 if( isset($attribute['@attributes']) && isset($attribute['@attributes']['Name']) && isset($attribute['saml2AttributeValue']) ) {
                     switch ($attribute['@attributes']['Name']) {
                         case 'urn:egov:bg:eauth:2.0:attributes:personName':
-                            if( $attribute['saml2AttributeValue'] != 'Потребител идентифициран с ПИК на НАП' ) { //ПИК login not returning name
-                                $user['name'] = $attribute['saml2AttributeValue'];
+                            if( $attribute['saml2AttributeValue'] != 'Потребител идентифициран с ПИК на НАП' && !is_array($attribute['saml2AttributeValue'])) { //ПИК login not returning name
+                                $user['name'] = mb_convert_case(transliterate_new($attribute['saml2AttributeValue'], true), MB_CASE_TITLE, 'UTF-8');
                             }
                         case 'urn:egov:bg:eauth:2.0:attributes:email':
                             $user['email'] = $attribute['saml2AttributeValue'];

@@ -606,4 +606,52 @@ if (!function_exists('clearText')) {
     }
 }
 
+if (!function_exists('transliterate_new')) {
+
+    /**
+     * Transliterate given string from cyrillic to latin letters and revers
+     *
+     * @method transliterate_new
+     * @param string $str
+     * @param bool $reverse
+     * @return string
+     */
+    function transliterate_new(string $str, bool $reverse = false)
+    {
+        $cyr = array('ч', 'Ч', 'щ', 'Щ', 'ш', 'Ш',
+            'ц', 'Ц', 'ц', 'Ц',
+            'ю', 'Ю', 'ю', 'Ю',
+            'я', 'Я', 'я', 'Я',
+            'а', 'А', 'б', 'Б', 'в', 'В', 'в', 'В',
+            'г', 'Г', 'д', 'Д', 'е', 'Е',
+            'ж', 'Ж', 'ж', 'Ж', 'з', 'З',
+            'и', 'И',
+            //'й', 'Й',
+            'к', 'К', 'л', 'Л', 'м', 'М', 'н', 'Н',
+            'о', 'О', 'п', 'П', 'р', 'Р', 'с', 'С',
+            'т', 'Т', 'у', 'У', 'ф', 'Ф', 'х', 'Х',
+            'ъ', 'Ъ',
+            //'ь',
+        );
+
+        $lat = array('ch', 'CH', 'sht', 'SHT', 'sh', 'SH',
+            'c', 'C', 'ts', 'TS',
+            'iu', 'IU', 'yu', 'YU',
+            'q', 'Q', 'ya', 'YA',
+            'a', 'A', 'b', 'B', 'v', 'V', 'w', 'W',
+            'g', 'G', 'd', 'D', 'e', 'E',
+            'zh', 'ZH', 'j', 'J', 'z', 'Z',
+            'i', 'I',
+            //'y', 'Y',
+            'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N',
+            'o', 'O', 'p', 'P', 'r', 'R', 's', 'S',
+            't', 'T', 'u', 'U', 'f', 'F', 'h', 'H',
+            'y', 'Y',
+            //'',
+        );
+
+        return $reverse ? str_replace($lat, $cyr, $str) : str_replace($cyr, $lat, $str);
+    }
+}
+
 
