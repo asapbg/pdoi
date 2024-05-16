@@ -40,25 +40,26 @@ class NotifySubjectForUnlockedApplication extends Command
             foreach ($apps as $app){
                 try {
                     $foundMails = false;
-                    $pdoiSubject = $app->responseSubject;
-                    if($pdoiSubject){
-                        if(!empty($pdoiSubject->email)){
-                            $foundMails = true;
-                            //subject notification
-                            Mail::to($pdoiSubject->email)->send(new SeosUnlockedApplication($app));
-                            sleep(2);
-                        }
-
-                        $emailList = $pdoiSubject->getConnectedUsersEmails();
-                        if( sizeof($emailList) ) {
-                            $foundMails = true;
-                            foreach ($emailList as $mail){
-                                Mail::to($mail)->send(new SeosUnlockedApplication($app));
-                                sleep(2);
-                            }
-                        }
-                    }
-
+//                    $foundMails = false;
+//                    $pdoiSubject = $app->responseSubject;
+//                    if($pdoiSubject){
+//                        if(!empty($pdoiSubject->email)){
+//                            $foundMails = true;
+//                            //subject notification
+//                            Mail::to($pdoiSubject->email)->send(new SeosUnlockedApplication($app));
+//                            sleep(2);
+//                        }
+//
+//                        $emailList = $pdoiSubject->getConnectedUsersEmails();
+//                        if( sizeof($emailList) ) {
+//                            $foundMails = true;
+//                            foreach ($emailList as $mail){
+//                                Mail::to($mail)->send(new SeosUnlockedApplication($app));
+//                                sleep(2);
+//                            }
+//                        }
+//                    }
+                    $foundMails = true;// Skip sending mails for now
                     if($foundMails){
                         $app->seos_error_alert = 0;
                         $app->save();
