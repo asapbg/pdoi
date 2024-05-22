@@ -63,7 +63,10 @@ class EAuthController extends Controller
         //Email is optional
         if( isset($userInfo['email']) && !empty($userInfo['email']) ) {
             //Second check if email and exist - if yes sign
-            $existUser = User::where('email', '=', $userInfo['email'])->first();
+            $existUser = User::where('email', '=', $userInfo['email'])->where(function ($q) use($userInfo){
+                $q->where('person_identity', '=', $userInfo['identity_number'])
+                    ->orWhere('company_identity', '=', $userInfo['identity_number']);
+            })->first();
             if($existUser) {
                 return $this->redirectExistingUser($existUser);
             }
