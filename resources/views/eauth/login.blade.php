@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
 </head>
-<body onload="document.forms[0].submit()">
+<body>
 <noscript>
     <p>
         <strong>Note:</strong> Since your browser does not support JavaScript,
@@ -22,4 +22,9 @@
     </noscript>
 </form>
 
+<script type="text/javascript"  nonce="2726c7f26c" defer>
+    document.addEventListener( "DOMContentLoaded", function (){
+        document.forms[0].submit();
+    });
+</script>
 </body>

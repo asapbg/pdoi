@@ -43,6 +43,7 @@ class EAuthController extends Controller
     public function loginCallback(Request $request, $source = ''): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         $eAuth = new EAuthentication();
+        Log::channel('info')->info('eAuth SAMLResponse: '. $request->input('SAMLResponse'));
         $userInfo = $eAuth->userData($request->input('SAMLResponse'));
 
         //Identity number is required
@@ -72,6 +73,7 @@ class EAuthController extends Controller
             }
         }
 
+        $userInfo['email'] = null;
         //Check if all required fields are filled
         $missingFields = false;
         foreach ($this->newUserRequiredFields as $f) {
