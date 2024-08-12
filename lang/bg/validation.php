@@ -317,5 +317,6 @@ return [
         'final_status'                  => 'Крайно решение',
         'refuse_reason'                  => 'Причина за отказ',
         'no_consider_reason'                  => 'Причина за оставяне без разглеждане',
+        'edit_final_decision_reason'                  => 'Причини за редакция на решението',
     ],
 ];

@@ -78,6 +78,25 @@ class PdoiApplicationPolicy
     }
 
     /**
+     * Determine whether the user can update the model category.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiApplication  $pdoiApplication
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function updateCategory(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
+    {
+        return $user->can('manage.*') ||
+            (
+                $user->canany(['application.*', 'application.view', 'application.edit'])
+                && (
+                    ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+                    || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+                )
+            );
+    }
+
+    /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
@@ -86,10 +105,47 @@ class PdoiApplicationPolicy
      */
     public function update(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
     {
-        //TODO fix me add subject from events
-        return (PdoiApplicationStatusesEnum::canRenew($pdoiApplication->status) //is in forwarded status
-                || $pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
-                || in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted()))
+//        //TODO fix me add subject from events
+//        return (PdoiApplicationStatusesEnum::canRenew($pdoiApplication->status) //is in forwarded status
+//                || $pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
+//                || in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted()))
+//            && (
+//                $user->can('manage.*') ||
+//                (
+//                    $user->canany(['application.*', 'application.view', 'application.edit'])
+//                    && (
+//                        ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+//                        || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+//                    )
+//                )
+//            );
+
+        return ($pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
+                || in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted())
+                || PdoiApplicationStatusesEnum::canEditFinalDecision($pdoiApplication->status)
+            )
+            && (
+                $user->can('manage.*') ||
+                (
+                    $user->canany(['application.*', 'application.view', 'application.edit'])
+                    && (
+                        ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+                        || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+                    )
+                )
+            );
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiApplication  $pdoiApplication
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function canEditFinalDecision(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
+    {
+        return (PdoiApplicationStatusesEnum::canEditFinalDecision($pdoiApplication->status))
             && (
                 $user->can('manage.*') ||
                 (

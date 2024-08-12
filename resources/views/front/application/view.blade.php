@@ -30,7 +30,7 @@
                                     <p class="my-1 p-fs"><strong>{{ __('custom.reg_number') }}:</strong>
                                         {{ $application['uri'] }} | {{ $application['subject'] }} | {{ $application['statusName'] }} |
                                         <strong>{{ __('custom.date_apply') }}:</strong> {{ displayDate($application['created_at'] )}} |
-                                        <strong>{{ __('custom.term') }}:</strong>{{ displayDate($application['term'] ) }}<br>
+                                        @if(!empty($application['term']))<strong>{{ __('custom.term') }}:</strong>{{ displayDate($application['term'] ) }}<br>@endif
                                     </p>
                                     <p class="my-1 p-fs">
                                         <a href="#"><i class="fas fa-user text-dark fw-bold me-1"></i> {{ $application['user_name'] }}</a> |

@@ -28,6 +28,8 @@ class RegisterEventRequest extends FormRequest
      */
     public function rules()
     {
+        $app = PdoiApplication::find(request()->input('application'));
+        $edit_final_decision_reason_is_required = request()->user()->can('canEditFinalDecision', $app) ? 'required' : 'nullable';
         return [
             'event' => ['nullable', 'numeric'],
             'final_status' => ['required', 'numeric'],
@@ -36,6 +38,7 @@ class RegisterEventRequest extends FormRequest
             'refuse_reason' => ['nullable', 'required_if:final_status,'.PdoiApplicationStatusesEnum::NOT_APPROVED->value, 'numeric', 'exists:reason_refusal,id'],
             'no_consider_reason' => ['nullable', 'required_if:final_status,'.PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value, 'numeric', 'gte:0'],
             'add_text' => ['nullable', 'required_if:no_consider_reason,0', 'string'],
+            'edit_final_decision_reason' => [$edit_final_decision_reason_is_required, 'string'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
             'files' => ['array', 'max:'.config('filesystems.max_file_uploads')],

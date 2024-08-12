@@ -1,9 +1,52 @@
 @extends('layouts.admin')
 
 @section('content')
+    @php($canEditDecision = auth()->user()->can('canEditFinalDecision', $application))
     <section class="content">
         <div class="container-fluid">
-            <div class="card">
+            @if($canEditDecision && $application->lastFinalEvent)
+                <div class="card card-primary card-outline">
+                    <div class="card-header p-0 pt-1 border-bottom-0">
+                        <h4 class="px-2 border-start border-warning border-5">Последно Крайно решение</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-5">
+                            <p class="my-1 p-fs"><strong>{{ __('custom.decision') }}: </strong> {{ $application->lastFinalEvent->eventReasonName }}</p>
+                            <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $application->response_date }}</p>
+                            {!! html_entity_decode($application->response) !!}
+                            @if($application->lastFinalEvent->files->count())
+                                <hr>
+                                <p class="my-1 p-fs"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>
+                                <table class="table table-sm mb-4">
+                                    <tbody>
+                                    @foreach($application->lastFinalEvent->files as $file)
+                                        <tr>
+                                            <td>
+                                                {{ $loop->index + 1 }}
+                                                <a class="btn btn-sm btn-secondary ml-2" type="button" href="{{ route('admin.download.file', ['file' => $file->id]) }}">
+                                                    <i class="fas fa-download me-1 download-file" data-file="$file->id" role="button"
+                                                       data-toggle="tooltip" title="{{ __('custom.download') }}"></i>
+                                                </a>
+                                            </td>
+                                            <td>{{ !empty($file->description) ? $file->description : 'Няма описание' }} @if($file->visible_on_site){{ '(публикуван)' }}@endif</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+            @endif
+            <div class="card card-primary card-outline">
+                @if($canEditDecision && $application->lastFinalEvent)
+                    <div class="card-header p-0 pt-1 border-bottom-0">
+                        <h4 class="px-2 border-start border-warning border-5">
+                            Ново Крайно решение
+                        </h4>
+                    </div>
+                @endif
                 <div class="card-body">
                     <form action="{{ route('admin.application.event.new.store') }}" method="post" name="form" id="form" enctype="multipart/form-data">
                         @csrf
@@ -20,6 +63,16 @@
                                 @endif
                             @endif
                             @if($event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value)
+                                @if($canEditDecision && $application->lastFinalEvent)
+                                    <div class="form-group form-group-sm col-12 mb-3">
+                                        <label class="form-label fw-semibold" >Причини за редакция на решението</label>
+                                        @php($edit_final_decision_reason = old('edit_final_decision_reason', ''))
+                                        <textarea class="form-control summernote w-100 @error('edit_final_decision_reason') is-invalid @enderror" name="edit_final_decision_reason" >{{ $edit_final_decision_reason }}</textarea>
+                                        @error('edit_final_decision_reason')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                @endif
                                 <div class="form-group form-group-sm col-md-6 col-12 mb-3">
                                     <label class="form-label fw-semibold" >{{ __('custom.event.FINAL_DECISION') }}:</label>
                                     <select name="final_status" class="form-control form-control-sm" id="final_status">

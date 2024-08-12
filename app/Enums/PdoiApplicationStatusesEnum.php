@@ -78,6 +78,16 @@ enum PdoiApplicationStatusesEnum: int
         ]);
     }
 
+    public static function canEditFinalDecision($value): bool
+    {
+        return in_array($value, [
+            self::APPROVED->value,
+            self::PART_APPROVED->value,
+            self::NOT_APPROVED->value,
+            self::NO_CONSIDER_REASON->value,
+        ]);
+    }
+
     public static function canForward($value): bool
     {
         return in_array($value, [

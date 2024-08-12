@@ -70,7 +70,10 @@ class PdoiApplicationController extends Controller
 
         $categories = Category::optionsList();
 
-        return $this->view('admin.applications.view', compact('item', 'categories'));
+        $refusalReasons = ReasonRefusal::optionsList();
+        $noConsiderReasons = NoConsiderReason::optionsList();
+        $event = Event::where('app_event', '=', Event::APP_EVENT_FINAL_DECISION)->first();
+        return $this->view('admin.applications.view', compact('item', 'categories', 'refusalReasons', 'noConsiderReasons', 'event'));
     }
 
     public function create(Request $request)
@@ -166,7 +169,7 @@ class PdoiApplicationController extends Controller
             abort(Response::HTTP_NOT_FOUND);
         }
         $user = auth()->user();
-        if( !$user->canAny(['update'], $item) ){
+        if( !$user->canAny(['updateCategory'], $item) ){
             abort(Response::HTTP_NOT_FOUND);
         }
 
@@ -186,7 +189,7 @@ class PdoiApplicationController extends Controller
             return response()->json(['error' => 1, 'message' => __('custom.record_not_found')]);
         }
         $user = auth()->user();
-        if( !$user->canAny(['update'], $item) ){
+        if( !$user->canAny(['updateCategory'], $item) ){
             return response()->json(['error' => 1, 'message' => __('messages.unauthorized')]);
         }
 
