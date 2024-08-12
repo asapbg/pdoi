@@ -30,11 +30,12 @@ class RegisterEventRequest extends FormRequest
     {
         return [
             'event' => ['nullable', 'numeric'],
-            'final_status' => ['nullable', 'numeric'],
+            'final_status' => ['required', 'numeric'],
             'application' => ['nullable', 'numeric', 'exists:pdoi_application,id'],
             'new_resp_subject_id' => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
-            'add_text' => ['nullable', 'string'],
-            'refuse_reason' => ['nullable', 'numeric', 'exists:reason_refusal,id'],
+            'refuse_reason' => ['nullable', 'required_if:final_status,'.PdoiApplicationStatusesEnum::NOT_APPROVED->value, 'numeric', 'exists:reason_refusal,id'],
+            'no_consider_reason' => ['nullable', 'required_if:final_status,'.PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value, 'numeric', 'gte:0'],
+            'add_text' => ['nullable', 'required_if:no_consider_reason,0', 'string'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
             'files' => ['array', 'max:'.config('filesystems.max_file_uploads')],

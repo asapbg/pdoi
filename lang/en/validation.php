@@ -159,7 +159,17 @@ return [
         'ssev_profile_not_exist' => 'Can\'t find (ССЕВ) profile',
         'files' => [
             'max' => 'Max files for upload is :max'
-        ]
+        ],
+        'refuse_reason' => [
+            'required_if' => 'Field is required'
+        ],
+        'no_consider_reason' => [
+            'required_if' => 'Field is required',
+            'gte' => 'Field is required'
+        ],
+        'add_text' => [
+            'required_if' => 'Field is required'
+        ],
     ],
 
     /*
@@ -317,6 +327,9 @@ return [
         'address_en'                => 'Address (EN)',
         'extra_info'                => 'Additional information',
         'subjects'                  => 'Institution',
+        'final_status'                  => 'Final Status',
+        'refuse_reason'                  => 'Refuse reason',
+        'no_consider_reason'                  => 'Причина за оставяне без разглеждане',
     ],
 
 ];

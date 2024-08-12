@@ -39,6 +39,7 @@ class ApplicationService
     public function registerEvent(int $eventType, $data = [], $disableCommunication = false): ?PdoiApplicationEvent
     {
         $newEvent = null;
+        $isRegistered = false;
         DB::beginTransaction();
         try {
             $eventConfig = Event::where('app_event', $eventType)
@@ -119,6 +120,10 @@ class ApplicationService
                         && isset($data['refuse_reason']) ) {
                         $newEvent->reason_not_approved = (int)$data['refuse_reason'];
                     }
+                    if( (int)$data['final_status'] == PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value
+                        && isset($data['no_consider_reason']) ) {
+                        $newEvent->no_consider_reason_id = (int)$data['no_consider_reason'];
+                    }
                 }
 
                 $this->application->save();
@@ -165,13 +170,14 @@ class ApplicationService
                 }
 
                 DB::commit();
+                $isRegistered = true;
             }
         } catch (\Exception $e) {
             DB::rollBack();
             logError('Register event ('. $eventConfig->name .') for application ID '.$this->application->id, $e->getMessage());
         }
 
-        return $newEvent;
+        return $isRegistered ? $newEvent : null;
     }
 
     /**

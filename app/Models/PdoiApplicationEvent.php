@@ -103,4 +103,9 @@ class PdoiApplicationEvent extends Model
     {
         return $this->hasOne(ExtendTermsReason::class, 'id', 'event_reason');
     }
+
+    public function noConsiderReason(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(User::class, 'id' , 'no_consider_reason_id');
+    }
 }

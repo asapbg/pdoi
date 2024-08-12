@@ -22,28 +22,57 @@
                             @if($event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value)
                                 <div class="form-group form-group-sm col-md-6 col-12 mb-3">
                                     <label class="form-label fw-semibold" >{{ __('custom.event.FINAL_DECISION') }}:</label>
-                                    <select name="final_status" class="form-control form-control-sm" required id="final_status">
-                                        <option value=""></option>
+                                    <select name="final_status" class="form-control form-control-sm" id="final_status">
+                                        <option value="" @if(empty(old('final_status', ''))) selected @endif></option>
                                         @foreach(\App\Enums\PdoiApplicationStatusesEnum::finalStatuses() as $status)
                                             @if($status->value != \App\Enums\PdoiApplicationStatusesEnum::FORWARDED->value)
-                                            <option value="{{ $status->value }}" @if($status->value == \App\Enums\PdoiApplicationStatusesEnum::NOT_APPROVED->value) data-refuse="1" @endif>{{ __('custom.application.status.'.$status->name) }}</option>
+                                            <option value="{{ $status->value }}"
+                                                    @if($status->value == \App\Enums\PdoiApplicationStatusesEnum::NOT_APPROVED->value) data-refuse="1" @endif
+                                                    @if($status->value == \App\Enums\PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value) data-no_consider_reason="1" @endif
+                                                    @if(old('final_status', '') == $status->value) selected @endif
+                                            >{{ __('custom.application.status.'.$status->name) }}</option>
                                                @endif
                                         @endforeach
                                     </select>
+                                    @error('final_status')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <div class="col-12"></div>
                                 <div class="form-group form-group-sm col-md-6 col-12 mb-3 d-none" id="refuse_reason_box">
                                     <label class="form-label fw-semibold" >{{ trans_choice('custom.reason_refusals', 1) }}:</label>
                                     <select name="refuse_reason" class="form-control form-control-sm" id="refuse_reason">
-                                        <option value=""></option>
+                                        <option value="" @if(empty(old('refuse_reason', ''))) selected @endif></option>
                                         @if($refusalReasons->count())
                                             @foreach($refusalReasons as $refuse)
-                                                <option value="{{ $refuse->id }}">{{ $refuse->name }}</option>
+                                                <option value="{{ $refuse->id }}"
+                                                        @if(old('refuse_reason', '') == $refuse->id) selected @endif
+                                                >{{ $refuse->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
+                                    @error('refuse_reason')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
+                                <div class="form-group form-group-sm col-md-6 col-12 mb-3 d-none no_consider_reason_box d-none" id="no_consider_reason_box">
+                                    <label class="form-label fw-semibold" >{{ trans_choice('custom.no_consider_reason', 1) }}:</label>
+                                    <select name="no_consider_reason" class="form-control form-control-sm" id="no_consider_reason">
+                                        <option value="-1" @if(old('no_consider_reason', '-1') == '-1') selected @endif></option>
+                                        @if($noConsiderReasons->count())
+                                            @foreach($noConsiderReasons as $cvRefuse)
+                                                <option value="{{ $cvRefuse->id }}"
+                                                        @if(old('no_consider_reason', -1) == $cvRefuse->id) selected @endif
+                                                >{{ $cvRefuse->name }}</option>
+                                            @endforeach
+                                        @endif
+                                        <option value="0" @if(old('no_consider_reason', -1) == 0) selected @endif data-is_other="1">Друго</option>
+                                    </select>
+                                    @error('no_consider_reason')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             @endif
 
 
@@ -140,18 +169,39 @@
     <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
             let reasonRefuseSelect = $('#refuse_reason');
+            let noConsiderReasonSelect = $('#no_consider_reason');
             let finalDecisionSelect = $('#final_status');
-            if(finalDecisionSelect) {
-                finalDecisionSelect.on('change', function (){
+
+            function initRefuseInputs(){
+                if($('#final_status')) {
                     let isRefuse = $('#final_status').find(':selected').data('refuse');
+                    let isNoConsiderReason = $('#final_status').find(':selected').data('no_consider_reason');
                     if( typeof isRefuse != 'undefined' && parseInt(isRefuse) == 1 ) {
                         $('#refuse_reason_box').removeClass('d-none');
+                        $('.no_consider_reason_box').addClass('d-none');
+                        noConsiderReasonSelect.val('');
+                        // noConsiderReasonOtherTextarea.val('');
+                    } else if(typeof isNoConsiderReason != 'undefined' && parseInt(isNoConsiderReason) == 1) {
+                        $('#no_consider_reason_box').removeClass('d-none');
+                        $('#refuse_reason_box').addClass('d-none');
+                        reasonRefuseSelect.val('');
                     } else {
                         $('#refuse_reason_box').addClass('d-none');
                         reasonRefuseSelect.val('');
+                        $('.no_consider_reason_box').addClass('d-none');
+                        noConsiderReasonSelect.val('');
                     }
+                }
+            }
+
+
+            if(finalDecisionSelect) {
+                finalDecisionSelect.on('change', function (){
+                    initRefuseInputs()
                 });
             }
+
+            initRefuseInputs();
         });
     </script>
 @endpush

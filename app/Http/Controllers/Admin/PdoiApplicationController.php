@@ -18,6 +18,7 @@ use App\Models\EkatteSettlement;
 use App\Models\Event;
 use App\Models\File;
 use App\Models\MailTemplates;
+use App\Models\NoConsiderReason;
 use App\Models\PdoiApplication;
 use App\Models\PdoiResponseSubject;
 use App\Models\ProfileType;
@@ -229,8 +230,9 @@ class PdoiApplicationController extends Controller
             };
 
             $refusalReasons = ReasonRefusal::optionsList();
+            $noConsiderReasons = NoConsiderReason::optionsList();
 
-            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate', 'mailTemplate', 'refusalReasons'));
+            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate', 'mailTemplate', 'refusalReasons', 'noConsiderReasons'));
         }
 
         $appService = new ApplicationService($application);
@@ -287,7 +289,7 @@ class PdoiApplicationController extends Controller
         if( $appService->registerEvent($event->app_event, $validated) ) {
             return redirect(route('admin.application.view', ['item' => $application->id]))->with('success', __('Успешно завършено регистриране на събитие '.$event->name));
         } else {
-            back()->with('danger', __('custom.system_error'));
+            return back()->withInput()->with('danger', __('custom.system_error'));
         }
     }
 

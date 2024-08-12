@@ -53,7 +53,8 @@ enum PdoiApplicationStatusesEnum: int
             self::PART_APPROVED,
             self::NOT_APPROVED,
             self::INFO_NOT_EXIST,
-            self::FORWARDED
+            self::FORWARDED,
+            self::NO_CONSIDER_REASON
         ];
     }
 
