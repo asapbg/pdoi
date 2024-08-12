@@ -17,9 +17,10 @@ enum PdoiApplicationStatusesEnum: int
     case PART_APPROVED = 5; //Частично одобрено
     case NOT_APPROVED = 6; //Неодобрено
     case INFO_NOT_EXIST = 7; //Информацията не съществува
-    case NO_REVIEW = 8; //Оставено без разглеждане
+    case NO_REVIEW = 8; //Просрочено
     case FORWARDED = 9; //Препратено по компетентност
     case RENEWED = 10; //Възобновено
+    case NO_CONSIDER_REASON = 11; //Оставено без разглеждане
 
     // Return enum name by value
     public static function keyByValue($searchVal): string
