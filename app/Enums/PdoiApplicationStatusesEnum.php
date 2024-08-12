@@ -41,6 +41,7 @@ enum PdoiApplicationStatusesEnum: int
             self::REGISTRATION_TO_SUBJECT->value,
             self::IN_PROCESS->value,
             self::FORWARDED->value,
+            self::NO_REVIEW->value,
 //            self::FORWARD_ТО_SUB_SUBJECT,
 //            self::FORWARD_ТО_NOT_REGISTERED_SUBJECT
         ];

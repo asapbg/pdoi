@@ -18,6 +18,7 @@ class Event  extends ModelActivityExtend implements TranslatableContract
     const DATE_TYPE_SUBJECT_REGISTRATION = 2;
     const EVENT_STATUS_COMPLETED = 1;
     const EVENT_STATUS_NOT_COMPLETED = 2;
+    const APP_EVENT_FINAL_DECISION = 6;
 
     public array $translatedAttributes = self::TRANSLATABLE_FIELDS;
 

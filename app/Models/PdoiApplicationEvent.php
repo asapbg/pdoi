@@ -24,7 +24,8 @@ class PdoiApplicationEvent extends Model
                     $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).($this->notApprovedReason ? ' - '.$this->notApprovedReason->name : '').')';
                 } else{
                     if( !$this->event_reason ) {
-                        $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->application->status)).')';
+//                        $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->application->status)).')';
+                        $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue(PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value)).')';
                     } else{
                         $name.= ' ('.__('custom.application.status.'.PdoiApplicationStatusesEnum::keyByValue($this->event_reason)).')';
                     }
