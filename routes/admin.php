@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\NoConsiderReason;
 use App\Http\Controllers\{Auth\Admin\LoginController as AdminLoginControllerAlias, CommonController};
 // Admin
 use Illuminate\Http\Request;
@@ -156,6 +157,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/nomenclature/reason-refusal',                'index')->name('nomenclature.reason_refusal')->middleware('can:viewAny,App\Models\ReasonRefusal');
         Route::get('/nomenclature/reason-refusal/edit/{item?}',         'edit')->name('nomenclature.reason_refusal.edit');
         Route::match(['post', 'put'], '/nomenclature/reason-refusal/store/{item?}',         'store')->name('nomenclature.reason_refusal.store');
+    });
+
+    Route::controller(\App\Http\Controllers\Admin\Nomenclature\NoConsiderationReasonController::class)->group(function () {
+        Route::get('/nomenclature/no-consider-reason',                'index')->name('nomenclature.no_consider_reason')->middleware('can:viewAny,App\Models\NoConsiderReason');
+        Route::get('/nomenclature/no-consider-reason/edit/{item?}',         'edit')->name('nomenclature.no_consider_reason.edit');
+        Route::match(['post', 'put'], '/nomenclature/no-consider-reason/store/{item?}',         'store')->name('nomenclature.no_consider_reason.store');
     });
 
     Route::controller(EventController::class)->group(function () {

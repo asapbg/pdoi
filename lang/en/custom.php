@@ -361,6 +361,7 @@ return [
     'nomenclature.extend_terms_reason'        => 'Extension of time (reason)|Extension of time (reasons)',
     'nomenclature.reason_refusal'               => 'Reason for rejection|Reasons for rejection',
     'nomenclature.event'                        => 'Event|Events',
+    'nomenclature.no_consider_reason' => "Reason for leaving without consideration|Reasons for leaving without consideration",
     //delivery_methods
     'delivery_by.EMAIL'                       => 'Publish to the platform and notify by e-mail address specified in the profile',
     'delivery_by.SDES'                        => 'Publish to the platform and notify by the secure electronic delivery system (ССЕВ)',
@@ -530,5 +531,8 @@ return [
     'asap_support'                      => 'Technical support',
     'user_is_public_contact' => 'Visible in \'Contacts\'',
     'user_is_public_contact.tooltip' => 'User\'s contact data will be visible in public section \'Contacts\'',
+    'no_consider_reasons' => "Reason for leaving without consideration|Reasons for leaving without consideration",
+    'no_consideration_reasons' => "Reason for leaving without consideration|Reasons for leaving without consideration",
+    'no_consider_reason' => "Reason for leaving without consideration",
 ];
 

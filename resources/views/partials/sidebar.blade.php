@@ -155,7 +155,9 @@
 || Str::contains(url()->current(), ['nomenclature/category'])
 || Str::contains(url()->current(), ['nomenclature/extend-terms'])
 || Str::contains(url()->current(), ['nomenclature/event'])
-|| Str::contains(url()->current(), ['nomenclature/reason-refusal']) )
+|| Str::contains(url()->current(), ['nomenclature/reason-refusal'])
+|| Str::contains(url()->current(), ['nomenclature/no-consider-reason'])
+)
                         <a href="#" class="nav-link @if($systemNomenclatureIsActive)) active @endif">
                             <i class="nav-icon fas fa-stream"></i>
                             <p>Системни<i class="fas fa-angle-left right"></i></p>
@@ -187,6 +189,13 @@
                                    class="nav-link @if(strstr(url()->current(), 'nomenclature/reason-refusal')) active @endif">
                                     <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
                                     <p>{{ trans_choice('custom.nomenclature.reason_refusal', 2) }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.no_consider_reason') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/no-consider-reason')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.no_consider_reason', 2) }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
