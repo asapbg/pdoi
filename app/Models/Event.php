@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\FilterSort;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class Event  extends ModelActivityExtend implements TranslatableContract
@@ -47,6 +48,11 @@ class Event  extends ModelActivityExtend implements TranslatableContract
                 'rules' => ['required', 'string', 'max:255']
             ],
         );
+    }
+
+    public function scopeFinalDecision($query)
+    {
+        $query->where('app_event', '=', self::APP_EVENT_FINAL_DECISION);
     }
 
     public static function optionsList()

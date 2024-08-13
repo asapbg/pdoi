@@ -137,6 +137,30 @@ class PdoiApplicationPolicy
     }
 
     /**
+     * Determine whether the user can set final decision on expired application.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiApplication  $pdoiApplication
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function updateExpired(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
+    {
+        return ($pdoiApplication->status == PdoiApplicationStatusesEnum::NO_REVIEW->value  //expired
+                && !$pdoiApplication->events()->whereIn('event_type', ApplicationEventsEnum::notAllowDecisionToExpiredApplication())->count()
+            )
+            && (
+                $user->can('manage.*') ||
+                (
+                    $user->canany(['application.*', 'application.view', 'application.edit'])
+                    && (
+                        ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+                        || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+                    )
+                )
+            );
+    }
+
+    /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user

@@ -173,26 +173,48 @@
                                         <span class="text-danger" id="remove-category-error"></span>
                                     </div>
                                 @endif
-
-                                @can('update', $item)
-                                    @if($item->currentEvent->event->nextEvents->count())
-                                        <h5 class="bg-primary py-1 px-2 my-4">{{ __('custom.new_event') }}</h5>
-                                        <form class=" mb-3" action="post">
-                                            @csrf
-                                            <div class="input-group col-md-6 col-12">
-                                                <select class="form-select form-select-sm" id="next-event">
-                                                    <option value="">{{ __('custom.available_actions') }}</option>
-                                                    @foreach($item->currentEvent->event->nextEvents as $event)
-                                                        @if(($event->app_event != \App\Enums\ApplicationEventsEnum::SEND_TO_SEOS->value && $event->app_event != \App\Enums\ApplicationEventsEnum::APPROVE_BY_SEOS->value) && ($event->app_event != \App\Enums\ApplicationEventsEnum::FORWARD->value || (\App\Enums\PdoiApplicationStatusesEnum::canForward((int)$item->status) && $item->response_subject_id )) )
-                                                            <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => (int)$event->id]) }}">@if($event->extendTimeReason){{ $event->extendTimeReason->name }}@else{{ $event->name }} @endif</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                                <a href="#" id="apply_event" role="button" class="btn btn-sm btn-success disabled">{{ __('custom.apply') }}</a>
-                                            </div>
-                                        </form>
-                                    @endif
-                                @endcan
+                                @if($item->status == \App\Enums\PdoiApplicationStatusesEnum::NO_REVIEW->value)
+                                    @php($availableEvents = \App\Models\Event::FinalDecision()->get())
+                                    @can('updateExpired', $item)
+                                        @if($availableEvents->count())
+                                            <h5 class="bg-primary py-1 px-2 my-4">{{ __('custom.new_event') }}</h5>
+                                            <form class=" mb-3" action="post">
+                                                @csrf
+                                                <div class="input-group col-md-6 col-12">
+                                                    <select class="form-select form-select-sm" id="next-event">
+                                                        <option value="">{{ __('custom.available_actions') }}</option>
+                                                        @foreach($availableEvents as $event)
+                                                            @if(($event->app_event != \App\Enums\ApplicationEventsEnum::SEND_TO_SEOS->value && $event->app_event != \App\Enums\ApplicationEventsEnum::APPROVE_BY_SEOS->value) && ($event->app_event != \App\Enums\ApplicationEventsEnum::FORWARD->value || (\App\Enums\PdoiApplicationStatusesEnum::canForward((int)$item->status) && $item->response_subject_id )) )
+                                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => (int)$event->id]) }}">@if($event->extendTimeReason){{ $event->extendTimeReason->name }}@else{{ $event->name }} @endif</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                    <a href="#" id="apply_event" role="button" class="btn btn-sm btn-success disabled">{{ __('custom.apply') }}</a>
+                                                </div>
+                                            </form>
+                                        @endif
+                                    @endcan
+                                @else
+                                    @can('update', $item)
+                                        @if($item->currentEvent->event->nextEvents->count())
+                                            <h5 class="bg-primary py-1 px-2 my-4">{{ __('custom.new_event') }}</h5>
+                                            <form class=" mb-3" action="post">
+                                                @csrf
+                                                <div class="input-group col-md-6 col-12">
+                                                    <select class="form-select form-select-sm" id="next-event">
+                                                        <option value="">{{ __('custom.available_actions') }}</option>
+                                                        @foreach($item->currentEvent->event->nextEvents as $event)
+                                                            @if(($event->app_event != \App\Enums\ApplicationEventsEnum::SEND_TO_SEOS->value && $event->app_event != \App\Enums\ApplicationEventsEnum::APPROVE_BY_SEOS->value) && ($event->app_event != \App\Enums\ApplicationEventsEnum::FORWARD->value || (\App\Enums\PdoiApplicationStatusesEnum::canForward((int)$item->status) && $item->response_subject_id )) )
+                                                                <option value="{{ route('admin.application.event.new', ['item' => $item->id, 'event' => (int)$event->id]) }}">@if($event->extendTimeReason){{ $event->extendTimeReason->name }}@else{{ $event->name }} @endif</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                    <a href="#" id="apply_event" role="button" class="btn btn-sm btn-success disabled">{{ __('custom.apply') }}</a>
+                                                </div>
+                                            </form>
+                                        @endif
+                                    @endcan
+                                @endif
                             </div>
                         </div>
                         @if(!empty($item->response_date))

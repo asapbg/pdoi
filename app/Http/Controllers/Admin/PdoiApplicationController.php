@@ -203,9 +203,15 @@ class PdoiApplicationController extends Controller
         $user = auth()->user();
 
         $application = PdoiApplication::find($applicationId);
-        if( !$application || !$user->canAny(['update'], $application) ){
+        if( !$application ){
             abort(Response::HTTP_NOT_FOUND);
         }
+
+        $policyToCheck = $application->status == PdoiApplicationStatusesEnum::NO_REVIEW->value ? 'updateExpired' : 'update';
+        if($user->cannot($policyToCheck, $application)){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
 
         $event = Event::find($eventId);
         if( !$event ) {
@@ -264,7 +270,13 @@ class PdoiApplicationController extends Controller
         $user = auth()->user();
 
         $application = PdoiApplication::find($validated['application']);
-        if( !$application || !$user->canAny(['update'], $application) ){
+
+        if( !$application ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $policyToCheck = $application->status == PdoiApplicationStatusesEnum::NO_REVIEW->value ? 'updateExpired' : 'update';
+        if($user->cannot($policyToCheck, $application)){
             abort(Response::HTTP_NOT_FOUND);
         }
 
