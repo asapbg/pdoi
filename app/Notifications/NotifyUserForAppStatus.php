@@ -14,6 +14,7 @@ class NotifyUserForAppStatus extends Notification
     use Queueable;
 
     private PdoiApplication $application;
+    private $editedEvent;
     /**
      * Create a new notification instance.
      *
@@ -22,6 +23,7 @@ class NotifyUserForAppStatus extends Notification
     public function __construct($application)
     {
         $this->application = $application;
+        $this->editedEvent = $application->lastFinalEvent ? $application->lastFinalEvent()->where('id', '<>', $application->lastFinalEvent->id) : null;
     }
 
     /**
@@ -44,8 +46,11 @@ class NotifyUserForAppStatus extends Notification
     public function toDatabase($notifiable): array
     {
         $communicationData = [
-            'message' => 'Здравейте '.$this->application->names.','.PHP_EOL.'
-                Информация за статуса на подадено от вас заявление в '.__('custom.full_app_name').PHP_EOL.':
+            'message' => 'Здравейте '.$this->application->names.','.PHP_EOL.(
+                $this->editedEvent ?
+                    'Информация за промяна на решението по подадено от вас заявление в '.__('custom.full_app_name').':'
+                    : 'Информация за статуса на подадено от вас заявление в '.__('custom.full_app_name').':'
+                ).PHP_EOL.'
                 Рег. №: '.$this->application->application_uri.PHP_EOL.';
                 Задължен субект: '.$this->application->responseSubject->subject_name.PHP_EOL.';
                 Статус: '.__('custom.application.status.'.\App\Enums\PdoiApplicationStatusesEnum::keyByValue($this->application->status)).PHP_EOL.';

@@ -381,6 +381,7 @@ class ApplicationService
             }
         }
         $this->application->save();
+        $this->application->refresh();
     }
 
     private function attachEventFiles($event, $files, $descriptions, $visiblelity)
