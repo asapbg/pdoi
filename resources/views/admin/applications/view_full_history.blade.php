@@ -162,9 +162,24 @@
                                                     <div class="col-12 font-weight-semibold mt-2">{{ __('custom.end_date') }}:</div>
                                                     <div class="col-12 p-3">{{ displayDate($event->event_end_date) }}</div>
                                                 @endif
-                                                @if(!empty($event->add_text))
-                                                    <div class="col-12 font-weight-semibold mt-2">{{ __('custom.additional_info') }}:</div>
-                                                    <div class="col-12 p-3">{!! html_entity_decode($event->add_text) !!}</div>
+                                                @if($event->event_type == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value && $event->event_reason == \App\Enums\PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value)
+                                                    @if($event->noConsiderReason)
+                                                        <div class="col-md-6 col-12 font-weight-semibold mt-2">{{ __('custom.no_consider_reason') }}:  <span class="font-weight-normal">{{ $event->noConsiderReason->name }}</span></div>
+                                                        @if(!empty($event->add_text))
+                                                            <div class="col-12 font-weight-semibold mt-2 mt-2">{{ __('custom.additional_info') }}:</div>
+                                                            <div class="col-12 p-3">{!! html_entity_decode($event->add_text) !!}</div>
+                                                        @endif
+                                                    @else
+                                                        @if(!empty($event->add_text))
+                                                            <div class="col-12 font-weight-semibold mt-2">{{ __('custom.no_consider_reason') }}:</div>
+                                                            <div class="col-12 p-3">{!! html_entity_decode($event->add_text) !!}</div>
+                                                        @endif
+                                                    @endif
+                                                @else
+                                                    @if(!empty($event->add_text))
+                                                        <div class="col-12 font-weight-semibold mt-2">{{ __('custom.additional_info') }}:</div>
+                                                        <div class="col-12 p-3">{!! html_entity_decode($event->add_text) !!}</div>
+                                                    @endif
                                                 @endif
                                                 @if($event->files->count())
                                                     <div class="col-12 font-weight-semibold mt-2">{{ trans_choice('custom.documents', 2) }}:</div>
@@ -184,6 +199,10 @@
                                                         @endforeach
                                                         </tbody>
                                                     </table>
+                                                @endif
+                                                @if(!empty($event->edit_final_decision_reason))
+                                                    <div class="col-12 font-weight-semibold mt-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i>{{ __('custom.edited') }}:</div>
+                                                    <div class="col-12 p-3">{!! html_entity_decode($event->edit_final_decision_reason) !!}</div>
                                                 @endif
                                             </div>
                                         </div>

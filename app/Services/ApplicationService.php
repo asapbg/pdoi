@@ -116,6 +116,15 @@ class ApplicationService
                 if ($eventConfig->app_event == ApplicationEventsEnum::FINAL_DECISION->value) {
                     $newEvent->event_reason = (int)$data['final_status'] ?? null;
 
+                    //If edit final decision set reasons in last decision
+                    if(isset($data['edit_final_decision_reason'])){
+                        $lastEvent = $this->application->lastEvent;
+                        if($lastEvent){
+                            $lastEvent->edit_final_decision_reason = $data['edit_final_decision_reason'];
+                            $lastEvent->save();
+                        }
+                    }
+
                     if( (int)$data['final_status'] == PdoiApplicationStatusesEnum::NOT_APPROVED->value
                         && isset($data['refuse_reason']) ) {
                         $newEvent->reason_not_approved = (int)$data['refuse_reason'];
@@ -341,6 +350,8 @@ class ApplicationService
             }
             if (isset($data['add_text']) && !empty($data['add_text'])) {
                 $this->application->response = htmlentities(stripHtmlTags($data['add_text']));
+            } else{
+                $this->application->response = null;
             }
             $this->application->status = $data['final_status'];
             $this->application->status_date = Carbon::now();

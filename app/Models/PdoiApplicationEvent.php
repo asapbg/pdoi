@@ -107,6 +107,6 @@ class PdoiApplicationEvent extends Model
 
     public function noConsiderReason(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(User::class, 'id' , 'no_consider_reason_id');
+        return $this->hasOne(NoConsiderReason::class, 'id' , 'no_consider_reason_id');
     }
 }

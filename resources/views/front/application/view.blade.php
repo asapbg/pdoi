@@ -49,7 +49,20 @@
                                         <h4>{{ __('custom.decision') }}</h4>
                                         <hr>
                                         <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
-                                        {!! html_entity_decode($application['response']) !!}
+
+                                        @if(!empty($application['no_consider_reason_name']) || !empty($application['no_consider_reason_text']))
+                                            @if(!empty($application['no_consider_reason_name']))
+                                                <p class="my-1 p-fs"><strong>{{ __('custom.no_consider_reason') }}: </strong> {{ $application['no_consider_reason_name'] }}</p>
+                                            @else
+                                                <p class="my-1 p-fs"><strong>{{ __('custom.no_consider_reason') }}: </strong></p>
+                                                {!! html_entity_decode($application['no_consider_reason_text']) !!}
+                                            @endif
+                                        @endif
+
+                                        @if(!empty($application['response']))
+                                            {!! html_entity_decode($application['response']) !!}
+                                        @endif
+
                                         @if(isset($application['final_files']) && isset($application['final_files']['data']) && sizeof($application['final_files']['data']))
                                             <hr>
                                             <p class="my-1 p-fs"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>

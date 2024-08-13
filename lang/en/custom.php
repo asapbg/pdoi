@@ -535,5 +535,6 @@ return [
     'no_consider_reasons' => "Reason for leaving without consideration|Reasons for leaving without consideration",
     'no_consideration_reasons' => "Reason for leaving without consideration|Reasons for leaving without consideration",
     'no_consider_reason' => "Reason for leaving without consideration",
+    'edited' => 'Edited',
 ];
 

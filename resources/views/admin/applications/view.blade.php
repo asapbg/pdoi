@@ -197,8 +197,25 @@
                         </div>
                         @if(!empty($item->response_date))
                             <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
+                                <p class="my-1 p-fs"><strong>{{ __('custom.status') }}: </strong> {{ $item->statusName }}</p>
                                 <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $item->response_date }}</p>
-                                {!! html_entity_decode($item->response) !!}
+
+                                @if($item->lastFinalEvent && $item->lastFinalEvent->event_type == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value && $item->lastFinalEvent->event_reason == \App\Enums\PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value)
+                                    @if($item->lastFinalEvent->noConsiderReason)
+                                        <p class="my-1 p-fs"><strong>{{ __('custom.no_consider_reason') }}: </strong> {{ $item->lastFinalEvent->noConsiderReason->name }}</p>
+                                        @if(!empty($item->response))
+                                            {!! html_entity_decode($item->response) !!}
+                                        @endif
+                                    @else
+                                        @if(!empty($item->lastFinalEvent->add_text))
+                                            <p class="my-1 p-fs"><strong>{{ __('custom.no_consider_reason') }}: </strong></p>
+                                            {!! html_entity_decode($item->lastFinalEvent->add_text) !!}
+                                        @endif
+                                    @endif
+                                @else
+                                    {!! html_entity_decode($item->response) !!}
+                                @endif
+
                                 @if($item->lastFinalEvent && $item->lastFinalEvent->files->count())
                                     <hr>
                                     <p class="my-1 p-fs"><strong>{{ trans_choice('custom.documents', 2) }}: </strong></p>

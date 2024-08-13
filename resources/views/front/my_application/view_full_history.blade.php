@@ -116,7 +116,7 @@
                                             <div class="col-md-2 col-12 fw-semibold">{{ __('custom.date') }}:  <span class="text-primary">{{ $event['date'] }}</span></div>
                                             <div class="col-md-8 col-12 fw-semibold">{{ trans_choice('custom.users', 1) }}: <span class="text-primary fw-normal">{{ $event['user_name'] }}</span> @if(!empty($event['user_type']))<span class="fst-italic text-primary fw-normal">({{ $event['user_type'] }})</span>@endif</div>
                                             @if(!is_null($event['old_subject']) || !is_null($event['new_subject']))
-                                                <div class="col-12 mt-2"></div>
+                                                <div class="col-12 mt-3"></div>
                                                 @if(!is_null($event['old_subject']))
                                                     <div class="col-md-6 col-12 fw-semibold">{{ __('custom.old_pdoi_subject') }}:  <span class="text-primary fw-normal">{{ $event['old_subject'] }}</span></div>
                                                 @endif
@@ -125,20 +125,28 @@
                                                 @endif
                                             @endif
                                             @if(!is_null($event['court_decision']))
-                                                <div class="col-12 fw-semibold mt-2">{{ __('custom.decision') }}:</div>
-                                                <div class="col-12 p-3">{{ $event['court_decision'] }}</div>
+                                                <div class="col-12 fw-semibold mt-3">{{ __('custom.decision') }}:</div>
+                                                <div class="col-12 mt-2">{{ $event['court_decision'] }}</div>
                                             @endif
                                             @if(!is_null($event['end_date']))
-                                                <div class="col-12 fw-semibold mt-2">{{ __('custom.end_date') }}:</div>
-                                                <div class="col-12 p-3">{{ $event['end_date'] }}</div>
+                                                <div class="col-12 fw-semibold mt-3">{{ __('custom.end_date') }}:</div>
+                                                <div class="col-12 mt-2">{{ $event['end_date'] }}</div>
+                                            @endif
+                                            @if(!empty($event['no_consider_reason_name']) || !empty($event['no_consider_reason_text']))
+                                                @if(!empty($event['no_consider_reason_name']))
+                                                    <div class="col-12 fw-semibold mt-3">{{ __('custom.no_consider_reason') }}:  <span class="fw-normal">{{ $event['no_consider_reason_name'] }}</span></div>
+                                                @else
+                                                    <div class="col-12 fw-semibold mt-3">{{ __('custom.no_consider_reason') }}:</div>
+                                                    <div class="col-12 mt-2">{!! html_entity_decode($event['no_consider_reason_text']) !!}</div>
+                                                @endif
                                             @endif
                                             @if(!empty($event['text']))
-                                                <div class="col-12 fw-semibold mt-2">{{ __('custom.additional_info') }}:</div>
-                                                <div class="col-12 p-3">{!! html_entity_decode($event['text']) !!}</div>
+                                                <div class="col-12 fw-semibold mt-3">{{ __('custom.additional_info') }}:</div>
+                                                <div class="col-12 mt-2">{!! html_entity_decode($event['text']) !!}</div>
                                             @endif
                                             @if(isset($event['files']) && isset($event['files']['data']) && sizeof($event['files']['data']))
-                                                <div class="col-12 fw-semibold mt-2">{{ trans_choice('custom.documents', 2) }}:</div>
-                                                <table class="table table-sm mt-2">
+                                                <div class="col-12 fw-semibold mt-3">{{ trans_choice('custom.documents', 2) }}:</div>
+                                                <table class="table table-sm">
                                                     <tbody>
                                                     @foreach($event['files']['data'] as $ef)
                                                         <tr>
@@ -154,6 +162,10 @@
                                                     @endforeach
                                                     </tbody>
                                                 </table>
+                                            @endif
+                                            @if(!empty($event['edit_reason']))
+                                                <div class="col-12 fw-semibold mt-3"><i class="fas fa-exclamation-triangle text-warning me-2"></i>{{ __('custom.edited') }}:</div>
+                                                <div class="col-12 mt-2">{!! html_entity_decode($event['edit_reason']) !!}</div>
                                             @endif
                                         </div>
                                     </div>
