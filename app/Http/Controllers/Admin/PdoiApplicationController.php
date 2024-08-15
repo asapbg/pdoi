@@ -11,6 +11,7 @@ use App\Http\Requests\ApplicationRenewRequest;
 use App\Http\Requests\RegisterEventForwardRequest;
 use App\Http\Requests\RegisterEventRequest;
 use App\Models\Category;
+use App\Models\ChangeDecisionReason;
 use App\Models\Country;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
@@ -240,8 +241,9 @@ class PdoiApplicationController extends Controller
 
             $refusalReasons = ReasonRefusal::optionsList();
             $noConsiderReasons = NoConsiderReason::optionsList();
+            $changeDecisionReasons = ChangeDecisionReason::optionsList();
 
-            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate', 'mailTemplate', 'refusalReasons', 'noConsiderReasons'));
+            return $this->view('admin.applications.'.$view, compact('application', 'event', 'subjects', 'newEndDate', 'mailTemplate', 'refusalReasons', 'noConsiderReasons', 'changeDecisionReasons'));
         }
 
         $appService = new ApplicationService($application);
@@ -278,6 +280,14 @@ class PdoiApplicationController extends Controller
         $policyToCheck = $application->status == PdoiApplicationStatusesEnum::NO_REVIEW->value ? 'updateExpired' : 'update';
         if($user->cannot($policyToCheck, $application)){
             abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if(isset($validated['change_decision_reasons_select']) && (int)$validated['change_decision_reasons_select'] > 0){
+            $changeDecisionReason = ChangeDecisionReason::find((int)$validated['change_decision_reasons_select']);
+            if($changeDecisionReason){
+                $validated['edit_final_decision_reason'] = $changeDecisionReason->name;
+            }
+            unset($validated['change_decision_reasons_select']);
         }
 
         $appService = new ApplicationService($application);

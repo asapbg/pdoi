@@ -65,9 +65,23 @@
                             @if($event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value)
                                 @if($canEditDecision && $application->lastFinalEvent)
                                     <div class="form-group form-group-sm col-12 mb-3">
-                                        <label class="form-label fw-semibold" >Причини за редакция на решението</label>
+                                        <label class="form-label fw-semibold" >{{ trans_choice('custom.nomenclature.change_decision_reason', 1) }}</label>
+                                        <select name="change_decision_reasons_select" class="form-control form-control-sm" id="change_decision_reasons_select">
+                                            <option value="-1" @if(old('change_decision_reasons_select', '-1') == '-1') selected @endif></option>
+                                            @if($changeDecisionReasons->count())
+                                                @foreach($changeDecisionReasons as $cdr)
+                                                    <option value="{{ $cdr->id }}"
+                                                            @if(old('change_decision_reasons_select', -1) == $cdr->id) selected @endif
+                                                    >{{ $cdr->name }}</option>
+                                                @endforeach
+                                            @endif
+                                            <option value="0" @if(old('change_decision_reasons_select', -1) == 0) selected @endif data-is_other="1">Друго</option>
+                                        </select>
+                                        @error('change_decision_reasons_select')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                         @php($edit_final_decision_reason = old('edit_final_decision_reason', ''))
-                                        <textarea class="form-control summernote w-100 @error('edit_final_decision_reason') is-invalid @enderror" name="edit_final_decision_reason" >{{ $edit_final_decision_reason }}</textarea>
+                                        <textarea class="form-control w-100 mt-2 @error('edit_final_decision_reason') is-invalid @enderror" name="edit_final_decision_reason" id="edit_final_decision_reason">{{ $edit_final_decision_reason }}</textarea>
                                         @error('edit_final_decision_reason')
                                         <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -224,6 +238,7 @@
             let reasonRefuseSelect = $('#refuse_reason');
             let noConsiderReasonSelect = $('#no_consider_reason');
             let finalDecisionSelect = $('#final_status');
+            let changeDecisionReasonSelect = $('#change_decision_reasons_select');
 
             function initRefuseInputs(){
                 if($('#final_status')) {
@@ -247,14 +262,34 @@
                 }
             }
 
+            function initChangeReasonInputs(){
+                if(changeDecisionReasonSelect){
+                    let changeDecisionReasonVal = changeDecisionReasonSelect.val();
+                    console.log(changeDecisionReasonVal);
+                    if(parseInt(changeDecisionReasonVal) == 0){
+                        console.log('show');
+                        $('#edit_final_decision_reason').show();
+                    } else{
+                        console.log('hide');
+                        $('#edit_final_decision_reason').hide();
+                    }
+                }
+            }
+
+            if(changeDecisionReasonSelect){
+                changeDecisionReasonSelect.on('change', function (){
+                    initChangeReasonInputs();
+                });
+            }
 
             if(finalDecisionSelect) {
                 finalDecisionSelect.on('change', function (){
-                    initRefuseInputs()
+                    initRefuseInputs();
                 });
             }
 
             initRefuseInputs();
+            initChangeReasonInputs();
         });
     </script>
 @endpush

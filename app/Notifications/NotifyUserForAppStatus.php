@@ -23,7 +23,7 @@ class NotifyUserForAppStatus extends Notification
     public function __construct($application)
     {
         $this->application = $application;
-        $this->editedEvent = $application->lastFinalEvent ? $application->lastFinalEvent()->where('id', '<>', $application->lastFinalEvent->id) : null;
+        $this->editedEvent = $application->lastFinalEvent ? $application->finalEvents()->where('id', '<>', $application->lastFinalEvent->id)->first() : null;
     }
 
     /**

@@ -331,6 +331,7 @@ return [
         'refuse_reason'                  => 'Refuse reason',
         'no_consider_reason'                  => 'Причина за оставяне без разглеждане',
         'edit_final_decision_reason'                  => 'Причини за редакция на решението',
+        'change_decision_reasons_select'                  => 'Причини за редакция на решението',
     ],
 
 ];
