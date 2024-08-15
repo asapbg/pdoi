@@ -7,7 +7,7 @@
             @if($canEditDecision && $application->lastFinalEvent)
                 <div class="card card-primary card-outline">
                     <div class="card-header p-0 pt-1 border-bottom-0">
-                        <h4 class="px-2 border-start border-warning border-5">Последно Крайно решение</h4>
+                        <h4 class="px-2 border-start border-warning border-5">Крайно решение</h4>
                     </div>
                     <div class="card-body">
                         <div class="mb-5">
@@ -43,7 +43,7 @@
                 @if($canEditDecision && $application->lastFinalEvent)
                     <div class="card-header p-0 pt-1 border-bottom-0">
                         <h4 class="px-2 border-start border-warning border-5">
-                            Ново Крайно решение
+                            Добавяне на ново действие по крайно решение
                         </h4>
                     </div>
                 @endif

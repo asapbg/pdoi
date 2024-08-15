@@ -394,7 +394,7 @@ return [
     'application.status.APPROVED'                    => 'Одобрено',
     'application.status.PART_APPROVED'               => 'Частично одобрено',
     'application.status.INFO_NOT_EXIST'              => 'Информацията не съществува',
-    'application.status.NO_REVIEW'                   => 'Просрочено',
+    'application.status.NO_REVIEW'                   => 'Непроизнесени в срок',
     'application.status.NO_CONSIDER_REASON'                   => 'Оставено без разглеждане',
     'application.status.NOT_APPROVED'                => 'Неодобрено',
     'application.status.FORWARDED'                   => 'Препратено по компетентност',
