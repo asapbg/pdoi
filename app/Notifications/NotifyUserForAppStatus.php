@@ -51,7 +51,7 @@ class NotifyUserForAppStatus extends Notification
                     'Извършена е промяна след обявяване на крайното решение, по подадено от вас заявление в '.__('custom.full_app_name').':'
                     : 'Информация за статуса на подадено от вас заявление в '.__('custom.full_app_name').':'
                 ).PHP_EOL.
-                ($this->editedEvent ? 'Причина за промяна на крайното решение: '.$this->editedEvent->edit_final_decision_reason.PHP_EOL : '').
+                ($this->editedEvent ? 'Причина за промяна на крайното решение: '.strip_tags(html_entity_decode($this->editedEvent->edit_final_decision_reason)).PHP_EOL : '').
                 'Рег. №: '.$this->application->application_uri.';'.PHP_EOL.
                 'Задължен субект: '.$this->application->responseSubject->subject_name.';'.PHP_EOL.
                 'Статус: '.__('custom.application.status.'.\App\Enums\PdoiApplicationStatusesEnum::keyByValue($this->application->status)).';'.PHP_EOL.
