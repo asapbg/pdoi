@@ -48,6 +48,9 @@
                                     <div class="col-12 mb-3">
                                         <h4>{{ __('custom.decision') }}</h4>
                                         <hr>
+                                        @if(isset($application['response_is_changed_message']) && $application['response_is_changed_message'])
+                                            <p><i class="fas fa-exclamation-triangle text-warning me-2"></i>{{ __('custom.change_after_final_decision') }}</p>
+                                        @endif
                                         <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
 
                                         @if(!empty($application['no_consider_reason_name']) || !empty($application['no_consider_reason_text']))

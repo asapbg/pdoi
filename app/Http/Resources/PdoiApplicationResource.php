@@ -31,6 +31,7 @@ class PdoiApplicationResource extends JsonResource
                 ]),
             'response_subject_name' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
             'response' =>$this->lastFinalEvent ? ($this->lastFinalEvent->event_type == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value && $this->lastFinalEvent->event_reason == \App\Enums\PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value && !$this->lastFinalEvent->noConsiderReason ? null : $this->response) : $this->response,
+            'response_is_changed_message' => $this->finalEvents->count() > 1,
             'response_date' => displayDate($this->response_date),
             'no_consider_reason_name' => $this->lastFinalEvent ? ($this->lastFinalEvent->noConsiderReason ? $this->lastFinalEvent->noConsiderReason->name : null) : null,
             'no_consider_reason_text' => $this->lastFinalEvent ? ($this->lastFinalEvent->event_type == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value && $this->lastFinalEvent->event_reason == \App\Enums\PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value && !$this->lastFinalEvent->noConsiderReason ? $this->lastFinalEvent->add_text : null) : null,

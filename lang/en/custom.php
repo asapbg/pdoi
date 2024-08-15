@@ -539,5 +539,6 @@ return [
     'edited' => 'Edited',
     'change_decision_reasons' => "Reason for change final decision|Reasons for change final decision",
     'change_decision_reason' => "Reason for change final decision",
+    'change_after_final_decision' => "Change after fina decision",
 ];
 

@@ -219,6 +219,10 @@
                         </div>
                         @if(!empty($item->response_date))
                             <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
+                                @if($item->finalEvents->count() > 1)
+                                    <p class="my-1 p-fs"><i class="fas fa-exclamation-triangle text-warning me-2"></i>{{ __('custom.change_after_final_decision') }}</p>
+                                @endif
+
                                 <p class="my-1 p-fs"><strong>{{ __('custom.status') }}: </strong> {{ $item->statusName }}</p>
                                 <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $item->response_date }}</p>
 

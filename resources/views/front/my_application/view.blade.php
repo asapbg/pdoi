@@ -156,6 +156,9 @@
                     </div>
                     @if(!empty($application['response_date']))
                         <div class="tab-pane fade" id="answer" role="tabpanel" aria-labelledby="answer-tab">
+                            @if(isset($application['response_is_changed_message']) && $application['response_is_changed_message'])
+                                <p class="my-1 p-fs"><i class="fas fa-exclamation-triangle text-warning me-2"></i>{{ __('custom.change_after_final_decision') }}</p>
+                            @endif
                             <p class="my-1 p-fs"><strong>{{ __('custom.status') }}: </strong> {{ $application['statusName'] }}</p>
                             <p class="my-1 p-fs"><strong>{{ __('custom.date') }}: </strong> {{ $application['response_date'] }}</p>
 
@@ -248,7 +251,7 @@
                         </div>
                     @endif
                 </div>
-                <div class="form-group row">
+                <div class="form-group row mt-2">
                     <div class="col-md-6 col-md-offset-3">
                         <a href="{{ url()->previous() }}" class="btn btn-sm btn-primary">{{ __('custom.back') }}</a>
                     </div>
