@@ -165,6 +165,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::match(['post', 'put'], '/nomenclature/no-consider-reason/store/{item?}',         'store')->name('nomenclature.no_consider_reason.store');
     });
 
+    Route::controller(\App\Http\Controllers\Admin\Nomenclature\ChangeDecisionReasonController::class)->group(function () {
+        Route::get('/nomenclature/change-decision-reason',                'index')->name('nomenclature.change_decision_reason')->middleware('can:viewAny,App\Models\ChangeDecisionReason');
+        Route::get('/nomenclature/change-decision-reason/edit/{item?}',         'edit')->name('nomenclature.change_decision_reason.edit');
+        Route::match(['post', 'put'], '/nomenclature/change-decision-reason/store/{item?}',         'store')->name('nomenclature.change_decision_reason.store');
+    });
+
     Route::controller(EventController::class)->group(function () {
         Route::get('/nomenclature/event',                'index')->name('nomenclature.event')->middleware('can:viewAny,App\Models\Event');
         Route::get('/nomenclature/event/edit/{item?}',         'edit')->name('nomenclature.event.edit');

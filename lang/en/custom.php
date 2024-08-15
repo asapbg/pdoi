@@ -362,6 +362,7 @@ return [
     'nomenclature.reason_refusal'               => 'Reason for rejection|Reasons for rejection',
     'nomenclature.event'                        => 'Event|Events',
     'nomenclature.no_consider_reason' => "Reason for leaving without consideration|Reasons for leaving without consideration",
+    'nomenclature.change_decision_reason' => "Reason for change final decision|Reasons for change final decision",
     //delivery_methods
     'delivery_by.EMAIL'                       => 'Publish to the platform and notify by e-mail address specified in the profile',
     'delivery_by.SDES'                        => 'Publish to the platform and notify by the secure electronic delivery system (ССЕВ)',
@@ -536,5 +537,7 @@ return [
     'no_consideration_reasons' => "Reason for leaving without consideration|Reasons for leaving without consideration",
     'no_consider_reason' => "Reason for leaving without consideration",
     'edited' => 'Edited',
+    'change_decision_reasons' => "Reason for change final decision|Reasons for change final decision",
+    'change_decision_reason' => "Reason for change final decision",
 ];
 

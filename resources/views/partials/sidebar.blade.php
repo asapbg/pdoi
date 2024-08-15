@@ -157,6 +157,7 @@
 || Str::contains(url()->current(), ['nomenclature/event'])
 || Str::contains(url()->current(), ['nomenclature/reason-refusal'])
 || Str::contains(url()->current(), ['nomenclature/no-consider-reason'])
+|| Str::contains(url()->current(), ['nomenclature/change-decision-reason'])
 )
                         <a href="#" class="nav-link @if($systemNomenclatureIsActive)) active @endif">
                             <i class="nav-icon fas fa-stream"></i>
@@ -196,6 +197,13 @@
                                    class="nav-link @if(strstr(url()->current(), 'nomenclature/no-consider-reason')) active @endif">
                                     <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
                                     <p>{{ trans_choice('custom.nomenclature.no_consider_reason', 2) }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.nomenclature.change_decision_reason') }}"
+                                   class="nav-link @if(strstr(url()->current(), 'nomenclature/change-decision-reason')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ trans_choice('custom.nomenclature.change_decision_reason', 2) }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
