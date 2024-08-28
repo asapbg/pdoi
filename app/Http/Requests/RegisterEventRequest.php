@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\PdoiApplicationStatusesEnum;
+use App\Models\Event;
 use App\Models\File;
 use App\Models\PdoiApplication;
 use App\Rules\FileClientMimeType;
@@ -29,10 +30,14 @@ class RegisterEventRequest extends FormRequest
     public function rules()
     {
         $app = PdoiApplication::find(request()->input('application'));
+        $event = request()->input('event') ? Event::find((int)request()->input('event')) : null;
         $edit_final_decision_reason_is_required = request()->user()->can('canEditFinalDecision', $app) && (int)request()->input('change_decision_reasons_select') == 0 ? 'required' : 'nullable';
+        $final_status_is_required = $event && $event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value ? 'required' : 'nullable';
+
+        //        $final_status_is_required = ;
         return [
             'event' => ['nullable', 'numeric'],
-            'final_status' => ['required', 'numeric'],
+            'final_status' => [$final_status_is_required, 'numeric'],
             'application' => ['nullable', 'numeric', 'exists:pdoi_application,id'],
             'new_resp_subject_id' => ['nullable', 'numeric', 'exists:pdoi_response_subject,id'],
             'refuse_reason' => ['nullable', 'required_if:final_status,'.PdoiApplicationStatusesEnum::NOT_APPROVED->value, 'numeric', 'exists:reason_refusal,id'],
