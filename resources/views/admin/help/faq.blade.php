@@ -14,7 +14,7 @@
         @if($page->files->count())
             @foreach($page->files as $f)
                 <div class="row p-3">
-                    <a class="w-100 mb-2" target="_blank" href="{{ route('admin.download.file', $f) }}">
+                    <a class="w-100 mb-2" target="_blank" href="{{ route('download.page.file', ['file' => $f->id]) }}">
                         {!! fileIcon($f->content_type) !!} {{ $f->description }}
                     </a>
                 </div>
