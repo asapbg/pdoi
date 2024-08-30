@@ -311,6 +311,10 @@ $(document).ready(function (e) {
         });
     }
 
+    $('body').on('click', '.print-window', function (){
+        window.print();
+    });
+
     $(document).on('click', '.logout-link', function (event){
         event.preventDefault();
         document.getElementById('logout-form').submit();

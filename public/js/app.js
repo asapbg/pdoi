@@ -723,7 +723,6 @@ $(function() {
         var settlementSelect = $('#settlement-select');
 
         function updateSelect2Options(select2El, dataToCompare, valueToCompare) {
-            console.log(select2El, dataToCompare, valueToCompare, select2El.find('option[data-' + dataToCompare + '="' + valueToCompare + '"]'));
             select2El.find('option').addClass('d-none');
             select2El.find('option[data-' + dataToCompare + '="' + valueToCompare + '"]').removeClass('d-none');
             select2El.val('');
