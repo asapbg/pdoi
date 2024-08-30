@@ -46,11 +46,17 @@
         </tr>
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr><td colspan="5">&nbsp;</td></tr>
-        <tr>
-            <td colspan="5" style="text-align: justify; font-family: DejaVu Sans, sans-serif !important;">
-                {!! html_entity_decode($application->request) !!}
-            </td>
-        </tr>
+    </table>
+    <div style="text-align: justify !important;">
+        {!! html_entity_decode($application->request) !!}
+    </div>
+
+{{--        <tr>--}}
+{{--            <td colspan="5" style="text-align: justify; font-family: DejaVu Sans, sans-serif !important;">--}}
+{{--                {!! html_entity_decode($application->request) !!}--}}
+{{--            </td>--}}
+{{--        </tr>--}}
+    <table>
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr>
             <td colspan="5" style="text-align: left;">
