@@ -66,7 +66,7 @@
                                             </select>
                                             <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject rounded"
                                                     data-title="{{ trans_choice('custom.pdoi_response_subjects',2) }}"
-                                                    data-url="{{ route('modal.pdoi_subjects').'?redirect_only=0&select=1&multiple=0' }}">
+                                                    data-url="{{ route('modal.pdoi_subjects').'?ignore_redirect_only=1&select=1&multiple=0' }}">
                                                 <i class="fa-solid fa-list"></i>
                                             </button>
                                         @break('subjects')

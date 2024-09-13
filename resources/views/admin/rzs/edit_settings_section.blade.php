@@ -41,4 +41,16 @@
         </div>
     </div>
     @include('admin.partial.edit_field_translate', ['field' => 'court_text', 'required' => false])
+
+    <div class="col-12 mt-3">
+        <div class="form-group form-group-sm col-12 mb-3">
+            <label class="form-label me-3 fw-semibold">
+                <input type="checkbox" name="redirect_only" value="1" @if(old('redirect_only', $item->id && $item->redirect_only ? 1 : 0) == 1) checked @endif>
+                    {!! __('custom.rzs.redirect_only.tooltip') !!}
+            </label>
+            @error('redirect_only')
+            <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
 </div>

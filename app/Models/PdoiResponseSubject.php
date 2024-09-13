@@ -165,8 +165,9 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
             ->whereNull('pdoi_response_subject.deleted_at')
             ->where('pdoi_response_subject_translations.locale', '=', app()->getLocale());
 
-        if( isset($filter['redirect_only']) ) {
-            $subjects->where('pdoi_response_subject.redirect_only', '=', (int)$filter['redirect_only']);
+        $ignoreRedirectOnly = $filter['ignore_redirect_only'] ?? 0;
+        if( $ignoreRedirectOnly ) {
+            $subjects->where('pdoi_response_subject.redirect_only', '=', 0);
         }
 
         $allSubjectsAndSections = DB::table("rzs_section")
