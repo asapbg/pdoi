@@ -91,11 +91,12 @@
                                 <label class="form-label" for="country_id">
                                     {{ __('validation.attributes.country') }}: <span class="required">*</span>
                                 </label>
+                                @php($old_country = old('country_id', 0) ? \App\Models\Country::find(old('country_id', 0)) : null)
                                 <select class="form-control form-control-sm select2 @error('country_id') is-invalid @enderror" name="country_id" id="country">
-                                    <option value="" @if(old('country_id', '') == '') selected="selected" @endif>---</option>
+                                    <option value="" @if(!$old_country) selected="selected" @endif>---</option>
                                     @if(isset($countries) && $countries->count())
                                         @foreach($countries as $row)
-                                            <option value="{{ $row->id }}" @if(old('country_id', '') == $row->id) selected="selected" @endif>{{ $row->name }}</option>
+                                            <option value="{{ $row->id }}" @if($old_country && $old_country->id == $row->id) selected="selected" @endif>{{ $row->name }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -107,11 +108,12 @@
                                 <label class="form-label" for="area_id">
                                     {{ __('validation.attributes.area') }}:
                                 </label>
+                                @php($old_area = old('area_id', 0) ? \App\Models\EkatteArea::find(old('area_id', 0)) : null)
                                 <select class="form-control form-control-sm select2 @error('area_id') is-invalid @enderror " name="area_id" id="area-select" >
                                     <option value="" @if(old('area_id', '') == '') selected="selected" @endif>---</option>
                                     @if(isset($areas) && $areas->count())
                                         @foreach($areas as $row)
-                                            <option value="{{ $row->id }}" @if(old('area_id', '') == $row->id) selected="selected" @endif
+                                            <option value="{{ $row->id }}" @if($old_area && $old_area->id == $row->id) selected="selected" @endif
                                             data-code="{{ $row->code }}">{{ $row->name }}</option>
                                         @endforeach
                                     @endif
@@ -124,11 +126,12 @@
                                 <label class="form-label" for="municipality_id">
                                     {{ __('validation.attributes.municipality') }}:
                                 </label>
+                                @php($old_municipality = old('municipality_id', 0) ? \App\Models\EkatteMunicipality::find(old('municipality_id', 0)) : null)
                                 <select class="form-control form-control-sm select2 @error('municipality_id') is-invalid @enderror " name="municipality_id" id="municipality-select">
                                         <option value="" @if(old('municipality_id', '') == '') selected="selected" @endif>---</option>
                                         @if(isset($municipality) && $municipality->count())
                                             @foreach($municipality as $row)
-                                                <option value="{{ $row->id }}" @if(old('municipality_id', '') == $row->id) selected="selected" @endif
+                                                <option value="{{ $row->id }}" @if($old_municipality && $old_municipality->id == $row->id) selected="selected" @endif
                                                 data-area="{{ substr($row->code, 0, 3) }}" data-code="{{ substr($row->code, -2) }}">{{ $row->name }}</option>
                                             @endforeach
                                         @endif
@@ -141,11 +144,12 @@
                                 <label class="form-label" for="settlement_id">
                                     {{ __('validation.attributes.settlement') }}:
                                 </label>
+                                @php($old_settlements = old('settlement_id', 0) ? \App\Models\EkatteSettlement::find(old('settlement_id', 0)) : null)
                                 <select class="form-control form-control-sm select2 @error('settlement') is-invalid @enderror" name="settlement_id" id="settlement-select">
                                     <option value="" @if(old('settlement_id', '') == '') selected="selected" @endif>---</option>
                                     @if(isset($settlements) && $settlements->count())
                                         @foreach($settlements as $row)
-                                            <option value="{{ $row->id }}" @if(old('settlement_id', '') == $row->id) selected="selected" @endif
+                                            <option value="{{ $row->id }}" @if($old_settlements && $old_settlements->id == $row->id) selected="selected" @endif
                                             data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}" data-full="{{ $row->municipality }}">{{ $row->name }}</option>
                                         @endforeach
                                     @endif
@@ -303,6 +307,11 @@
                     $('.default-country-section').addClass('d-none');
                 }
             });
+
+            @if($old_country && $defaultCountry->id != $old_country->id)
+                $('#country').trigger('change');
+
+            @endif
         });
     </script>
 @endpush
