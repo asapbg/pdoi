@@ -165,6 +165,12 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             ->whereIn('pdoi_application.status', PdoiApplicationStatusesEnum::notCompleted());
     }
 
+    public function scopeIsExpireSoon($query)
+    {
+        $query->where('pdoi_application.response_end_time', '=', Carbon::now()->addDays(3)->startOfDay())
+            ->whereIn('pdoi_application.status', PdoiApplicationStatusesEnum::notCompleted());
+    }
+
     public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(PdoiApplication::class, 'id', 'parent_id');
