@@ -237,6 +237,7 @@ return [
     'ekatte'                           => 'Town|Towns',
     'code'                             => 'Code',
     'zip_code'                         => 'Zip code',
+    'zip_code_short'                         => 'Zip code',
     'altitude'                         => 'altitude',
     'record_not_found'                 => 'Record not found',
     'sort'                             => 'Sort',

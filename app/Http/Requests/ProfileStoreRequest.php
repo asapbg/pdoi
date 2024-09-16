@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\DeliveryMethodsEnum;
+use App\Models\Country;
 use App\Models\User;
 use App\Rules\AlphaSpace;
 use App\Rules\EgnRule;
@@ -43,9 +44,6 @@ class ProfileStoreRequest extends FormRequest
             'person_identity' => ['nullable', 'string', new EgnRule()],
             'company_identity' => ['nullable', 'string', 'max:20'],
             'country' => ['required', 'numeric', 'exists:country,id'],
-            'area' => ['required', 'numeric', 'exists:ekatte_area,id'],
-            'municipality' => ['required', 'numeric', 'exists:ekatte_municipality,id'],
-            'settlement' => ['required', 'numeric', 'exists:ekatte_settlement,id'],
             'post_code' => ['nullable', 'string', 'max:10'],
             'address' => ['required', 'string', 'max:255'],
             'address_second' => ['nullable', 'string', 'max:255'],
@@ -68,6 +66,19 @@ class ProfileStoreRequest extends FormRequest
             if ( request()->input('legal_form') ) {
                 $personIdentity = request()->input('legal_form') == User::USER_TYPE_PERSON ? 'person_identity' : 'company_identity';
                 $rules[$personIdentity] = ['required', 'string', 'max:20', Rule::unique('users', $personIdentity)->ignore(auth()->user()->id), new EgnRule()];
+            }
+        }
+
+        if(request()->input('country')) {
+            $defaultCountry = Country::isDefault()->first();
+            if(request()->input('country') == $defaultCountry->id){
+                $rules['area'] = ['required', 'numeric', 'exists:ekatte_area,id'];
+                $rules['municipality'] = ['required', 'numeric', 'exists:ekatte_municipality,id'];
+                $rules['settlement'] = ['required', 'numeric', 'exists:ekatte_settlement,id'];
+            } else{
+                $rules['area'] = ['nullable'];
+                $rules['municipality'] = ['nullable'];
+                $rules['settlement'] = ['nullable'];
             }
         }
 

@@ -102,7 +102,7 @@
                     <div class="row">
                         <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.country') }}: <span class="required">*</span></label>
-                            <select class="form-control form-control-sm select2 @error('country') is-invalid @enderror" name="country"
+                            <select class="form-control form-control-sm select2 @error('country') is-invalid @enderror" name="country" id="country"
                                     required>
                                 <option value="" @if(!old('country', $user->country_id)) selected="selected" @endif>---</option>
                                 @if(isset($countries) && $countries->count())
@@ -113,8 +113,8 @@
                             </select>
                             <span id="error-country" class="text-danger">@error('country'){{ $message }}@enderror</span>
                         </div>
-                        <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                            <label class="form-label fw-semibold">{{ __('validation.attributes.area') }}: <span class="required">*</span></label>
+                        <div class="form-group form-group-sm col-md-3 col-12 mb-3 default-country-section">
+                            <label class="form-label fw-semibold w-100">{{ __('validation.attributes.area') }}: <span class="required">*</span></label>
                             @php($area = old('area', $user->ekatte_area_id))
                             <select class="form-control form-control-sm select2 @error('area') is-invalid @enderror" name="area" required id="area-select">
                                 <option value="" @if(!$area) selected="selected" @endif>---</option>
@@ -127,8 +127,8 @@
                             </select>
                             <span id="error-area" class="text-danger">@error('area'){{ $message }}@enderror</span>
                         </div>
-                        <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                            <label class="form-label fw-semibold">{{ __('validation.attributes.municipality') }}: <span class="required">*</span></label>
+                        <div class="form-group form-group-sm col-md-3 col-12 mb-3 default-country-section">
+                            <label class="form-label fw-semibold w-100">{{ __('validation.attributes.municipality') }}: <span class="required">*</span></label>
                             @php($municipality = old('municipality', $user->ekatte_municipality_id))
                             <select class="form-control form-control-sm select2 @error('municipality') is-invalid @enderror" name="municipality" required id="municipality-select">
                                 <option value="" @if(!$municipality) selected="selected" @endif>---</option>
@@ -141,8 +141,8 @@
                             </select>
                             <span id="error-municipality" class="text-danger">@error('municipality'){{ $message }}@enderror</span>
                         </div>
-                        <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                            <label class="form-label fw-semibold">{{ __('validation.attributes.settlement') }}: <span class="required">*</span></label>
+                        <div class="form-group form-group-sm col-md-3 col-12 mb-3 default-country-section">
+                            <label class="form-label fw-semibold w-100">{{ __('validation.attributes.settlement') }}: <span class="required">*</span></label>
                                 @php($settlement = old('settlement', $user->ekatte_settlement_id))
                             <select class="form-control form-control-sm select2 @error('settlement') is-invalid @enderror" name="settlement" required id="settlement-select">
                                 <option value="" @if(!$settlement) selected="selected" @endif>---</option>
@@ -155,6 +155,8 @@
                             </select>
                             <span id="error-settlement" class="text-danger">@error('settlement'){{ $message }}@enderror</span>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3">
                             <label class="form-label fw-semibold">{{ __('validation.attributes.post_code') }}:</label>
                             <input class="form-control form-control-sm @error('post_code') is-invalid @enderror" type="text" name="post_code" value="{{ old('post_code', $user->post_code) }}">
@@ -202,6 +204,8 @@
     <script src="{{ asset('jquery-validation/localization/messages_' . app()->getLocale() . '.js') }}"></script>
     <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
+            let defaultCountry = @json(isset($defaultCountry) ? $defaultCountry->id : -1)
+
             $('input[name="legal_form"]').on('change', function (){
                 let legalForm = $('input[name="legal_form"]:checked').val();
                 $('select[name="profile_type"] option').each(function (){
@@ -212,6 +216,20 @@
                     }
                 });
             });
+
+            $('#country').on('change', function (){
+                if(parseInt($('#country').val()) == defaultCountry){
+                    //show all fields
+                    $('.default-country-section').removeClass('d-none');
+                } else{
+                    //hide some fields
+                    $('.default-country-section').addClass('d-none');
+                }
+            });
+
+            @if($defaultCountry->id != $user->county_id)
+                $('#country').trigger('change');
+            @endif
         });
     </script>
 @endpush

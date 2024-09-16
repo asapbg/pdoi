@@ -237,6 +237,7 @@ return [
     'ekatte'                           => 'Населено място|Населени места',
     'code'                             => 'Код',
     'zip_code'                         => 'Пощенски код',
+    'zip_code_short'                         => 'п.к.',
     'altitude'                         => 'altitude',
     'record_not_found'                 => 'Записът не е открит',
     'sort'                             => 'Сортиране',

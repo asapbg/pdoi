@@ -167,17 +167,20 @@ class PdoiApplicationController extends Controller
         }
         $title = __('front.application.title.apply');
 
+        $defaultCountry = Country::isDefault()->first();
         $data=[];
         if( !$user->country ) {
             $data['countries'] = Country::optionsList();
         }
-        if( !$user->area ) {
+        if( !$user->country || (!$user->area && $defaultCountry->id == $user->country_id) ) {
             $data['areas'] = EkatteArea::optionsList();
         }
-        if( !$user->municipality ) {
+
+        if( !$user->country || (!$user->municipality && $defaultCountry->id == $user->country_id) ) {
             $data['municipality'] = EkatteMunicipality::optionsList();
         }
-        if( !$user->settlement ) {
+
+        if( !$user->country || (!$user->settlement && $defaultCountry->id == $user->country_id) ) {
             $data['settlements'] = EkatteSettlement::optionsList();
         }
 

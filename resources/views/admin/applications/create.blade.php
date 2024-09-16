@@ -103,7 +103,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="form-group form-group-sm col-md-3 col-12 mb-3">
+                            <div class="form-group form-group-sm col-md-3 col-12 mb-3 default-country-section">
                                 <label class="form-label" for="area_id">
                                     {{ __('validation.attributes.area') }}:
                                 </label>
@@ -120,7 +120,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="form-group form-group-sm col-md-3 col-12 mb-3">
+                            <div class="form-group form-group-sm col-md-3 col-12 mb-3 default-country-section">
                                 <label class="form-label" for="municipality_id">
                                     {{ __('validation.attributes.municipality') }}:
                                 </label>
@@ -137,7 +137,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="form-group form-group-sm col-md-3 col-12 mb-3">
+                            <div class="form-group form-group-sm col-md-3 col-12 mb-3 default-country-section">
                                 <label class="form-label" for="settlement_id">
                                     {{ __('validation.attributes.settlement') }}:
                                 </label>
@@ -280,6 +280,8 @@
 @push('scripts')
     <script type="text/javascript"  nonce="2726c7f26c">
         $(document).ready(function (){
+            let defaultCountry = @json(isset($defaultCountry) ? $defaultCountry->id : -1)
+
             $('input[name="applicant_type"]').on('change', function (){
                 let legalForm = parseInt($('input[name=applicant_type]:checked').val());
                 $('select[name="profile_type"] option').each(function (index, el){
@@ -290,6 +292,16 @@
                     }
                 });
                 $('select[name="profile_type"]').val('');
+            });
+
+            $('#country').on('change', function (){
+                if(parseInt($('#country').val()) == defaultCountry){
+                    //show all fields
+                    $('.default-country-section').removeClass('d-none');
+                } else{
+                    //hide some fields
+                    $('.default-country-section').addClass('d-none');
+                }
             });
         });
     </script>

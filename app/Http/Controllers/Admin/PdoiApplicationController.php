@@ -79,6 +79,7 @@ class PdoiApplicationController extends Controller
 
     public function create(Request $request)
     {
+        $defaultCountry = Country::isDefault()->first();
         if( $request->isMethod('post') ) {
             $appRequest = new AdminCreateApplicationRequest();
             $validator = Validator::make($request->all(), $appRequest->rules());
@@ -105,6 +106,12 @@ class PdoiApplicationController extends Controller
 
             foreach (['files', 'file_description', 'file_visible', 'status', 'response'] as $field) {
                 if(isset($validated[$field])) { unset($validated[$field]);}
+            }
+
+            if($defaultCountry->id != $validated['country_id']){
+                $validated['area_id'] = null;
+                $validated['municipality_id'] = null;
+                $validated['settlement_id'] = null;
             }
             DB::beginTransaction();
             try {
@@ -136,7 +143,7 @@ class PdoiApplicationController extends Controller
         $settlements = EkatteSettlement::optionsList();
         $subjects = optionsFromModel(PdoiResponseSubject::simpleOptionsList());
         return $this->view('admin.applications.create', compact('profileTypes','countries'
-            , 'areas', 'municipality', 'settlements', 'subjects'));
+            , 'areas', 'municipality', 'settlements', 'subjects', 'defaultCountry'));
     }
 
     public function showFullHistory(Request $request, int $id = 0): \Illuminate\View\View

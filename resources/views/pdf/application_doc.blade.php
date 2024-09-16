@@ -38,9 +38,11 @@
         <tr><td colspan="5">&nbsp;</td></tr>
         <tr>
             <td colspan="5" style="text-align: justify;">
-                {{ __('custom.address_for_contact') }}: {{ lcfirst(trans_choice('custom.area', 1)) }} {{ $application->area->ime }},
-                {{ lcfirst(trans_choice('custom.municipality', 1)) }} {{ $application->municipality->ime }},
-                {{ lcfirst(trans_choice('custom.settlement', 1)) }} {{ $application->settlement->ime }},
+                {{ __('custom.address_for_contact') }}:
+                @if($application->area){{ lcfirst(trans_choice('custom.area', 1)) }} {{ $application->area->ime }}{{','}}@endif
+                @if($application->municipality){{ lcfirst(trans_choice('custom.municipality', 1)) }} {{ $application->municipality->ime }}{{','}} @endif
+                @if($application->settlement){{ lcfirst(trans_choice('custom.settlement', 1)) }} {{ $application->settlement->ime }}{{','}} @endif
+                @if(!empty($application->post_code)){{ lcfirst(__('custom.zip_code_short')) }} {{ $application->post_code }}{{','}} @endif
                 {{ lcfirst(__('custom.address')) }} {{ $application->address.(!empty($application->address_second) ? ', ' : '').$application->address_second }}.
             </td>
         </tr>

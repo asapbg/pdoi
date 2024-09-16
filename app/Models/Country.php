@@ -23,11 +23,16 @@ class Country extends ModelActivityExtend implements TranslatableContract
     //activity
     protected string $logName = "country";
 
-    protected $fillable = ['active'];
+    protected $fillable = ['active', 'is_default'];
 
     public function scopeIsActive($query)
     {
         $query->where('country.active', 1);
+    }
+
+    public function scopeIsDefault($query)
+    {
+        $query->where('country.is_default', 1);
     }
 
     /**

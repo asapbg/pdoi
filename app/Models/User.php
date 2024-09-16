@@ -259,17 +259,21 @@ class User extends Authenticatable implements MustVerifyEmailContract
     }
 
     public static function prepareModelFields($validated, $checkAllowed = false) {
-        if (isset($validated['country'])) {
-            $validated['country_id'] = $validated['country'];
-            unset($validated['country']);
-        }
+
+        $defaultCountry = Country::isDefault()->first();
 
         foreach (['area', 'municipality', 'settlement'] as $f) {
-            if (isset($f)) {
+            if($defaultCountry->id != $validated['country']){
+                $validated['ekatte_'.$f.'_id'] = null;
+
+            } else{
                 $validated['ekatte_'.$f.'_id'] = $validated[$f];
-                unset($validated[$f]);
             }
+            unset($validated[$f]);
         }
+
+        $validated['country_id'] = $validated['country'];
+        unset($validated['country']);
 
         if( $checkAllowed ) {
             foreach ($validated as $key => $field) {

@@ -129,79 +129,87 @@
                                     <option value="" @if(!old('country', $user->country_id)) selected="selected" @endif>---</option>
                                     @if(isset($data['countries']) && $data['countries']->count())
                                         @foreach($data['countries'] as $row)
-                                            <option value="{{ $row->id }}" @if(old('country', $user->country_id) == $row->id) selected="selected" @endif>{{ $row->name }}</option>
+                                            <option value="{{ $row->id }}" @if(old('country', $user->country_id) == $row->id) selected="selected" @endif >{{ $row->name }}</option>
                                         @endforeach
                                     @endif
                                 @endif
                             </select>
                             <span id="error-country" class="text-danger">@error('country'){{ $message }}@enderror</span>
                         </div>
-                        <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                            <label class="form-label fw-semibold" for="area">
-                                {{ __('validation.attributes.area') }}: <span class="required">*</span>
-                                @if(!$user->area) <i class="fa-solid fa-user fs text-warning"></i> @endif
-                            </label>
-                            @php($area = old('area', $user->ekatte_area_id))
-                            <select class="form-control form-control-sm select2 @error('area') is-invalid @enderror @if($user->area) disabled-item @endif" name="area" id="area-select"
-                                    required @if($user->area) disabled @endif>
-                                @if($user->area)
-                                    <option value="{{ $user->area->id }}" selected="selected">{{ $user->area->ime }}</option>
-                                @else
-                                    <option value="" @if(!$area) selected="selected" @endif>---</option>
-                                    @if(isset($data['areas']) && $data['areas']->count())
-                                        @foreach($data['areas'] as $row)
-                                            <option value="{{ $row->id }}" @if($area == $row->id) selected="selected" @endif
-                                            data-code="{{ $row->code }}">{{ $row->name }}</option>
-                                        @endforeach
-                                    @endif
-                                @endif
-                            </select>
-                            <span id="error-area" class="text-danger">@error('area'){{ $message }}@enderror</span>
-                        </div>
-                        <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                            <label class="form-label fw-semibold" for="municipality">
-                                {{ __('validation.attributes.municipality') }}: <span class="required">*</span>
-                                @if(!$user->municipality) <i class="fa-solid fa-user fs text-warning"></i> @endif
-                            </label>
-                            @php($municipality = old('municipality', $user->ekatte_municipality_id))
-                            <select class="form-control form-control-sm select2 @error('municipality') is-invalid @enderror @if($user->municipality) disabled-item @endif" name="municipality" id="municipality-select"
-                                    required @if($user->municipality) disabled @endif>
-                                @if($user->municipality)
-                                    <option value="{{ $user->municipality->id }}" selected="selected">{{ $user->municipality->ime }}</option>
-                                @else
-                                    <option value="" @if(!$municipality) selected="selected" @endif>---</option>
-                                    @if(isset($data['municipality']) && $data['municipality']->count())
-                                        @foreach($data['municipality'] as $row)
-                                            <option value="{{ $row->id }}" @if($municipality == $row->id) selected="selected" @endif
-                                            data-area="{{ substr($row->code, 0, 3) }}" data-code="{{ substr($row->code, -2) }}">{{ $row->name }}</option>
-                                        @endforeach
-                                    @endif
-                                @endif
-                            </select>
-                            <span id="error-municipality" class="text-danger">@error('municipality'){{ $message }}@enderror</span>
-                        </div>
-                        <div class="form-group form-group-sm col-md-3 col-12 mb-3">
-                            <label class="form-label fw-semibold" for="settlement">
-                                {{ __('validation.attributes.settlement') }}: <span class="required">*</span>
-                                @if(!$user->settlement) <i class="fa-solid fa-user fs text-warning"></i> @endif
-                            </label>
-                            @php($settlement = old('settlement', $user->ekatte_settlement_id))
-                                <select class="form-control form-control-sm select2 @error('settlement') is-invalid @enderror @if($user->settlement) disabled-item @endif" name="settlement" id="settlement-select"
-                                        required @if($user->settlement) disabled @endif>
-                                    @if($user->settlement)
-                                        <option value="{{ $user->settlement->id }}" selected="selected">{{ $user->settlement->ime }}</option>
+                        @if(isset($data['areas']) && $data['areas']->count())
+                            <div class="form-group form-group-sm col-md-3 col-12 mb-3">
+                                <label class="form-label fw-semibold" for="area">
+                                    {{ __('validation.attributes.area') }}: <span class="required">*</span>
+                                    @if(!$user->area) <i class="fa-solid fa-user fs text-warning"></i> @endif
+                                </label>
+                                @php($area = old('area', $user->ekatte_area_id))
+                                <select class="form-control form-control-sm select2 @error('area') is-invalid @enderror @if($user->area) disabled-item @endif" name="area" id="area-select"
+                                        required @if($user->area) disabled @endif>
+                                    @if($user->area)
+                                        <option value="{{ $user->area->id }}" selected="selected">{{ $user->area->ime }}</option>
                                     @else
-                                        <option value="" @if(!$settlement) selected="selected" @endif>---</option>
-                                        @if(isset($data['settlements']) && $data['settlements']->count())
-                                            @foreach($data['settlements'] as $row)
-                                                <option value="{{ $row->id }}" @if($settlement == $row->id) selected="selected" @endif
-                                                data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}" data-full="{{ $row->municipality }}">{{ $row->name }}</option>
+                                        <option value="" @if(!$area) selected="selected" @endif>---</option>
+                                        @if(isset($data['areas']) && $data['areas']->count())
+                                            @foreach($data['areas'] as $row)
+                                                <option value="{{ $row->id }}" @if($area == $row->id) selected="selected" @endif
+                                                data-code="{{ $row->code }}">{{ $row->name }}</option>
                                             @endforeach
                                         @endif
                                     @endif
                                 </select>
-                                <span id="error-settlement" class="text-danger">@error('settlement'){{ $message }}@enderror</span>
-                        </div>
+                                <span id="error-area" class="text-danger">@error('area'){{ $message }}@enderror</span>
+                            </div>
+                        @endif
+                        @if(isset($data['municipality']) && $data['municipality']->count())
+                            <div class="form-group form-group-sm col-md-3 col-12 mb-3">
+                                <label class="form-label fw-semibold" for="municipality">
+                                    {{ __('validation.attributes.municipality') }}: <span class="required">*</span>
+                                    @if(!$user->municipality) <i class="fa-solid fa-user fs text-warning"></i> @endif
+                                </label>
+                                @php($municipality = old('municipality', $user->ekatte_municipality_id))
+                                <select class="form-control form-control-sm select2 @error('municipality') is-invalid @enderror @if($user->municipality) disabled-item @endif" name="municipality" id="municipality-select"
+                                        required @if($user->municipality) disabled @endif>
+                                    @if($user->municipality)
+                                        <option value="{{ $user->municipality->id }}" selected="selected">{{ $user->municipality->ime }}</option>
+                                    @else
+                                        <option value="" @if(!$municipality) selected="selected" @endif>---</option>
+                                        @if(isset($data['municipality']) && $data['municipality']->count())
+                                            @foreach($data['municipality'] as $row)
+                                                <option value="{{ $row->id }}" @if($municipality == $row->id) selected="selected" @endif
+                                                data-area="{{ substr($row->code, 0, 3) }}" data-code="{{ substr($row->code, -2) }}">{{ $row->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    @endif
+                                </select>
+                                <span id="error-municipality" class="text-danger">@error('municipality'){{ $message }}@enderror</span>
+                            </div>
+                        @endif
+                        @if(isset($data['settlements']) && $data['settlements']->count())
+                            <div class="form-group form-group-sm col-md-3 col-12 mb-3">
+                                <label class="form-label fw-semibold" for="settlement">
+                                    {{ __('validation.attributes.settlement') }}: <span class="required">*</span>
+                                    @if(!$user->settlement) <i class="fa-solid fa-user fs text-warning"></i> @endif
+                                </label>
+                                @php($settlement = old('settlement', $user->ekatte_settlement_id))
+                                    <select class="form-control form-control-sm select2 @error('settlement') is-invalid @enderror @if($user->settlement) disabled-item @endif" name="settlement" id="settlement-select"
+                                            required @if($user->settlement) disabled @endif>
+                                        @if($user->settlement)
+                                            <option value="{{ $user->settlement->id }}" selected="selected">{{ $user->settlement->ime }}</option>
+                                        @else
+                                            <option value="" @if(!$settlement) selected="selected" @endif>---</option>
+                                            @if(isset($data['settlements']) && $data['settlements']->count())
+                                                @foreach($data['settlements'] as $row)
+                                                    <option value="{{ $row->id }}" @if($settlement == $row->id) selected="selected" @endif
+                                                    data-area="{{ $row->area }}" data-municipality="{{ substr($row->municipality, -2) }}" data-full="{{ $row->municipality }}">{{ $row->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        @endif
+                                    </select>
+                                    <span id="error-settlement" class="text-danger">@error('settlement'){{ $message }}@enderror</span>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="row">
                         <div class="form-group form-group-sm col-md-2 col-12 mb-3">
                             <label class="form-label fw-semibold" for="post_code">
                                 {{ __('validation.attributes.post_code') }}:

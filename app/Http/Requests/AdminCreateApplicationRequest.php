@@ -40,6 +40,7 @@ class AdminCreateApplicationRequest extends FormRequest
             'municipality_id' => ['nullable', 'numeric', 'exists:ekatte_municipality,id'],
             'settlement_id' => ['nullable', 'numeric', 'exists:ekatte_settlement,id'],
             'address' => ['nullable', 'string', 'max:255'],
+            'post_code' => ['nullable', 'string', 'max:10'],
             'email_publication' => ['nullable', 'numeric', 'in:1'],
             'names_publication' => ['nullable', 'numeric', 'in:1'],
             'address_publication' => ['nullable', 'numeric', 'in:1'],

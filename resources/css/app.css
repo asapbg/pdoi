@@ -107,6 +107,10 @@ label.is_invalid {
     margin-bottom: 5px;
 }
 
+.default-country-section .select2.select2-container {
+    width: 100% !important;
+}
+
 /*fix hidden selct 2 option by empty text*/
 li.select2-results__option:empty {
     display: none;

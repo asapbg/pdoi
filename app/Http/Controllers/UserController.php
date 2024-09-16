@@ -30,6 +30,7 @@ class UserController extends Controller
 
             try {
                 $validated = User::prepareModelFields($validator->validated());
+
                 if( isset($validated['legal_form']) && $validated['legal_form'] ) {
                     if( $validated['legal_form'] == User::USER_TYPE_PERSON ) {
                         $validated['company_identity'] = null;
@@ -40,7 +41,6 @@ class UserController extends Controller
                     $validated['person_identity'] = null;
                     $validated['company_identity'] = null;
                 }
-
                 $user->fill($validated);
                 $user->save();
                 session()->flash('success', __('custom.success_update'));
@@ -53,10 +53,11 @@ class UserController extends Controller
 
         $profileTypes = ProfileType::optionsList();
         $countries = Country::optionsList();
+        $defaultCountry = Country::isDefault()->first();
         $areas = EkatteArea::optionsList();
         $municipalities = EkatteMunicipality::optionsList();
         $settlements = EkatteSettlement::optionsList();
         return view('front.edit_profile', compact('title', 'user', 'profileTypes'
-            , 'countries', 'areas', 'municipalities', 'settlements'));
+            , 'countries', 'areas', 'municipalities', 'settlements', 'defaultCountry'));
     }
 }
