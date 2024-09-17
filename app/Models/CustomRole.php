@@ -18,6 +18,7 @@ class CustomRole extends Role
     const PAGINATE = 20;
 
     const SUPER_USER_ROLE = 'service_user';
+    const ADMIN_USER_ROLE = 'admin';
     const FULL_ACCESS_RULE = 'manage.*';
     const WEB_ACCESS_RULE = ['manage.*', 'pdoi.*', 'pdoi.web'];
     /**

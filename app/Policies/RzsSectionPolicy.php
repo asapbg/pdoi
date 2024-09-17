@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\CustomRole;
 use App\Models\RzsSection;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -53,8 +54,13 @@ class RzsSectionPolicy
      */
     public function update(User $user, RzsSection $rzsSection)
     {
+        $user = auth()->user();
+        if($user && !$user->hasAnyRole([CustomRole::ADMIN_USER_ROLE, CustomRole::SUPER_USER_ROLE])){
+            $ids = RzsSection::getAdmStructureIds($user->responseSubject->adm_level);
+        }
+
         return $user->canAny(['manage.*','administration.*', 'administration.rzs_sections'])
-            && $rzsSection->manual;
+            && $rzsSection->manual && (!isset($ids) || (isset($ids) && in_array($rzsSection->id, $ids)));
     }
 
     /**

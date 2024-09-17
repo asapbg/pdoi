@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\RzsSectionStoreRequest;
+use App\Models\CustomRole;
 use App\Models\RzsSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -25,9 +26,12 @@ class RzsSectionController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
+
         $items = RzsSection::with(['subjects', 'translation'])
+            ->FilterByRole()
             ->FilterBy($requestFilter)
             ->paginate($paginate);
+
         $toggleBooleanModel = 'RzsSection';
         $editRouteName = self::EDIT_ROUTE;
         $listRouteName = self::LIST_ROUTE;
@@ -49,7 +53,7 @@ class RzsSectionController extends AdminController
         $storeRouteName = self::STORE_ROUTE;
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = RzsSection::translationFieldsProperties();
-        $rzsSections = RzsSection::optionsList();
+        $rzsSections = RzsSection::optionsList([$item->id ? $item->id : 0], true);
         return $this->view(self::EDIT_VIEW, compact('item', 'storeRouteName',
             'listRouteName', 'translatableFields', 'rzsSections'));
     }
