@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
+use App\Models\Egov\EgovOrganisation;
 use App\Models\PdoiResponseSubject;
 use App\Rules\SsevEgovProfileRule;
 use App\Rules\SsevProfileRule;
@@ -58,7 +59,7 @@ class PdoiResponseSubjectStoreRequest extends FormRequest
                     $rules['email'] = ['required', 'email', 'max:255'];
                 }
                 if( (int)request()->input('rzs_delivery_method') == PdoiSubjectDeliveryMethodsEnum::SEOS->value ) {
-                    $rules['eik'] = [Rule::exists('egov_organisation', 'eik')->where('status', '=', 1)];
+                    $rules['eik'] = [Rule::exists('egov_organisation', 'eik')];
                 }
             }
             $rules['rzs_delivery_method'][] = new SubjectValidDeliveryMethod(request()->input('id'), request()->input('full_edit'), request()->input('eik'), request()->input('email'));
