@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\File;
 use App\Models\PdoiApplication;
 use App\Rules\FileClientMimeType;
+use App\Rules\MinHtmlLengthRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -57,7 +58,7 @@ class RegisterEventRequest extends FormRequest
             $event
             && $event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value
             && request()->input('final_status') != PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value){
-            $rules['add_text'] = ['nullable', 'required_without:files', 'string'];
+            $rules['add_text'] = ['nullable', 'required_without:files', 'string', new MinHtmlLengthRule(3)];
             $rules['files'] = ['array', 'required_without:add_text', 'max:'.config('filesystems.max_file_uploads')];
         }
 

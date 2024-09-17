@@ -277,6 +277,7 @@ class PdoiApplicationController extends Controller
         }
 
         $validated = $validator->validated();
+        dd($validated);
         $user = auth()->user();
 
         $application = PdoiApplication::find($validated['application']);
