@@ -35,7 +35,7 @@ class RegisterEventRequest extends FormRequest
         $final_status_is_required = $event && $event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value ? 'required' : 'nullable';
 
         //        $final_status_is_required = ;
-        return [
+        $rules = [
             'event' => ['nullable', 'numeric'],
             'final_status' => [$final_status_is_required, 'numeric'],
             'application' => ['nullable', 'numeric', 'exists:pdoi_application,id'],
@@ -52,5 +52,15 @@ class RegisterEventRequest extends FormRequest
             'file_visible' => ['array'],
             'file_visible.*' => ['nullable', 'numeric'],
         ];
+
+        if(
+            $event
+            && $event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value
+            && request()->input('final_status') != PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value){
+            $rules['add_text'] = ['nullable', 'required_without:files', 'string'];
+            $rules['files'] = ['array', 'required_without:add_text', 'max:'.config('filesystems.max_file_uploads')];
+        }
+
+        return $rules;
     }
 }
