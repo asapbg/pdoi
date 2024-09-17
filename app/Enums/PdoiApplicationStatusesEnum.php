@@ -34,6 +34,24 @@ enum PdoiApplicationStatusesEnum: int
         return $keyName;
     }
 
+    public static function styleByValue($searchVal): string
+    {
+        $colors = [
+            self::RECEIVED->value => 'received',
+            self::REGISTRATION_TO_SUBJECT->value => 'reg-subject',
+            self::IN_PROCESS->value => 'in-process',
+            self::APPROVED->value => 'approved',
+            self::PART_APPROVED->value => 'part-approved',
+            self::NOT_APPROVED->value => 'not-approved',
+            self::INFO_NOT_EXIST->value => 'no-info',
+            self::FORWARDED->value => 'forwarded',
+            self::RENEWED->value => 'renewed',
+            self::NO_CONSIDER_REASON->value => 'no-consider',
+            self::NO_REVIEW->value => 'no-review'
+        ];
+        return $colors[$searchVal];
+    }
+
     public static function  notCompleted(): array
     {
         return [

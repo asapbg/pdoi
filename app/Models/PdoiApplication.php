@@ -98,19 +98,22 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
 
     protected function statusStyle(): Attribute
     {
-        $class = 'light';
-        if(in_array($this->status, [PdoiApplicationStatusesEnum::RECEIVED->value, PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value, PdoiApplicationStatusesEnum::IN_PROCESS->value])) {
-            $class = $this->response_end_time > Carbon::now() ? 'success' : 'warning';
-        } else {
-            if( $this->status === PdoiApplicationStatusesEnum::NOT_APPROVED->value ) {
-                $class = 'danger';
-            } elseif ( $this->status === PdoiApplicationStatusesEnum::FORWARDED->value ) {
-                $class = 'info';
-            }
-        }
-
+//        $class = 'light';
+//        if(in_array($this->status, [PdoiApplicationStatusesEnum::RECEIVED->value, PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value, PdoiApplicationStatusesEnum::IN_PROCESS->value])) {
+//            $class = $this->response_end_time > Carbon::now() ? 'success' : 'warning';
+//        } else {
+//            if( $this->status === PdoiApplicationStatusesEnum::NOT_APPROVED->value ) {
+//                $class = 'danger';
+//            } elseif ( $this->status === PdoiApplicationStatusesEnum::FORWARDED->value ) {
+//                $class = 'info';
+//            }
+//        }
+//
+//        return Attribute::make(
+//            get: fn () => $class
+//        );
         return Attribute::make(
-            get: fn () => $class
+            get: fn () => PdoiApplicationStatusesEnum::styleByValue($this->status)
         );
     }
 
@@ -551,6 +554,19 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             order by pdoi_application.id desc
             '.($limit ? 'limit '.$limit : '').';
         ');
+    }
+
+    public static function applicationCounter($filter = []){
+        $arr = self::select([DB::raw('count(id) as cnt'), 'status'])
+            ->FilterBy($filter)
+            ->groupBy('status')
+            ->orderBy('status')
+            ->get()
+            ->toArray();
+        if(sizeof($arr)){
+            $arr = array_combine(array_column($arr,'status'), array_column($arr,'cnt'));
+        }
+        return $arr;
     }
 
 }

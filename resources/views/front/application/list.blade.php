@@ -7,6 +7,16 @@
         <div class="page-title mb-md-3 mb-2 px-5">
             <h3 class="b-1 text-center">{{ $titlePage }}</h3>
         </div>
+        @if(isset($applicationsCnt) && sizeof($applicationsCnt))
+            <div class="mb-3">
+                @foreach($applicationsCnt as $status => $cnt)
+                    <div class="legend-element">
+                        <span class="app-badge {{ \App\Enums\PdoiApplicationStatusesEnum::styleByValue($status) }}">{{ $cnt }}</span>
+                        <a href="{{ route('application.list').'?status='.$status }}">{{ __('custom.application.status.'.\App\Enums\PdoiApplicationStatusesEnum::keyByValue($status)) }}</a>
+                    </div>
+                @endforeach
+            </div>
+        @endif
         @include('front.partials.filter_form')
         @if($cntApplication)
             <div class="list-options mb-3 d-flex justify-content-end">
@@ -40,7 +50,7 @@
                                 <div class="my-2">
                                     {{ mb_substr($itemContent, 0, 100) }}@if(strlen($itemContent) > 100){{ '...' }}@endif
                                 </div>
-                                <p class="my-1 p-fs">{{ __('custom.date_apply') }}: {{ displayDate($item['created_at']) }} | {{ __('custom.status') }}: {{ $item['statusName'] }} | <i class="fas fa-eye text-primary me-1"></i>{{ $item['cnt_visits'] }}</p>
+                                <p class="my-1 p-fs">{{ __('custom.date_apply') }}: {{ displayDate($item['created_at']) }} | {{ __('custom.status') }}: <span class="app-badge {{ $item['statusStyle'] }} fs-12">{{ $item['statusName'] }}</span> | <i class="fas fa-eye text-primary me-1"></i>{{ $item['cnt_visits'] }}</p>
                             </div>
                         @endforeach
                         {{ $applications['links'] }}

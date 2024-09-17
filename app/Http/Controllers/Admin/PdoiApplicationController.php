@@ -50,7 +50,8 @@ class PdoiApplicationController extends Controller
                 ->paginate($paginate);
 //        }
         $listRouteName = 'admin.application';
-        return $this->view('admin.applications.index', compact('items', 'filter', 'listRouteName'));
+        $applicationsCnt = PdoiApplication::applicationCounter($request->all());
+        return $this->view('admin.applications.index', compact('items', 'filter', 'listRouteName', 'applicationsCnt'));
     }
 
     public function show(Request $request, int $id = 0): \Illuminate\View\View

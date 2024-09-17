@@ -31,6 +31,39 @@
     --link-font-size:16px;
     --p-font-size:14px;
     --menu-bkg-color:#003d74;
+
+    --received-bkg-color: #eceaea;
+    --received-text-color: #333;
+
+    --reg-subject-bkg-color: #a10037;
+    --reg-subject-text-color: #fff;
+
+    --in-process-bkg-color: #6c757d;
+    --in-process-text-color: #fff;
+
+    --approved-bkg-color: #6abe7d;
+    --approved-text-color: #fff;
+
+    --part-approved-bkg-color: #0a8122;
+    --part-approved-text-color: #fff;
+
+    --not-approved-bkg-color: #dc3545;
+    --not-approved-text-color: #fff;
+
+    --no-info-bkg-color: #026af1;
+    --no-info-text-color: #fff;
+
+    --forwarded-bkg-color: #17a2b8;
+    --forwarded-text-color: #fff;
+
+    --renewed-bkg-color: #cfe138;
+    --renewed-text-color: #333;
+
+    --no-consider-bkg-color: #ffc107;
+    --no-consider-text-color: #333;
+
+    --no-review-bkg-color: #dec1fd;
+    --no-review-text-color: #333;
 }
 
 @font-face {
@@ -80,6 +113,10 @@ body {
 
 .fs {
     font-size: 10px;
+}
+
+.fs-12 {
+    font-size: 12px !important;
 }
 
 .a-fs {
@@ -617,3 +654,142 @@ a.home-section-button .home-section-button-txt {
 table.align-middle th, table.align-middle td {
     vertical-align: middle!important;
 }
+/*========================*/
+/* START App elements */
+/*=========================*/
+.legend-element {
+    display: inline-block !important;
+    margin-bottom: 12px !important;
+    margin-right: 20px !important;
+    font-size: 14px !important;
+}
+.legend-element span {
+    font-weight: bold !important;
+    margin-right: 2px !important;
+}
+
+.app-badge {
+    border-radius: 5px !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    padding: 3px 6px !important;
+}
+/*========================*/
+/* END App elements */
+/*=========================*/
+/*========================*/
+/*START Statuses*/
+/*=========================*/
+.app-badge.received {
+    background-color: var(--received-bkg-color) !important;
+    border-color: var(--received-bkg-color) !important;
+    color: var(--received-text-color) !important;
+}
+.bg-received {
+    background-color: var(--received-bkg-color) !important;
+    color: var(--received-text-color) !important;
+}
+
+.app-badge.reg-subject {
+    background-color: var(--reg-subject-bkg-color) !important;
+    border-color: var(--reg-subject-bkg-color) !important;
+    color: var(--reg-subject-text-color) !important;
+}
+.bg-reg-subject {
+    background-color: var(--reg-subject-bkg-color) !important;
+    color: var(--reg-subject-text-color) !important;
+}
+
+.app-badge.in-process {
+    background-color: var(--in-process-bkg-color) !important;
+    border-color: var(--in-process-bkg-color) !important;
+    color: var(--in-process-text-color) !important;
+}
+.bg-in-process {
+    background-color: var(--in-process-bkg-color) !important;
+    color: var(--in-process-text-color) !important;
+}
+
+.app-badge.approved {
+    background-color: var(--approved-bkg-color) !important;
+    border-color: var(--approved-bkg-color) !important;
+    color: var(--approved-text-color) !important;
+}
+.bg-approved {
+    background-color: var(--approved-bkg-color) !important;
+    color: var(--approved-text-color) !important;
+}
+
+.app-badge.part-approved {
+    background-color: var(--part-approved-bkg-color) !important;
+    border-color: var(--part-approved-bkg-color) !important;
+    color: var(--part-approved-text-color) !important;
+}
+.bg-part-approved {
+    background-color: var(--part-approved-bkg-color) !important;
+    color: var(--part-approved-text-color) !important;
+}
+
+.app-badge.not-approved {
+    background-color: var(--not-approved-bkg-color) !important;
+    border-color: var(--not-approved-bkg-color) !important;
+    color: var(--not-approved-text-color) !important;
+}
+.bg-not-approved {
+    background-color: var(--not-approved-bkg-color) !important;
+    color: var(--part-approved-text-color) !important;
+}
+
+.app-badge.no-info {
+    background-color: var(--no-info-bkg-color) !important;
+    border-color: var(--no-info-bkg-color) !important;
+    color: var(--not-approved-text-color) !important;
+}
+.bg-no-info {
+    background-color: var(--no-info-bkg-color) !important;
+    color: var(--no-info-text-color) !important;
+}
+
+.app-badge.forwarded {
+    background-color: var(--forwarded-bkg-color) !important;
+    border-color: var(--forwarded-bkg-color) !important;
+    color: var(--forwarded-text-color) !important;
+}
+.bg-forwarded {
+    background-color: var(--forwarded-bkg-color) !important;
+    color: var(--forwarded-text-color) !important;
+}
+
+.app-badge.renewed {
+    background-color: var(--renewed-bkg-color) !important;
+    border-color: var(--renewed-bkg-color) !important;
+    color: var(--renewed-text-color) !important;
+}
+.bg-renewed {
+    background-color: var(--renewed-bkg-color) !important;
+    color: var(--renewed-text-color) !important;
+}
+
+.app-badge.no-consider {
+    background-color: var(--no-consider-bkg-color) !important;
+    border-color: var(--no-consider-bkg-color) !important;
+    color: var(--no-consider-text-color) !important;
+}
+.bg-no-consider {
+    background-color: var(--no-consider-bkg-color) !important;
+    color: var(--no-consider-text-color) !important;
+}
+
+.app-badge.no-review {
+    background-color: var(--no-review-bkg-color) !important;
+    border-color: var(--no-review-bkg-color) !important;
+    color: var(--no-review-text-color) !important;
+}
+.bg-no-review {
+    background-color: var(--no-review-bkg-color) !important;
+    color: var(--no-review-text-color) !important;
+}
+
+/*========================*/
+/*END Statuses*/
+/*=========================*/

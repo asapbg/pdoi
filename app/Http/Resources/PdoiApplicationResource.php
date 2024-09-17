@@ -39,6 +39,7 @@ class PdoiApplicationResource extends JsonResource
             'created_at' => $this->created_at,
             'status' => $this->status,
             'statusName' => $this->statusName,
+            'statusStyle' => $this->statusStyle,
             'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
             'term' => $this->response_end_time,
             'names' => $this->full_names,

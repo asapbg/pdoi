@@ -14,11 +14,19 @@
                             <i class="fas fa-plus-circle"></i> {{ __('custom.application.add_external') }}
                         </a>
                     </div>
-                    <div id="legend" class="mb-3">
-                        <div class="d-inline-block app-f-small"><span class="badge badge-info ms-2 lh-1">&nbsp;</span> {{ __('custom.forwarded') }}</div>
-                        <div class="d-inline-block app-f-small"><span class="badge badge-success ms-2 lh-1">&nbsp;</span> {{ __('custom.in_process') }}</div>
-                        <div class="d-inline-block app-f-small"><span class="badge badge-warning ms-2 lh-1">&nbsp;</span> {{ __('custom.expired_term') }}</div>
-                        <div class="d-inline-block app-f-small"><span class="badge badge-danger ms-2 lh-1">&nbsp;</span> {{ __('custom.not_approved') }}</div>
+                    <div id="legend" class="mb-3 mt-3">
+                        @foreach(\App\Enums\PdoiApplicationStatusesEnum::values() as $val)
+                            <div class="legend-element">
+                                <span class="app-badge {{ \App\Enums\PdoiApplicationStatusesEnum::styleByValue($val) }} lh-1">
+                                    {{ isset($applicationsCnt) && sizeof($applicationsCnt) && isset($applicationsCnt[$val]) ? $applicationsCnt[$val] : 0 }}
+                                </span>
+                                <a href="{{ route('admin.application').'?status='.$val }}">{{ __('custom.application.status.'.\App\Enums\PdoiApplicationStatusesEnum::keyByValue($val)) }}</a>
+                            </div>
+                        @endforeach
+{{--                        <div class="d-inline-block app-f-small"><span class="badge badge-info ms-2 lh-1">&nbsp;</span> {{ __('custom.forwarded') }}</div>--}}
+{{--                        <div class="d-inline-block app-f-small"><span class="badge badge-success ms-2 lh-1">&nbsp;</span> {{ __('custom.in_process') }}</div>--}}
+{{--                        <div class="d-inline-block app-f-small"><span class="badge badge-warning ms-2 lh-1">&nbsp;</span> {{ __('custom.expired_term') }}</div>--}}
+{{--                        <div class="d-inline-block app-f-small"><span class="badge badge-danger ms-2 lh-1">&nbsp;</span> {{ __('custom.not_approved') }}</div>--}}
                     </div>
                     <table class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">
                         <thead>

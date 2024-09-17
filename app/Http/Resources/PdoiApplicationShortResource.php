@@ -33,6 +33,7 @@ class PdoiApplicationShortResource extends JsonResource
             'created_at' => $this->created_at,
             'status' => $this->status,
             'statusName' => $this->statusName,
+            'statusStyle' => $this->statusStyle,
             'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
             'term' => $this->response_end_time,
             'user_name' => $this->names_publication ? $this->full_names : __('custom.users.legal_form.'.$this->applicant_type),

@@ -55,12 +55,12 @@ class PdoiApplicationController extends Controller
                 'lastFinalEvent', 'lastFinalEvent.visibleFiles', 'children'])
                 ->FilterBy($request->all())
                 ->SortedBy($sort,$sortOrd);
-
             $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
         }
+        $applicationsCnt = PdoiApplication::applicationCounter($request->all());
         $titlePage =__('custom.searching');
         $this->setBreadcrumbsTitle($titlePage);
-        return $this->view('front.application.list', compact('applications', 'titlePage', 'filter'));
+        return $this->view('front.application.list', compact('applications', 'titlePage', 'filter', 'applicationsCnt'));
     }
 
     public function show(Request $request, int $id = 0)
