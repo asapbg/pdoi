@@ -57,7 +57,7 @@ class PdoiApplicationController extends Controller
                 ->SortedBy($sort,$sortOrd);
             $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
         }
-        $applicationsCnt = PdoiApplication::applicationCounter($request->all());
+        $applicationsCnt = PdoiApplication::applicationCounter();
         $titlePage =__('custom.searching');
         $this->setBreadcrumbsTitle($titlePage);
         return $this->view('front.application.list', compact('applications', 'titlePage', 'filter', 'applicationsCnt'));
