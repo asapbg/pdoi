@@ -70,7 +70,7 @@ class RzsSection  extends ModelActivityExtend implements TranslatableContract
         return $this->name;
     }
 
-    public static function optionsList($excludeIds = array(0), $filterByRole = false): \Illuminate\Support\Collection
+    public static function optionsList($excludeIds = array(), $filterByRole = false): \Illuminate\Support\Collection
     {
         $ids = null;
         if($filterByRole){
@@ -78,6 +78,10 @@ class RzsSection  extends ModelActivityExtend implements TranslatableContract
             if($user->responseSubject){
                 $ids = self::getAdmStructureIds($user->responseSubject->adm_level);
             }
+        }
+
+        if(!sizeof($excludeIds)){
+            $excludeIds = [0];
         }
 
 

@@ -40,6 +40,33 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         $query->where('pdoi_response_subject.adm_register', 0);
     }
 
+    public function scopeFilterByRole($query)
+    {
+        $user = auth()->user();
+        if($user && !$user->hasAnyRole([CustomRole::SUPER_USER_ROLE, CustomRole::ADMIN_USER_ROLE])){
+            $ids = [0];
+            if($user->responseSubject){
+                $ids = self::getAdmStructureIds($user->responseSubject->adm_level);
+            }
+            $query->whereIn('pdoi_response_subject.adm_level', $ids)
+                ->where(function ($q) use ($user){
+                    $q->where('pdoi_response_subject.adm_level', '<>', $user->responseSubject->adm_level)
+                        ->orWhere('pdoi_response_subject.id', '=', $user->responseSubject->id);
+                    });
+        }
+    }
+
+    public static function getAdmStructureIds($parent, $currentArray = array()){
+        $ids = sizeof($currentArray) ? array_merge($currentArray, [$parent]) : [$parent];
+        $children = RzsSection::where('parent_id', '=', $parent)->get();
+        if($children->count()){
+            foreach ($children as $child){
+                $ids = self::getAdmStructureIds($child->id, $ids);
+            }
+        }
+        return $ids;
+    }
+
     public function section(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(RzsSection::class, 'adm_level', 'adm_level');
@@ -124,14 +151,28 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
      * @param array|int $ignoreId
      * @return \Illuminate\Support\Collection
      */
-    public static function optionsList(array|int $ignoreId = []): \Illuminate\Support\Collection
+    public static function optionsList(array|int $ignoreId = [], $filterByRole = false): \Illuminate\Support\Collection
     {
+        $user = auth()->user();
+        $ids = null;
+        if($filterByRole){
+            if($user->responseSubject){
+                $ids = self::getAdmStructureIds($user->responseSubject->adm_level);
+            }
+        }
+
         $query = DB::table('pdoi_response_subject')
             ->select(['pdoi_response_subject.id', 'pdoi_response_subject_translations.subject_name as name', 'pdoi_response_subject.adm_level as parent'])
             ->join('pdoi_response_subject_translations', 'pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')
             ->where('pdoi_response_subject.active', '=', 1)
             ->whereNull('deleted_at')
             ->where('pdoi_response_subject_translations.locale', '=', app()->getLocale())
+            ->when($ids, function ($query) use($ids, $user) {
+                return $query->whereIn('pdoi_response_subject.adm_level', $ids)->where(function ($q) use ($user){
+                    $q->where('pdoi_response_subject.adm_level', '<>', $user->responseSubject->adm_level)
+                        ->orWhere('pdoi_response_subject.id', '=', $user->responseSubject->id);
+                });
+            })
             ->orderBy('pdoi_response_subject.id', 'asc')
             ->orderBy('pdoi_response_subject.adm_level', 'asc')
             ->orderBy('pdoi_response_subject_translations.subject_name', 'asc');

@@ -42,7 +42,9 @@ class PdoiResponseSubjectController extends AdminController
         if( !isset($requestFilter['active']) ) {
             $requestFilter['active'] = 1;
         }
+        DB::enableQueryLog();
         $items = PdoiResponseSubject::with(['translation', 'section.translation'])
+            ->FilterByRole()
             ->FilterBy($requestFilter)
             ->paginate($paginate);
         $toggleBooleanModel = 'PdoiResponseSubject';
@@ -88,11 +90,11 @@ class PdoiResponseSubjectController extends AdminController
     public function edit(Request $request, PdoiResponseSubject $item)
     {
         if( ($item->id && ($request->user()->cannot('update', $item) && $request->user()->cannot('updateSettings', $item)) )
-            || $request->user()->cannot('create', PdoiResponseSubject::class) ) {
+            || (!$item->id && $request->user()->cannot('create', PdoiResponseSubject::class)) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
-        $subjects = PdoiResponseSubject::optionsList($item->id ?? 0);
-        $rzsSections = RzsSection::optionsList();
+        $subjects = PdoiResponseSubject::optionsList($item->id ?? 0, true);
+        $rzsSections = RzsSection::optionsList([],true);
         $areas = EkatteArea::optionsList();
         $municipalities = EkatteMunicipality::optionsList();
         $settlement = EkatteSettlement::optionsList();

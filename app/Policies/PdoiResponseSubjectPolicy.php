@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\CustomRole;
 use App\Models\PdoiResponseSubject;
+use App\Models\RzsSection;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -53,8 +55,20 @@ class PdoiResponseSubjectPolicy
      */
     public function update(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
+        $user = auth()->user();
+        if($user && !$user->hasAnyRole([CustomRole::ADMIN_USER_ROLE, CustomRole::SUPER_USER_ROLE])){
+            $ids = RzsSection::getAdmStructureIds($user->responseSubject->adm_level);
+        }
+
         return $user->canAny(['manage.*','administration.*', 'administration.rzs_items'])
-            && !$pdoiResponseSubject->adm_register;
+            && !$pdoiResponseSubject->adm_register
+            && (
+                !isset($ids)
+                || (
+                    in_array($pdoiResponseSubject->section->id, $ids)
+                    && ($pdoiResponseSubject->section->id != $user->responseSubject->section->id || $user->responseSubject->id == $pdoiResponseSubject->id)
+                )
+            );
     }
 
     /**
@@ -66,7 +80,19 @@ class PdoiResponseSubjectPolicy
      */
     public function updateSettings(User $user, PdoiResponseSubject $pdoiResponseSubject)
     {
-        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items']);
+        $user = auth()->user();
+        if($user && !$user->hasAnyRole([CustomRole::ADMIN_USER_ROLE, CustomRole::SUPER_USER_ROLE])){
+            $ids = RzsSection::getAdmStructureIds($user->responseSubject->adm_level);
+        }
+
+        return $user->canAny(['manage.*','administration.*', 'administration.rzs_items'])
+            && (
+                !isset($ids)
+                || (
+                    in_array($pdoiResponseSubject->section->id, $ids)
+                    && ($pdoiResponseSubject->section->id != $user->responseSubject->section->id || $user->responseSubject->id == $pdoiResponseSubject->id)
+                )
+            );
     }
 
     /**
