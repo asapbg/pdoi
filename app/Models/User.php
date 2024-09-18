@@ -253,6 +253,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasMany(PdoiApplication::class, 'user_reg', 'id');
     }
 
+    public function renewRequests(): HasMany
+    {
+        return $this->hasMany(PdoiApplicationRestoreRequest::class, 'applicant_id', 'id');
+    }
+
     public function responseSubject(): HasOne
     {
         return $this->hasOne(PdoiResponseSubject::class, 'id', 'administrative_unit');

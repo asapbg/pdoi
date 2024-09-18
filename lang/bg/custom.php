@@ -271,6 +271,7 @@ return [
     'to_base_application'                       => 'към основно заявление',
     'application_system_title'                  => 'Заявление от :user до :subject от :apply_date',
     'own_application_system_title'              => 'Заявление до :subject от :apply_date',
+    'own_application_renew_title'              => 'Възобновяване на заявление :reg_num',
     'anonymous_applicant'                       => 'Анонимен заявител',
     'no_results'                                => 'Не са открити записи',
     'period'                                    => 'Период',
@@ -542,6 +543,12 @@ return [
     'change_decision_reasons' => "Причина за промяна на крайно решение|Причини за промяна на крайно решение",
     'change_decision_reason' => "Причина за промяна на крайно решение",
     'change_after_final_decision' => "Промяна след крайно решение",
+    'restore_request'                               => 'Заявка за възобновяване|Заявки за възобновяване',
+    'pdoi_application_restore_requests'                               => 'Заявка за възобновяване|Заявки за възобновяване',
+    'restore_request.status.0'                                          => 'Очаква обработка',
+    'restore_request.status.1'                                          => 'Одобрено',
+    'restore_request.status.2'                                          => 'Отказано',
+    'restore_request.reject_btn'                                          => 'Отказване на възобновяване',
 
 ];
 

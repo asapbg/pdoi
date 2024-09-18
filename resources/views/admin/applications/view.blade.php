@@ -326,7 +326,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-6 col-md-offset-3">
-                            <a href="{{ url()->previous() }}" class="btn btn-primary">{{ __('custom.cancel') }}</a>
+                            <a href="{{ url()->previous() }}" class="btn btn-primary">{{ __('custom.back') }}</a>
                         </div>
                     </div>
                 </div>

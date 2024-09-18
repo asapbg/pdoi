@@ -110,7 +110,7 @@
                                     <div class="col-md-6 col-md-offset-3">
                                         <button id="save" type="button" class="save btn btn-success" data-form="formInPlatform">{{ __('custom.apply') }}</button>
                                         <a href="{{ route('admin.application.view', ['item' => $application->id]) }}"
-                                           class="btn btn-primary">{{ __('custom.cancel') }}</a>
+                                           class="btn btn-primary">{{ __('custom.back') }}</a>
                                     </div>
                                 </div>
                                 <br/>
@@ -206,7 +206,7 @@
 {{--                                        <p class="text-danger">Очаква се уточнение как ще се обработват тези препращания преди функционалността да бъде отключена</p>--}}
                                         <button id="save" type="button" class="save btn btn-success" data-form="formOutPlatform">{{ __('custom.apply') }}</button>
                                         <a href="{{ route('admin.application.view', ['item' => $application->id]) }}"
-                                           class="btn btn-primary">{{ __('custom.cancel') }}</a>
+                                           class="btn btn-primary">{{ __('custom.back') }}</a>
                                     </div>
                                 </div>
                                 <br/>

@@ -48,7 +48,7 @@
                                 <button id="save" type="submit" name="reopen" value="0" class="action-btn btn btn-success d-none" disabled="">{{ __('custom.apply') }}</button>
                                 <button id="reopen" type="submit" name="reopen" value="1" class="action-btn btn btn-success d-none" disabled="">{{ __('custom.application.renew') }}</button>
                                 <a href="{{ url()->previous() }}"
-                                   class="btn btn-primary">{{ __('custom.cancel') }}</a>
+                                   class="btn btn-primary">{{ __('custom.back') }}</a>
                             </div>
                         </div>
                     </form>

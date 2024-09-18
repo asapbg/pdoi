@@ -15,6 +15,7 @@ class File extends Model
 
     const CODE_OBJ_APPLICATION = 13;
     const CODE_OBJ_EVENT = 14;
+    const CODE_OBJ_APPLICATION_RENEW = 15;
     const CODE_OBJ_MENU_SECTION = 20;
     const CODE_OBJ_PAGE = 21;
     const CODE_OBJ_MESSAGE = 10000;

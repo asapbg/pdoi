@@ -31,7 +31,7 @@ class PdoiApplicationApplyRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
+    {dd(request()->all());
         $rules = [
             'legal_form' => ['required', 'numeric', Rule::in(array_keys(User::getUserLegalForms()))],
             'names' => ['required', 'string', 'max:255', new AlphaSpace()],

@@ -30,6 +30,13 @@
                             <p>{{ trans_choice('custom.applications',2) }}</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.restore_requests') }}"
+                           class="nav-link @if(strstr(url()->current(), 'restore-requests/')) active @endif">
+                            <i class="fas fa-file-alt"></i>
+                            <p>{{ trans_choice('custom.restore_request',2) }}</p>
+                        </a>
+                    </li>
                 @endcanany
                 <!-- RZS subjects and sections -->
                 @canany(['manage.*', 'administration.*', 'administration.rzs_sections', 'administration.rzs_items'])

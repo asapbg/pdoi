@@ -53,5 +53,7 @@ return [
     'statistic.type.TYPE_APPLICATION_MONTH' => 'Статистика за подадени заявления по задължен субект, тип заявител и статус',
     'statistic.type.TYPE_APPLICATION_STATUS_SIX_MONTH' => 'Статистика за подадените чрез платформата за достъп до обществена информация заявления',
 //    'statistic.type.TYPE_APPLICATION_STATUS_TOTAL' => 'Статистика за подадените чрез платформата за достъп до обществена информация заявления',
-    'to_admin_panel' => 'Административен панел'
+    'to_admin_panel' => 'Административен панел',
+    'application.renew.files_section' => 'Прилагане на документи (съдебно решение и др.)',
+    'renew_request.btn' => 'Изпрати заявка за възобновяване',
 ];

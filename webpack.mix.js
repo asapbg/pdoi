@@ -72,6 +72,7 @@ mix.scripts([
     'resources/js/front/select2.full.min.js',
     'resources/js/front/app.js',
     'resources/js/front/apply_application.js',
+    'resources/js/front/renew_application.js',
     'resources/js/partials/select2Ekatte.js',
     'resources/adminlte-3.2/plugins/daterangepicker/daterangepicker.js',
 ], 'public/js/app.js');

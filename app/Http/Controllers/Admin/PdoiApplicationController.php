@@ -21,6 +21,7 @@ use App\Models\File;
 use App\Models\MailTemplates;
 use App\Models\NoConsiderReason;
 use App\Models\PdoiApplication;
+use App\Models\PdoiApplicationRestoreRequest;
 use App\Models\PdoiResponseSubject;
 use App\Models\ProfileType;
 use App\Models\ReasonRefusal;
@@ -361,6 +362,15 @@ class PdoiApplicationController extends Controller
 
         $appService = new ApplicationService($application);
         $registerEvent = $appService->registerEvent(ApplicationEventsEnum::RENEW_PROCEDURE->value, $validated);
+
+        $restoreRequests = $application->restoreRequests()->where('status', '=', PdoiApplicationRestoreRequest::STATUS_IN_PROCESS)->get()->first();
+        if($restoreRequests){
+            $restoreRequests->status = PdoiApplicationRestoreRequest::STATUS_APPROVED;
+            $restoreRequests->status_datetime = databaseDateTime(Carbon::now());
+            $restoreRequests->status_user_id = auth()->user()->id;
+            $restoreRequests->save();
+        }
+
         if ( is_null($registerEvent) ) {
             return back()->withInput()->with('danger', __('custom.system_error'));
         }

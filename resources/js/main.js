@@ -599,6 +599,7 @@ $(document).ready(function (e) {
         _myModal.title = typeof obj.title != 'undefined' ? obj.title : '';
         _myModal.dismissible = typeof obj.dismissible != 'undefined' ? obj.dismissible : true;
         _myModal.body = typeof obj.body != 'undefined' ? obj.body : '';
+        _myModal.footer = typeof obj.footer != 'undefined' ? obj.footer : '';
         _myModal.bodyLoadUrl = typeof obj.bodyLoadUrl != 'undefined' ? obj.bodyLoadUrl : null;
         _myModal.destroyListener = typeof obj.destroyListener != 'undefined' ? obj.destroyListener : false;
         _myModal.customClass = typeof obj.customClass != 'undefined' ? obj.customClass : '';
@@ -625,6 +626,7 @@ $(document).ready(function (e) {
             '      </div>\n' +
             '      <div class="modal-body" id="' + _myModal.id + '-body' + '">\n' + _myModal.body +
             '      </div>\n' +
+            (_myModal.footer ? '<div class="modal-footer">'+ _myModal.footer +'</div>' : '') +
             '    </div>\n' +
             '  </div>\n' +
             '</div>';
@@ -655,4 +657,19 @@ $(document).ready(function (e) {
     //==========================
     // End MyModal
     //==========================
+
+    if($('.confirmRejectRenewModal').length) {
+        $('.confirmRejectRenewModal').on('click', function (event){
+            let confirmModal = new MyModal({
+                title: 'Отказване на възобновяване',
+                destroyListener: true,
+                body: '<p class="m-0">Сигурни ли сте, че искате да откажете заявката за възобновяване?</p>',
+                footer: '<button class="btn btn-sm btn-danger confirmRejectModal">Да</button>' +
+                    '<button class="btn btn-sm btn-secondary closeModal ms-3" data-dismiss="modal" aria-label="Не">Не</button>'
+            });
+            $('#'+confirmModal.id).on('click', '.confirmRejectModal', function (){
+                $('#confirmRejectRenewModalSubmit').trigger('click');
+            });
+        });
+    }
 })

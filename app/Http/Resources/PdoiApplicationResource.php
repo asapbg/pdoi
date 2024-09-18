@@ -29,6 +29,10 @@ class PdoiApplicationResource extends JsonResource
                     'subject' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
                     'apply_date' => displayDate($this->created_at)
                 ]),
+            'renew_title' => __('custom.own_application_renew_title',
+                [
+                    'reg_num' => $this->application_uri,
+                ]),
             'response_subject_name' => $this->response_subject_id ? $this->responseSubject->subject_name : $this->nonRegisteredSubjectName,
             'response' =>$this->lastFinalEvent ? ($this->lastFinalEvent->event_type == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value && $this->lastFinalEvent->event_reason == \App\Enums\PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value && !$this->lastFinalEvent->noConsiderReason ? null : $this->response) : $this->response,
             'response_is_changed_message' => $this->finalEvents->count() > 1,

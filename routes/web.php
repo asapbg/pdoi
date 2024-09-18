@@ -73,6 +73,8 @@ Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\Cus
         Route::get( '/my-application/full-history/{id}','showMyFullHistory')->name('application.my.show.history');
         Route::get('/new-application','create')->name('application.create');
         Route::post('/application/store','store')->name('application.store');
+        Route::get( '/my-application/{id}/renew','renewMy')->name('application.my.renew');
+        Route::post( '/my-application/store-renew','storeRenewMy')->name('application.my.renew.store');
     });
 });
 

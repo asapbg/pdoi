@@ -53,5 +53,7 @@ return [
     'statistic.type.TYPE_APPLICATION_MONTH' => 'Statistics for submitted applications by subject, type of applicant and status - monthly basis',
     'statistic.type.TYPE_APPLICATION_STATUS_SIX_MONTH' => 'Statistics for applications submitted through the platform for access to public information - on a semi-annual basis',
 //    'statistic.type.TYPE_APPLICATION_STATUS_TOTAL' => 'Statistics for applications submitted through the platform for access to public information - total',
-    'to_admin_panel' => 'Admin Panel'
+    'to_admin_panel' => 'Admin Panel',
+    'application.renew.files_section' => 'Attach documents (judgment and others)',
+    'renew_request.btn' => 'Send renew request',
 ];

@@ -7,6 +7,7 @@ use App\Enums\MailTemplateTypesEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Requests\PdoiApplicationApplyRequest;
+use App\Http\Requests\RenewApplicationStoreRequest;
 use App\Http\Requests\StoreInfoEventRequest;
 use App\Http\Resources\PdoiApplicationResource;
 use App\Http\Resources\PdoiApplicationShortCollection;
@@ -21,6 +22,7 @@ use App\Models\Event;
 use App\Models\File;
 use App\Models\MailTemplates;
 use App\Models\PdoiApplication;
+use App\Models\PdoiApplicationRestoreRequest;
 use App\Models\PdoiResponseSubject;
 use App\Models\User;
 use App\Notifications\NotifySubjectNewApplication;
@@ -88,8 +90,8 @@ class PdoiApplicationController extends Controller
             'lastFinalEvent', 'lastFinalEvent.visibleFiles'])
             ->FilterBy($request->all())
             ->SortedBy($sort,$sortOrd)
-            ->where('user_reg', $request->user()
-                ->id);
+            ->where('user_reg', $request->user()->id)
+            ->where('manual', '=', 0);
         $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
         $myList = true;
         $titlePage =__('front.my_application.title');
@@ -107,6 +109,7 @@ class PdoiApplicationController extends Controller
         }
 
         $application = (new PdoiApplicationResource($item))->resolve();
+        $application['canRenewRequest'] = $request->user()->can('renewRequest', $item);
 
         $lastEvent = $item->lastEvent;
         $needInfoSection = [];
@@ -172,20 +175,13 @@ class PdoiApplicationController extends Controller
         if( !$user->country ) {
             $data['countries'] = Country::optionsList();
         }
-        if( !$user->country || (!$user->area && $defaultCountry->id == $user->country_id) ) {
-            $data['areas'] = EkatteArea::optionsList();
-        }
 
-        if( !$user->country || (!$user->municipality && $defaultCountry->id == $user->country_id) ) {
-            $data['municipality'] = EkatteMunicipality::optionsList();
-        }
-
-        if( !$user->country || (!$user->settlement && $defaultCountry->id == $user->country_id) ) {
-            $data['settlements'] = EkatteSettlement::optionsList();
-        }
+        $data['areas'] = EkatteArea::optionsList();
+        $data['municipality'] = EkatteMunicipality::optionsList();
+        $data['settlements'] = EkatteSettlement::optionsList();
 
         $rzs = PdoiResponseSubject::optionsList();
-        return $this->view('front.application.apply', compact('data', 'user', 'rzs', 'title'));
+        return $this->view('front.application.apply', compact('data', 'user', 'rzs', 'title', 'defaultCountry'));
     }
 
     public function store(Request $request) {
@@ -319,6 +315,77 @@ class PdoiApplicationController extends Controller
             logError('Apply application (front)', $e->getMessage());
             return response()->json(['errors' => __('custom.system_error')], 200);
         }
+    }
+
+    public function renewMy(Request $request, int $id = 0)
+    {
+        $item = PdoiApplication::find($id);
+        if( !$item ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        if( !$request->user()->can('renewRequest', $item) ) {
+            return back()->with('warning', __('messages.unauthorized'));
+        }
+        $application = (new PdoiApplicationResource($item))->resolve();
+        $this->setTitleSingular(__('custom.application.renew'));
+        return $this->view('front.my_application.renew', compact('application'));
+    }
+
+    public function storeRenewMy(Request $request)
+    {
+        $applicationRequest = new RenewApplicationStoreRequest();
+
+        $validator = Validator::make($request->all(), $applicationRequest->rules());
+
+        if($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 200);
+        }
+        $validated = $validator->validated();
+        $item = PdoiApplication::find($validated['id']);
+        if( !$item ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        if( !$request->user()->can('renewRequest', $item) ) {
+            return response()->json(['errors' => __('messages.unauthorized')], 200);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $renew = new PdoiApplicationRestoreRequest([
+                'pdoi_application_id' => $item->id,
+                'applicant_id' => auth()->user()->id,
+                'user_request' => $validated['request_summernote'],
+                'status_datetime' => databaseDateTime(Carbon::now()),
+            ]);
+            $renew->save();
+            //Save user attached files
+            if( isset($validated['files']) && sizeof($validated['files']) ) {
+                foreach ($validated['files'] as $key => $file) {
+                    $fileNameToStore = ($key + 1).'_'.round(microtime(true)).'.'.$file->getClientOriginalExtension();
+                    // Upload File
+                    $file->storeAs($item->fileFolder, $fileNameToStore, 'local');
+                    $newFile = new File([
+                        'code_object' => File::CODE_OBJ_APPLICATION_RENEW,
+                        'filename' => $fileNameToStore,
+                        'content_type' => $file->getClientMimeType() != 'application/octet-stream' ? $file->getClientMimeType() : $file->getMimeType(),
+                        'path' => $item->fileFolder.$fileNameToStore,
+                        'description' => $validated['file_description'][$key],
+                        'user_reg' => auth()->user()->id,
+                    ]);
+                    $renew->files()->save($newFile);
+                    //$ocr = new FileOcr($newFile->refresh());
+                    //$ocr->extractText();
+                }
+            }
+            DB::commit();
+            return response()->json(['redirect_url' => route('application.my.show', $item).'#renews'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            logError('Renew application ID'.$item->id.'  (front)', $e->getMessage());
+            return response()->json(['errors' => __('custom.system_error')], 200);
+        }
+
     }
 
     private function updateProfile($validatedFields) {

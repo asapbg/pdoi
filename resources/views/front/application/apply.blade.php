@@ -136,7 +136,7 @@
                             </select>
                             <span id="error-country" class="text-danger">@error('country'){{ $message }}@enderror</span>
                         </div>
-                        @if(isset($data['areas']) && $data['areas']->count())
+                        @if(isset($data['areas']) && $data['areas']->count() && (!$user->country || ($user->country && $user->country->id == $defaultCountry->id)) )
                             <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                                 <label class="form-label fw-semibold" for="area">
                                     {{ __('validation.attributes.area') }}: <span class="required">*</span>
@@ -160,7 +160,7 @@
                                 <span id="error-area" class="text-danger">@error('area'){{ $message }}@enderror</span>
                             </div>
                         @endif
-                        @if(isset($data['municipality']) && $data['municipality']->count())
+                        @if(isset($data['municipality']) && $data['municipality']->count() && (!$user->country || ($user->country && $user->country->id == $defaultCountry->id)) )
                             <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                                 <label class="form-label fw-semibold" for="municipality">
                                     {{ __('validation.attributes.municipality') }}: <span class="required">*</span>
@@ -184,7 +184,7 @@
                                 <span id="error-municipality" class="text-danger">@error('municipality'){{ $message }}@enderror</span>
                             </div>
                         @endif
-                        @if(isset($data['settlements']) && $data['settlements']->count())
+                        @if(isset($data['settlements']) && $data['settlements']->count() && (!$user->country || ($user->country && $user->country->id == $defaultCountry->id)) )
                             <div class="form-group form-group-sm col-md-3 col-12 mb-3">
                                 <label class="form-label fw-semibold" for="settlement">
                                     {{ __('validation.attributes.settlement') }}: <span class="required">*</span>

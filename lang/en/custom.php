@@ -271,6 +271,7 @@ return [
     'to_base_application'                       => 'to main application',
     'application_system_title'                  => 'Application from :user to :subject by :apply_date',
     'own_application_system_title'              => 'Application to :subject from :apply_date',
+    'own_application_renew_title'              => 'Renew application :reg_num',
     'anonymous_applicant'                       => 'Anonymous',
     'no_results'                                => 'No records found',
     'period'                                    => 'Period',
@@ -541,5 +542,11 @@ return [
     'change_decision_reasons' => "Reason for change final decision|Reasons for change final decision",
     'change_decision_reason' => "Reason for change final decision",
     'change_after_final_decision' => "Change after fina decision",
+    'restore_request'                               => 'Application restore request|Application restore requests',
+    'pdoi_application_restore_requests'                               => 'Application restore request|Application restore requests',
+    'restore_request.status.0'                                          => 'In Process',
+    'restore_request.status.1'                                          => 'Approved',
+    'restore_request.status.2'                                          => 'Rejected',
+    'restore_request.reject_btn'                                          => 'Regect restor',
 ];
 

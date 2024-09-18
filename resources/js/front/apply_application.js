@@ -65,6 +65,7 @@ $(function() {
             //merge two forms
             let rzsForm = $('#rzs').serializeArray();
             for (let i = 0; i < rzsForm.length; i++) {
+                console.log(rzsForm[i].name);
                 formData.append(rzsForm[i].name, rzsForm[i].value);
             }
             $.ajax({

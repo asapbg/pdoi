@@ -219,4 +219,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/statistic/{type}',                'statistic')->name('statistic.type');
     });
 
+    Route::controller(\App\Http\Controllers\Admin\PdoiApplicationRestoreRequestController::class)->group(function () {
+        Route::get('/restore-requests',                'index')->name('restore_requests')->middleware('can:viewAny,App\Models\PdoiApplicationRestoreRequest');
+        Route::get('/restore-requests/edit/{item?}',         'edit')->name('restore_requests.edit');
+        Route::get('/restore-requests/view/{item?}',         'show')->name('restore_requests.view');
+        Route::put('/restore-requests/reject',         'reject')->name('restore_requests.reject');
+    });
+
 });

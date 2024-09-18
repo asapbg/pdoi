@@ -262,6 +262,12 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         return $this->hasOne(ProfileType::class, 'id', 'profile_type');
     }
 
+    public function restoreRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PdoiApplicationRestoreRequest::class, 'pdoi_application_id','id')
+            ->orderBy('created_at', 'desc');
+    }
+
     public static function statisticRenewed($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
     {
         $fromDate = isset($filter['fromDate']) && !empty($filter['fromDate']) ? $filter['fromDate'] : Carbon::now()->startOfMonth()->startOfDay();

@@ -38,7 +38,7 @@
                             <div class="form-group col-12 mt-2">
 {{--                                <div class="col-md-6 col-md-offset-3">--}}
                                     <button id="save" type="submit" class="btn btn-success">{{ __('custom.save') }}</button>
-                                    <a href="{{ route('admin.roles') }}" class="btn btn-primary">{{ __('custom.cancel') }}</a>
+                                    <a href="{{ route('admin.roles') }}" class="btn btn-primary">{{ __('custom.back') }}</a>
 {{--                                </div>--}}
                             </div>
                             <br/>

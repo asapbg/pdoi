@@ -221,7 +221,7 @@
                             <div class="col-md-6 col-md-offset-3">
                                 <button id="save" type="submit" class="btn btn-success">{{ __('custom.apply') }}</button>
                                 <a href="{{ route('admin.application.view', ['item' => $application->id]) }}"
-                                   class="btn btn-primary">{{ __('custom.cancel') }}</a>
+                                   class="btn btn-primary">{{ __('custom.back') }}</a>
                             </div>
                         </div>
                         <br/>

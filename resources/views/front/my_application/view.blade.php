@@ -54,7 +54,12 @@
 
                         <div class="row">
                             <div class="col-md-3 col-12 fw-bold mb-2">{{ __('custom.reg_number') }}:  <span class="text-primary">{{ $application['uri'] }}</span></div>
-                            <div class="col-md-4 col-12 fw-bold mb-2">{{ __('custom.status') }}:  <span class="text-primary">{{ $application['statusName'] }}</span></div>
+                            <div class="col-md-4 col-12 fw-bold mb-2">
+                                {{ __('custom.status') }}:  <span class="text-primary">{{ $application['statusName'] }}</span>
+                                @if($application['canRenewRequest'])
+                                    <a href="{{ route('application.my.renew', $application['id']) }}" class="btn btn-sm btn-success ms-2">{{ __('custom.renew') }}</a>
+                                @endif
+                            </div>
                             <div class="col-md-5 col-12 fw-bold mb-2">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $application['response_subject_name'] }}</span></div>
                             <div class="col-md-3 col-12 fw-bold mb-2">{{ __('custom.date_apply') }}: <span class="text-primary">{{ displayDate($application['created_at']) }}</span></div>
                             <div class="col-md-3 col-12 fw-bold mb-2">{{ __('custom.term') }}: <span class="text-primary">{{ displayDate($application['term']) }}</span></div>

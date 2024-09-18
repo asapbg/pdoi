@@ -207,6 +207,22 @@ class PdoiApplicationPolicy
     }
 
     /**
+     * Determine whether the external user can renew the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiApplication  $pdoiApplication
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function renewRequest(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
+    {
+        return PdoiApplicationStatusesEnum::canRenew($pdoiApplication->status)// status allow renewing
+            && !$pdoiApplication->manual
+            && $pdoiApplication->currentEvent->event->app_event != ApplicationEventsEnum::RENEW_PROCEDURE->value //check if already has renewed event with rejection
+            && $user->id == $pdoiApplication->user_reg
+            && !$pdoiApplication->restoreRequests()->where('status', '=', 0)->count();
+    }
+
+    /**
      * Determine whether the user can forward the model.
      *
      * @param  \App\Models\User  $user
