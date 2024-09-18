@@ -53,6 +53,14 @@ class PdoiApplicationRestoreRequest extends ModelActivityExtend
         );
     }
 
+    protected function statusName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => __('custom.restore_request.status.'.(int)$this->status)
+        );
+    }
+
+
     public function author(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(User::class, 'id','applicant_id')->withTrashed();
@@ -66,13 +74,6 @@ class PdoiApplicationRestoreRequest extends ModelActivityExtend
     public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(File::class, 'id_object', 'id')->where('code_object', '=', File::CODE_OBJ_APPLICATION_RENEW);
-    }
-
-    protected function statusName(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => __('custom.restore_request.status.'.(int)$this->status)
-        );
     }
 
     public function statusUser(): \Illuminate\Database\Eloquent\Relations\HasOne

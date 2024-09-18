@@ -24,6 +24,11 @@
                             <a class="nav-link" id="sub-application-tab" data-bs-toggle="tab" data-bs-target="#sub-application" role="button" aria-controls="sub-application" aria-selected="false">Препратени заявления</a>
                         </li>
                     @endif
+                    @if(isset($application['renewRequests']) && sizeof($application['renewRequests']))
+                        <li class="nav-item">
+                            <a class="nav-link" id="renews-tab" data-bs-toggle="tab" data-bs-target="#renews" role="button" aria-controls="renews" aria-selected="false">Завки за възобновяване</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
             <div class="card-body">
@@ -256,11 +261,39 @@
                         </div>
                     @endif
                 </div>
+                @if(isset($application['renewRequests']) && sizeof($application['renewRequests']))
+                        <div class="tab-pane fade" id="renews" role="tabpanel" aria-labelledby="renews-tab">
+                            <table class="table table-sm table-bordered table-responsive">
+                                <thead>
+                                <tr>
+                                    <th>{{ __('custom.date_apply') }}</th>
+                                    <th>{{ __('custom.status') }}</th>
+                                    <th>{{ __('custom.status_date') }}</th>
+                                    <th>Обработено от</th>
+                                    <th>{{ __('custom.answer') }}</th>
+                                </tr>
+                                </thead>
+                                <thead>
+                                @foreach($application['renewRequests'] as $renew)
+                                    <tr>
+                                        <td>{{ displayDate($renew['created_at']) }}</td>
+                                        <td>{{ $renew['status'] }}</td>
+                                        <td>{{ displayDate($renew['status_date']) }}</td>
+                                        <td>{{ $renew['statusUser'] }}</td>
+                                        <td>{!! $renew['reason_refuse'] !!}</td>
+                                    </tr>
+                                @endforeach
+                                </thead>
+                            </table>
+                        </div>
+                    @endif
                 <div class="form-group row mt-2">
                     <div class="col-md-6 col-md-offset-3">
                         <a href="{{ url()->previous() }}" class="btn btn-sm btn-primary">{{ __('custom.back') }}</a>
                     </div>
                 </div>
+                </div>
+
             </div>
         </div>
     </section>

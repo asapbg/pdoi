@@ -102,6 +102,16 @@ class PdoiApplicationResource extends JsonResource
                     'date' => displayDateTime($item->created_at),
                     'status' => __('custom.application.status.'. \App\Enums\PdoiApplicationStatusesEnum::keyByValue($item->status))
                 ];
+            })->toArray() : [],
+            'renewRequests' => $this->restoreRequests->count() ? $this->restoreRequests->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'status' => $item->statusName,
+                    'status_date' => $item->status_datetime,
+                    'reason_refuse' => $item->reason_refuse,
+                    'statusUser' => $item->statusUser ? $item->statusUser->fullName() : null,
+                    'created_at' => $item->created_at
+                ];
             })->toArray() : []
         ];
     }
