@@ -110,7 +110,8 @@ class PdoiApplicationResource extends JsonResource
                     'status_date' => $item->status_datetime,
                     'reason_refuse' => $item->reason_refuse,
                     'statusUser' => $item->statusUser ? $item->statusUser->fullName() : null,
-                    'created_at' => $item->created_at
+                    'created_at' => $item->created_at,
+                    'files' => !empty($item->files) ? (new FileCollection($item->files))->resolve() : [],
                 ];
             })->toArray() : []
         ];

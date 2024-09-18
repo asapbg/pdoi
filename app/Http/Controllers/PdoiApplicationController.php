@@ -341,6 +341,7 @@ class PdoiApplicationController extends Controller
             return response()->json(['errors' => $validator->errors()->first()], 200);
         }
         $validated = $validator->validated();
+
         $item = PdoiApplication::find($validated['id']);
         if( !$item ) {
             abort(Response::HTTP_NOT_FOUND);

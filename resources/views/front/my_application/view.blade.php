@@ -267,6 +267,7 @@
                                 <thead>
                                 <tr>
                                     <th>{{ __('custom.date_apply') }}</th>
+                                    <th>{{ trans_choice('custom.documents', 2) }}</th>
                                     <th>{{ __('custom.status') }}</th>
                                     <th>{{ __('custom.status_date') }}</th>
                                     <th>Обработено от</th>
@@ -277,6 +278,15 @@
                                 @foreach($application['renewRequests'] as $renew)
                                     <tr>
                                         <td>{{ displayDate($renew['created_at']) }}</td>
+                                        <td>
+                                            @if(isset($renew['files']) && isset($renew['files']['data']) && sizeof($renew['files']['data']))
+                                                @foreach($renew['files']['data'] as $f)
+                                                    <a class="d-block" type="button" href="{{ route('download.file', ['file' => $f['id']]) }}">
+                                                        <span class="download-file" data-file="{{ $f['id'] }}">{{ $f['description'] }}</span></i>
+                                                    </a>
+                                                @endforeach
+                                            @endif
+                                        </td>
                                         <td>{{ $renew['status'] }}</td>
                                         <td>{{ displayDate($renew['status_date']) }}</td>
                                         <td>{{ $renew['statusUser'] }}</td>

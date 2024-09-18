@@ -30,7 +30,7 @@ class RenewApplicationStoreRequest extends FormRequest
             'request_summernote' => ['nullable', 'string'],
             'file_description' => ['array'],
             'file_description.*' => ['nullable', 'string', 'max:255'],
-            'files' => ['array','min:1', 'max:'.config('filesystems.max_file_uploads')],
+            'files' => ['required', 'array', 'max:'.config('filesystems.max_file_uploads')],
             'files.*' => ['file', 'max:'.config('filesystems.max_upload_file_size'), new FileClientMimeType(File::ALLOWED_FILE_EXTENSIONS_MIMES_TYPE)],
         ];
     }

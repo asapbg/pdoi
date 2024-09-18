@@ -55,9 +55,23 @@ $(function() {
             });
 
             let formData = new FormData($('#renew_form')[0]); //use this to catch file inputs
+
+            //In this form we have a problem with files input so we loop elements and append to formData
+            formData.delete('files');
+            let filesArr = [];
+            $('.file-validate').each(function (indx, el){
+                filesArr.push(el.files[0]);
+            });
+            formData.append('files', filesArr);
+            // console.log(formData.entries());
+            // for(var pair of formData.entries()) {
+            //     console.log(pair[0]+ ', '+ pair[1]);
+            // }
+
             $.ajax({
                 url: $('#applicationUrl').val(),
                 type: 'POST',
+                method: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,

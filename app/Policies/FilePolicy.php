@@ -19,7 +19,7 @@ class FilePolicy
      */
     public function download(User $user, File $file): \Illuminate\Auth\Access\Response|bool
     {
-        $application = $file->code_object == File::CODE_OBJ_APPLICATION ? $file->application : $file->event->application;
+        $application = $file->code_object == File::CODE_OBJ_APPLICATION ? $file->application : ($file->code_object == File::CODE_OBJ_APPLICATION_RENEW ? $file->renew->application : $file->event->application);
         if( !$file->visible_on_site
             && !(
                 $application->applicant->id == $user->id

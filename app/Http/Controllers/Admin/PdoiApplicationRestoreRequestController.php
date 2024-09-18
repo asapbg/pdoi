@@ -32,6 +32,8 @@ class PdoiApplicationRestoreRequestController extends AdminController
                 $q->ByUserSubjects();
             })
             ->FilterBy($requestFilter)
+            ->orderBy('id', 'desc')
+            ->orderBy('status', 'asc')
             ->paginate($paginate);
 
         $editRouteName = self::EDIT_ROUTE;

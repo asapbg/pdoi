@@ -18,9 +18,35 @@
                             </div>
                         @endif
                         <div class="col-12">
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">{{ __('validation.attributes.files') }}</label>
-                                Файла тук за сваляне
+                            <div class="col-12">
+                                <h5 class="bg-primary py-1 px-2 mb-4">{{ trans_choice('custom.documents',1) }}</h5>
+                                <table class="table table-light table-sm table-bordered mb-4">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>{{ __('front.file_name') }}</th>
+                                        <th>{{ __('front.description') }}</th>
+                                        <th>{{ __('custom.actions') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @if($item->files->count())
+                                        @foreach($item->files as $key => $file)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $file->filename }}</td>
+                                                <td>{{ $file->description }}</td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-secondary" type="button" href="{{ route('admin.download.file', ['file' => $file->id]) }}">
+                                                        <i class="fas fa-download me-1 download-file" data-file="$file->id" role="button"
+                                                           data-toggle="tooltip" title="{{ __('custom.download') }}"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         @if($item->status == \App\Models\PdoiApplicationRestoreRequest::STATUS_REGECTED)

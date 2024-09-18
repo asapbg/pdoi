@@ -62,6 +62,10 @@ $(function() {
             navBtns.prop('disable', true);
             //merge forms
             let formData = new FormData($('#info')[0]); //use this to catch file inputs
+            // console.log(formData.entries());
+            // for(var pair of formData.entries()) {
+            //     console.log(pair[0]+ ', '+ pair[1]);
+            // }
             //merge two forms
             let rzsForm = $('#rzs').serializeArray();
             for (let i = 0; i < rzsForm.length; i++) {
