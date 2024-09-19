@@ -3,9 +3,12 @@
 namespace App\Policies;
 
 use App\Enums\ApplicationEventsEnum;
+use App\Enums\DeliveryMethodsEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
+use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Models\PdoiApplication;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PdoiApplicationPolicy
@@ -120,9 +123,13 @@ class PdoiApplicationPolicy
 //                )
 //            );
 
-        return ($pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
+        return (
+                ($pdoiApplication->status == PdoiApplicationStatusesEnum::RENEWED->value  //is in renew procedure
                 || in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted())
-                || PdoiApplicationStatusesEnum::canEditFinalDecision($pdoiApplication->status)
+                || PdoiApplicationStatusesEnum::canEditFinalDecision($pdoiApplication->status))
+                && (
+                    $pdoiApplication->status != PdoiApplicationStatusesEnum::RECEIVED->value || $pdoiApplication->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value
+                )
             )
             && (
                 $user->can('manage.*') ||
@@ -232,6 +239,9 @@ class PdoiApplicationPolicy
     public function forward(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
     {
         return PdoiApplicationStatusesEnum::canForward($pdoiApplication->status)// status allow forwarding
+            && !is_null($pdoiApplication->response_end_time)
+            && ($pdoiApplication->status != PdoiApplicationStatusesEnum::FORWARDED->value || Carbon::parse($pdoiApplication->response_end_time)->format('Y-m-d') >= Carbon::now()->format('Y-m-d'))
+            && ($pdoiApplication->status != PdoiApplicationStatusesEnum::RECEIVED->value || $pdoiApplication->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value)
             && !$pdoiApplication->manual && $pdoiApplication->response_subject_id
             && (
                 $user->can('manage.*') ||

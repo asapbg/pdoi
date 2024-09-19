@@ -109,6 +109,7 @@ enum PdoiApplicationStatusesEnum: int
     public static function canForward($value): bool
     {
         return in_array($value, [
+            self::RECEIVED->value,
             self::IN_PROCESS->value,
             self::FORWARDED->value,
         ]);
