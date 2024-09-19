@@ -51,6 +51,14 @@
                 @include('layouts.partial.count-down-timer')
             </div>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.users.profile.notifications') }}" aria-expanded="false">
+                <i class="fas fa-bell"></i>
+                @if($user && !is_null($user->myUnreadedNotifications()) && $user->myUnreadedNotifications()->count())
+                    <span class="badge badge-danger navbar-badge">{{ $user->myUnreadedNotifications()->count() }}</span>
+                @endif
+            </a>
+        </li>
         <!-- User Account: style can be found in dropdown.less -->
         <li class="nav-item dropdown">
             @php

@@ -548,5 +548,8 @@ return [
     'restore_request.status.1'                                          => 'Approved',
     'restore_request.status.2'                                          => 'Rejected',
     'restore_request.reject_btn'                                          => 'Regect restor',
+    'notifications'                                          => 'Notification|Notifications',
+    'restore_requests' => 'Application restore request|Application restore requests',
+    'my_notifications' => 'My notifications'
 ];
 

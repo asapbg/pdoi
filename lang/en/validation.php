@@ -333,7 +333,8 @@ return [
         'edit_final_decision_reason'                  => 'Причини за редакция на решението',
         'change_decision_reasons_select'                  => 'Причини за редакция на решението',
         'files'                  => 'Documents',
-        'answer' => 'Отговор'
+        'answer' => 'Отговор',
+        'msg' => 'Messages'
     ],
 
 ];

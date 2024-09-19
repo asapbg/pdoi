@@ -323,4 +323,20 @@ class  UsersController extends Controller
 
         }
     }
+
+    public function myNotifications(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $user = $request->user();
+        $notifications = $user->myNotifications()->paginate(User::PAGINATE);
+
+        return $this->view('admin.my_notifications.index', compact('user', 'notifications'));
+    }
+
+    public function showMyNotifications(Request $request, $id): \Illuminate\View\View
+    {
+        $user = $request->user();
+        $notification = $user->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return $this->view('admin.my_notifications.show', compact('notification'));
+    }
 }

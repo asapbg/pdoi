@@ -320,6 +320,7 @@ return [
         'edit_final_decision_reason'                  => 'Причини за промяна на крайно решение',
         'change_decision_reasons_select'                  => 'Причини за промяна на крайно решение',
         'files'                  => 'Документи',
-        'answer' => 'Отговор'
+        'answer' => 'Отговор',
+        'msg' => 'Съобщение'
     ],
 ];

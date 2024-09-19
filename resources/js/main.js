@@ -672,4 +672,31 @@ $(document).ready(function (e) {
             });
         });
     }
+
+    if($('#all').length) {
+        $('#all').on('change', function (event){
+            let selectToClear = $('#' + $(this).data('clear'));
+            if($(this).is(':checked') && typeof selectToClear != 'undefined' && selectToClear.length){
+                console.log('ok');
+                $(selectToClear).val([]);
+                $(selectToClear).trigger('change');
+            }
+        });
+    }
+
+    if($('.select_with_all_checkbox').length) {
+        $('.select_with_all_checkbox').on('change', function (event){
+            let val = $(this).val();
+            let connectedCheckbox = $('#' + $(this).data('clear'));
+            if(typeof connectedCheckbox != 'undefined' && connectedCheckbox.length){
+                if(val != ''){
+                    connectedCheckbox.prop('checked', false);
+                }
+                // else{
+                //     connectedCheckbox.prop('checked', true);
+                // }
+            }
+
+        });
+    }
 })

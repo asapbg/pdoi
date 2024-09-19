@@ -549,6 +549,9 @@ return [
     'restore_request.status.1'                                          => 'Одобрено',
     'restore_request.status.2'                                          => 'Отказано',
     'restore_request.reject_btn'                                          => 'Отказване на възобновяване',
+    'notifications'                                          => 'Известие|Известия',
+    'restore_requests' => 'Заявка за възобновяване|Заявки за възобновяване',
+    'my_notifications' => 'Моите известия'
 
 ];
 

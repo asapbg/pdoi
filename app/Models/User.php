@@ -195,6 +195,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
             ->where('users.active', 1);
     }
 
+    public function scopeInternal($query)
+    {
+        $query->where('users.user_type', self::USER_TYPE_INTERNAL);
+    }
+
     public function scopeIsContactVisible($query): void
     {
         $query->where('users.is_public_contact', 1);
@@ -302,5 +307,15 @@ class User extends Authenticatable implements MustVerifyEmailContract
                     users.active = 1
                     and users.deleted_at is null
         ');
+    }
+
+    public function myUnreadedNotifications()
+    {
+        return $this->unreadNotifications()->where('type', '=', CustomNotification::INTERNAL_NOTIFICATION_TYPE)->get();
+    }
+
+    public function myNotifications()
+    {
+        return $this->notifications()->where('type', '=', CustomNotification::INTERNAL_NOTIFICATION_TYPE);
     }
 }

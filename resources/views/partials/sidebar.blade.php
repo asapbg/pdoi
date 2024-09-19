@@ -38,6 +38,15 @@
                         </a>
                     </li>
                 @endcanany
+                @canany(['manage.*'])
+                    <li class="nav-item">
+                        <a href="{{ route('admin.notifications') }}"
+                           class="nav-link @if(strstr(url()->current(), 'admin/notifications')) active @endif">
+                            <i class="fas fa-comments"></i>
+                            <p>{{ trans_choice('custom.notifications',2) }}</p>
+                        </a>
+                    </li>
+                @endcanany
                 <!-- RZS subjects and sections -->
                 @canany(['manage.*', 'administration.*', 'administration.rzs_sections', 'administration.rzs_items'])
                     <li class="nav-item">

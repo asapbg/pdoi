@@ -56,6 +56,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
     Route::controller(UsersController::class)->group(function () {
         Route::name('users.profile.edit')->get('/users/profile/{user}/edit', 'editProfile');
         Route::name('users.profile.update')->post('/users/profile/{user}/update', 'updateProfile');
+        Route::name('users.profile.notifications')->get('/my-notifications', 'myNotifications');
+        Route::name('users.profile.notifications.show')->get('/my-notifications/{id}/show', 'showMyNotifications');
     });
 
     Route::controller(UsersController::class)->group(function () {
@@ -224,6 +226,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/restore-requests/edit/{item?}',         'edit')->name('restore_requests.edit');
         Route::get('/restore-requests/view/{item?}',         'show')->name('restore_requests.view');
         Route::put('/restore-requests/reject',         'reject')->name('restore_requests.reject');
+    });
+
+    Route::controller(\App\Http\Controllers\Admin\NotificationsController::class)->group(function () {
+        Route::get('/notifications',                'index')->name('notifications')->middleware('can:manage.*');
+        Route::get('/notifications/create',         'create')->name('notifications.create');
+        Route::post('/notifications/store',         'store')->name('notifications.store');
+        Route::get('/notifications/view/{id?}',         'show')->name('notifications.view');
     });
 
 });
