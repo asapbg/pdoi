@@ -321,6 +321,7 @@ return [
         'change_decision_reasons_select'                  => 'Причини за промяна на крайно решение',
         'files'                  => 'Документи',
         'answer' => 'Отговор',
-        'msg' => 'Съобщение'
+        'msg' => 'Съобщение',
+        'new_resp_subject_id' => 'Нов задължен субект'
     ],
 ];

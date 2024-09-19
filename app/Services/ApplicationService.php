@@ -36,7 +36,14 @@ class ApplicationService
         $this->userId = auth()->user() ? auth()->user()->id : null;
     }
 
-    public function registerEvent(int $eventType, $data = [], $disableCommunication = false): ?PdoiApplicationEvent
+    /**
+     * @param int $eventType
+     * @param array $data
+     * @param bool $disableCommunication
+     * @param bool $skipForwardCurrentSubject  //Tell us do we need to generate application for the current user when event is Forward. We need this beacuse event can be registered for more than one subject and this will generate fake applications for each new subject to the current
+     * @return PdoiApplicationEvent|null
+     */
+    public function registerEvent(int $eventType, array $data = [], bool $disableCommunication = false, bool $skipForwardCurrentSubject = false): ?PdoiApplicationEvent
     {
         $newEvent = null;
         $isRegistered = false;
@@ -173,7 +180,7 @@ class ApplicationService
                             break;
                     }
                     //generate new application for current subject
-                    if( isset($data['current_subject_user_request']) && !empty($data['current_subject_user_request']) ) {
+                    if( !$skipForwardCurrentSubject && isset($data['current_subject_user_request']) && !empty($data['current_subject_user_request']) ) {
                         self::generateNewApplication($data, $this->application->id, $this->application->response_subject_id);
                     }
                 }

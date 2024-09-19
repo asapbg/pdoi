@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\File;
 use App\Rules\FileClientMimeType;
+use App\Rules\MinHtmlLengthRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterEventForwardRequest extends FormRequest
@@ -30,8 +31,8 @@ class RegisterEventForwardRequest extends FormRequest
             'in_platform' => ['required', 'numeric'],
             'application' => ['nullable', 'numeric', 'exists:pdoi_application,id'],
             'old_subject' => ['required', 'numeric', 'exists:pdoi_response_subject,id'],
-            'subject_user_request' => ['required', 'string', 'min:3'],
-            'add_text' => ['nullable', 'string', 'min:3'],
+            'subject_user_request' => ['required', 'string', new MinHtmlLengthRule(3)],
+            'add_text' => ['nullable', 'string', new MinHtmlLengthRule(3)],
             'to_name' => ['nullable', 'string', 'min:2'],
             'current_subject_user_request' => ['nullable', 'string', 'min:3'],
             'file_description' => ['array'],
@@ -42,7 +43,8 @@ class RegisterEventForwardRequest extends FormRequest
 
         $inPlatform = (int)request()->input('in_platform');
         if( $inPlatform ) {
-            $rules['new_resp_subject_id'] = ['required', 'numeric', 'exists:pdoi_response_subject,id'];
+            $rules['new_resp_subject_id'] = ['required', 'array', 'min:1', 'max:10'];
+            $rules['new_resp_subject_id.*'] = ['numeric', 'exists:pdoi_response_subject,id'];
         } else {
             $rules['new_resp_subject_eik'] = ['required', 'string', 'max:13'];
             $rules['new_resp_subject_name'] = ['required', 'string', 'max:255'];

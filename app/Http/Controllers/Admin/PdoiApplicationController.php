@@ -278,6 +278,7 @@ class PdoiApplicationController extends Controller
         }
 
         $validated = $validator->validated();
+
         $user = auth()->user();
 
         $application = PdoiApplication::find($validated['application']);
@@ -304,10 +305,30 @@ class PdoiApplicationController extends Controller
         //detect if event is forward and need to switch to child event depending on user selected new subject
         if( $event->app_event == ApplicationEventsEnum::FORWARD->value ) {
             if( (int)$validated['in_platform'] ) {
-                //if new subject is child of current
-                if( PdoiResponseSubject::isChildOf((int)$validated['old_subject'], (int)$validated['new_resp_subject_id']) ) {
-                    $event = Event::where('app_event', '=', ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value)->first();
-                    unset($validated['event']);
+                //changed many subjects
+                $allSubjects = sizeof($validated['new_resp_subject_id']);
+                $successSubjects = [];
+                $errorSubjects = [];
+                foreach ($validated['new_resp_subject_id'] as $key => $subj){
+                    //if new subject is child of current
+                    if( PdoiResponseSubject::isChildOf((int)$validated['old_subject'], (int)$subj) ) {
+                        $event = Event::where('app_event', '=', ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value)->first();
+                    }
+                    $subEventData = $validated;
+                    $subEventData['new_resp_subject_id'] = $subj;
+                    unset($subEventData['event']);
+                    if(!$appService->registerEvent($event->app_event, $subEventData, false, $key > 0)){
+                        $errorSubjects[] = PdoiResponseSubject::find($subj)->subject_name;
+                    } else{
+                        $successSubjects[] = PdoiResponseSubject::find($subj)->subject_name;
+                    }
+                }
+                if(!sizeof($successSubjects)){
+                    return back()->withInput()->with('danger', __('custom.system_error'));
+                } else if($allSubjects != sizeof($successSubjects)){
+                    return redirect(route('admin.application.view', ['item' => $application->id]))->with('warning', __('За следните Задължени субекти регистрирането на събитеие не беше успешно: '. implode(', ', $errorSubjects)));
+                } else{
+                    return redirect(route('admin.application.view', ['item' => $application->id]))->with('success', __('Успешно завършено регистриране на събитие Препращане по компетентност'));
                 }
             } else {
                 if( isset($validated['subject_is_child']) && (int)$validated['subject_is_child'] ) {

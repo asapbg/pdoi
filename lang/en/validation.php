@@ -334,7 +334,8 @@ return [
         'change_decision_reasons_select'                  => 'Причини за редакция на решението',
         'files'                  => 'Documents',
         'answer' => 'Отговор',
-        'msg' => 'Messages'
+        'msg' => 'Messages',
+        'new_resp_subject_id' => 'New subject'
     ],
 
 ];

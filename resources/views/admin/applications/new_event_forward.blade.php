@@ -37,45 +37,51 @@
                                         <label class="form-label fw-semibold" >{{ __('custom.new_pdoi_subject') }}: <span class="required">*</span></label>
                                         <div class="col-12 d-flex flex-row">
                                             <div class="input-group">
-                                                <select required class="form-control form-control-sm select2" name="new_resp_subject_id" id="subjects">
+                                                <select required class="form-control form-control-sm select2 @error('new_resp_subject_id') is-invalid @enderror" multiple="multiple" name="new_resp_subject_id[]" id="subjects">
                                                     <option value="">---</option>
                                                     @if(isset($subjects) && sizeof($subjects))
                                                         @foreach($subjects as $option)
-                                                            <option value="{{ $option['value'] }}" @if($option['value'] == old('new_resp_subject_id', '')) selected @endif>{{ $option['name'] }}</option>
+                                                            <option value="{{ $option['value'] }}" @if(in_array($option['value'], old('new_resp_subject_id', []))) selected @endif>{{ $option['name'] }}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
                                             </div>
                                             <button type="button" class="btn btn-sm btn-primary ms-1 pick-subject rounded"
                                                     data-title="{{ trans_choice('custom.pdoi_response_subjects',2) }}"
-                                                    data-url="{{ route('modal.pdoi_subjects').'?redirect_only=0&select=1&&admin=1' }}">
+                                                    data-url="{{ route('modal.pdoi_subjects').'?redirect_only=0&select=1&&admin=1&multiple=1' }}">
                                                 <i class="fas fa-list"></i>
                                             </button>
                                         </div>
-                                        <span class="text-danger" id="error-new_resp_subject_id"></span>
+                                        <span class="text-danger" id="error-new_resp_subject_id"> @error('new_resp_subject_id'){{ $message }}@enderror </span>
                                     </div>
                                     <div class="form-group form-group-sm col-md-4 col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.mail_templates.placeholders.to_name') }}:</label>
-                                        <input type="text" class="form-control form-control-sm" name="to_name" value="{{ old('to_name', '') }}" id="to_name">
-                                        <span class="text-danger" id="error-to_name"></span>
+                                        <input type="text" class="form-control form-control-sm @error('to_name') is-invalid @enderror" name="to_name" value="{{ old('to_name', '') }}" id="to_name">
+                                        <span class="text-danger" id="error-to_name">@error('to_name'){{ $message }}@enderror</span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{{ __('custom.user_request') }}: <span class="required">*</span></label>
-                                        <textarea class="col-12 form-control summernote-custom-clone">@if(!empty(old('subject_user_request', ''))){!! old('subject_user_request') !!}@endif</textarea>
+                                        <textarea class="col-12 form-control summernote-custom-clone @error('subject_user_request') is-invalid @enderror">@if(!empty(old('subject_user_request', ''))){!! old('subject_user_request') !!}@endif</textarea>
                                         <input type="hidden" class="do-not-ignore summernote-val" name="subject_user_request" value="@if(!empty(old('subject_user_request', ''))){!! old('subject_user_request') !!}@endif" id="subject_user_request">
-                                        <span class="text-danger" id="error-subject_user_request"></span>
+                                        <span class="text-danger" id="error-subject_user_request">
+                                            @error('subject_user_request') {{ $message }} @enderror
+                                        </span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{!! __('custom.comment_to_new_subject') !!}:</label>
-                                        <textarea class="col-12 form-control summernote-standard-clone">@if(!empty(old('add_text', ''))){!! old('add_text') !!}@endif</textarea>
+                                        <textarea class="col-12 form-control summernote-standard-clone @error('add_text') is-invalid @enderror">@if(!empty(old('add_text', ''))){!! old('add_text') !!}@endif</textarea>
                                         <input type="hidden" class="do-not-ignore summernote-val" name="add_text" value="@if(!empty(old('add_text', ''))){!! old('add_text') !!}@endif" id="add_text">
-                                        <span class="text-danger" id="error-add_text"></span>
+                                        <span class="text-danger" id="error-add_text">
+                                            @error('add_text') {{ $message }} @enderror
+                                        </span>
                                     </div>
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label fw-semibold" >{!! __('custom.request_to_current_subject') !!}:</label>
-                                        <textarea class="col-12 form-control summernote-standard-clone">@if(!empty(old('current_subject_user_request', ''))){!! old('current_subject_user_request') !!}@endif</textarea>
+                                        <textarea class="col-12 form-control summernote-standard-clone @error('current_subject_user_request') is-invalid @enderror">@if(!empty(old('current_subject_user_request', ''))){!! old('current_subject_user_request') !!}@endif</textarea>
                                         <input type="hidden" class="do-not-ignore summernote-val" name="current_subject_user_request" value="@if(!empty(old('current_subject_user_request', ''))){!! old('current_subject_user_request') !!}@endif" id="current_subject_user_request">
-                                        <span class="text-danger" id="error-current_subject_user_request"></span>
+                                        <span class="text-danger" id="error-current_subject_user_request">
+                                            @error('current_subject_user_request') {{ $message }} @enderror
+                                        </span>
                                     </div>
                                     @if($event->files)
                                         <h5 class="bg-primary py-1 px-2 mb-4">{{ trans_choice('custom.documents',1) }}</h5>
@@ -290,7 +296,7 @@
                     rules: getRules(form.data('rule')),
                     errorPlacement: function (error, element) {
                         if( element.attr("name") != 'files[]' ) {
-                            $("#error-" + element.attr("name")).html(error);
+                            $("#error-" + element.attr("name").replace("[]", "")).html(error);
                         } else{
                             error.insertAfter(element);
                         }
