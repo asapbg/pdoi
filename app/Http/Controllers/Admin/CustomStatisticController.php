@@ -99,36 +99,42 @@ class CustomStatisticController extends AdminController
                 //TODO STATISTIC get data from file
                 $fData = csvToArray($validated['file']->getPathName());
                 if(!sizeof($fData)){
-                    return back()->withInput()->with('danger', 'Данните от посочения файл не отговарят на тип справка');
+                    return back()->withInput()->with('danger', 'Неуспешно извличане на данни от файла');
                 }
 
-                //data without header
-                $fDataNoHeader = $fData;
-                array_shift($fDataNoHeader);
-                //heading row containing secondary labels
-                $datasetsLabels = $fData[0];
+                if($validated['type'] == CustomStatisticTypeEnum::TYPE_BASE->value){
+                    //data without header
+                    $fDataNoHeader = $fData;
+                    array_shift($fDataNoHeader);
+                    //heading row containing secondary labels
+                    $datasetsLabels = $fData[0];
 
-                //Main labels
-                $labels = array_map(function($csvRow){
-                    return $csvRow[0];
-                }, $fDataNoHeader);
+                    //Main labels
+                    $labels = array_map(function($csvRow){
+                        return $csvRow[0];
+                    }, $fDataNoHeader);
 
-                $datasets = [];
-                foreach ($datasetsLabels as $hKey => $hCell){
-                    if($hKey){
-                        $datasets[] = array(
-                            "label" => $hCell,
-                            "data" => array_map(function($csvRow) use($hKey) {
-                                return $csvRow[$hKey];
-                            }, $fDataNoHeader)
-                        );
+                    $datasets = [];
+                    foreach ($datasetsLabels as $hKey => $hCell){
+                        if($hKey){
+                            $datasets[] = array(
+                                "label" => $hCell,
+                                "data" => array_map(function($csvRow) use($hKey) {
+                                    return $csvRow[$hKey];
+                                }, $fDataNoHeader)
+                            );
+                        }
                     }
-                }
 
-                $sData = array(
-                    "labels" => $labels,
-                    "datasets" => $datasets
-                );
+                    $sData = array(
+                        "labels" => $labels,
+                        "datasets" => $datasets
+                    );
+                }
+            }
+
+            if(!isset($sData) && !$id){
+                return back()->withInput()->with('danger', 'Данните от посочения файл не отговарят на типа справка');
             }
 
             if(!$id){
