@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-delete-resource" role="dialog" aria-hidden=" true">
+<div class="modal fade" id="modal-delete-resource" role="dialog" aria-hidden=" true" style="widt">
     <div class="modal-dialog">
 
         <div class="modal-content">
@@ -23,13 +23,13 @@
                 <form method="POST" action="" class="pull-left mr-4">
                     @csrf
                     <input name="id" value="" id="resource_id" type="hidden">
-                    <button type="submit" class="btn btn-danger js-delete-resource">
+                    <button type="submit" class="btn btn-danger js-delete-resource mb-2">
                         <i class="fas fa-ban"></i>&nbsp; {{__('custom.deletion')." ".__('custom.of')}} {{capitalize($resource)}}
                     </button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
+                        {{__('custom.cancel')}}
+                    </button>
                 </form>
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
-                    {{__('custom.cancel')}}
-                </button>
             </div>
 
         </div>

@@ -218,6 +218,7 @@ return [
     'date_received'                    => 'Received on',
     'date_created'                     => 'Date of creation',
     'date_public'                       => 'Publication date',
+    'date_unpublic'                       => 'Public to',
     'date_apply'                       => 'Apply date',
     'date_registration'                => 'Registration date',
     'are_you_sure_to_delete'           => 'Сигурни ли сте, че искате да изтриете',
@@ -446,6 +447,8 @@ return [
     'settings.session_time_limit'                => 'Потребителска сесия без активност (в минути)',
     //statistics
     'statistic'                                 => 'Statistic',
+    'statistic.dynamic'                                 => 'Динамични данни',
+    'statistic.static'                                 => 'Статични данни',
     'base'                                      => 'Base',
     'statistics.not_available_statistic'        => 'No available statistics found',
     'statistics.base'                           => 'Base',
@@ -550,6 +553,9 @@ return [
     'restore_request.reject_btn'                                          => 'Regect restor',
     'notifications'                                          => 'Notification|Notifications',
     'restore_requests' => 'Application restore request|Application restore requests',
-    'my_notifications' => 'My notifications'
+    'my_notifications' => 'My notifications',
+    'custom_statistics' => 'Statistic (Static data)|Statistics (Static data)',
+    'custom_statistics.TYPE_BASE' => 'Standard',
+    'author' => 'Author',
 ];
 

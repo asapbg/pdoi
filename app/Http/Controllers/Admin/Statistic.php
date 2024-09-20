@@ -140,10 +140,6 @@ class Statistic extends Controller
         return $this->view('admin.statistic.'.$type, compact('data'));
     }
 
-    public function publicStatistic(Request $request, $type = self::TYPE_BASE){
-
-    }
-
     private function filter($type): array
     {
         return match ($type) {

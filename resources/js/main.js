@@ -436,6 +436,16 @@ $(document).ready(function (e) {
         });
     }
 
+    if($('.datepicker-day').length) {
+        $('.datepicker-day').datepicker({
+            language: typeof GlobalLang != 'undefined' ? GlobalLang : 'en',
+            format: 'dd.mm.yyyy',
+            todayHighlight: true,
+            orientation: "bottom left",
+            autoclose: true
+        });
+    }
+
     if($('.datepicker_end_date').length) {
         $('.datepicker_end_date').datepicker({
             language: typeof GlobalLang != 'undefined' ? GlobalLang : 'en',

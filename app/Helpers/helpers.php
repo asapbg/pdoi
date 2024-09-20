@@ -654,4 +654,24 @@ if (!function_exists('transliterate_new')) {
     }
 }
 
+if (!function_exists('csvToArray')) {
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        if (!file_exists($filename) || !is_readable($filename)) {
+            return false;
+        }
+
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+                $data[] = $row;
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
+}
+
 

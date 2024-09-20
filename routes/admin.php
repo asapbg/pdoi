@@ -221,6 +221,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/statistic/{type}',                'statistic')->name('statistic.type');
     });
 
+    Route::controller(\App\Http\Controllers\Admin\CustomStatisticController::class)->group(function () {
+        Route::get('/custom-statistic',                'index')->name('custom_statistic')->middleware('can:viewAny,App\Models\CustomStatistic');
+        Route::get('/custom-statistic/{id}/edit',                'edit')->name('custom_statistic.edit');
+        Route::match(['put', 'post'], '/custom-statistic/{id}/store',                'store')->name('custom_statistic.store');
+        Route::post( '/custom-statistic/{item}/delete',                'delete')->name('custom_statistic.delete');
+        Route::get( '/custom-statistic/download-file-example/{type}',                'downloadExampleStatisticFile')->name('custom_statistic.download.example');
+    });
+
     Route::controller(\App\Http\Controllers\Admin\PdoiApplicationRestoreRequestController::class)->group(function () {
         Route::get('/restore-requests',                'index')->name('restore_requests')->middleware('can:viewAny,App\Models\PdoiApplicationRestoreRequest');
         Route::get('/restore-requests/edit/{item?}',         'edit')->name('restore_requests.edit');

@@ -335,7 +335,9 @@ return [
         'files'                  => 'Documents',
         'answer' => 'Отговор',
         'msg' => 'Messages',
-        'new_resp_subject_id' => 'New subject'
+        'new_resp_subject_id' => 'New subject',
+        'publish_from'                       => 'Publication date',
+        'publish_to'                       => 'Public to',
     ],
 
 ];

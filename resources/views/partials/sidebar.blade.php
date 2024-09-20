@@ -120,11 +120,26 @@
 {{--                Statistics--}}
                 @canany(['manage.*', 'statistics.*'])
                     <li class="nav-item">
-                        <a href="{{ route('admin.statistic') }}"
-                           class="nav-link @if(str_contains(url()->current(), 'statistic')) active @endif">
-                            <i class="fas fa-chart-line"></i>
-                            <p>{{ trans_choice('custom.statistics',2) }}</p>
+                        <a href="#" class="nav-link @if(str_contains(url()->current(), 'statistic')) active @endif">
+                            <i class="nav-icon fas fa-chart-line"></i>
+                            <p>{{ trans_choice('custom.statistics',2) }}<i class="fas fa-angle-left right"></i></p>
                         </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.custom_statistic') }}"
+                                   class="nav-link @if(str_contains(url()->current(), 'custom-statistic')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ __('custom.statistic.static') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.statistic') }}"
+                                   class="nav-link @if(str_contains(url()->current(), 'statistic') && !str_contains(url()->current(), 'custom-statistic')) active @endif">
+                                    <i class="fas fa-circle nav-icon nav-item-sub-icon"></i>
+                                    <p>{{ __('custom.statistic.dynamic') }}</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endcanany
 {{--                Nomenlatures--}}

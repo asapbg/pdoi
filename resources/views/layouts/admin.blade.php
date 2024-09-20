@@ -18,7 +18,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script nonce="2726c7f26c">
-        GlobalLang = "{{ str_replace('_', '-', app()->getLocale()) }}";
+        var GlobalLang = "{{ str_replace('_', '-', app()->getLocale()) }}";
     </script>
     <script nonce="2726c7f26c" type="text/javascript">
         var max_upload_file_size = parseInt(<?php echo config('filesystems.max_upload_file_size')?>) * 1024; //kb to b

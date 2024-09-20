@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Enums\PdoiApplicationStatusesEnum;
 use App\Enums\StatisticTypeEnum;
 use App\Exports\StatisticExport;
+use App\Models\CustomStatistic;
 use App\Models\PdoiApplication;
 use App\Models\Statistic;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StatisticController extends Controller
@@ -17,7 +19,19 @@ class StatisticController extends Controller
     public function index()
     {
         $titlePage = trans_choice('front.statistics', 2);
-        return $this->view('front.statistic.index', compact('titlePage'));
+        $customStatistics = CustomStatistic::IsPublished()->get();
+        return $this->view('front.statistic.index', compact('titlePage', 'customStatistics'));
+    }
+
+    public function showCustom($id = 0)
+    {
+        $item = CustomStatistic::IsPublished()->find($id);
+
+        if(!$item){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->view('front.statistic.view_custon_statistic', compact('item'));
     }
 
     public function show(Request $request, int $type)

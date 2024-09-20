@@ -56,4 +56,5 @@ return [
     'to_admin_panel' => 'Admin Panel',
     'application.renew.files_section' => 'Attach documents (judgment and others)',
     'renew_request.btn' => 'Send renew request',
+    'statistics.full_screen' => 'Preview'
 ];

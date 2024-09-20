@@ -56,4 +56,5 @@ return [
     'to_admin_panel' => 'Административен панел',
     'application.renew.files_section' => 'Прилагане на документи (съдебно решение и др.)',
     'renew_request.btn' => 'Изпрати заявка за възобновяване',
+    'statistics.full_screen' => 'Преглед'
 ];
