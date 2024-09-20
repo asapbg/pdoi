@@ -492,7 +492,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                             DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value),
                             DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_REVIEW->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::NO_REVIEW->value),
                             DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::FORWARDED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::FORWARDED->value),
-                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::RENEWED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::RENEWED->value)
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::RENEWED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::RENEWED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value)
                         ]
                     )->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
                     ->join('pdoi_response_subject_translations', function ($join){
@@ -519,7 +520,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                             DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value),
                             DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_REVIEW->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::NO_REVIEW->value),
                             DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::FORWARDED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::FORWARDED->value),
-                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::RENEWED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::RENEWED->value)
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::RENEWED->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::RENEWED->value),
+                            DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value.' then 1 else 0 end) as cnt_'.PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value)
                         ])
                     ->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
                     ->join('pdoi_response_subject_translations', function ($join){

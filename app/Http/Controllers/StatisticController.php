@@ -49,21 +49,25 @@ class StatisticController extends Controller
         if( $arrayData ) {
             $statuses = PdoiApplicationStatusesEnum::values();
             $colors = [
-                PdoiApplicationStatusesEnum::RECEIVED->value => '#1D1289FF',
-                PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value => '#890F0FFF',
-                PdoiApplicationStatusesEnum::IN_PROCESS->value => '#128914FF',
-                PdoiApplicationStatusesEnum::APPROVED->value => '#C2AA0BFF',
-                PdoiApplicationStatusesEnum::PART_APPROVED->value => '#EA6749FF',
-                PdoiApplicationStatusesEnum::NOT_APPROVED->value => '#64DE04FF',
-                PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value => '#890F0FFF',
-                PdoiApplicationStatusesEnum::NO_REVIEW->value => '#AF2CF1FF',
-                PdoiApplicationStatusesEnum::FORWARDED->value => '#2CF1ACFF',
-                PdoiApplicationStatusesEnum::RENEWED->value => '#F19F34FF',
+                PdoiApplicationStatusesEnum::RECEIVED->value => '#ECEAEAFF',
+                PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value => '#A10037FF',
+                PdoiApplicationStatusesEnum::IN_PROCESS->value => '#6C757DFF',
+                PdoiApplicationStatusesEnum::APPROVED->value => '#6ABE7DFF',
+                PdoiApplicationStatusesEnum::PART_APPROVED->value => '#0A8122FF',
+                PdoiApplicationStatusesEnum::NOT_APPROVED->value => '#DC3545FF',
+                PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value => '#026AF1FF',
+                PdoiApplicationStatusesEnum::NO_REVIEW->value => '#DEC1FDFF',
+                PdoiApplicationStatusesEnum::FORWARDED->value => '#17A2B8FF',
+                PdoiApplicationStatusesEnum::RENEWED->value => '#CFE138FF',
+                PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value => '#FFC107FF',
             ];
 
             $chartData['labels'] = array_column($arrayData, 'name');
             $extraChartData['scaleY']['max'] = 0;
             foreach ($statuses as $status) {
+                if(!sizeof(array_column($arrayData, 'cnt_'.$status))){
+                    dd('cnt_'.$status, $arrayData);
+                }
                 $max = max(array_column($arrayData, 'cnt_'.$status));
                 if( $max > $extraChartData['scaleY']['max'] ) {
                     $extraChartData['scaleY']['max'] = $max;
