@@ -369,6 +369,8 @@ return [
     //delivery_methods
     'delivery_by.EMAIL'                       => 'Публикуване на портала и уведомяване на посочения в профила е-мейл адрес',
     'delivery_by.SDES'                        => 'Публикуване на портала и уведомяване чрез системата за сигурно електронно връчване (ССЕВ)',
+    'delivered_by.EMAIL'                       => 'Чрез електронна поща',
+    'delivered_by.SDES'                        => 'Чрез системата за сигурно електронно връчване (ССЕВ)',
     //applications
     'applications'                               => 'Заявление|Заявления',
     'data_for_event'                            => 'Информация за събитие',
@@ -405,6 +407,7 @@ return [
     'application.status.RENEWED'                   => 'Възобновено',
     'application.request_for_info'                   => 'Искане за достъп до обществена информация',
     'application.full_history'                   => 'Електронно досие',
+    'application.log'                           => 'История (активност)',
     'application.manual_application'            => 'Получено извън плаформата',
     //events names
     'event.SEND'                                => 'Подаване на заявление',
@@ -558,6 +561,13 @@ return [
     'custom_statistics' => 'Статистика (Статични данни)|Статистики (Статични данни)',
     'custom_statistics.TYPE_BASE' => 'Стандартен',
     'author' => 'Автор',
+    'notification_types' => [
+        'App\Notifications\NotifyUserForAppStatus' => 'Съобщение за статус на заявление',
+        'App\Notifications\NotifySubjectNewApplication' => 'Известяване на ЗС за заявление',
+    ],
+    'user_logout' => 'Изход от платформата',
+    'user_login' => 'Вход в платформата',
+    'apply_event' => 'Подадено',
 
 ];
 

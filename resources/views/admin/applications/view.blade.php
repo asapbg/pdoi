@@ -15,11 +15,21 @@
                             </li>
                         @endif
                         <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="pill" href="#custom-tabs-three-messages" role="tab" aria-controls="custom-tabs-three-messages" aria-selected="true">{{ trans_choice('custom.activity_logs',1) }}</a>
+                            <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="pill" href="#custom-tabs-three-messages" role="tab" aria-controls="custom-tabs-three-messages" aria-selected="true">История на обработка</a>
                         </li>
+                        @if(isset($activities) && $activities->count())
+                            <li class="nav-item">
+                                <a class="nav-link" id="activity-tab" data-toggle="pill" href="#activity" role="tab" aria-controls="activity" aria-selected="true">{{ trans_choice('custom.activity_logs',1) }}</a>
+                            </li>
+                        @endif
                         @if($item->children->count())
                             <li class="nav-item">
                                 <a class="nav-link" id="sub-application-tab" data-toggle="pill" href="#sub-application" role="tab" aria-controls="sub-application" aria-selected="false">Препратени заявления</a>
+                            </li>
+                        @endif
+                        @if(isset($communication) && sizeof($communication))
+                            <li class="nav-item">
+                                <a class="nav-link" id="communication-tab" data-toggle="pill" href="#communication" role="tab" aria-controls="communication" aria-selected="true">Комуникация</a>
                             </li>
                         @endif
                     </ul>
@@ -318,6 +328,152 @@
                                                 <td>{{ displayDate($app->created_at) }}</td>
                                                 <td>{{ __('custom.application.status.'. \App\Enums\PdoiApplicationStatusesEnum::keyByValue($app->status)) }}</td>
                                             </tr>
+                                        @endforeach
+                                    </thead>
+                                </table>
+                            </div>
+                        @endif
+                        @if(isset($activities) && $activities->count())
+                            <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+                                <table class="table table-light table-sm table-bordered mb-4">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>{{__('custom.activity_log_date')}}</th>
+                                        <th>{{__('custom.activity_log_action')}}</th>
+                                        <th>{{__('custom.activity_log_causer')}}</th>
+                                        <th>{{__('custom.actions')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($activities as $activity)
+                                            @php($subject_name = $activity->getSubjectName())
+                                            @php($causer_name = "Няма данни за Дееца, може би е бил изтрит")
+
+                                            <tr>
+                                                <td>{{ $activity->id }}</td>
+                                                <td>{{ displayDateTime($activity->created_at) }}</td>
+                                                <td>{{ $activity->getActivityDescription() }}</td>
+                                                <td>
+                                                    @if($activity->causer)
+                                                        <a class="text-decoration-underline" href="{{ route('admin.users.edit', $activity->causer->id) }}" target="_blank">{{ $activity->causer->fullName() }}</a>
+                                                    @else
+                                                        Няма данни за Дееца, може би е бил изтрит
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{route('admin.activity-logs.show',$activity->id)}}"
+                                                       class="btn btn-sm btn-info"
+                                                       data-toggle="tooltip"
+                                                       title="{{__('custom.view')}}">
+                                                        <i class="fa fa-search"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                        @if(isset($communication) && sizeof($communication))
+                            <div class="tab-pane fade" id="communication" role="tabpanel" aria-labelledby="communication-tab">
+                                <table class="table table-light table-sm table-bordered mb-4">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Тип на известието</th>
+                                        <th>Метод (известие)</th>
+                                        <th>До</th>
+                                        <th>Планирано</th>
+                                        <th>Изпратено</th>
+                                        <th>Опити за изпращане</th>
+
+                                        <th>Получател</th>
+                                        <th>СЕОС (egov_message_id)</th>
+    {{--                                    <th>ССЕВ ID</th>--}}
+
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <thead>
+                                        @foreach($communication as $comm)
+                                            @php($jsonData = json_decode($comm->data, true))
+                                            @if($comm->row_type == 'notification')
+                                                <tr>
+                                                    <td>{{ $comm->n_id }}</td>
+                                                    <td>{{ __('custom.notification_types.'.$comm->type) }}</td>
+                                                    <td>{{ $comm->notifiable_type == 'App\Models\PdoiResponseSubject' ? __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($comm->type_channel)) : __('custom.delivered_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($comm->type_channel)) }}</td>
+                                                    <td>
+                                                        @if($comm->notifiable_type == 'App\Models\PdoiResponseSubject')
+                                                            @if($comm->type_channel == \App\Enums\PdoiSubjectDeliveryMethodsEnum::EMAIL->value)
+                                                                {{ $jsonData['to_email'] }}
+                                                            @elseif($comm->type_channel == \App\Enums\PdoiSubjectDeliveryMethodsEnum::SDES->value)
+                                                                {{ $jsonData['to_identity'] }} (ССЕВ ID {{ $jsonData['ssev_profile_id'] }})
+                                                            @else
+                                                            @endif
+                                                        @else
+                                                            @if($comm->type_channel == \App\Enums\DeliveryMethodsEnum::EMAIL->value)
+                                                                {{ $jsonData['to_email'] }}
+                                                            @elseif($comm->type_channel == \App\Enums\DeliveryMethodsEnum::SDES->value)
+                                                                {{ $jsonData['to_identity'] }} (ССЕВ ID {{ $jsonData['ssev_profile_id'] }})
+                                                            @else
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ displayDateTime($comm->created_at) }}</td>
+                                                    <td>@if($comm->is_send) {{ displayDateTime($comm->updated_at) }} @else <i class="fas fa-minus text-danger"></i> @endif</td>
+                                                    <td>{{ $comm->cnt_send }}</td>
+                                                    <td>
+                                                        @if($comm->notifiable_type == 'App\Models\PdoiResponseSubject')
+                                                            <a class="text-decoration-underline" href="{{ route('admin.rzs.view', $comm->notifiable_id) }}" target="_blank">ЗС</a>
+                                                        @elseif($comm->notifiable_type == 'App\Models\User')
+                                                            <a class="text-decoration-underline" href="{{ route('admin.users.edit', $comm->notifiable_id) }}" target="_blank">Потребител</a>
+                                                        @else
+                                                            {{ $comm->notifiable_type }} | {{ $comm->notifiable_id }}
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $comm->egov_message_id ?? '---' }}</td>
+        {{--                                            <td>{{ $comm->msg_integration_id ?? '---' }}</td>--}}
+                                                    <td><a href="{{ route('admin.support.notifications.view', ['id' => $comm->n_id]) }}" target="_blank"><i class="fas fa-eye text-warning"></i></a></td>
+                                                </tr>
+                                            @elseif($comm->row_type == 'notification_error')
+                                                <tr>
+                                                    <td>{{ $comm->n_id }}</td>
+                                                    <td>{{ __('custom.notification_types.'.$comm->type) }}</td>
+                                                    <td>{{ $comm->notifiable_type == 'App\Models\PdoiResponseSubject' ? __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($comm->type_channel)) : __('custom.delivered_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($comm->type_channel)) }}</td>
+                                                    <td>
+                                                        @if($comm->notifiable_type == 'App\Models\PdoiResponseSubject')
+                                                            @if($comm->type_channel == \App\Enums\PdoiSubjectDeliveryMethodsEnum::EMAIL->value)
+                                                                {{ $jsonData['to_email'] }}
+                                                            @elseif($comm->type_channel == \App\Enums\PdoiSubjectDeliveryMethodsEnum::SDES->value)
+                                                                {{ $jsonData['to_identity'] }} (ССЕВ ID {{ $jsonData['ssev_profile_id'] }})
+                                                            @else
+                                                            @endif
+                                                        @else
+                                                            @if($comm->type_channel == \App\Enums\DeliveryMethodsEnum::EMAIL->value)
+                                                                {{ $jsonData['to_email'] }}
+                                                            @elseif($comm->type_channel == \App\Enums\DeliveryMethodsEnum::SDES->value)
+                                                                {{ $jsonData['to_identity'] }} (ССЕВ ID {{ $jsonData['ssev_profile_id'] }})
+                                                            @else
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ displayDateTime($comm->created_at) }}</td>
+                                                    <td>Неуспешен опит</td>
+                                                    <td>---</td>
+                                                    <td>
+                                                        @if($comm->notifiable_type == 'App\Models\PdoiResponseSubject')
+                                                            <a class="text-decoration-underline" href="{{ route('admin.rzs.view', $comm->notifiable_id) }}" target="_blank">ЗС</a>
+                                                        @elseif($comm->notifiable_type == 'App\Models\User')
+                                                            <a class="text-decoration-underline" href="{{ route('admin.users.edit', $comm->notifiable_id) }}" target="_blank">Потребител</a>
+                                                        @else
+                                                            {{ $comm->notifiable_type }} | {{ $comm->notifiable_id }}
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $comm->egov_message_id ?? '---' }}</td>
+                                                    <td></td>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     </thead>
                                 </table>

@@ -21,4 +21,9 @@ class CustomNotification extends DatabaseNotification
             get: fn () => $this->data['sender_name'] ?? ''
         );
     }
+
+    public function errors()
+    {
+        return $this->hasMany(NotificationError::class, 'notification_id', 'id');
+    }
 }

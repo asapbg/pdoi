@@ -36,7 +36,7 @@
             </a>
         @endcan
         @canany('renew', $item)
-            <a href="{{ route( 'admin.application.renew' , [$item->id]) }}"
+            <a href="{{ route( 'admin.application.renew' , ['id' => $item->id]) }}"
                class="btn btn-sm btn-success"
                data-toggle="tooltip"
                title="{{ __('custom.renew') }}">

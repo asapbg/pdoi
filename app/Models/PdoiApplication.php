@@ -268,6 +268,64 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             ->orderBy('created_at', 'desc');
     }
 
+//    public function activities(): \Illuminate\Database\Eloquent\Relations\HasMany
+//    {
+//        return $this->hasMany(CustomActivity::class, 'subject_id','id')
+//            ->where('subject_type', '=', 'App\Models\PdoiApplication')
+//            ->orderBy('created_at', 'desc');
+//    }
+
+    public function communication()
+    {
+        return DB::select('
+            select *
+            from (
+                select
+                    \'notification\' as row_type,
+                    n.id as n_id,
+                    n.type_channel,
+                    n.type,
+                    n.created_at,
+                    n.is_send,
+                    n.cnt_send,
+                    n.notifiable_type,
+                    n.notifiable_id,
+                    n.data,
+                    case when n.type_channel = 3 then \'egov\' else null end as egov_msg_data,
+                    \'\' as err_content,
+                    null as err_datetime,
+                    n.created_at as ord,
+                    2 as ord2
+                from notifications n
+                where true
+                    and n.data like \'%"application_id":'.$this->id.'%\'
+
+                union
+                    select
+                        \'notification_error\' as row_type,
+                        notifications.id as n_id,
+                        notifications.type_channel,
+                        notifications.type,
+                        notifications.created_at,
+                        0 as is_send,
+                        null as cnt_send,
+                        notifications.notifiable_type,
+                        notifications.notifiable_id,
+                        notifications.data,
+                        case when notifications.type_channel = 3 then \'egov\' else null end as egov_msg_data,
+                        ne.content as err_content,
+                        ne.created_at as err_datetime,
+                        ne.created_at as ord,
+                        1 as ord2
+                    from notification_error ne
+                    join notifications on notifications.id::text = ne.notification_id
+                    where true
+                        and notifications.data like \'%"application_id":'.$this->id.'%\'
+                ) A
+            order by A.n_id asc, A.ord2 asc, A.ord desc
+        ');
+    }
+
     public static function statisticRenewed($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
     {
         $fromDate = isset($filter['fromDate']) && !empty($filter['fromDate']) ? $filter['fromDate'] : Carbon::now()->startOfMonth()->startOfDay();
