@@ -35,9 +35,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-12 mt-1">
+                            <div class="col-md-3 col-12 mt-1 @if($item->id && !auth()->user()->hasAnyRole(\App\Models\CustomRole::SUPER_USER_ROLE, \App\Models\CustomRole::ADMIN_USER_ROLE)) d-none @endif">
                                 <div class="form-group">
-                                    <label class="col-sm-12 control-label">
+                                    <label class="col-sm-12 control-label ">
                                         {{ __('validation.attributes.status') }}
                                     </label>
                                     <div class="col-12">
