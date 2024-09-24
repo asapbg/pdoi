@@ -151,7 +151,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
      * @param array|int $ignoreId
      * @return \Illuminate\Support\Collection
      */
-    public static function optionsList(array|int $ignoreId = [], $filterByRole = false): \Illuminate\Support\Collection
+    public static function optionsList(array|int $ignoreId = [], $filterByRole = false, $ignoreOnlyRedirect = false): \Illuminate\Support\Collection
     {
         $user = auth()->user();
         $ids = null;
@@ -172,6 +172,9 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
                     $q->where('pdoi_response_subject.adm_level', '<>', $user->responseSubject->adm_level)
                         ->orWhere('pdoi_response_subject.id', '=', $user->responseSubject->id);
                 });
+            })
+            ->when($ignoreOnlyRedirect, function ($query) {
+                return $query->where('pdoi_response_subject.redirect_only', '=', 0);
             })
             ->orderBy('pdoi_response_subject.id', 'asc')
             ->orderBy('pdoi_response_subject.adm_level', 'asc')
