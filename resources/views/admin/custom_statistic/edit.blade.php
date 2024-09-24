@@ -74,7 +74,7 @@
 
                             <div class="col-12 mt-1">
                                 <div class="form-group">
-                                    <label for="file" class="col-12 control-label">Изберете файл <span class="required">*</span> </label>
+                                    <label for="file" class="col-12 control-label">Изберете файл @if(!$item->id) <span class="required">*</span> @endif </label>
                                     <div class="col-12">
                                         <input class="form-control form-control-sm @error('file') is-invalid @enderror" id="file" type="file" name="file">
                                         @error('file')

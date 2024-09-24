@@ -24,6 +24,7 @@
                         <tr>
                             <th>ID</th>
                             <th>{{__('validation.attributes.name')}}</th>
+                            <th>{{__('validation.attributes.type')}}</th>
                             <th>{{ __('custom.date_public') }}</th>
                             <th>{{ __('custom.date_unpublic') }}</th>
                             <th>{{__('custom.author')}}</th>
@@ -36,6 +37,7 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
+                                    <td>{{ __('custom.custom_statistics.'.\App\Enums\CustomStatisticTypeEnum::keyByValue($item->type)) }}</td>
                                     <td>{{ displayDate($item->publish_from) }}</td>
                                     <td>{{ !empty($item->publish_to) ? displayDate($item->publish_to) : 'Безсрочно' }}</td>
                                     <td>{{ $item->author ? $item->author->fullName() : '---' }}</td>
