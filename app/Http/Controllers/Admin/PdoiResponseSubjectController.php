@@ -89,10 +89,12 @@ class PdoiResponseSubjectController extends AdminController
      */
     public function edit(Request $request, PdoiResponseSubject $item)
     {
+
         if( ($item->id && ($request->user()->cannot('update', $item) && $request->user()->cannot('updateSettings', $item)) )
             || (!$item->id && $request->user()->cannot('create', PdoiResponseSubject::class)) ) {
             return back()->with('warning', __('messages.unauthorized'));
         }
+
         $subjects = PdoiResponseSubject::optionsList($item->id ?? 0, true);
         $rzsSections = RzsSection::optionsList([],true);
         $areas = EkatteArea::optionsList();
@@ -104,8 +106,8 @@ class PdoiResponseSubjectController extends AdminController
         $listRouteName = self::LIST_ROUTE;
         $translatableFields = PdoiResponseSubject::translationFieldsProperties();
         $editOptions = [
-            'full' => $request->user()->can('update', $item),
-            'settings' => $request->user()->can('updateSettings', $item),
+            'full' => !$item->id || ($item->id && $request->user()->can('update', $item)),
+            'settings' => !$item->id || ($item->id &&$request->user()->can('updateSettings', $item)),
         ];
 
         $this->setTitlePlural($item->id > 0 ? 'Редакция на ЗС ('.$item->subject_name.')' : 'Създаване на ЗС');

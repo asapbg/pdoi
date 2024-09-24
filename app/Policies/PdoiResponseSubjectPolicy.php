@@ -65,7 +65,7 @@ class PdoiResponseSubjectPolicy
             && (
                 !isset($ids)
                 || (
-                    in_array($pdoiResponseSubject->section->id, $ids)
+                    $pdoiResponseSubject->section && in_array($pdoiResponseSubject->section->id, $ids)
                     && ($pdoiResponseSubject->section->id != $user->responseSubject->section->id || $user->responseSubject->id == $pdoiResponseSubject->id)
                 )
             );
@@ -89,7 +89,7 @@ class PdoiResponseSubjectPolicy
             && (
                 !isset($ids)
                 || (
-                    in_array($pdoiResponseSubject->section->id, $ids)
+                    $pdoiResponseSubject->section && in_array($pdoiResponseSubject->section->id, $ids)
                     && ($pdoiResponseSubject->section->id != $user->responseSubject->section->id || $user->responseSubject->id == $pdoiResponseSubject->id)
                 )
             );

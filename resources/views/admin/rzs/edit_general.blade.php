@@ -56,7 +56,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-12 mt-1 @if(!auth()->user()->hasAnyRole(\App\Models\CustomRole::SUPER_USER_ROLE, \App\Models\CustomRole::ADMIN_USER_ROLE)) d-none @endif">
+    <div class="col-md-3 col-12 mt-1 @if($item && !auth()->user()->hasAnyRole(\App\Models\CustomRole::SUPER_USER_ROLE, \App\Models\CustomRole::ADMIN_USER_ROLE)) d-none @endif">
         <div class="form-group">
             <label class="col-sm-12 control-label">
                 {{ __('validation.attributes.status') }}
