@@ -26,7 +26,7 @@ class MinHtmlLengthRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return strlen(stripHtmlTags($value, ['all'])) >= $this->length;
+        return strlen(trim(stripHtmlTags($value, ['all']))) >= $this->length;
     }
 
     /**
