@@ -47,7 +47,7 @@
                                     <td>{{ __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($item->delivery_method)) }}</td>
                                     <td>
                                         @if(isset($toggleBooleanModel))
-                                            @includeIf('partials.toggle-boolean', ['object' => $item, 'model' => $toggleBooleanModel])
+                                            @includeIf('partials.toggle-boolean', ['object' => $item, 'model' => $toggleBooleanModel, 'disable_btn' => !auth()->user()->hasAnyRole(\App\Models\CustomRole::SUPER_USER_ROLE, \App\Models\CustomRole::ADMIN_USER_ROLE)])
                                         @endif
                                     </td>
                                     <td class="text-center">
