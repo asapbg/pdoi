@@ -284,10 +284,24 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     ape.id::text as id,
                     \'event\' as row_type,
                     ape.created_at,
-                    jsonb_build_object(\'event_type\', ape.event_type, \'sttaus\', null) as info,
+                    jsonb_build_object(
+                        \'event_type\', ape.event_type,
+                        \'status\', null,
+                        \'user_id\', ape.user_reg,
+                        \'user_name\', (case when u.id is not null then u.names else \'\' end),
+                        \'old_subject_id\', ape.old_resp_subject_id,
+                        \'old_subject_name\', case when ost.id is not null then ost.subject_name else \'\' end,
+                        \'new_subject_id\', ape.new_resp_subject_id,
+                        \'new_subject_name\', case when nst.id is not null then nst.subject_name else (case when ape.subject_name is not null then ape.subject_name else \'\' end) end
+                        ) as info,
                     ape.created_at as ord,
                     1 as ord2
                 from pdoi_application_event ape
+                left join users u on u.id = ape.user_reg
+                left join pdoi_response_subject os on os.id = ape.old_resp_subject_id
+                left join pdoi_response_subject_translations ost on ost.pdoi_response_subject_id = os.id and ost.locale = \'bg\'
+                left join pdoi_response_subject ns on ns.id = ape.new_resp_subject_id
+                left join pdoi_response_subject_translations nst on nst.pdoi_response_subject_id = ns.id and nst.locale = \'bg\'
                 where true
                     and ape.pdoi_application_id = '.$this->id.'
                 union
@@ -362,7 +376,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                             and al.subject_id = '.$this->id.'
                             and al.event = \'notify_moderators_for_new_app\'
             ) A
-            order by A.ord asc
+            order by A.ord desc
         ');
     }
 

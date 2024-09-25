@@ -24,7 +24,7 @@
                         @endif
                         @if(isset($customActivity) && sizeof($customActivity))
                             <li class="nav-item">
-                                <a class="nav-link" id="communication-tab" data-toggle="pill" href="#communication" role="tab" aria-controls="communication" aria-selected="true">Комуникация</a>
+                                <a class="nav-link" id="communication-tab" data-toggle="pill" href="#communication" role="tab" aria-controls="communication" aria-selected="true">Log (събития)</a>
                             </li>
                         @endif
                     </ul>
@@ -379,7 +379,18 @@
                                                 </td>
                                                 <td>
                                                     @if($ca->row_type == 'event')
-                                                        ---
+                                                        @if(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FINAL_DECISION->value, \App\Enums\ApplicationEventsEnum::SEND->value, \App\Enums\ApplicationEventsEnum::ASK_FOR_INFO->value, \App\Enums\ApplicationEventsEnum::GIVE_INFO->value, \App\Enums\ApplicationEventsEnum::FORWARD->value, \App\Enums\ApplicationEventsEnum::EXTEND_TERM->value, \App\Enums\ApplicationEventsEnum::RENEW_PROCEDURE->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value]))
+                                                            <span>От: </span><a class="text-primary" href="{{ route('admin.users.edit', $jsonData['user_id']) }}" target="_blank">{{ $jsonData['user_name'] }}</a><br>
+                                                        @endif
+                                                        @if(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FORWARD->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value]))
+                                                            <span>Препратено (от):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['old_subject_id']) }}" target="_blank">{{ $jsonData['old_subject_name'] }}</a><br>
+                                                            <span>Препратено (към):</span><a class="text-primary" href="{{ route('admin.users.edit', $jsonData['new_subject_id']) }}" target="_blank">{{ $jsonData['new_subject_name'] }}</a><br>
+                                                        @elseif(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value]))
+                                                            <span>Препратено (от):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['old_subject_id']) }}" target="_blank">{{ $jsonData['old_subject_name'] }}</a><br>
+                                                            <span>Препратено (към):</span>{{ $jsonActivityPropertiesData['new_subject_name'] }}<br>
+                                                        @elseif(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::SEND_TO_SEOS->value, \App\Enums\ApplicationEventsEnum::APPROVE_BY_SEOS->value]))
+                                                            Системно
+                                                        @endif
                                                     @elseif($ca->row_type == 'activity')
                                                         <div>
                                                             <span>До:</span>

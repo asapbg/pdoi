@@ -38,6 +38,7 @@ class ActivityLogController extends Controller
                                     ->when($log_date, function ($query) use ($date_start, $date_end) {
                                         $query->whereBetween('created_at', [$date_start, $date_end]);
                                     })
+                                    ->whereNotIn('event', ['notify_moderators_for_new_app'])
                                     ->orderBy('id','desc')
                                     ->paginate(CustomActivity::PAGINATE);
 
