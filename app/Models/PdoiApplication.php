@@ -281,48 +281,88 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             select *
             from (
                 select
-                    \'notification\' as row_type,
-                    n.id as n_id,
-                    n.type_channel,
-                    n.type,
-                    n.created_at,
-                    n.is_send,
-                    n.cnt_send,
-                    n.notifiable_type,
-                    n.notifiable_id,
-                    n.data,
-                    case when n.type_channel = 3 then \'egov\' else null end as egov_msg_data,
-                    \'\' as err_content,
-                    null as err_datetime,
-                    n.created_at as ord,
-                    2 as ord2
-                from notifications n
+                    ape.id::text as id,
+                    \'event\' as row_type,
+                    ape.created_at,
+                    jsonb_build_object(\'event_type\', ape.event_type, \'sttaus\', null) as info,
+                    ape.created_at as ord,
+                    1 as ord2
+                from pdoi_application_event ape
                 where true
-                    and n.data like \'%"application_id":'.$this->id.'%\'
-
+                    and ape.pdoi_application_id = '.$this->id.'
                 union
                     select
+                        ne.id::text as id,
                         \'notification_error\' as row_type,
-                        notifications.id as n_id,
-                        notifications.type_channel,
-                        notifications.type,
-                        notifications.created_at,
-                        0 as is_send,
-                        null as cnt_send,
-                        notifications.notifiable_type,
-                        notifications.notifiable_id,
-                        notifications.data,
-                        case when notifications.type_channel = 3 then \'egov\' else null end as egov_msg_data,
-                        ne.content as err_content,
-                        ne.created_at as err_datetime,
+                        ne.created_at,
+                        jsonb_build_object(
+                            \'notification_id\', notifications.id,
+                            \'type_channel\', notifications.type_channel,
+                            \'type\', notifications.type,
+                            \'is_send\', notifications.is_send,
+                            \'notifiable_type\', notifications.notifiable_type,
+                            \'notifiable_id\', notifications.notifiable_id,
+                            \'data\', notifications.data,
+                            \'err_content\', ne.content,
+                            \'egov_message_id\', notifications.egov_message_id,
+                            \'recipient_guid\', egov_message.recipient_guid,
+                            \'recipient_endpoint\', egov_service.uri,
+                            \'recipient_eik\', egov_message.recipient_eik,
+                            \'recipient_name\', egov_message.recipient_name) as info,
                         ne.created_at as ord,
                         1 as ord2
                     from notification_error ne
                     join notifications on notifications.id::text = ne.notification_id
+                    left join egov_message on  egov_message.id = notifications.egov_message_id
+                    left join egov_organisation on egov_organisation.guid = egov_message.recipient_guid
+                    left join egov_service on egov_service.id_org = egov_organisation.id
                     where true
                         and notifications.data like \'%"application_id":'.$this->id.'%\'
-                ) A
-            order by A.n_id asc, A.ord2 asc, A.ord desc
+
+                union select
+                        n.id::text as id,
+                        \'notification\' as row_type,
+                        n.updated_at as created_at,
+                        jsonb_build_object(
+                            \'type_channel\', n.type_channel,
+                            \'type\', n.type,
+                            \'created_at\', n.created_at,
+                            \'is_send\', n.is_send,
+                            \'cnt_send\', n.cnt_send,
+                            \'notifiable_type\', n.notifiable_type,
+                            \'notifiable_id\', n.notifiable_id,
+                            \'data\', n.data,
+                            \'egov_message_id\', n.egov_message_id,
+                            \'recipient_guid\', em.recipient_guid,
+                            \'recipient_endpoint\', es.uri,
+                            \'recipient_eik\', em.recipient_eik,
+                            \'recipient_name\', em.recipient_name) as info,
+                        n.updated_at as ord,
+                        2 as ord2
+                    from notifications n
+                    left join egov_message em on  em.id = n.egov_message_id
+                    left join egov_organisation on egov_organisation.guid = em.recipient_guid
+                    left join egov_service es on es.id_org = egov_organisation.id
+                    where true
+                        and n.data like \'%"application_id":'.$this->id.'%\'
+                        and n.is_send = 1
+
+                union select
+                            al.id::text as id,
+                            \'activity\' as row_type,
+                            al.created_at as created_at,
+                            jsonb_build_object(
+                                \'event\', al.event,
+                                \'properties\', al.properties) as info,
+                            al.created_at as ord,
+                            1 as ord2
+                        from activity_log al
+                        where true
+                            and al.subject_type = \'App\Models\PdoiApplication\'
+                            and al.subject_id = '.$this->id.'
+                            and al.event = \'notify_moderators_for_new_app\'
+            ) A
+            order by A.ord asc
         ');
     }
 

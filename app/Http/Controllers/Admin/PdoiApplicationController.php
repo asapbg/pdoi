@@ -76,20 +76,18 @@ class PdoiApplicationController extends Controller
         }
 
         $categories = Category::optionsList();
-        $communication = null;
-        $activities = null;
+        $customActivity = null;
 
         if(auth()->user()->hasRole(CustomRole::SUPER_USER_ROLE)){
-//            $communication = CustomNotification::with('errors')->whereRaw('data like \'%"application_id":'.$item->id.'%\'')->get();
-            $communication = $item->communication();
-            $activities = CustomActivity::where('subject_type', 'App\Models\PdoiApplication')->where('subject_id', $item->id)
-                ->orderBy('id')
-                ->get();
+            $customActivity = $item->communication();
+            //For local test
+//            $customActivity = json_decode(file_get_contents("C:\Users\magdalena.mitkova\Desktop\pitay_json.json"), true);
+//            $customActivity = array_map(function ($row){ return (object)$row; }, $customActivity);
         }
         $refusalReasons = ReasonRefusal::optionsList();
         $noConsiderReasons = NoConsiderReason::optionsList();
         $event = Event::where('app_event', '=', Event::APP_EVENT_FINAL_DECISION)->first();
-        return $this->view('admin.applications.view', compact('item', 'categories', 'refusalReasons', 'noConsiderReasons', 'event', 'communication', 'activities'));
+        return $this->view('admin.applications.view', compact('item', 'categories', 'refusalReasons', 'noConsiderReasons', 'event', 'customActivity'));
     }
 
     public function create(Request $request)
@@ -180,24 +178,6 @@ class PdoiApplicationController extends Controller
         $categories = Category::optionsList();
 
         return $this->view('admin.applications.view_full_history', compact('item', 'categories'));
-    }
-
-    public function showLog(Request $request, int $id, $section = self::SECTION_ACTIVITY): \Illuminate\View\View
-    {
-        $item = PdoiApplication::find($id);
-        if( !$item ) {
-            abort(Response::HTTP_NOT_FOUND);
-        }
-        $user = auth()->user();
-        if( !$user->can('view', $item) ){
-            abort(Response::HTTP_NOT_FOUND);
-        }
-        $data = [];
-        if($section == self::SECTION_ACTIVITY){
-            $data['activities'] = $item->activities;
-        }
-
-        return $this->view('admin.applications.log', compact('item', 'data', 'section'));
     }
 
     public function addCategory(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse

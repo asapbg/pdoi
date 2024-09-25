@@ -567,5 +567,6 @@ return [
     'user_logout' => 'Изход от платформата',
     'user_login' => 'Вход в платформата',
     'apply_event' => 'Подадено',
+    'notify_moderators_for_new_app' => 'Известие до модератор за ново завление'
 ];
 
