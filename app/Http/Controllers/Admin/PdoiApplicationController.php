@@ -79,15 +79,29 @@ class PdoiApplicationController extends Controller
         $customActivity = null;
 
         if(auth()->user()->hasRole(CustomRole::SUPER_USER_ROLE)){
-            $customActivity = $item->communication();
+//            $customActivity = $item->communication();
             //For local test
-//            $customActivity = json_decode(file_get_contents("C:\Users\magdalena.mitkova\Desktop\pitay_json.json"), true);
-//            $customActivity = array_map(function ($row){ return (object)$row; }, $customActivity);
+            $customActivity = json_decode(file_get_contents("C:\Users\magdalena.mitkova\Desktop\pitay_json.json"), true);
+            $customActivity = array_map(function ($row){ return (object)$row; }, $customActivity);
         }
         $refusalReasons = ReasonRefusal::optionsList();
         $noConsiderReasons = NoConsiderReason::optionsList();
         $event = Event::where('app_event', '=', Event::APP_EVENT_FINAL_DECISION)->first();
         return $this->view('admin.applications.view', compact('item', 'categories', 'refusalReasons', 'noConsiderReasons', 'event', 'customActivity'));
+    }
+
+    public function showLog(Request $request, int|string $id, string $type)
+    {
+        switch ($type){
+            case 'activity':
+                break;
+            case 'notification': //success email and ssev
+                break;
+        }
+        if(!isset($item)){
+            abort(\Illuminate\Http\Response::HTTP_NOT_FOUND);
+        }
+        return $this->view('admin.applications.log_view', compact('item'));
     }
 
     public function create(Request $request)

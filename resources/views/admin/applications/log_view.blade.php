@@ -380,7 +380,7 @@
                                                     @elseif($ca->row_type == 'activity')
                                                         @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos']))
                                                             Успешно
-                                                        @elseif(in_array($jsonData['event'], ['error_check_status_in_seos', 'error_send_to_seos']))
+                                                        @elseif(in_array($jsonData['event'], ['error_check_status_in_seos']))
                                                             Неуспешно
                                                         @endif
                                                     @endif
@@ -410,7 +410,7 @@
                                                                     <a class="text-primary" href="{{ route('admin.users.edit', $jsonActivityPropertiesData['user_id']) }}" target="_blank">{{ $jsonActivityPropertiesData['user_name'] }}</a><br>
                                                                     <span>Получател (ел. поща):</span> {{ $jsonActivityPropertiesData['user_email'] }}<br>
                                                                 @endif
-                                                            @elseif(in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos', 'send_to_seos', 'error_send_to_seos']))
+                                                            @elseif(in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos', 'send_to_seos']))
                                                                 <span>Канал:</span>
                                                                 {{ __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::SEOS->name) }}
                                                                 <div>
@@ -424,7 +424,7 @@
                                                                         <a class="text-primary"  href="{{ route('admin.rzs.view', $notifcationM->notifiable->id) }}" target="_blank">{{ $notifcationM->notifiable->subject_name }}</a><br>
                                                                     @endif
                                                                     @if(isset($egovM))
-                                                                        @php($zrsLabel = in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos', 'error_send_to_seos']) ? 'Деловодна система' : 'Получател')
+                                                                        @php($zrsLabel = in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos']) ? 'Деловодна система' : 'Получател')
                                                                         <span>{{ $zrsLabel }} (ЕИК):</span> {{ $egovM->recipient_eik }}<br>
                                                                         <span>{{ $zrsLabel }}  (GUID):</span> {{ $egovM->recipient_guid }}<br>
                                                                         <span>{{ $zrsLabel }}  (URL):</span> {{ $egovM->recipient_endpoint }}<br>
@@ -509,7 +509,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-{{--                                                    <a href="{{ route('admin.application.log.view', ['id' => $ca->id, 'type' => $ca->row_type]) }}" target="_blank"><i class="fas fa-eye text-warning"></i></a>--}}
+                                                    <a href="{{ route('admin.application.log.view', ['id' => $ca->n_id, 'type' => $ca->row_type]) }}" target="_blank"><i class="fas fa-eye text-warning"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
