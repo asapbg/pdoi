@@ -200,6 +200,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
         $query->where('users.user_type', self::USER_TYPE_INTERNAL);
     }
 
+    public function scopeExternal($query)
+    {
+        $query->where('users.user_type', self::USER_TYPE_EXTERNAL);
+    }
+
     public function scopeIsContactVisible($query): void
     {
         $query->where('users.is_public_contact', 1);

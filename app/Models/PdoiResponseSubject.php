@@ -35,6 +35,11 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         $query->where('pdoi_response_subject.active', 1);
     }
 
+    public function scopeCanApplyTo($query)
+    {
+        $query->where('pdoi_response_subject.redirect_only', 0);
+    }
+
     public function scopeIsManual($query)
     {
         $query->where('pdoi_response_subject.adm_register', 0);

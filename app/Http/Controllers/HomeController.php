@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PdoiApplicationStatusesEnum;
 use App\Http\Resources\PdoiApplicationShortCollection;
 use App\Http\Resources\PdoiApplicationShortResource;
 use App\Models\MenuSection;
@@ -55,7 +56,13 @@ class HomeController extends Controller
         $videoInstructionPage = Page::with(['translations'])
             ->where('system_name', '=', Page::VIDEO_INSTRUCTION_PAGE)
             ->first();
-        return view('front.home', compact('applications', 'mostAskedSubjects', 'mainClass', 'videoInstructionPage'));
+
+        $allApplicationsCnt = PdoiApplication::count();
+        $registerdUsersCnt = User::External()->count();
+        $pdoiSubjectsCnt = PdoiResponseSubject::CanApplyTo()->count();
+        $applicationsLateAnswerCnt = PdoiApplication::where('status', '=', PdoiApplicationStatusesEnum::NO_REVIEW->value)
+            ->count();
+        return view('front.home', compact('applications', 'mostAskedSubjects', 'mainClass', 'videoInstructionPage', 'allApplicationsCnt', 'registerdUsersCnt', 'pdoiSubjectsCnt', 'applicationsLateAnswerCnt'));
     }
 
     public function section($slug) {

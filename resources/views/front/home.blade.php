@@ -91,6 +91,53 @@
                     <a href="{{ route('statistic.list') }}" class="btn btn-primary rounded w-auto">{{ __('custom.more_statistics') }} <i class="fa-solid fa-arrow-right-long ms-2"></i></a>
                 </div>
             </section>
+            <hr class="mb-0 custom-hr" >
+            <section class="py-5">
+                <div class="row mb-4">
+                    <div class="col-lg-4 col-md-12 d-flex align-items-stretch mt-4 mt-lg-0 request">
+                        <div class="icon-box w-100">
+                            <div class="icon-no-width">
+                                <span>{{ $allApplicationsCnt }}</span>
+                            </div>
+
+                            <p></p>
+                            <h4>Подадени заявления</h4>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 d-flex align-items-stretch mt-4 mt-lg-0 request">
+                        <div class="icon-box w-100">
+                            <div class="icon-no-width">
+                                <span>{{ $registerdUsersCnt }}</span>
+                            </div>
+
+                            <p></p>
+                            <h4>Регистрирани потребители</h4>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 d-flex align-items-stretch mt-4 mt-lg-0 request">
+                        <div class="icon-box w-100">
+                            <div class="icon-no-width">
+                                <span>{{ $pdoiSubjectsCnt }}</span>
+                            </div>
+
+                            <p></p>
+                            <h4>Задължени субекти</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4 text justify-content-center">
+                    <div class="col-lg-4 col-md-12 d-flex align-items-stretch mt-4 mt-lg-0 request">
+                        <div class="icon-box w-100">
+                            <div class="icon-no-width">
+                                <span>{{ $applicationsLateAnswerCnt }}</span>
+                            </div>
+
+                            <p></p>
+                            <h4>Заявления с просрочени отговори</h4>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <hr class="custom-hr mb-0">
             <section class="py-5">
                 <h2 class="pb-2 mb-3 fw-bold">{{ __('custom.last_applications') }}</h2>
