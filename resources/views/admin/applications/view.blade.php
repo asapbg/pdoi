@@ -361,8 +361,12 @@
                                                 <td>
                                                     @if($ca->row_type == 'event')
                                                         Регистрирано събитие
-                                                    @elseif(in_array($ca->row_type, ['notification_error', 'notification', 'activity']))
+                                                    @elseif(in_array($ca->row_type, ['notification_error', 'notification']))
                                                         Комуникационно
+                                                    @elseif(in_array($ca->row_type, ['activity']))
+                                                        @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos']))
+                                                            Комуникационно
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td>{{ displayDateTime($ca->created_at) }}</td>
@@ -374,7 +378,11 @@
                                                     @elseif($ca->row_type == 'notification')
                                                         Успешно
                                                     @elseif($ca->row_type == 'activity')
-                                                        Успешно
+                                                        @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos']))
+                                                            Успешно
+                                                        @elseif(in_array($jsonData['event'], ['error_check_status_in_seos']))
+                                                            Неуспешно
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td>
@@ -396,10 +404,36 @@
                                                             @endif
                                                     @elseif($ca->row_type == 'activity')
                                                         <div>
-                                                            @if(isset($jsonActivityPropertiesData['user_id']))
-                                                                <span>До:</span>
-                                                                <a class="text-primary" href="{{ route('admin.users.edit', $jsonActivityPropertiesData['user_id']) }}" target="_blank">{{ $jsonActivityPropertiesData['user_name'] }}</a><br>
-                                                                <span>Получател (ел. поща):</span> {{ $jsonActivityPropertiesData['user_email'] }}<br>
+                                                            @if($jsonData['event'] == 'notify_moderators_for_new_app')
+                                                                @if(isset($jsonActivityPropertiesData['user_id']))
+                                                                    <span>До:</span>
+                                                                    <a class="text-primary" href="{{ route('admin.users.edit', $jsonActivityPropertiesData['user_id']) }}" target="_blank">{{ $jsonActivityPropertiesData['user_name'] }}</a><br>
+                                                                    <span>Получател (ел. поща):</span> {{ $jsonActivityPropertiesData['user_email'] }}<br>
+                                                                @endif
+                                                            @elseif(in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos', 'send_to_seos']))
+                                                                <span>Канал:</span>
+                                                                {{ __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::SEOS->name) }}
+                                                                <div>
+                                                                    @if(isset($jsonActivityPropertiesData['egov_message_id']))
+                                                                        @php($egovM = \App\Models\Egov\EgovMessage::find($jsonActivityPropertiesData['egov_message_id']));
+                                                                    @endif
+                                                                    @if(isset($jsonActivityPropertiesData['notification_id']))
+                                                                        @php($notifcationM = \App\Models\CustomNotification::find($jsonActivityPropertiesData['notification_id']));
+                                                                    @endif
+                                                                    @if(isset($notifcationM))
+                                                                        <a class="text-primary"  href="{{ route('admin.rzs.view', $notifcationM->notifiable->id) }}" target="_blank">{{ $notifcationM->notifiable->subject_name }}</a><br>
+                                                                    @endif
+                                                                    @if(isset($egovM))
+                                                                        @php($zrsLabel = in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos']) ? 'Деловодна система' : 'Получател')
+                                                                        <span>{{ $zrsLabel }} (ЕИК):</span> {{ $egovM->recipient_eik }}<br>
+                                                                        <span>{{ $zrsLabel }}  (GUID):</span> {{ $egovM->recipient_guid }}<br>
+                                                                        <span>{{ $zrsLabel }}  (URL):</span> {{ $egovM->recipient_endpoint }}<br>
+                                                                        @if(in_array($jsonData['event'], ['send_to_seos', 'success_check_status_in_seos']))
+                                                                            <span>Статус:</span> {{ $jsonActivityPropertiesData['response_status'] ?? '' }}
+                                                                        @endif
+                                                                        <span>MSG ID:</span> {{ $egovM->id }}
+                                                                    @endif
+                                                                </div>
                                                             @endif
                                                         </div>
                                                     @elseif($ca->row_type == 'notification_error')

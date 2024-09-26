@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ApplicationEventsEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
+use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Enums\StatisticTypeEnum;
 use App\Traits\FilterSort;
 use Carbon\Carbon;
@@ -366,6 +367,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     where true
                         and n.data like \'%"application_id":'.$this->id.'%\'
                         and n.is_send = 1
+                        and n.type_channel <> '.PdoiSubjectDeliveryMethodsEnum::SEOS->value.'
 
                 union select
                             al.id::text as id,
@@ -380,7 +382,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                         where true
                             and al.subject_type = \'App\Models\PdoiApplication\'
                             and al.subject_id = '.$this->id.'
-                            and al.event = \'notify_moderators_for_new_app\'
+                            and (al.event = \'notify_moderators_for_new_app\' or al.event = \'success_send_to_seos\' or al.event = \'error_check_status_in_seos\')
             ) A
             order by A.ord desc
         ');

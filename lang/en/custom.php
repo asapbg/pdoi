@@ -567,6 +567,9 @@ return [
     'user_logout' => 'Изход от платформата',
     'user_login' => 'Вход в платформата',
     'apply_event' => 'Подадено',
-    'notify_moderators_for_new_app' => 'Известие до модератор за ново завление'
+    'notify_moderators_for_new_app' => 'Известие до модератор за ново завление',
+    'success_send_to_seos' => 'Известяване на ЗС за заявление',
+    'error_check_status_in_seos' => 'Проверка на статус в деловодната система',
+    'success_check_status_in_seos' => 'Проверка на статус в деловодната система',
 ];
 
