@@ -16,7 +16,7 @@
                         </div>
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label fw-semibold" >Дата/час на настъпване:</label>
-                            <span>{{ displayDateTime($notification->created_at }}</span>
+                            <span>{{ displayDateTime($notification->created_at) }}</span>
                         </div>
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label fw-semibold" >Статус:</label>
