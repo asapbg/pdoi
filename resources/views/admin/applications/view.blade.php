@@ -396,9 +396,11 @@
                                                             @endif
                                                     @elseif($ca->row_type == 'activity')
                                                         <div>
-                                                            <span>До:</span>
-                                                            <a class="text-primary" href="{{ route('admin.users.edit', $jsonActivityPropertiesData['user_id']) }}" target="_blank">{{ $jsonActivityPropertiesData['user_name'] }}</a><br>
-                                                            <span>Получател (ел. поща):</span> {{ $jsonActivityPropertiesData['user_email'] }}<br>
+                                                            @if(isset($jsonActivityPropertiesData['user_id']))
+                                                                <span>До:</span>
+                                                                <a class="text-primary" href="{{ route('admin.users.edit', $jsonActivityPropertiesData['user_id']) }}" target="_blank">{{ $jsonActivityPropertiesData['user_name'] }}</a><br>
+                                                                <span>Получател (ел. поща):</span> {{ $jsonActivityPropertiesData['user_email'] }}<br>
+                                                            @endif
                                                         </div>
                                                     @elseif($ca->row_type == 'notification_error')
                                                         <div>
