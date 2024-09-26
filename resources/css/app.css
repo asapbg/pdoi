@@ -575,6 +575,7 @@ p.home-sub-items.m-0 {
 .icon-box .icon-no-width {
     margin: 0 auto;
     width: fit-content;
+    min-width: 64px;
     height: 64px;
     background: var(--menu-bkg-color);
     border-radius: 4px;
@@ -583,8 +584,8 @@ p.home-sub-items.m-0 {
     justify-content: center;
     transition: 0.3s;
     margin-bottom: 6px;
-    padding-left: 3px;
-    padding-right: 3px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 a.home-section-button {
     display: flex;
