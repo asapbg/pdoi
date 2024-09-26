@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="row mb-4">
                         @php($notification = $item['notification'])
-                        @php($jsonNotifyMsgData = json_decode($notification->data, true))
+                        @php($jsonNotifyMsgData = $notification->data)
 
                         <h5 class="bg-primary py-1 px-2">{{ __('custom.notification_types.'.$notification->type) }}</h5>
                         <div class="form-group form-group-sm col-12 mb-3">
@@ -52,7 +52,7 @@
                         </div>
                         <div class="form-group form-group-sm col-12 mb-3">
                             <label class="form-label fw-semibold" >Съобщение:</label>
-                            <pre>@php(print_r(json_decode($notification->data)))</pre>
+                            <pre>@php(print_r($notification->data))</pre>
                         </div>
                     </div>
                     <div class="form-group row">
