@@ -563,6 +563,10 @@ return [
     'notification_types' => [
         'App\Notifications\NotifyUserForAppStatus' => 'Съобщение за статус на заявление',
         'App\Notifications\NotifySubjectNewApplication' => 'Известяване на ЗС за заявление',
+        'App\Notifications\NotifyUserExtendTerm' => 'Известяване на заявителя за удължаване на срок',
+        'App\Notifications\NotifyUserForAppForward' => 'Известяване на заявителя за препращане',
+        'App\Notifications\NotifyUserNeedMoreInfo' => 'Известяване на заявителя за необходимост от още информация',
+        'App\Notifications\NotifySubjectAdditionalInfo' => 'Известяване на ЗС за предоставена допълнителна информация',
     ],
     'user_logout' => 'Изход от платформата',
     'user_login' => 'Вход в платформата',
