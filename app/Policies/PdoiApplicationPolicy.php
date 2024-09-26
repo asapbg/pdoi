@@ -128,7 +128,8 @@ class PdoiApplicationPolicy
                 || in_array($pdoiApplication->status, PdoiApplicationStatusesEnum::notCompleted())
                 || PdoiApplicationStatusesEnum::canEditFinalDecision($pdoiApplication->status))
                 && (
-                    $pdoiApplication->status != PdoiApplicationStatusesEnum::RECEIVED->value || $pdoiApplication->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value
+//                    $pdoiApplication->status != PdoiApplicationStatusesEnum::RECEIVED->value || $pdoiApplication->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value
+                    $pdoiApplication->status != PdoiApplicationStatusesEnum::RECEIVED->value
                 )
             )
             && (
@@ -241,7 +242,8 @@ class PdoiApplicationPolicy
         return PdoiApplicationStatusesEnum::canForward($pdoiApplication->status)// status allow forwarding
             && !is_null($pdoiApplication->response_end_time)
             && ($pdoiApplication->status != PdoiApplicationStatusesEnum::FORWARDED->value || Carbon::parse($pdoiApplication->response_end_time)->format('Y-m-d') >= Carbon::now()->format('Y-m-d'))
-            && ($pdoiApplication->status != PdoiApplicationStatusesEnum::RECEIVED->value || $pdoiApplication->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value)
+//            && ($pdoiApplication->status != PdoiApplicationStatusesEnum::RECEIVED->value || $pdoiApplication->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value)
+            && ($pdoiApplication->status != PdoiApplicationStatusesEnum::RECEIVED->value)
             && !$pdoiApplication->manual && $pdoiApplication->response_subject_id
             && (
                 $user->can('manage.*') ||
