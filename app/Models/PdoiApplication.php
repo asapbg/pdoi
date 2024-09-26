@@ -298,7 +298,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                         \'app_subject_name\', case when past.id is not null then past.subject_name else \'\' end
                         ) as info,
                     ape.created_at as ord,
-                    1 as ord2
+                    1 as ord2,
+                    1 as has_log_view
                 from pdoi_application_event ape
                 left join users u on u.id = ape.user_reg
                 left join pdoi_application pa on pa.id = ape.pdoi_application_id
@@ -331,7 +332,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                             \'recipient_eik\', egov_message.recipient_eik,
                             \'recipient_name\', egov_message.recipient_name) as info,
                         ne.created_at as ord,
-                        1 as ord2
+                        1 as ord2,
+                        1 as has_log_view
                     from notification_error ne
                     join notifications on notifications.id::text = ne.notification_id
                     left join egov_message on  egov_message.id = notifications.egov_message_id
@@ -360,7 +362,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                             \'recipient_eik\', em.recipient_eik,
                             \'recipient_name\', em.recipient_name) as info,
                         n.updated_at as ord,
-                        2 as ord2
+                        2 as ord2,
+                        1 as has_log_view
                     from notifications n
                     left join egov_message em on  em.id = n.egov_message_id
                     left join egov_organisation on egov_organisation.guid = em.recipient_guid
@@ -378,7 +381,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                                 \'event\', al.event,
                                 \'properties\', al.properties) as info,
                             al.created_at as ord,
-                            1 as ord2
+                            1 as ord2,
+                            (case when al.event <> \'notify_moderators_for_new_app\' then 1 else 0 end) as has_log_view
                         from activity_log al
                         where true
                             and al.subject_type = \'App\Models\PdoiApplication\'

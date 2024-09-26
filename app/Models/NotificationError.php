@@ -13,4 +13,9 @@ class NotificationError extends Model
     public $timestamps = true;
 
     protected $table = 'notification_error';
+
+    public function notification(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(CustomNotification::class, 'id', 'notification_id');
+    }
 }

@@ -23,7 +23,9 @@ use App\Models\Event;
 use App\Models\File;
 use App\Models\MailTemplates;
 use App\Models\NoConsiderReason;
+use App\Models\NotificationError;
 use App\Models\PdoiApplication;
+use App\Models\PdoiApplicationEvent;
 use App\Models\PdoiApplicationRestoreRequest;
 use App\Models\PdoiResponseSubject;
 use App\Models\ProfileType;
@@ -33,6 +35,7 @@ use App\Services\FileOcr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,16 +95,82 @@ class PdoiApplicationController extends Controller
 
     public function showLog(Request $request, int|string $id, string $type)
     {
-        switch ($type){
-            case 'activity':
-                break;
-            case 'notification': //success email and ssev
-                break;
+        if(!auth()->user()->hasAnyRole([CustomRole::SUPER_USER_ROLE])){
+            return back()->with('danger', __('messages.unauthorized'));
         }
+
+        $view = '';
+        try {
+            switch ($type){
+                case 'event': //pdoi_application_event
+                    $event = PdoiApplicationEvent::find($id);
+                    if($event){
+                        $title = $event->eventReasonName;
+                        $rawItem['event'] = $event;
+                        $item = $rawItem;
+                        $view = 'log_view_event';
+                    }
+                    break;
+                case 'activity': //success seos, error seos, notify_moderators_for_new_app
+                    $activity = CustomActivity::find((int)$id);
+                    if($activity){
+                        $jsonProperties = $activity->properties ?? null;
+                        $rawItem['activity'] = $activity;
+                        if(in_array($activity->event, ['send_to_seos', 'error_check_status_in_seos', 'success_check_status_in_seos', 'error_send_to_seos', 'success_send_to_seos'])) {
+                            $view = 'log_view_activity_seos';
+
+                            if (isset($jsonProperties['egov_message_id'])) {
+                                $egovM = \App\Models\Egov\EgovMessage::find($jsonProperties['egov_message_id']);
+                                $rawItem['egov_message'] = $egovM;
+
+                                if (isset($jsonProperties['notification_id'])) {
+                                    $notifcationM = \App\Models\CustomNotification::find($jsonProperties['notification_id']);
+                                    $rawItem['notification'] = $notifcationM;
+
+                                    $item = $rawItem;
+                                    $title = __('custom.'.$activity->event);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 'notification': //success without seos
+                    $notification = CustomNotification::find($id);
+                    if($notification){
+                        $rawItem['notification'] = $notification;
+                        if($notification->egov_message_id){
+                            $rawItem['egov_message'] = \App\Models\Egov\EgovMessage::find($notification->egov_message_id);
+                        }
+
+                        $item = $rawItem;
+                        $title = __('custom.notification_types.'.$notification->type);
+                        $view = 'log_view_notification';
+                    }
+                    break;
+                case 'notification_error': //error without seos
+                    $notification_error = NotificationError::find((int)$id);
+                    if($notification_error){
+                        $rawItem['notification_error'] = $notification_error;
+                        if($notification_error->notification && $notification_error->notification->egov_message_id){
+                            $rawItem['egov_message'] = \App\Models\Egov\EgovMessage::find($notification_error->notification->egov_message_id);
+                        }
+
+                        $title = __('custom.notification_types.'.$notification_error->notification?->type);
+                        $item = $rawItem;
+                        $view = 'log_view_notification_error';
+                    }
+                    break;
+            }
+        }catch(\Exception $e){
+            Log::error('Application log record view ID ('.$id.') TYPE ('.$type.') error '.$e );
+        }
+
         if(!isset($item)){
             abort(\Illuminate\Http\Response::HTTP_NOT_FOUND);
         }
-        return $this->view('admin.applications.log_view', compact('item'));
+
+        $this->setTitleHeading('Прегелд на активност '.(isset($title) ? $title : ''));
+        return $this->view('admin.applications.'.$view, compact('item'));
     }
 
     public function create(Request $request)
