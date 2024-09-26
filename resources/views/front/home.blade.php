@@ -124,7 +124,7 @@
                             <h4>Задължени субекти</h4>
                         </div>
                     </div>
-                </div>
+                </div> 
                 <div class="row mb-4 text justify-content-center">
                     <div class="col-lg-4 col-md-12 d-flex align-items-stretch mt-4 mt-lg-0 request">
                         <div class="icon-box w-100">
