@@ -289,9 +289,24 @@ class PdoiApplicationController extends Controller
                 $newApplication->refresh();
                 $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
 
-                $emailList = $subject->getModeratorsEmail();
+                $moderators =  $subject->getModerators();
+                $emailList = $moderators->pluck('email')->toArray();
                 if( sizeof($emailList) ) {
                     Mail::to($emailList)->send(new ModeratorNewApplication(route('admin.application.view', ['item' => $newApplication->id])));
+                    foreach ($moderators as $m){
+                        if(in_array($m->email, $emailList)){
+                            activity('applications')
+//                                ->causedBy($userModel)
+                                ->performedOn($newApplication)
+                                ->event('notify_moderators_for_new_app')
+                                ->withProperties([
+                                    'user_id' => $m->id,
+                                    'user_name' => $m->fullName(),
+                                    'user_email' => $m->email,
+                                ])
+                                ->log('notify_moderators_for_new_app');
+                        }
+                    }
                 }
 
                 //return info for each generated application

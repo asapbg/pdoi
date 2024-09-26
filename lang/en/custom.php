@@ -369,6 +369,8 @@ return [
     //delivery_methods
     'delivery_by.EMAIL'                       => 'Publish to the platform and notify by e-mail address specified in the profile',
     'delivery_by.SDES'                        => 'Publish to the platform and notify by the secure electronic delivery system (ССЕВ)',
+    'delivered_by.EMAIL'                       => 'Чрез електронна поща',
+    'delivered_by.SDES'                        => 'Чрез системата за сигурно електронно връчване (ССЕВ)',
     //applications
     'applications'                               => 'Application|Applications',
     'data_for_event'                            => 'Event information',
@@ -405,6 +407,7 @@ return [
     'application.status.RENEWED'                   => 'Resumed',
     'application.request_for_info'                   => 'Request for access to public information',
     'application.full_history'                   => 'Electronic file',
+    'application.log'                           => 'History (activity)',
     'application.manual_application'            => 'Received off platform',
     //events names
     'event.SEND'                                => 'Submitting an application',
@@ -557,5 +560,16 @@ return [
     'custom_statistics' => 'Statistic (Static data)|Statistics (Static data)',
     'custom_statistics.TYPE_BASE' => 'Standard',
     'author' => 'Author',
+    'notification_types' => [
+        'App\Notifications\NotifyUserForAppStatus' => 'Съобщение за статус на заявление',
+        'App\Notifications\NotifySubjectNewApplication' => 'Известяване на ЗС за заявление',
+    ],
+    'user_logout' => 'Изход от платформата',
+    'user_login' => 'Вход в платформата',
+    'apply_event' => 'Подадено',
+    'notify_moderators_for_new_app' => 'Известие до модератор за ново завление',
+    'success_send_to_seos' => 'Известяване на ЗС за заявление',
+    'error_check_status_in_seos' => 'Проверка на статус в деловодната система',
+    'success_check_status_in_seos' => 'Проверка на статус в деловодната система',
 ];
 

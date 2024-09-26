@@ -365,6 +365,19 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
     }
 
     /**
+     * Using to get actual moderators at the moment of apply
+     * @return mixed
+     */
+    public function getModerators()
+    {
+        return User::IsActive()->where(function ($q){
+            $q->where(function ($q){
+                $q->where('administrative_unit', $this->id)->role('admin_moderator');
+            });
+        })->get();
+    }
+
+    /**
      * Return all emails of users connected with current subject
      * @return array
      */

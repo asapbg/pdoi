@@ -15,11 +15,16 @@
                             </li>
                         @endif
                         <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="pill" href="#custom-tabs-three-messages" role="tab" aria-controls="custom-tabs-three-messages" aria-selected="true">{{ trans_choice('custom.activity_logs',1) }}</a>
+                            <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="pill" href="#custom-tabs-three-messages" role="tab" aria-controls="custom-tabs-three-messages" aria-selected="true">История на обработка</a>
                         </li>
                         @if($item->children->count())
                             <li class="nav-item">
                                 <a class="nav-link" id="sub-application-tab" data-toggle="pill" href="#sub-application" role="tab" aria-controls="sub-application" aria-selected="false">Препратени заявления</a>
+                            </li>
+                        @endif
+                        @if(isset($customActivity) && sizeof($customActivity))
+                            <li class="nav-item">
+                                <a class="nav-link" id="communication-tab" data-toggle="pill" href="#communication" role="tab" aria-controls="communication" aria-selected="true">Log (събития)</a>
                             </li>
                         @endif
                     </ul>
@@ -317,6 +322,193 @@
                                                 <td>{{ $app->response_subject_id ? $app->responseSubject->subject_name : $app->nonRegisteredSubjectName }}</td>
                                                 <td>{{ displayDate($app->created_at) }}</td>
                                                 <td>{{ __('custom.application.status.'. \App\Enums\PdoiApplicationStatusesEnum::keyByValue($app->status)) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </thead>
+                                </table>
+                            </div>
+                        @endif
+                        @if(isset($customActivity) && sizeof($customActivity))
+                            <div class="tab-pane fade" id="communication" role="tabpanel" aria-labelledby="communication-tab">
+                                <table class="table table-striped  table-sm mb-4">
+                                    <thead>
+                                    <tr>
+                                        <th>Действие</th>
+                                        <th>Вид събитие</th>
+                                        <th>Дата/час на настъпване</th>
+                                        <th>Статус</th>
+                                        <th>Допълнителна информация</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <thead>
+                                        @foreach($customActivity as $ca)
+                                            @php($jsonData = json_decode($ca->info, true))
+                                            @php($jsonNotifyMsgData = in_array($ca->row_type,['notification_error', 'notification']) ? json_decode($jsonData['data'], true) : null)
+                                            @php($jsonActivityPropertiesData = in_array($ca->row_type,['activity']) ? $jsonData['properties'] : null)
+                                            <tr>
+                                                <td>
+                                                    @if($ca->row_type == 'event')
+                                                        <i class="fas fa-caret-square-right text-primary me-2"></i> {{ __('custom.event.'.\App\Enums\ApplicationEventsEnum::keyByValue($jsonData['event_type'])) }}
+                                                    @elseif($ca->row_type == 'notification_error')
+                                                        <i class="fas fa-envelope text-danger me-2"></i> {{ __('custom.notification_types.'.$jsonData['type']) }}
+                                                    @elseif($ca->row_type == 'notification')
+                                                        <i class="fas fa-envelope text-success me-2"></i> {{ __('custom.notification_types.'.$jsonData['type']) }}
+                                                    @elseif($ca->row_type == 'activity')
+                                                        <i class="fas fa-envelope text-success me-2"></i> {{ __('custom.'.$jsonData['event']) }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($ca->row_type == 'event')
+                                                        Регистрирано събитие
+                                                    @elseif(in_array($ca->row_type, ['notification_error', 'notification']))
+                                                        Комуникационно
+                                                    @elseif(in_array($ca->row_type, ['activity']))
+                                                        @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos']))
+                                                            Комуникационно
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                                <td>{{ displayDateTime($ca->created_at) }}</td>
+                                                <td>
+                                                    @if($ca->row_type == 'event')
+                                                        Успешно
+                                                    @elseif($ca->row_type == 'notification_error')
+                                                        Неуспешно
+                                                    @elseif($ca->row_type == 'notification')
+                                                        Успешно
+                                                    @elseif($ca->row_type == 'activity')
+                                                        @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos']))
+                                                            Успешно
+                                                        @elseif(in_array($jsonData['event'], ['error_check_status_in_seos']))
+                                                            Неуспешно
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($ca->row_type == 'event')
+                                                        @if(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FINAL_DECISION->value, \App\Enums\ApplicationEventsEnum::SEND->value, \App\Enums\ApplicationEventsEnum::ASK_FOR_INFO->value, \App\Enums\ApplicationEventsEnum::GIVE_INFO->value, \App\Enums\ApplicationEventsEnum::FORWARD->value, \App\Enums\ApplicationEventsEnum::EXTEND_TERM->value, \App\Enums\ApplicationEventsEnum::RENEW_PROCEDURE->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value]))
+                                                            <span>Регистрирано от: </span><a class="text-primary" href="{{ route('admin.users.edit', $jsonData['user_id']) }}" target="_blank">{{ $jsonData['user_name'] }}</a><br>
+                                                        @endif
+                                                        @if(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FORWARD->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value]))
+                                                            <span>Препратено (от):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['old_subject_id']) }}" target="_blank">{{ $jsonData['old_subject_name'] }}</a><br>
+                                                            <span>Препратено (към):</span><a class="text-primary" href="{{ route('admin.users.edit', $jsonData['new_subject_id']) }}" target="_blank">{{ $jsonData['new_subject_name'] }}</a><br>
+                                                        @elseif(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value]))
+                                                            <span>Препратено (от):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['old_subject_id']) }}" target="_blank">{{ $jsonData['old_subject_name'] }}</a><br>
+                                                            <span>Препратено (към):</span>{{ $jsonActivityPropertiesData['new_subject_name'] }}<br>
+                                                        @elseif(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::SEND_TO_SEOS->value, \App\Enums\ApplicationEventsEnum::APPROVE_BY_SEOS->value]))
+                                                                <span>Регистрирано от: </span> Системно<br>
+                                                            @if(isset($jsonData['app_subject_id']))
+                                                                <span>Деловодна система на: </span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['app_subject_id']) }}" target="_blank">{{ $jsonData['app_subject_name'] }}</a><br>
+                                                                @endif
+                                                            @endif
+                                                    @elseif($ca->row_type == 'activity')
+                                                        <div>
+                                                            @if($jsonData['event'] == 'notify_moderators_for_new_app')
+                                                                @if(isset($jsonActivityPropertiesData['user_id']))
+                                                                    <span>До:</span>
+                                                                    <a class="text-primary" href="{{ route('admin.users.edit', $jsonActivityPropertiesData['user_id']) }}" target="_blank">{{ $jsonActivityPropertiesData['user_name'] }}</a><br>
+                                                                    <span>Получател (ел. поща):</span> {{ $jsonActivityPropertiesData['user_email'] }}<br>
+                                                                @endif
+                                                            @elseif(in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos', 'send_to_seos']))
+                                                                <span>Канал:</span>
+                                                                {{ __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::SEOS->name) }}
+                                                                <div>
+                                                                    @if(isset($jsonActivityPropertiesData['egov_message_id']))
+                                                                        @php($egovM = \App\Models\Egov\EgovMessage::find($jsonActivityPropertiesData['egov_message_id']));
+                                                                    @endif
+                                                                    @if(isset($jsonActivityPropertiesData['notification_id']))
+                                                                        @php($notifcationM = \App\Models\CustomNotification::find($jsonActivityPropertiesData['notification_id']));
+                                                                    @endif
+                                                                    @if(isset($notifcationM))
+                                                                        <a class="text-primary"  href="{{ route('admin.rzs.view', $notifcationM->notifiable->id) }}" target="_blank">{{ $notifcationM->notifiable->subject_name }}</a><br>
+                                                                    @endif
+                                                                    @if(isset($egovM))
+                                                                        @php($zrsLabel = in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos']) ? 'Деловодна система' : 'Получател')
+                                                                        <span>{{ $zrsLabel }} (ЕИК):</span> {{ $egovM->recipient_eik }}<br>
+                                                                        <span>{{ $zrsLabel }}  (GUID):</span> {{ $egovM->recipient_guid }}<br>
+                                                                        <span>{{ $zrsLabel }}  (URL):</span> {{ $egovM->recipient_endpoint }}<br>
+                                                                        @if(in_array($jsonData['event'], ['send_to_seos', 'success_check_status_in_seos']))
+                                                                            <span>Статус:</span> {{ $jsonActivityPropertiesData['response_status'] ?? '' }}
+                                                                        @endif
+                                                                        <span>MSG ID:</span> {{ $egovM->id }}
+                                                                    @endif
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    @elseif($ca->row_type == 'notification_error')
+                                                        <div>
+                                                            <span>Канал:</span>
+                                                            @if($jsonData['notifiable_type'] == 'App\Models\PdoiResponseSubject')
+                                                                {{ __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($jsonData['type_channel'])) }}
+                                                            @else
+                                                                {{ __('custom.delivered_by.'.\App\Enums\DeliveryMethodsEnum::keyByValue($jsonData['type_channel'])) }}
+                                                            @endif
+                                                        </div>
+                                                        <div>
+                                                            <span>До:</span>
+                                                            @if($jsonData['notifiable_type'] == 'App\Models\PdoiResponseSubject')
+                                                                @if($jsonData['type_channel'] == \App\Enums\PdoiSubjectDeliveryMethodsEnum::EMAIL->value)
+                                                                    <a href="{{ route('admin.rzs.view', $jsonData['notifiable_id']) }}" target="_blank">{{ $jsonNotifyMsgData['to_email'] }}</a>
+                                                                @elseif($jsonData['type_channel'] == \App\Enums\PdoiSubjectDeliveryMethodsEnum::SDES->value)
+                                                                    {{ $jsonNotifyMsgData['to_identity'] }} (ССЕВ ID {{ $jsonNotifyMsgData['ssev_profile_id'] }})
+                                                                @elseif($jsonData['type_channel'] == \App\Enums\PdoiSubjectDeliveryMethodsEnum::SEOS->value)
+                                                                    @if(isset($jsonData['egov_message_id']))
+                                                                        <a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['notifiable_id']) }}" target="_blank">{{ $jsonData['recipient_name'] }}</a><br>
+                                                                        <span>Получател (ЕИК):</span> {{ $jsonData['recipient_eik'] }}<br>
+                                                                        <span>Получател (GUID):</span> {{ $jsonData['recipient_guid'] }}<br>
+                                                                        <span>Получател (URL):</span> {{ $jsonData['recipient_endpoint'] }}<br>
+                                                                        <span>MSG ID:</span> {{ $jsonData['egov_message_id'] }}
+                                                                    @endif
+                                                                @endif
+                                                            @else
+                                                                @if($jsonData['type_channel'] == \App\Enums\DeliveryMethodsEnum::EMAIL->value)
+                                                                    <a class="text-primary" href="{{ route('admin.users.edit', $jsonData['notifiable_id']) }}" target="_blank">{{ $jsonNotifyMsgData['to_email'] }}</a>
+                                                                @elseif($jsonData['type_channel'] == \App\Enums\DeliveryMethodsEnum::SDES->value)
+                                                                    {{ $jsonNotifyMsgData['to_identity'] }} (ССЕВ ID {{ $jsonNotifyMsgData['ssev_profile_id'] }})
+                                                                @endif
+                                                            @endif
+                                                        </div>
+                                                        <div>
+                                                            @php($errInfoArray = isset($jsonData['err_content']) ? explode('response code: ', $jsonData['err_content']) : '')
+                                                            @php($err = sizeof($errInfoArray) == 2 ? 'response code: '.$errInfoArray[1] : 'unknown')
+                                                            <span>Грешка:</span>
+                                                            {{ $err }}
+                                                        </div>
+                                                    @elseif($ca->row_type == 'notification')
+                                                        <span>Канал:</span>
+                                                        @if($jsonData['notifiable_type'] == 'App\Models\PdoiResponseSubject')
+                                                            {{ __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($jsonData['type_channel'])) }}
+                                                        @else
+                                                            {{ __('custom.delivered_by.'.\App\Enums\DeliveryMethodsEnum::keyByValue($jsonData['type_channel'])) }}
+                                                        @endif
+                                                        <div>
+                                                            <span>До:</span>
+                                                            @if($jsonData['notifiable_type'] == 'App\Models\PdoiResponseSubject')
+                                                                @if($jsonData['type_channel'] == \App\Enums\PdoiSubjectDeliveryMethodsEnum::EMAIL->value)
+                                                                    <a href="{{ route('admin.rzs.view', $jsonData['notifiable_id']) }}" target="_blank">{{ $jsonNotifyMsgData['to_email'] }}</a>
+                                                                @elseif($jsonData['type_channel'] == \App\Enums\PdoiSubjectDeliveryMethodsEnum::SDES->value)
+                                                                    <a href="{{ route('admin.rzs.view', $jsonData['notifiable_id']) }}" target="_blank">{{ $jsonNotifyMsgData['to_identity'] }} (ССЕВ ID {{ $jsonNotifyMsgData['ssev_profile_id'] }})</a>
+                                                                @elseif($jsonData['type_channel'] == \App\Enums\PdoiSubjectDeliveryMethodsEnum::SEOS->value)
+                                                                    @if(isset($jsonData['egov_message_id']))
+                                                                        <a class="text-primary"  href="{{ route('admin.rzs.view', $jsonData['notifiable_id']) }}" target="_blank">{{ $jsonData['recipient_name'] }}</a><br>
+                                                                        <span>Получател (ЕИК):</span> {{ $jsonData['recipient_eik'] }}<br>
+                                                                        <span>Получател (GUID):</span> {{ $jsonData['recipient_guid'] }}<br>
+                                                                        <span>Получател (URL):</span> {{ $jsonData['recipient_endpoint'] }}<br>
+                                                                        <span>MSG ID:</span> {{ $jsonData['egov_message_id'] }}
+                                                                    @endif
+                                                                @endif
+                                                            @else
+                                                                @if($jsonData['type_channel'] == \App\Enums\DeliveryMethodsEnum::EMAIL->value)
+                                                                    <a class="text-primary" href="{{ route('admin.users.edit', $jsonData['notifiable_id']) }}" target="_blank">{{ $jsonNotifyMsgData['to_email'] }}</a>
+                                                                @elseif($jsonData['type_channel'] == \App\Enums\DeliveryMethodsEnum::SDES->value)
+                                                                    {{ $jsonNotifyMsgData['to_identity'] }} (ССЕВ ID {{ $jsonNotifyMsgData['ssev_profile_id'] }})
+                                                                @endif
+                                                            @endif
+                                                        </div>
+                                                    @endif
+                                                </td>
+{{--                                                <td><a href="{{ route('admin.support.notifications.view', ['id' => $ca->n_id]) }}" target="_blank"><i class="fas fa-eye text-warning"></i></a></td>--}}
                                             </tr>
                                         @endforeach
                                     </thead>

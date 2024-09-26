@@ -13,6 +13,9 @@ use App\Http\Requests\RegisterEventRequest;
 use App\Models\Category;
 use App\Models\ChangeDecisionReason;
 use App\Models\Country;
+use App\Models\CustomActivity;
+use App\Models\CustomNotification;
+use App\Models\CustomRole;
 use App\Models\EkatteArea;
 use App\Models\EkatteMunicipality;
 use App\Models\EkatteSettlement;
@@ -63,6 +66,7 @@ class PdoiApplicationController extends Controller
             'settlement', 'settlement.translations', 'currentEvent', 'currentEvent.event', 'currentEvent.event.translation', 'currentEvent.event.nextEvents',
             'currentEvent.event.nextEvents.extendTimeReason', 'currentEvent.event.nextEvents.extendTimeReason.translation'])
             ->find((int)$id);
+
         if( !$item ) {
             abort(Response::HTTP_NOT_FOUND);
         }
@@ -72,11 +76,18 @@ class PdoiApplicationController extends Controller
         }
 
         $categories = Category::optionsList();
+        $customActivity = null;
 
+        if(auth()->user()->hasRole(CustomRole::SUPER_USER_ROLE)){
+            $customActivity = $item->communication();
+            //For local test
+//            $customActivity = json_decode(file_get_contents("C:\Users\magdalena.mitkova\Desktop\pitay_json.json"), true);
+//            $customActivity = array_map(function ($row){ return (object)$row; }, $customActivity);
+        }
         $refusalReasons = ReasonRefusal::optionsList();
         $noConsiderReasons = NoConsiderReason::optionsList();
         $event = Event::where('app_event', '=', Event::APP_EVENT_FINAL_DECISION)->first();
-        return $this->view('admin.applications.view', compact('item', 'categories', 'refusalReasons', 'noConsiderReasons', 'event'));
+        return $this->view('admin.applications.view', compact('item', 'categories', 'refusalReasons', 'noConsiderReasons', 'event', 'customActivity'));
     }
 
     public function create(Request $request)

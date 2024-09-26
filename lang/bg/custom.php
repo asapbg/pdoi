@@ -369,6 +369,8 @@ return [
     //delivery_methods
     'delivery_by.EMAIL'                       => 'Публикуване на портала и уведомяване на посочения в профила е-мейл адрес',
     'delivery_by.SDES'                        => 'Публикуване на портала и уведомяване чрез системата за сигурно електронно връчване (ССЕВ)',
+    'delivered_by.EMAIL'                       => 'Чрез електронна поща',
+    'delivered_by.SDES'                        => 'Чрез системата за сигурно електронно връчване (ССЕВ)',
     //applications
     'applications'                               => 'Заявление|Заявления',
     'data_for_event'                            => 'Информация за събитие',
@@ -405,10 +407,12 @@ return [
     'application.status.RENEWED'                   => 'Възобновено',
     'application.request_for_info'                   => 'Искане за достъп до обществена информация',
     'application.full_history'                   => 'Електронно досие',
+    'application.log'                           => 'История (активност)',
     'application.manual_application'            => 'Получено извън плаформата',
     //events names
     'event.SEND'                                => 'Подаване на заявление',
     'event.SEND_TO_RKS'                         => 'Изпратено към деловодна система',
+    'event.SEND_TO_SEOS'                         => 'Изпратено към деловодна система',
     'event.APPROVE_BY_SEOS'                      => 'Потвърждение от деловодна система',
     'event.ASK_FOR_INFO'                        => 'Искане на допълнителна информация',
     'event.GIVE_INFO'                           => 'Предоставяне на допълнителна информация',
@@ -558,6 +562,16 @@ return [
     'custom_statistics' => 'Статистика (Статични данни)|Статистики (Статични данни)',
     'custom_statistics.TYPE_BASE' => 'Стандартен',
     'author' => 'Автор',
-
+    'notification_types' => [
+        'App\Notifications\NotifyUserForAppStatus' => 'Съобщение за статус на заявление',
+        'App\Notifications\NotifySubjectNewApplication' => 'Известяване на ЗС за заявление',
+    ],
+    'user_logout' => 'Изход от платформата',
+    'user_login' => 'Вход в платформата',
+    'apply_event' => 'Подадено',
+    'notify_moderators_for_new_app' => 'Известие до модератор за ново завление',
+    'success_send_to_seos' => 'Известяване на ЗС за заявление',
+    'error_check_status_in_seos' => 'Проверка на статус в деловодната система',
+    'success_check_status_in_seos' => 'Проверка на статус в деловодната система',
 ];
 

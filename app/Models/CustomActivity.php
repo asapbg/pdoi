@@ -38,7 +38,19 @@ class CustomActivity extends Activity
      */
     public function getActivityDescription()
     {
-        $description = ($this->description == "deleted") ? __('custom.deletion') : __('custom.'.$this->description);
+//        $description = ($this->description == "deleted") ? __('custom.deletion') : __('custom.'.$this->description);
+//        if (strstr($description, 'custom')) {
+//            return "Неизвестно действие";
+//        }
+
+        if($this->description == "deleted"){
+            $description = __('custom.deletion');
+        } elseif ($this->description == "created" && $this->subject_type == 'App\Models\PdoiApplication'){
+            $description = __('custom.apply_event');
+        } else{
+            $description = __('custom.'.$this->description);
+        }
+
         if (strstr($description, 'custom')) {
             return "Неизвестно действие";
         }

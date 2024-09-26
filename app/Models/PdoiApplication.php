@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ApplicationEventsEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
+use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Enums\StatisticTypeEnum;
 use App\Traits\FilterSort;
 use Carbon\Carbon;
@@ -266,6 +267,125 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
     {
         return $this->hasMany(PdoiApplicationRestoreRequest::class, 'pdoi_application_id','id')
             ->orderBy('created_at', 'desc');
+    }
+
+//    public function activities(): \Illuminate\Database\Eloquent\Relations\HasMany
+//    {
+//        return $this->hasMany(CustomActivity::class, 'subject_id','id')
+//            ->where('subject_type', '=', 'App\Models\PdoiApplication')
+//            ->orderBy('created_at', 'desc');
+//    }
+
+    public function communication()
+    {
+        return DB::select('
+            select *
+            from (
+                select
+                    ape.id::text as id,
+                    \'event\' as row_type,
+                    ape.created_at,
+                    jsonb_build_object(
+                        \'event_type\', ape.event_type,
+                        \'status\', null,
+                        \'user_id\', ape.user_reg,
+                        \'user_name\', (case when u.id is not null then u.names else \'\' end),
+                        \'old_subject_id\', ape.old_resp_subject_id,
+                        \'old_subject_name\', case when ost.id is not null then ost.subject_name else \'\' end,
+                        \'new_subject_id\', ape.new_resp_subject_id,
+                        \'new_subject_name\', case when nst.id is not null then nst.subject_name else (case when ape.subject_name is not null then ape.subject_name else \'\' end) end,
+                        \'app_subject_id\', pas.id,
+                        \'app_subject_name\', case when past.id is not null then past.subject_name else \'\' end
+                        ) as info,
+                    ape.created_at as ord,
+                    1 as ord2
+                from pdoi_application_event ape
+                left join users u on u.id = ape.user_reg
+                left join pdoi_application pa on pa.id = ape.pdoi_application_id
+                left join pdoi_response_subject pas on pas.id = pa.response_subject_id
+                left join pdoi_response_subject_translations past on past.pdoi_response_subject_id = pas.id and past.locale = \'bg\'
+
+                left join pdoi_response_subject os on os.id = ape.old_resp_subject_id
+                left join pdoi_response_subject_translations ost on ost.pdoi_response_subject_id = os.id and ost.locale = \'bg\'
+                left join pdoi_response_subject ns on ns.id = ape.new_resp_subject_id
+                left join pdoi_response_subject_translations nst on nst.pdoi_response_subject_id = ns.id and nst.locale = \'bg\'
+                where true
+                    and ape.pdoi_application_id = '.$this->id.'
+                union
+                    select
+                        ne.id::text as id,
+                        \'notification_error\' as row_type,
+                        ne.created_at,
+                        jsonb_build_object(
+                            \'notification_id\', notifications.id,
+                            \'type_channel\', notifications.type_channel,
+                            \'type\', notifications.type,
+                            \'is_send\', notifications.is_send,
+                            \'notifiable_type\', notifications.notifiable_type,
+                            \'notifiable_id\', notifications.notifiable_id,
+                            \'data\', notifications.data,
+                            \'err_content\', ne.content,
+                            \'egov_message_id\', notifications.egov_message_id,
+                            \'recipient_guid\', egov_message.recipient_guid,
+                            \'recipient_endpoint\', egov_service.uri,
+                            \'recipient_eik\', egov_message.recipient_eik,
+                            \'recipient_name\', egov_message.recipient_name) as info,
+                        ne.created_at as ord,
+                        1 as ord2
+                    from notification_error ne
+                    join notifications on notifications.id::text = ne.notification_id
+                    left join egov_message on  egov_message.id = notifications.egov_message_id
+                    left join egov_organisation on egov_organisation.guid = egov_message.recipient_guid
+                    left join egov_service on egov_service.id_org = egov_organisation.id
+                    where true
+                        and notifications.data like \'%"application_id":'.$this->id.'%\'
+
+                union select
+                        n.id::text as id,
+                        \'notification\' as row_type,
+                        n.updated_at as created_at,
+                        jsonb_build_object(
+                            \'type_channel\', n.type_channel,
+                            \'type\', n.type,
+                            \'created_at\', n.created_at,
+                            \'is_send\', n.is_send,
+                            \'cnt_send\', n.cnt_send,
+                            \'notifiable_type\', n.notifiable_type,
+                            \'notifiable_id\', n.notifiable_id,
+                            \'data\', n.data,
+                            \'egov_message_id\', n.egov_message_id,
+                            \'recipient_guid\', em.recipient_guid,
+                            \'recipient_endpoint\', es.uri,
+                            \'recipient_eik\', em.recipient_eik,
+                            \'recipient_name\', em.recipient_name) as info,
+                        n.updated_at as ord,
+                        2 as ord2
+                    from notifications n
+                    left join egov_message em on  em.id = n.egov_message_id
+                    left join egov_organisation on egov_organisation.guid = em.recipient_guid
+                    left join egov_service es on es.id_org = egov_organisation.id
+                    where true
+                        and n.data like \'%"application_id":'.$this->id.'%\'
+                        and n.is_send = 1
+                        and n.type_channel <> '.PdoiSubjectDeliveryMethodsEnum::SEOS->value.'
+
+                union select
+                            al.id::text as id,
+                            \'activity\' as row_type,
+                            al.created_at as created_at,
+                            jsonb_build_object(
+                                \'event\', al.event,
+                                \'properties\', al.properties) as info,
+                            al.created_at as ord,
+                            1 as ord2
+                        from activity_log al
+                        where true
+                            and al.subject_type = \'App\Models\PdoiApplication\'
+                            and al.subject_id = '.$this->id.'
+                            and (al.event = \'notify_moderators_for_new_app\' or al.event = \'success_send_to_seos\' or al.event = \'error_check_status_in_seos\')
+            ) A
+            order by A.ord desc
+        ');
     }
 
     public static function statisticRenewed($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
