@@ -292,12 +292,18 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                         \'old_subject_id\', ape.old_resp_subject_id,
                         \'old_subject_name\', case when ost.id is not null then ost.subject_name else \'\' end,
                         \'new_subject_id\', ape.new_resp_subject_id,
-                        \'new_subject_name\', case when nst.id is not null then nst.subject_name else (case when ape.subject_name is not null then ape.subject_name else \'\' end) end
+                        \'new_subject_name\', case when nst.id is not null then nst.subject_name else (case when ape.subject_name is not null then ape.subject_name else \'\' end) end,
+                        \'app_subject_id\', pas.id,
+                        \'app_subject_name\', case when past.id is not null then past.subject_name else \'\' end
                         ) as info,
                     ape.created_at as ord,
                     1 as ord2
                 from pdoi_application_event ape
                 left join users u on u.id = ape.user_reg
+                left join pdoi_application pa on pa.id = ape.pdoi_application_id
+                left join pdoi_response_subject pas on pas.id = pa.response_subject_id
+                left join pdoi_response_subject_translations past on past.pdoi_response_subject_id = pas.id and past.locale = \'bg\'
+
                 left join pdoi_response_subject os on os.id = ape.old_resp_subject_id
                 left join pdoi_response_subject_translations ost on ost.pdoi_response_subject_id = os.id and ost.locale = \'bg\'
                 left join pdoi_response_subject ns on ns.id = ape.new_resp_subject_id
