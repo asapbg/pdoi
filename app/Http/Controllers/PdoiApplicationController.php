@@ -50,7 +50,7 @@ class PdoiApplicationController extends Controller
         $applications = null;
         $sort = $request->filled('sort') ? $request->input('sort') : 'apply_date';
         $sortOrd = $request->filled('ord') ? $request->input('ord') : 'desc';
-        if( isset($requestFilter['search']) ) {
+//        if( isset($requestFilter['search']) ) {
             $paginate = $filter['paginate'] ?? PdoiApplication::PAGINATE;
             $appQ = PdoiApplication::with(['responseSubject', 'responseSubject.translation',
                 'events', 'events.user', 'events.event', 'events.event.translation',
@@ -58,7 +58,7 @@ class PdoiApplicationController extends Controller
                 ->FilterBy($request->all())
                 ->SortedBy($sort,$sortOrd);
             $applications = (new PdoiApplicationShortCollection($appQ->paginate($paginate)))->resolve();
-        }
+//        }
         $applicationsCnt = PdoiApplication::applicationCounter();
         $titlePage =__('custom.searching');
         $this->setBreadcrumbsTitle($titlePage);
