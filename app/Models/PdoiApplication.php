@@ -387,7 +387,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                         where true
                             and al.subject_type = \'App\Models\PdoiApplication\'
                             and al.subject_id = '.$this->id.'
-                            and (al.event = \'notify_moderators_for_new_app\' or al.event = \'success_send_to_seos\' or al.event = \'error_check_status_in_seos\' or al.event = \'error_send_to_seos\')
+                            and (al.event = \'notify_moderators_for_new_app\' or al.event = \'success_send_to_seos\' or al.event = \'error_check_status_in_seos\' or al.event = \'error_send_to_seos\' or al.event = \'error_send_to_seos\' or al.event = \'success_check_status_in_seos\')
             ) A
             order by A.ord desc
         ');
