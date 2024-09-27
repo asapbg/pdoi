@@ -355,7 +355,7 @@
                                                     @elseif($ca->row_type == 'notification')
                                                         <i class="fas fa-envelope text-success me-2"></i> {{ __('custom.notification_types.'.$jsonData['type']) }}
                                                     @elseif($ca->row_type == 'activity')
-                                                        <i class="fas fa-envelope text-@if(in_array($jsonData['event']), ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos']){{ 'success' }}@else{{ 'danger' }}@endif me-2"></i> {{ __('custom.'.$jsonData['event']) }}
+                                                        <i class="fas fa-envelope @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos'])) text-success @else text-danger @endif me-2"></i> {{ __('custom.'.$jsonData['event']) }}
                                                     @endif
                                                 </td>
                                                 <td>
