@@ -62,7 +62,11 @@
                             </div>
                             <div class="form-group form-group-sm col-12 mb-3">
                                 <label class="form-label fw-semibold" >Отговор:</label>
-                                <span>{{ $jsonActivityPropertiesData['response'] ?? '' }}</span>
+                                @if(is_array($jsonActivityPropertiesData['response']))
+                                    <pre>@php(print_r($notification->data))</pre>
+                                @else
+                                    <span>{{ $jsonActivityPropertiesData['response'] ?? '' }}</span>
+                                @endif
                             </div>
                             <div class="form-group form-group-sm col-12 mb-3">
                                 <label class="form-label fw-semibold" >MSG ID:</label>
