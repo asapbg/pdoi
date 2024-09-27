@@ -415,10 +415,10 @@
                                                                 {{ __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::SEOS->name) }}
                                                                 <div>
                                                                     @if(isset($jsonActivityPropertiesData['egov_message_id']))
-                                                                        @php($egovM = \App\Models\Egov\EgovMessage::find($jsonActivityPropertiesData['egov_message_id']));
+                                                                        @php($egovM = \App\Models\Egov\EgovMessage::find($jsonActivityPropertiesData['egov_message_id']))
                                                                     @endif
                                                                     @if(isset($jsonActivityPropertiesData['notification_id']))
-                                                                        @php($notifcationM = \App\Models\CustomNotification::find($jsonActivityPropertiesData['notification_id']));
+                                                                        @php($notifcationM = \App\Models\CustomNotification::find($jsonActivityPropertiesData['notification_id']))
                                                                     @endif
                                                                     @if(isset($notifcationM))
                                                                         <a class="text-primary"  href="{{ route('admin.rzs.view', $notifcationM->notifiable->id) }}" target="_blank">{{ $notifcationM->notifiable->subject_name }}</a><br>

@@ -7,6 +7,7 @@
                 <div class="card-body">
                     <div class="row mb-4">
                         @php($activity = $item['activity'])
+                        @php($notification = $item['notification'])
                         @php($jsonActivityPropertiesData = $activity->properties)
                         <h5 class="bg-primary py-1 px-2">{{ __('custom.'.$activity->event) }}</h5>
                         <div class="form-group form-group-sm col-12 mb-3">
@@ -33,13 +34,19 @@
                             <label class="form-label fw-semibold" >Канал:</label>
                             <span>
                                 @if(in_array($activity->event, ['error_check_status_in_seos', 'success_check_status_in_seos', 'send_to_seos', 'error_send_to_seos', 'success_send_to_seos']))
-                                        __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::SEOS->name) }}
+                                        {{  __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::SEOS->name) }}
                                 @endif
                             </span>
                         </div>
                         @if(isset($item['egov_message']))
                             @php($egovM = $item['egov_message'])
                             @php($zrsLabel = in_array($activity->event, ['error_check_status_in_seos', 'success_check_status_in_seos', 'error_send_to_seos', 'success_send_to_seos']) ? 'Деловодна система' : 'Получател')
+                            @if(isset($notification) && in_array($activity->event, ['error_check_status_in_seos', 'success_check_status_in_seos', 'error_send_to_seos', 'success_send_to_seos']))
+                                <div class="form-group form-group-sm col-12 mb-3">
+                                    <label class="form-label fw-semibold" >{{ $zrsLabel }}:</label>
+                                    <a href="{{ route('admin.rzs.view', $notification->notifiable->id) }}">{{ $notification->notifiable->subject_name }}</a>
+                                </div>
+                            @endif
                             <div class="form-group form-group-sm col-12 mb-3">
                                 <label class="form-label fw-semibold" >{{ $zrsLabel }} (ЕИК):</label>
                                 <span>{{ $egovM->recipient_eik }}</span>
@@ -50,7 +57,15 @@
                             </div>
                             <div class="form-group form-group-sm col-12 mb-3">
                                 <label class="form-label fw-semibold" >{{ $zrsLabel }} (URL):</label>
-                                <span>{{ $egovM->recipient_endpoint }}</span>
+                                @if(!isset($jsonActivityPropertiesData['recipient_endpoint']))
+                                    @php($service= $egovM->recipient?->services->first())
+                                    @if($service)
+                                        @php($endpoint = '* '.$service->uri)
+                                    @endif
+                                @else
+                                    @php($endpoint = $jsonActivityPropertiesData['recipient_endpoint'])
+                                @endif
+                                <span>{{ $endpoint }}</span>
                             </div>
                             <div class="form-group form-group-sm col-12 mb-3">
                                 <label class="form-label fw-semibold" >MSG ID:</label>
