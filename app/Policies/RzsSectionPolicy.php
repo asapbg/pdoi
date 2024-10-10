@@ -55,9 +55,9 @@ class RzsSectionPolicy
     public function update(User $user, RzsSection $rzsSection)
     {
         $user = auth()->user();
-        if($user && !$user->hasAnyRole([CustomRole::ADMIN_USER_ROLE, CustomRole::SUPER_USER_ROLE])){
-            $ids = RzsSection::getAdmStructureIds($user->responseSubject->adm_level);
-        }
+//        if($user && !$user->hasAnyRole([CustomRole::ADMIN_USER_ROLE, CustomRole::SUPER_USER_ROLE])){
+//            $ids = RzsSection::getAdmStructureIds($user->responseSubject->adm_level);
+//        }
 
         return $user->canAny(['manage.*','administration.*', 'administration.rzs_sections'])
             && $rzsSection->manual && (!isset($ids) || (isset($ids) && in_array($rzsSection->id, $ids)));
