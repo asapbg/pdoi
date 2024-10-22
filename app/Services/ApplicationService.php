@@ -189,6 +189,7 @@ class ApplicationService
                 $isRegistered = true;
             }
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             logError('Register event ('. $eventConfig->name .') for application ID '.$this->application->id, $e->getMessage());
         }
@@ -242,6 +243,7 @@ class ApplicationService
 
         //Register event: register first app event
         $receivedEvent = $appService->registerEvent(ApplicationEventsEnum::SEND->value);
+
         if ( is_null($receivedEvent) ) {
             throw new \Exception('Apply application (front). Operation roll back because cant\'t register '.ApplicationEventsEnum::SEND->name. ' event');
         }
@@ -307,13 +309,15 @@ class ApplicationService
 
         $appService->generatePdf($newApplication);
         $newApplication->refresh();
-        $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
 
-        $emailList = $subject->getModeratorsEmail();
-        if( sizeof($emailList) ) {
-            Mail::to($emailList)->send(new ModeratorNewApplication(route('admin.application.view', ['item' => $newApplication->id])));
+        if(isset($subject)){
+            $subject->notify(new NotifySubjectNewApplication($newApplication, $notifyData));
+
+            $emailList = $subject->getModeratorsEmail();
+            if( sizeof($emailList) ) {
+                Mail::to($emailList)->send(new ModeratorNewApplication(route('admin.application.view', ['item' => $newApplication->id])));
+            }
         }
-
         sleep(1);
 
         return $newApplication;

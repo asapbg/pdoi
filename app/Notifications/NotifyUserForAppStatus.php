@@ -53,7 +53,7 @@ class NotifyUserForAppStatus extends Notification
                 ).PHP_EOL.
                 ($this->editedEvent ? 'Причина за промяна на крайното решение: '.strip_tags(html_entity_decode($this->editedEvent->edit_final_decision_reason)).PHP_EOL : '').
                 'Рег. №: '.$this->application->application_uri.';'.PHP_EOL.
-                'Задължен субект: '.$this->application->responseSubject->subject_name.';'.PHP_EOL.
+                'Задължен субект: '.($this->application->responseSubject ? $this->application->responseSubject->subject_name : $this->application->not_registered_subject_name).';'.PHP_EOL.
                 'Статус: '.__('custom.application.status.'.\App\Enums\PdoiApplicationStatusesEnum::keyByValue($this->application->status)).';'.PHP_EOL.
                 'Дата на промяна: '.displayDate($this->application->status_date).';'.PHP_EOL.
                 'Срок за отговор: '.displayDate($this->application->response_end_time).';'.PHP_EOL.

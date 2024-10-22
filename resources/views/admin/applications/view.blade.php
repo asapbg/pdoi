@@ -395,7 +395,7 @@
                                                             <span>Препратено (към):</span><a class="text-primary" href="{{ route('admin.users.edit', $jsonData['new_subject_id']) }}" target="_blank">{{ $jsonData['new_subject_name'] }}</a><br>
                                                         @elseif(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value]))
                                                             <span>Препратено (от):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['old_subject_id']) }}" target="_blank">{{ $jsonData['old_subject_name'] }}</a><br>
-                                                            <span>Препратено (към):</span>{{ $jsonActivityPropertiesData['new_subject_name'] }}<br>
+                                                            <span>Препратено (към):</span>{{ $jsonData['new_subject_name'] }}<br>
                                                         @elseif(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::SEND_TO_SEOS->value, \App\Enums\ApplicationEventsEnum::APPROVE_BY_SEOS->value]))
                                                                 <span>Регистрирано от: </span> Системно<br>
                                                             @if(isset($jsonData['app_subject_id']))
