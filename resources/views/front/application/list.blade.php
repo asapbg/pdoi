@@ -48,7 +48,7 @@
                                 <p class="my-1 p-fs">{{ __('custom.reg_number') }}: {{ $item['uri'] }}</p>
                                 @php($itemContent = clearText(strip_tags(html_entity_decode($item['request']))))
                                 <div class="my-2">
-                                    {{ mb_substr($itemContent, 0, 100) }}@if(strlen($itemContent) > 100){{ '...' }}@endif
+                                    {{ mb_substr($itemContent, 0, 300) }}@if(strlen($itemContent) > 300){{ '...' }}@endif
                                 </div>
                                 <p class="my-1 p-fs">{{ __('custom.date_apply') }}: {{ displayDate($item['created_at']) }} | {{ __('custom.status') }}: <span class="app-badge {{ $item['statusStyle'] }} fs-12">{{ $item['statusName'] }}</span> | <i class="fas fa-eye text-primary me-1"></i>{{ $item['cnt_visits'] }}</p>
                             </div>
