@@ -166,13 +166,15 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
     public function scopeExpiredAndActive($query)
     {
         $query->where('pdoi_application.response_end_time', '<', Carbon::now()->startOfDay()->format('Y-m-d H:i:s'))
-            ->whereIn('pdoi_application.status', PdoiApplicationStatusesEnum::notCompleted());
+            ->whereIn('pdoi_application.status', PdoiApplicationStatusesEnum::notCompleted())
+            ->whereNotIn('pdoi_application.status', [PdoiApplicationStatusesEnum::FORWARDED->value]);
     }
 
     public function scopeIsExpireSoon($query)
     {
         $query->where('pdoi_application.response_end_time', '=', Carbon::now()->addDays(env('NOTIFY_DAYS_BEFORE_EXPIRE', 3))->startOfDay())
-            ->whereIn('pdoi_application.status', PdoiApplicationStatusesEnum::notCompleted());
+            ->whereIn('pdoi_application.status', PdoiApplicationStatusesEnum::notCompleted())
+            ->whereNotIn('pdoi_application.status', [PdoiApplicationStatusesEnum::FORWARDED->value]);
     }
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\HasOne
