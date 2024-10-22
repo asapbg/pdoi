@@ -407,7 +407,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             })
             ->select(DB::raw('max(pdoi_response_subject_translations.subject_name) as subject_name'), DB::raw('count(distinct(pdoi_application.id)) as applications_cnt'));
 
-        $query->when($subject, function ($q, $subject) {
+        $query->where('pdoi_response_subject.email', 'not like', '%asap.bg%')
+        ->when($subject, function ($q, $subject) {
             return $q->where('pdoi_application.response_subject_id', $subject);
         })->when($fromDate, function ($q, $fromDate) {
             return $q->where('pdoi_application.created_at', '>=', Carbon::parse($fromDate)->startOfDay());
@@ -450,7 +451,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                 DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_REVIEW->value.' then 1 else 0 end) as expired_applications')
             );
 
-        $query->when($subject, function ($q, $subject) {
+        $query->where('pdoi_response_subject.email', 'not like', '%asap.bg%')
+        ->when($subject, function ($q, $subject) {
             return $q->where('pdoi_application.response_subject_id', $subject);
         })->when($fromDate, function ($q, $fromDate) {
             return $q->where('pdoi_application.created_at', '>=', Carbon::parse($fromDate)->startOfDay());
@@ -579,7 +581,8 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             })
             ->select(DB::raw($name.' as name'), DB::raw($value.' as value_cnt'));
 
-        $query->when($category, function ($q, $category) {
+        $query->where('pdoi_response_subject.email', 'not like', '%asap.bg%')
+        ->when($category, function ($q, $category) {
             return $q->where('category.id', $category);
         })->when($status, function ($q, $status) {
                 return $q->where('pdoi_application.status', $status);
@@ -618,6 +621,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     ->where('files.code_object', '=', File::CODE_OBJ_EVENT);
             })
             ->select(DB::raw('max(pdoi_response_subject_translations.subject_name) as name'), DB::raw('count(pdoi_application.id) as value_cnt'))
+            ->where('pdoi_response_subject.email', 'not like', '%asap.bg%')
             ->whereIn('pdoi_application_event.event_type', [ApplicationEventsEnum::FINAL_DECISION])
             ->whereIn('pdoi_application_event.event_reason', [PdoiApplicationStatusesEnum::APPROVED->value, PdoiApplicationStatusesEnum::PART_APPROVED->value])
             ->where(function ($q){
@@ -670,6 +674,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     })->when($to, function ($q, $to) {
                         return $q->where('pdoi_application.created_at', '<=', Carbon::parse($to)->endOfDay());
                     })
+                    ->where('pdoi_response_subject.email', 'not like', '%asap.bg%')
                     ->groupBy('pdoi_application.response_subject_id', 'pdoi_response_subject_translations.subject_name', 'pdoi_application.applicant_type')
                     ->orderBy('pdoi_response_subject_translations.subject_name');
                 break;
@@ -698,6 +703,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                     })->when($to, function ($q, $to) {
                         return $q->where('pdoi_application.created_at', '<=', Carbon::parse($to)->endOfDay());
                     })
+                    ->where('pdoi_response_subject.email', 'not like', '%asap.bg%')
                     ->groupBy('pdoi_application.response_subject_id', 'pdoi_response_subject_translations.subject_name')
                     ->orderBy('pdoi_response_subject_translations.subject_name');
                 break;
