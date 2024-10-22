@@ -462,6 +462,7 @@ return [
     'statistics.forward'                      => 'Statistics on the number of applications forwarded by institutions',
     'statistics.renew'                        => 'Statistics for overturned denials',
     'statistics.terms'                          => 'Information on the deadline for the institutions to pronounce',
+    'statistics.subject_not_published'                          => 'Reference for obliged entities that do not publish information/file in response',
     'statistics.applications'                   => 'Applications',
     'statistics.applications.name_column.subject' => 'Obligatory subject',
     'statistics.applications.name_column.applicant_type' => 'User type',

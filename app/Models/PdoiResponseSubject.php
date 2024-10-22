@@ -281,13 +281,19 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
             from pdoi_response_subject
             join pdoi_response_subject_translations
                 on pdoi_response_subject_translations.pdoi_response_subject_id = pdoi_response_subject.id and pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'
-            join users on pdoi_response_subject.id = users.administrative_unit
+            left join users on pdoi_response_subject.id = users.administrative_unit
             where
-                users.deleted_at is null
-                and users.active = 1
+                (
+                    users.id is null
+                    or (
+                        users.deleted_at is null
+                        and users.active = 1
+                    )
+                )
                 and pdoi_response_subject.deleted_at is null
                 and pdoi_response_subject.active = 1
-            group by pdoi_response_subject.id;
+            group by pdoi_response_subject.id
+            order by max(pdoi_response_subject_translations.subject_name);
         ');
     }
 

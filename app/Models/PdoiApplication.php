@@ -600,6 +600,48 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             ->paginate(20);
     }
 
+    public static function statisticSubjectNoPublished($filter, $export = 0): \Illuminate\Contracts\Pagination\LengthAwarePaginator|array|\Illuminate\Support\Collection
+    {
+        $page = isset($filter['page']) && !empty($filter['page']) ? (int)$filter['page'] : 1;
+        $fromDate = isset($filter['fromDate']) && !empty($filter['fromDate']) ? $filter['fromDate'] : Carbon::now()->startOfMonth()->startOfDay();
+        $toDate = isset($filter['toDate']) && !empty($filter['toDate']) ? $filter['toDate'] : Carbon::now()->endOfMonth()->endOfDay();
+        $subject = (isset($filter['subject']) && !empty($filter['subject'])) ? (int)$filter['subject'] : null;
+
+        $query = DB::table('pdoi_application')
+            ->join('pdoi_response_subject', 'pdoi_response_subject.id', '=', 'pdoi_application.response_subject_id')
+            ->join('pdoi_response_subject_translations', function ($join){
+                $join->on('pdoi_response_subject_translations.pdoi_response_subject_id', '=', 'pdoi_response_subject.id')->whereRaw('pdoi_response_subject_translations.locale = \''.app()->getLocale().'\'');
+            })
+            ->join('pdoi_application_event', 'pdoi_application_event.pdoi_application_id', '=', 'pdoi_application.id')
+            ->leftJoin('files', function ($join){
+                $join->on('files.id_object', '=', 'pdoi_application_event.id')
+                    ->where('files.code_object', '=', File::CODE_OBJ_EVENT);
+            })
+            ->select(DB::raw('max(pdoi_response_subject_translations.subject_name) as name'), DB::raw('count(pdoi_application.id) as value_cnt'))
+            ->whereIn('pdoi_application_event.event_type', [ApplicationEventsEnum::FINAL_DECISION])
+            ->whereIn('pdoi_application_event.event_reason', [PdoiApplicationStatusesEnum::APPROVED->value, PdoiApplicationStatusesEnum::PART_APPROVED->value])
+            ->where(function ($q){
+                $q->where(function ($q){
+                    $q->whereNull('add_text')->orWhere('add_text', '=', '');
+                })->whereNull('files.id');
+            })
+            ->when($subject, function ($q, $subject) {
+                return $q->where('pdoi_application.response_subject_id', $subject);
+            })->when($fromDate, function ($q, $fromDate) {
+                return $q->where('pdoi_application.created_at', '>=', Carbon::parse($fromDate)->startOfDay());
+            })->when($toDate, function ($q, $toDate) {
+                return $q->where('pdoi_application.created_at', '<=', Carbon::parse($toDate)->endOfDay());
+            });
+
+        if( $export ) {
+            return $query->groupBy('pdoi_application.response_subject_id')
+                ->orderBy('pdoi_application.response_subject_id')->get();
+        }
+        return $query->groupBy('pdoi_application.response_subject_id')
+            ->orderBy('pdoi_application.response_subject_id')
+            ->paginate(20);
+    }
+
     public static function publicStatistic($type, $from, $to): bool|string
     {
         switch ($type)

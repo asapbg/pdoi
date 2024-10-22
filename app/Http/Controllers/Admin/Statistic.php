@@ -22,6 +22,7 @@ class Statistic extends Controller
     const TYPE_RENEW = 'renew';
     const TYPE_FORWARDED = 'forward';
     const TYPE_TERMS = 'terms';
+    const TYPE_SUBJECT_NOT_PUBLISHED = 'subject_not_published';
 
     private function isAuth(){
         if( !auth()->user() || !auth()->user()->canany(['manage.*', 'statistic.*']) ) {
@@ -59,6 +60,10 @@ class Statistic extends Controller
             [
                 'name' => __('custom.statistics.terms'),
                 'url' => route('admin.statistic.type', ['type' => self::TYPE_TERMS])
+            ],
+            [
+                'name' => __('custom.statistics.subject_not_published'),
+                'url' => route('admin.statistic.type', ['type' => self::TYPE_SUBJECT_NOT_PUBLISHED])
             ]
         );
         return $this->view('admin.statistic.index', compact('statistics', 'statisticLinks'));
@@ -79,6 +84,16 @@ class Statistic extends Controller
                 $data['name_title'] = __('custom.statistics.applications.name_column.'.$requestFilter['groupBy']);
                 $data['groupedBy'] = $requestFilter['groupBy'];
                 $this->setTitles(trans_choice('custom.statistics', 1).' '.trans_choice('custom.applications', 2));
+                if(!$export) {
+                    $data['canExport'] = 1;
+                    $data['filter'] = $this->filter($type);
+                }
+                break;
+            case self::TYPE_SUBJECT_NOT_PUBLISHED:
+                $requestFilter = $request->all();
+                $data['statistic'] = PdoiApplication::statisticSubjectNoPublished($requestFilter, $export);
+                $data['name_title'] = __('custom.statistics.subject_not_published');
+                $this->setTitles(__('custom.statistics.subject_not_published'));
                 if(!$export) {
                     $data['canExport'] = 1;
                     $data['filter'] = $this->filter($type);
@@ -121,6 +136,9 @@ class Statistic extends Controller
                     'title' => __('custom.statistics.base.subjects_with_admin'),
                     'statistic' => PdoiResponseSubject::statisticSubjectsWithAdmin()
                 ];
+                if(!$export) {
+                    $data['canExport'] = 1;
+                }
         }
 
         if( $export ) {
@@ -176,6 +194,34 @@ class Statistic extends Controller
                     'default' => '',
                     'value' => request()->input('category'),
                     'col' => 'col-md-4'
+                ),
+                'subject' => array(
+                    'type' => 'subjects',
+                    'placeholder' => trans_choice('custom.pdoi_response_subjects', 1),
+                    'options' => optionsFromModel(PdoiResponseSubject::simpleOptionsList(), true, '', trans_choice('custom.pdoi_response_subjects', 1)),
+                    'value' => request()->input('subject'),
+                    'default' => '',
+                )
+            ),
+            self::TYPE_SUBJECT_NOT_PUBLISHED => array(
+//                'groupBy' => [
+//                    'type' => 'select',
+//                    'options' => statisticApplicationGroupByOptions(true, '', __('custom.group_by')),
+//                    'value' => request()->input('groupBy') ?? 'subject',
+//                    'default' => '',
+//                    'col' => 'col-md-4'
+//                ],
+                'fromDate' => array(
+                    'type' => 'datepicker',
+                    'value' => request()->input('fromDate') ?? Carbon::now()->startOfMonth()->format('d-m-Y'),
+                    'placeholder' => __('custom.begin_date'),
+                    'col' => 'col-md-2'
+                ),
+                'toDate' => array(
+                    'type' => 'datepicker',
+                    'value' => request()->input('toDate') ?? Carbon::now()->endOfMonth()->format('d-m-Y'),
+                    'placeholder' => __('custom.end_date'),
+                    'col' => 'col-md-2'
                 ),
                 'subject' => array(
                     'type' => 'subjects',

@@ -463,6 +463,7 @@ return [
     'statistics.forward'                      => 'Статистика за броя заявления, препратени от институции',
     'statistics.renew'                        => 'Статистика за отменените откази',
     'statistics.terms'                          => 'Справка за срока за произнасяне от институциите',
+    'statistics.subject_not_published'                          => 'Справка за ЗС които не публикуват информация/файл в отговор',
     'statistics.applications'                   => 'Заявления',
     'statistics.applications.name_column.subject' => 'Задължен субект',
     'statistics.applications.name_column.applicant_type' => 'Тип потребител',

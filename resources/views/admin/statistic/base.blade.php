@@ -6,6 +6,11 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
+                    @if(isset($data['canExport']) && $data['canExport'])
+                        <a class="btn btn-sm btn-success mb-3" href="{{ route('admin.statistic.type', ['type' => \App\Http\Controllers\Admin\Statistic::TYPE_BASE]).'?export=1' }}">
+                            <i class="fas fa-file-excel"></i> {{ __('custom.export') }}
+                        </a>
+                    @endif
                     @if(isset($data) && isset($data['user_type']) && isset($data['user_type']['title']))
                         <table class="table table-sm table-bordered mb-4" width="100%" cellspacing="0">
                             <thead>
