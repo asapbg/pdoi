@@ -516,37 +516,37 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         {
             case 'subject':
                 $name = 'max(pdoi_response_subject_translations.subject_name)';
-                $value = 'count(pdoi_application.id)';
+                $value = 'count(distinct(pdoi_application.id))';
                 $groupBy = 'pdoi_application.response_subject_id';
                 $orderBy = 'pdoi_application.response_subject_id';
                 break;
             case 'applicant_type':
                 $name = 'case when pdoi_application.applicant_type = '.User::USER_TYPE_PERSON.' then \''.__('custom.users.legal_form.'.User::USER_TYPE_PERSON).'\' else \''.__('custom.users.legal_form.'.User::USER_TYPE_COMPANY).'\' end';
-                $value = 'count(pdoi_application.id)';
+                $value = 'count(distinct(pdoi_application.id))';
                 $groupBy = 'pdoi_application.applicant_type';
                 $orderBy = 'pdoi_application.applicant_type';
                 break;
             case 'profile_type':
                 $name = 'max(coalesce(profile_type_translations.name, \'NA\'))';
-                $value = 'count(pdoi_application.id)';
+                $value = 'count(distinct(pdoi_application.id))';
                 $groupBy = 'pdoi_application.profile_type';
                 $orderBy = 'pdoi_application.profile_type';
                 break;
             case 'status':
                 $name = 'pdoi_application.status';
-                $value = 'count(pdoi_application.id)';
+                $value = 'count(distinct(pdoi_application.id))';
                 $groupBy = 'pdoi_application.status';
                 $orderBy = 'pdoi_application.status';
                 break;
             case 'country':
                 $name = 'coalesce(country_translations.name, \'NA\')';
-                $value = 'count(pdoi_application.id)';
+                $value = 'count(distinct(pdoi_application.id))';
                 $groupBy = ['country.id', 'country_translations.name'];
                 $orderBy = 'country_translations.name';
                 break;
             case 'category':
                 $name = 'coalesce(category_translations.name, \'NA\')';
-                $value = 'count(pdoi_application.id)';
+                $value = 'count(distinct(pdoi_application.id))';
                 $groupBy = ['category.id', 'category_translations.name'];
                 $orderBy = 'category_translations.name';
                 break;
