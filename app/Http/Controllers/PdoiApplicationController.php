@@ -13,6 +13,7 @@ use App\Http\Resources\PdoiApplicationResource;
 use App\Http\Resources\PdoiApplicationShortCollection;
 use App\Http\Resources\PdoiApplicationShortResource;
 use App\Mail\ModeratorNewApplication;
+use App\Mail\ModeratorNewAppRenewRequest;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\EkatteArea;
@@ -394,6 +395,14 @@ class PdoiApplicationController extends Controller
                     //$ocr->extractText();
                 }
             }
+
+            if($item->responseSubject){
+                $emails = $item->responseSubject->getModeratorsEmail();
+                if( sizeof($emails) ) {
+                    Mail::to($emails)->send(new ModeratorNewAppRenewRequest(route('admin.restore_requests.edit', ['item' => $renew->id])));
+                }
+            }
+
             DB::commit();
             return response()->json(['redirect_url' => route('application.my.show', $item).'#renews'], 200);
         } catch (\Exception $e) {
