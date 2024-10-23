@@ -119,6 +119,10 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/info.log'),
         ],
+        'seos' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/seos.log'),
+        ],
     ],
 
 ];
