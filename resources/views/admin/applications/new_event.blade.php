@@ -169,7 +169,7 @@
                                 </div>
                             @endif
                             @if($event->add_text)
-                                <h5 class="bg-primary py-1 px-2">{{ __('custom.additional_info') }}</h5>
+                                <h5 class="bg-primary py-1 px-2">@if($event->app_event == \App\Enums\ApplicationEventsEnum::FINAL_DECISION->value){{ 'Предоставена обществена информация' }}@else{{ __('custom.additional_info') }}@endif</h5>
                                 <div class="form-group form-group-sm col-12 mb-3">
                                     <label class="form-label fw-semibold" ></label>
                                     @php($request = old('add_text', ''))

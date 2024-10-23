@@ -366,7 +366,8 @@ class PdoiApplicationController extends Controller
 
         $eventRequest = $event->app_event == ApplicationEventsEnum::FORWARD->value ?
             new RegisterEventForwardRequest() : new RegisterEventRequest();
-        $validator = Validator::make($request->all(), $eventRequest->rules());
+
+        $validator = Validator::make($request->all(), $eventRequest->rules(), $eventRequest->messages());
         if( $validator->fails() ) {
             return back()->withInput()->withErrors($validator->errors());
         }
