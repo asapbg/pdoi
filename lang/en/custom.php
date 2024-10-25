@@ -577,5 +577,8 @@ return [
     'error_send_to_seos' => 'Изпращане на заявление към деловодната с-ма на ЗС',
     'error_check_status_in_seos' => 'Проверка на статус в деловодната система',
     'success_check_status_in_seos' => 'Проверка на статус в деловодната система',
+    'register_action' => 'Register',
+    'manual_register' => 'Manual register' ,
+
 ];
 

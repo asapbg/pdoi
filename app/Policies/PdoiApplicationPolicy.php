@@ -306,4 +306,32 @@ class PdoiApplicationPolicy
     {
         return false;
     }
+
+    /**
+     * Determine whether the user can register the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\PdoiApplication  $pdoiApplication
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function register(User $user, PdoiApplication $pdoiApplication): \Illuminate\Auth\Access\Response|bool
+    {
+        return (
+           !$pdoiApplication->manual
+            && (
+                $pdoiApplication->status == PdoiApplicationStatusesEnum::RECEIVED->value
+                || $pdoiApplication->status == PdoiApplicationStatusesEnum::REGISTRATION_TO_SUBJECT->value
+            )
+            && (
+                $user->can('manage.*') ||
+                (
+                    $user->canany(['application.*', 'application.view', 'application.edit'])
+                    && (
+                        ($pdoiApplication->response_subject_id && $user->administrative_unit === $pdoiApplication->response_subject_id)
+                        || (!$pdoiApplication->response_subject_id && $pdoiApplication->parent && $user->administrative_unit == $pdoiApplication->parent->response_subject_id)
+                    )
+                )
+            )
+        );
+    }
 }

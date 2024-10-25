@@ -35,6 +35,14 @@
                 <i class="fas fa-history"></i>
             </a>
         @endcan
+        @can('register', $item)
+            <div data-href="{{ route( 'admin.application.register' , [$item->id]) }}"
+               class="btn btn-sm btn-success trigger-link"
+               data-toggle="tooltip"
+               title="{{ __('custom.register_action') }}">
+                <i class="fa fa-unlock-alt"></i>
+            </div>
+        @endcan
         @canany('renew', $item)
             <a href="{{ route( 'admin.application.renew' , [$item->id]) }}"
                class="btn btn-sm btn-success"

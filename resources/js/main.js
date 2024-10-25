@@ -630,13 +630,13 @@ $(document).ready(function (e) {
             '  <div class="modal-dialog">\n' +
             '    <!-- Modal content-->\n' +
             '    <div class="modal-content">\n' +
-            '      <div class="modal-header">\n' +
+            '      <div class="modal-header bg-light">\n' +
             '        <h4 class="modal-title">' + _myModal.title + '</h4>\n' +
             (_myModal.dismissible ? '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' : '') +
             '      </div>\n' +
             '      <div class="modal-body" id="' + _myModal.id + '-body' + '">\n' + _myModal.body +
             '      </div>\n' +
-            (_myModal.footer ? '<div class="modal-footer">'+ _myModal.footer +'</div>' : '') +
+            (_myModal.footer ? '<div class="modal-footer bg-light">'+ _myModal.footer +'</div>' : '') +
             '    </div>\n' +
             '  </div>\n' +
             '</div>';
@@ -707,6 +707,25 @@ $(document).ready(function (e) {
                 // }
             }
 
+        });
+    }
+
+    //Same as .cancelModal but here we show warning about documents in approve procedure.
+    // This documents will be canceled after confirm.
+    if($('.trigger-link').length) {
+        $('.trigger-link').on('click', function (event){
+            let href = $(this).data('href');
+            let confirmModal = new MyModal({
+                title: 'Регистрация на заявление',
+                destroyListener: true,
+                body: '<p class="mb-2 text-danger fw-bold">Това действие ще отрази заявлението като регистрирано и срокът за неговата обработка ще започене да тече от този момент! </br>Това е необратим процес!</p>' +
+                    '<p class="m-0">Сигурни ли сте, че искате да продължите?</p>',
+                footer: '<button class="btn btn-sm btn-danger confirmModalProcedure">Да</button>' +
+                    '<button class="btn btn-sm btn-secondary closeModal ms-3" data-dismiss="modal" aria-label="Не">Не</button>'
+            });
+            $('#'+confirmModal.id).on('click', '.confirmModalProcedure', function (){
+                window.location = href;
+            });
         });
     }
 })

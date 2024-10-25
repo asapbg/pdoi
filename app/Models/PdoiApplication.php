@@ -384,12 +384,12 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                                 \'properties\', al.properties) as info,
                             al.created_at as ord,
                             1 as ord2,
-                            (case when al.event <> \'notify_moderators_for_new_app\' then 1 else 0 end) as has_log_view
+                            (case when al.event <> \'notify_moderators_for_new_app\' and al.event <> \'manual_register\' then 1 else 0 end) as has_log_view
                         from activity_log al
                         where true
                             and al.subject_type = \'App\Models\PdoiApplication\'
                             and al.subject_id = '.$this->id.'
-                            and (al.event = \'notify_moderators_for_new_app\' or al.event = \'success_send_to_seos\' or al.event = \'error_check_status_in_seos\' or al.event = \'error_send_to_seos\' or al.event = \'error_send_to_seos\' or al.event = \'success_check_status_in_seos\')
+                            and (al.event = \'notify_moderators_for_new_app\' or al.event = \'success_send_to_seos\' or al.event = \'error_check_status_in_seos\' or al.event = \'error_send_to_seos\' or al.event = \'error_send_to_seos\' or al.event = \'success_check_status_in_seos\' or al.event = \'manual_register\')
             ) A
             order by A.ord desc
         ');

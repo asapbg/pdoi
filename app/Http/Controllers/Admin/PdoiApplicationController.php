@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\ApplicationEventsEnum;
 use App\Enums\MailTemplateTypesEnum;
 use App\Enums\PdoiApplicationStatusesEnum;
+use App\Enums\PdoiSubjectDeliveryMethodsEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCreateApplicationRequest;
 use App\Http\Requests\ApplicationRenewRequest;
@@ -30,6 +31,7 @@ use App\Models\PdoiApplicationRestoreRequest;
 use App\Models\PdoiResponseSubject;
 use App\Models\ProfileType;
 use App\Models\ReasonRefusal;
+use App\Notifications\NotifyUserForAppStatus;
 use App\Services\ApplicationService;
 use App\Services\FileOcr;
 use Carbon\Carbon;
@@ -91,6 +93,55 @@ class PdoiApplicationController extends Controller
         $noConsiderReasons = NoConsiderReason::optionsList();
         $event = Event::where('app_event', '=', Event::APP_EVENT_FINAL_DECISION)->first();
         return $this->view('admin.applications.view', compact('item', 'categories', 'refusalReasons', 'noConsiderReasons', 'event', 'customActivity'));
+    }
+
+    public function register(Request $request, int $id = 0)
+    {
+        $item = PdoiApplication::find((int)$id);
+
+        if( !$item ) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        $user = auth()->user();
+        if( !$user->can('register', $item) ){
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        try {
+            if(
+                $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SDES->value
+                || $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value
+                || $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SEOS->value
+            ){
+                $item->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
+                $item->registration_date = date('Y-m-d H:i:s');
+                $item->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
+                $item->status_date = date('Y-m-d H:i:s');
+                $item->save();
+            }
+
+            CustomNotification::where('data', 'like', '"application_id":'.$item->id.',')
+                ->where('type', '=', 'App\Notifications\NotifySubjectNewApplication')
+                ->where('cnt_send', '<>', 9999)
+                ->update(['cnt_send' => 9999]);
+
+            activity('applications')
+                ->performedOn($item)
+                ->event('manual_register')
+                ->withProperties([
+                    'user_id' => auth()->user()->id,
+                    'user_name' => auth()->user()->fullName()
+                ])
+                ->log('manual_register');
+
+            $item->applicant->notify(new NotifyUserForAppStatus($item));
+
+            return redirect(route('admin.application.view', $item->id))->with('success', 'Заявлението е регситрирано успешно');
+        } catch (\Exception $e){
+            Log::error('Manual register application (ID '.$item->id.') error:'. $e);
+            return back()->with('danger', __('messages.system_error'));
+        }
+
     }
 
     public function showLog(Request $request, int|string $id, string $type)

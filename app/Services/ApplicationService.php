@@ -368,7 +368,7 @@ class ApplicationService
             $this->application->status_date = Carbon::now();
             $this->application->response_date = Carbon::now();
             $this->application->replay_in_time = Carbon::now()->diffInDays($this->application->registration_date);
-        }else {
+        } else {
             if( $event->app_event != ApplicationEventsEnum::RENEW_PROCEDURE->value || (isset($data['reopen']) && (int)$data['reopen']) ) {
                 $this->application->status = $event->app_status;
                 $this->application->status_date = Carbon::now();
@@ -382,9 +382,9 @@ class ApplicationService
             } elseif ( $event->app_event == ApplicationEventsEnum::APPROVE_BY_SEOS->value) {
                 //потвърдено от деловодна система
                 $this->application->registration_date = Carbon::now();
-                if(!$this->application->parent_id || $this->application->response_subject_id != $this->application->parent->response_subject_id ) {
+//                if(!$this->application->parent_id || $this->application->response_subject_id != $this->application->parent->response_subject_id ) {
                     $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
-                }
+//                }
             } elseif( $event->app_event == ApplicationEventsEnum::GIVE_INFO->value ) {
                 //Предоставяне на допълнителна информация
                 //крайния срок се удължава като се изчислява 14 дни от датата на уточняването на предмета на исканата обществена информация

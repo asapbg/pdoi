@@ -37,7 +37,17 @@
                                     <div class="col-12 bg-info mb-3">{{ __('custom.application.manual_application') }}</div>
                                 @endif
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.reg_number') }}:  <span class="text-primary">{{ $item->application_uri }}</span></div>
-                                <div class="col-md-4 col-12 fw-bold">{{ __('custom.status') }}:  <span class="text-primary">{{ $item->statusName }}</span></div>
+                                <div class="col-md-4 col-12 fw-bold">
+                                    {{ __('custom.status') }}:  <span class="text-primary">{{ $item->statusName }}</span>
+                                    @can('register', $item)
+                                        <div data-href="{{ route( 'admin.application.register' , [$item->id]) }}"
+                                             class="btn btn-sm btn-success trigger-link"
+                                             data-toggle="tooltip"
+                                             title="{{ __('custom.register_action') }}">
+                                            <i class="fa fa-unlock-alt"></i>
+                                        </div>
+                                    @endcan
+                                </div>
                                 <div class="col-md-4 col-12 fw-bold">{{ __('custom.last_event') }}:  <span class="text-primary">{{ $item->currentEvent->event->name }} ({{ displayDate($item->currentEvent->event_date) }})</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ trans_choice('custom.pdoi_response_subjects', 1)  }}:  <span class="text-primary">{{ $item->response_subject_id ? $item->responseSubject->subject_name : $item->nonRegisteredSubjectName }}</span></div>
                                 <div class="col-md-4 col-12 fw-bold">{{ !$item->manual ? __('custom.date_apply') : __('custom.date_public') }}: <span class="text-primary">{{ displayDate($item->created_at) }}</span></div>
@@ -355,7 +365,11 @@
                                                     @elseif($ca->row_type == 'notification')
                                                         <i class="fas fa-envelope text-success me-2"></i> {{ __('custom.notification_types.'.$jsonData['type']) }}
                                                     @elseif($ca->row_type == 'activity')
-                                                        <i class="fas fa-envelope @if(in_array($jsonData['event'], ['success_send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos'])) text-success @else text-danger @endif me-2"></i> {{ __('custom.'.$jsonData['event']) }}
+                                                        @if($jsonData['event'] == 'manual_register')
+                                                            <i class="fas fa-unlock-alt text-success me-2"></i> {{ __('custom.'.$jsonData['event']) }}
+                                                        @else
+                                                            <i class="fas fa-envelope @if(in_array($jsonData['event'], ['success_send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos'])) text-success @else text-danger @endif me-2"></i> {{ __('custom.'.$jsonData['event']) }}
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td>
@@ -366,6 +380,8 @@
                                                     @elseif(in_array($ca->row_type, ['activity']))
                                                         @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos', 'error_send_to_seos', 'error_check_status_in_seos', 'success_send_to_seos']))
                                                             Комуникационно
+                                                        @elseif(in_array($jsonData['event'], ['manual_register']))
+                                                            Регистрирано събитие
                                                         @endif
                                                     @endif
                                                 </td>
@@ -378,7 +394,7 @@
                                                     @elseif($ca->row_type == 'notification')
                                                         Успешно
                                                     @elseif($ca->row_type == 'activity')
-                                                        @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos', 'success_send_to_seos']))
+                                                        @if(in_array($jsonData['event'], ['send_to_seos', 'notify_moderators_for_new_app', 'success_check_status_in_seos', 'success_send_to_seos', 'manual_register']))
                                                             Успешно
                                                         @elseif(in_array($jsonData['event'], ['error_check_status_in_seos', 'error_send_to_seos']))
                                                             Неуспешно
@@ -409,6 +425,10 @@
                                                                     <span>До:</span>
                                                                     <a class="text-primary" href="{{ route('admin.users.edit', $jsonActivityPropertiesData['user_id']) }}" target="_blank">{{ $jsonActivityPropertiesData['user_name'] }}</a><br>
                                                                     <span>Получател (ел. поща):</span> {{ $jsonActivityPropertiesData['user_email'] }}<br>
+                                                                @endif
+                                                            @elseif($jsonData['event'] == 'manual_register')
+                                                                @if(isset($jsonActivityPropertiesData['user_id']))
+                                                                    <span>Регистрирано от: </span><a class="text-primary" href="{{ route('admin.users.edit', $jsonActivityPropertiesData['user_id']) }}" target="_blank">{{ $jsonActivityPropertiesData['user_name'] }}</a><br>
                                                                 @endif
                                                             @elseif(in_array($jsonData['event'], ['error_check_status_in_seos', 'success_check_status_in_seos', 'send_to_seos', 'error_send_to_seos', 'success_send_to_seos']))
                                                                 <span>Канал:</span>
