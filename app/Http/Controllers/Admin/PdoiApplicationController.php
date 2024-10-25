@@ -81,12 +81,12 @@ class PdoiApplicationController extends Controller
         $categories = Category::optionsList();
         $customActivity = null;
 
-        if(auth()->user()->hasRole(CustomRole::SUPER_USER_ROLE)){
+//        if(auth()->user()->hasRole(CustomRole::SUPER_USER_ROLE)){
             $customActivity = $item->communication();
             //For local test
 //            $customActivity = json_decode(file_get_contents("C:\Users\magdalena.mitkova\Desktop\pitay_json.json"), true);
 //            $customActivity = array_map(function ($row){ return (object)$row; }, $customActivity);
-        }
+//        }
         $refusalReasons = ReasonRefusal::optionsList();
         $noConsiderReasons = NoConsiderReason::optionsList();
         $event = Event::where('app_event', '=', Event::APP_EVENT_FINAL_DECISION)->first();
