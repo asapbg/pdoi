@@ -65,11 +65,11 @@
                 {{ __('custom.date_apply') }}: {{ displayDate($application->created_at) }} г.
             </td>
         </tr>
-        <tr>
-            <td colspan="5" style="text-align: left;">
-                {{ __('custom.date_registration') }}: {{ displayDate($application->registration_date) }} г.
-            </td>
-        </tr>
+{{--        <tr>--}}
+{{--            <td colspan="5" style="text-align: left;">--}}
+{{--                {{ __('custom.date_registration') }}: {{ displayDate($application->registration_date) }} г.--}}
+{{--            </td>--}}
+{{--        </tr>--}}
     </table>
 </div>
 </body>
