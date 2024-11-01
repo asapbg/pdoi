@@ -582,10 +582,10 @@ return [
     'manual_register' => 'Manual register' ,
     'responsible_organization'  => 'Responsible organization',
     'asap_ltd' => 'ASAP Ltd.' ,
-    'admin_support'   => 'Admin support' ,
+    'admin_support'   => 'Support' ,
     'admin_support_text'  => 'For assistance in searching for specific information from a certain obligated entity, you can contact the platform moderators:' ,
-    'technical_support'  => 'In the event of a system crash',
+    'technical_support'  => 'In case of system crash',
     'technical_support_email'  => 'Email',
-    'technical_support_text'  => 'In case of system crash, please contact our technical support team.',
+    'technical_support_text'  => 'In case of system crash, please contact:',
 ];
 

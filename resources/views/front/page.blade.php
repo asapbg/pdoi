@@ -39,13 +39,13 @@
         @endif
         @if(isset($contacts) && sizeof($contacts))
             <div class="card card-light mb-4">
-                <div class="card-header app-card-header p-0 pt-1 border-bottom-0">
-                    <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                <div class="card-header bg-white p-1 border-bottom-0">
+                    <ul class="nav nav-tabs justify-content-between" id="custom-tabs-three-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="admin-support-tab" data-bs-toggle="tab" data-bs-target="#admin-support" role="button" aria-controls="admin-support" aria-selected="true">{{ __('custom.admin_support') }}</a>
+                            <a class="nav-link text-dark active" id="admin-support-tab" data-bs-toggle="tab" data-bs-target="#admin-support" role="button" aria-controls="admin-support" aria-selected="true">{{ __('custom.admin_support') }}</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="tech-support-tab" data-bs-toggle="tab" data-bs-target="#tech-support" role="button" aria-controls="tech-support" aria-selected="false" tabindex="-1">{{ __('custom.technical_support') }}</a>
+                            <a class="nav-link text-dark" id="tech-support-tab" data-bs-toggle="tab" data-bs-target="#tech-support" role="button" aria-controls="tech-support" aria-selected="false" tabindex="-1">{{ __('custom.technical_support') }}</a>
                         </li>
                     </ul>
                 </div>
