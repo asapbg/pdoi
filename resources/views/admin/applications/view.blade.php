@@ -404,7 +404,11 @@
                                                 <td>
                                                     @if($ca->row_type == 'event')
                                                         @if(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FINAL_DECISION->value, \App\Enums\ApplicationEventsEnum::SEND->value, \App\Enums\ApplicationEventsEnum::ASK_FOR_INFO->value, \App\Enums\ApplicationEventsEnum::GIVE_INFO->value, \App\Enums\ApplicationEventsEnum::FORWARD->value, \App\Enums\ApplicationEventsEnum::EXTEND_TERM->value, \App\Enums\ApplicationEventsEnum::RENEW_PROCEDURE->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value]))
-                                                            <span>Регистрирано от: </span><a class="text-primary" href="{{ route('admin.users.edit', $jsonData['user_id']) }}" target="_blank">{{ $jsonData['user_name'] }}</a><br>
+                                                            @if(isset($jsonData['user_id']))
+                                                                <span>Регистрирано от: </span><a class="text-primary" href="{{ route('admin.users.edit', $jsonData['user_id']) }}" target="_blank">{{ $jsonData['user_name'] }}</a><br>
+                                                            @else
+                                                                <span>Регистрирано от: </span> ---
+                                                            @endif
                                                         @endif
                                                         @if(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FORWARD->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value]))
                                                             <span>Препратено (от):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['old_subject_id']) }}" target="_blank">{{ $jsonData['old_subject_name'] }}</a><br>
