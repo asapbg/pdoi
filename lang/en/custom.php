@@ -139,6 +139,7 @@ return [
     'province'                         => 'province',
     'problem'                          => 'problem',
     'phone'                            => 'Phone',
+    'email_contact'                    => 'Email',
     'internal'                         => 'internal',
     'external'                         => 'external',
     'mobile'                           => 'mobile',
@@ -579,6 +580,12 @@ return [
     'success_check_status_in_seos' => 'Проверка на статус в деловодната система',
     'register_action' => 'Register',
     'manual_register' => 'Manual register' ,
-
+    'responsible_organization'  => 'Responsible organization',
+    'asap_ltd' => 'ASAP Ltd.' ,
+    'admin_support'   => 'Admin support' ,
+    'admin_support_text'  => 'For assistance in searching for specific information from a certain obligated entity, you can contact the platform moderators:' ,
+    'technical_support'  => 'In the event of a system crash',
+    'technical_support_email'  => 'Email',
+    'technical_support_text'  => 'In case of system crash, please contact our technical support team.',
 ];
 
