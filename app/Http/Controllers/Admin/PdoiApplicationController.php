@@ -146,9 +146,9 @@ class PdoiApplicationController extends Controller
 
     public function showLog(Request $request, int|string $id, string $type)
     {
-        if(!auth()->user()->hasAnyRole([CustomRole::SUPER_USER_ROLE])){
-            return back()->with('danger', __('messages.unauthorized'));
-        }
+//        if(!auth()->user()->hasAnyRole([CustomRole::SUPER_USER_ROLE])){
+//            return back()->with('danger', __('messages.unauthorized'));
+//        }
 
         $view = '';
         try {
