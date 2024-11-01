@@ -408,7 +408,7 @@
                                                         @endif
                                                         @if(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FORWARD->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_SUB_SUBJECT->value]))
                                                             <span>Препратено (от):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['old_subject_id']) }}" target="_blank">{{ $jsonData['old_subject_name'] }}</a><br>
-                                                            <span>Препратено (към):</span><a class="text-primary" href="{{ route('admin.users.edit', $jsonData['new_subject_id']) }}" target="_blank">{{ $jsonData['new_subject_name'] }}</a><br>
+                                                            <span>Препратено (към):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['new_subject_id']) }}" target="_blank">{{ $jsonData['new_subject_name'] }}</a><br>
                                                         @elseif(in_array($jsonData['event_type'], [\App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value, \App\Enums\ApplicationEventsEnum::FORWARD_TO_NOT_REGISTERED_SUBJECT->value]))
                                                             <span>Препратено (от):</span><a class="text-primary" href="{{ route('admin.rzs.view', $jsonData['old_subject_id']) }}" target="_blank">{{ $jsonData['old_subject_name'] }}</a><br>
                                                             <span>Препратено (към):</span>{{ $jsonData['new_subject_name'] }}<br>
