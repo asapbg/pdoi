@@ -37,14 +37,14 @@ enum ApplicationEventsEnum: int
     {
         return [
             self::ASK_FOR_INFO->value,
-            self::GIVE_INFO->value,
-            self::FORWARD->value,
-            self::EXTEND_TERM->value,
-            self::FINAL_DECISION->value,
+//            self::GIVE_INFO->value,
+//            self::FORWARD->value,
+//            self::EXTEND_TERM->value,
+//            self::FINAL_DECISION->value,
             self::RENEW_PROCEDURE->value,
-            self::FORWARD_TO_SUB_SUBJECT->value,
-            self::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value,
-            self::FORWARD_TO_NOT_REGISTERED_SUBJECT->value,
+//            self::FORWARD_TO_SUB_SUBJECT->value,
+//            self::FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT->value,
+//            self::FORWARD_TO_NOT_REGISTERED_SUBJECT->value,
         ];
     }
 

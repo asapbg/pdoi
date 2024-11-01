@@ -103,7 +103,7 @@ enum PdoiApplicationStatusesEnum: int
             self::PART_APPROVED->value,
             self::NOT_APPROVED->value,
             self::NO_CONSIDER_REASON->value,
-            self::NO_REVIEW
+//            self::NO_REVIEW->value
         ]);
     }
 
