@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomNotificationStoreRequest;
+use App\Jobs\QueueUserInternalNotificationsJob;
 use App\Models\CustomNotification;
 use App\Models\User;
 use App\Notifications\CustomInternalNotification;
@@ -53,34 +54,27 @@ class NotificationsController extends AdminController
         }
         $validated = $request->validated();
 
+
         $users = isset($validated['all']) ? User::Internal()->IsActive()->get() : User::whereIn('id', $validated['users'])->get();
 
         if(!$users->count()){
             return back()->withInput()->with('danger', 'Не са открити посочените получатели');
         }
 
-        $errors = [];
-        foreach ($users as $u){
-            try {
-                $u->notify(new CustomInternalNotification([
-                    'msg' => $validated['msg']
-                    , 'subject' => $validated['subject']
-                    , 'sender' => auth()->user()
-                    , 'internalMsg' => isset($validated['db'])
-                    , 'mailMsg' => isset($validated['mail'])
-                ]));
-            } catch (\Exception $e){
-                Log::error('Error sending message to user ID('.$u->id.'): '.$e);
-                $errors[] = $u->fullName();
-            }
-        }
 
-        if(!sizeof($errors)){
-            return redirect(route('admin.notifications'))->with('success', 'Всички съобщения са изпратени успешно');
-        } else if (sizeof($errors) == sizeof($validated['users'])){
+        try {
+            dispatch(new QueueUserInternalNotificationsJob($users, [
+                'msg' => $validated['msg']
+                , 'subject' => $validated['subject']
+                , 'sender' => auth()->user()
+                , 'internalMsg' => isset($validated['db'])
+                , 'mailMsg' => isset($validated['mail'])
+            ]));
+
+            return redirect(route('admin.notifications'))->with('success', 'Съобщението е изпратено успешно');
+        } catch (\Exception $e){
+            Log::error('Error sending message: '.$e);
             return back()->withInput()->with('danger', 'Възникна грешка, съобщението не е изпратено');
-        } else {
-            return redirect(route('admin.notifications'))->with('warning', 'Следните потребители може да не са получили съобщението: '. implode(', ', $errors));
         }
     }
 
