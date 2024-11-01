@@ -31,6 +31,7 @@ class CustomNotificationStoreRequest extends FormRequest
             'users.*' => ['numeric', 'exists:users,id'],
             'msg' => ['required', 'string', new MinHtmlLengthRule()],
             'subject' => ['required', 'string', 'max:255'],
+            'all' => ['nullable', 'numeric'],
         ];
     }
 

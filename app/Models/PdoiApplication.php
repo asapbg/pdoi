@@ -447,10 +447,17 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
                         pdoi_application.response_end_time is not null
                         and pdoi_application.status_date is not null
                         and pdoi_application.status_date <= pdoi_application.response_end_time
-                        and pdoi_application.status in ('.PdoiApplicationStatusesEnum::APPROVED->value.','.PdoiApplicationStatusesEnum::PART_APPROVED->value.','.PdoiApplicationStatusesEnum::NOT_APPROVED->value.','.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value.','.PdoiApplicationStatusesEnum::FORWARDED->value.')
+                        and pdoi_application.status in ('.PdoiApplicationStatusesEnum::APPROVED->value.','.PdoiApplicationStatusesEnum::PART_APPROVED->value.','.PdoiApplicationStatusesEnum::NOT_APPROVED->value.','.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value.','.PdoiApplicationStatusesEnum::FORWARDED->value.','.PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value.','.PdoiApplicationStatusesEnum::RENEWED->value.')
                        then 1 else 0 end) as in_time_applications
                 '),
-                DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_REVIEW->value.' then 1 else 0 end) as expired_applications')
+                DB::raw('sum(case when pdoi_application.status = '.PdoiApplicationStatusesEnum::NO_REVIEW->value.' then 1 else
+                    (case when
+                        pdoi_application.response_end_time is not null
+                        and pdoi_application.status_date is not null
+                        and pdoi_application.status_date <= pdoi_application.response_end_time
+                        and pdoi_application.status in ('.PdoiApplicationStatusesEnum::APPROVED->value.','.PdoiApplicationStatusesEnum::PART_APPROVED->value.','.PdoiApplicationStatusesEnum::NOT_APPROVED->value.','.PdoiApplicationStatusesEnum::INFO_NOT_EXIST->value.','.PdoiApplicationStatusesEnum::FORWARDED->value.','.PdoiApplicationStatusesEnum::NO_CONSIDER_REASON->value.','.PdoiApplicationStatusesEnum::RENEWED->value.')
+                       then 0 else 1 end)
+                 end) as expired_applications')
             );
 
         $query->where('pdoi_response_subject.email', 'not like', '%asap.bg%')
