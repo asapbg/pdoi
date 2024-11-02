@@ -771,7 +771,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
 
         if(sizeof($notifications)){
             foreach ($notifications as $n){
-                DB::statement('update notifications set cnt_send = '.CustomNotification::PDOI_APP_CNT_DISABLE_NUMBER.' where cnt_send <> '.CustomNotification::PDOI_APP_CNT_DISABLE_NUMBER.' and notifications.id =\''.$n.'\'');
+                DB::statement('update notifications set cnt_send = '.CustomNotification::PDOI_APP_CNT_DISABLE_NUMBER.' where cnt_send <> '.CustomNotification::PDOI_APP_CNT_DISABLE_NUMBER.' and notifications.id =\''.$n->id.'\'');
             }
         }
     }

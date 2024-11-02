@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('check:expired_application')->everyThirtyMinutes();
+         $schedule->command('check:expired_application')->everyFourHours();
          $schedule->command('sync:iisda')->daily();
          $schedule->command('notification:email')->everyFifteenMinutes();
          $schedule->command('notify:unlocked_applications')->hourly();
