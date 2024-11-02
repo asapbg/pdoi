@@ -759,4 +759,21 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
         return $arr;
     }
 
+    public static function disableRegisterNotifications($appId)
+    {
+        $notifications = DB::select('
+            select id
+            from notifications
+            where
+                notifications.type = \'App\Notifications\NotifySubjectNewApplication\'
+                and notifications.data ilike \'%application_id":'.$appId.',%\'
+        ');
+
+        if(sizeof($notifications)){
+            foreach ($notifications as $n){
+                DB::statement('update notifications set cnt_send = '.CustomNotification::PDOI_APP_CNT_DISABLE_NUMBER.' where cnt_send <> '.CustomNotification::PDOI_APP_CNT_DISABLE_NUMBER.' and notifications.id =\''.$n.'\'');
+            }
+        }
+    }
+
 }

@@ -57,6 +57,9 @@ class CloseExpiredApplications extends Command
             $applications = array_chunk($needToFinishIds, 10);
             foreach ($applications as $ids) {
                 PdoiApplication::whereIn('id', $ids)->update(['status' => PdoiApplicationStatusesEnum::NO_REVIEW->value, 'status_date' => Carbon::now()->format('Y-m-d H:i:s')]);
+                foreach ($ids as $i){
+                    PdoiApplication::disableRegisterNotifications($i);
+                }
             }
         }
     }

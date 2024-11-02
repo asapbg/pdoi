@@ -9,6 +9,7 @@ use Illuminate\Notifications\DatabaseNotification;
 class CustomNotification extends DatabaseNotification
 {
     const PAGINATE = 20;
+    const PDOI_APP_CNT_DISABLE_NUMBER = 9999;
     const INTERNAL_NOTIFICATION_TYPE = 'App\Notifications\CustomInternalNotification';
 
     public function scopeInternalCommunication($query){
