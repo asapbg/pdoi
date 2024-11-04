@@ -71,6 +71,7 @@ class NotificationsController extends AdminController
                 'msg' => stripHtmlTagsMailContent($validated['msg'])
                 , 'subject' => $validated['subject']
                 , 'sender' => auth()->user()
+                , 'sender_name' => auth()->user()->fullName()
                 , 'internalMsg' => isset($validated['db'])
                 , 'mailMsg' => isset($validated['mail'])
             ]));

@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\DeliveryMethodsEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -11,15 +12,17 @@ class CustomInternalNotification extends Notification
     use Queueable;
 
     private array $msgData;
+    private string $chanel;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($msgData)
+    public function __construct($msgData, $chanel)
     {
         $this->msgData = $msgData;
+        $this->chanel = $chanel;
     }
 
     /**
@@ -31,27 +34,31 @@ class CustomInternalNotification extends Notification
     public function via($notifiable)
     {
         $channels = [];
-        if ($this->msgData['internalMsg']) {
+        if ($this->chanel == 'internalMsg') {
             $channels[] = 'database';
         }
-        if ($this->msgData['mailMsg']) {
-            $channels[] = 'mail';
+        if ($this->chanel == 'mailMsg') {
+            $channels[] = CustomDbChannel::class;
         }
         return $channels;
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
+    public function toDatabase($notifiable)
     {
-        $message = (new MailMessage)
-            ->subject($this->msgData['subject'])
-        ->markdown('emails.custom_msg', $this->msgData);
-        return $message;
+        $communicationData = [
+            'sender_id' => $this->msgData['sender'] ? $this->msgData['sender']->id : null,
+            'sender_name' => !empty($this->msgData['sender_name']) ? $this->msgData['sender_name'] : 'Системно съобщение',
+            'message' => $this->msgData['msg'].'<p></p><p>'.(!empty($this->msgData['sender_name']) ? $this->msgData['sender_name'] : 'Системно съобщение').'</p>',
+            'subject' => $this->msgData['subject'],
+            'type_channel' => DeliveryMethodsEnum::EMAIL
+        ];
+
+        $communicationData['from_name'] = config('mail.from.name');
+        $communicationData['from_email'] = config('mail.from.address');
+        $communicationData['to_name'] = $notifiable->names;
+        $communicationData['to_email'] = $notifiable->email;
+
+        return $communicationData;
     }
 
     /**

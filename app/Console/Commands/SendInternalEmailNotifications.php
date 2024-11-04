@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
-class SendEmailNotifications extends Command
+class SendInternalEmailNotifications extends Command
 {
     const MAX_TRY = 3;
     const EMAIL_CHANNEL= 1;
@@ -21,7 +21,7 @@ class SendEmailNotifications extends Command
      *
      * @var string
      */
-    protected $signature = 'notification:email';
+    protected $signature = 'notification:email_internal';
 
     /**
      * The console command description.
@@ -37,12 +37,12 @@ class SendEmailNotifications extends Command
      */
     public function handle()
     {
-        Log::info("Cron run notification:email.");
+        Log::info("Cron run notification:email_internal");
 
         $beforeTimestamp = Carbon::now()->subHours(1);
         $notifications = DB::table('notifications')
+            ->where('type','=', 'App\Notifications\CustomInternalNotification')
             ->where('type_channel','=', self::EMAIL_CHANNEL)
-            ->where('type','<>', 'App\Notifications\CustomInternalNotification')
             ->where('cnt_send','<', self::MAX_TRY)
             ->where('is_send','=', 0)
             ->where(function ($q) use ($beforeTimestamp){
@@ -50,6 +50,7 @@ class SendEmailNotifications extends Command
                     ->orWhere('created_at', '>=', $beforeTimestamp);
             })
             ->get();
+
         if( $notifications->count() ) {
             foreach ($notifications as $item) {
                 $messageData = json_decode($item->data, true);
@@ -63,11 +64,7 @@ class SendEmailNotifications extends Command
                             $to = 'pmo@asap.bg';
                         }
 
-                        $application = PdoiApplication::find((int)$messageData['application_id']);
-                        if($application){
-                            $appService = new ApplicationService($application);
-                            $appService->communicationCallback($item);
-                        }
+
 
                         $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['message'])));
                         $myMessage = clearText($myMessage);
@@ -75,17 +72,17 @@ class SendEmailNotifications extends Command
                             $message->from($messageData['from_email'])
                                 ->to($to)
                                 ->subject($messageData['subject'])
-//                            ->html($messageData['message'])
-                                ->text($myMessage);
+                                ->html($messageData['message'])
+                                ->text($messageData['message']);
 
-                            if( isset($messageData['files']) && sizeof($messageData['files']) ) {
-                                $files = File::whereIn('id', $messageData['files'])->get();
-                                if( $files->count() ){
-                                    foreach ($files as $f) {
-                                        $message->attach(base_path().Storage::disk('local')->url('app'.DIRECTORY_SEPARATOR.$f->path));
-                                    }
-                                }
-                            }
+//                            if( isset($messageData['files']) && sizeof($messageData['files']) ) {
+//                                $files = File::whereIn('id', $messageData['files'])->get();
+//                                if( $files->count() ){
+//                                    foreach ($files as $f) {
+//                                        $message->attach(base_path().Storage::disk('local')->url('app'.DIRECTORY_SEPARATOR.$f->path));
+//                                    }
+//                                }
+//                            }
                         });
 
                         DB::table('notifications')
@@ -100,7 +97,6 @@ class SendEmailNotifications extends Command
                             'notification_id' => $item->id,
                             'content' => $e,
                             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-
                         ]);
                         DB::table('notifications')
                             ->where('id', $item->id)

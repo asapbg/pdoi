@@ -21,6 +21,8 @@
                             <th>Получател</th>
                             <th>Изпратено от</th>
                             <th>Прочетено</th>
+                            <th>Изпратено</th>
+                            <th>Тип</th>
                             <th>{{ __('custom.actions') }}</th>
                         </tr>
                         </thead>
@@ -31,7 +33,29 @@
                                     <td>{{ displayDateTime($item->created_at) }}</td>
                                     <td>{{ $item->notifiable?->fullName() }}</td>
                                     <td>{{ $item->internalSenderName }}</td>
-                                    <td>@if($item->unread()) <i class="fas fa-minus text-danger"></i> @else {{ displayDateTime($item->read_at) }} @endif</td>
+                                    <td>
+                                        @if($item->type_channel == 0)
+                                            @if($item->unread())
+                                                <i class="fas fa-minus text-danger"></i>
+                                            @else
+                                                {{ displayDateTime($item->read_at) }}
+                                            @endif
+                                        @else
+                                            NA
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($item->type_channel == 0)
+                                            {{ displayDateTime($item->created_at) }}
+                                        @else
+                                            @if($item->is_send)
+                                                {{ displayDateTime($item->updated_at) }}
+                                            @else
+                                                <i class="fas fa-minus text-danger"></i>
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td>@if($item->type_channel == 1) <i class="fas fa-envelope text-primary"></i> @else <i class="fas fa-bell text-primary"></i> @endif</td>
                                     <td class="text-center">
                                         @can('manage.*')
                                             <a href="{{ route( 'admin.notifications.view' , $item->id) }}"

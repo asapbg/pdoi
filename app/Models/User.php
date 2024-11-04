@@ -321,6 +321,6 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     public function myNotifications()
     {
-        return $this->notifications()->where('type', '=', CustomNotification::INTERNAL_NOTIFICATION_TYPE);
+        return $this->notifications()->where('type', '=', CustomNotification::INTERNAL_NOTIFICATION_TYPE)->whereNull('type_channel');
     }
 }

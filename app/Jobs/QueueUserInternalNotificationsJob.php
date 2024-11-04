@@ -34,6 +34,15 @@ class QueueUserInternalNotificationsJob implements ShouldQueue
      */
     public function handle()
     {
-        Notification::send($this->users, new CustomInternalNotification($this->data));
+        foreach ($this->users as $user){
+            if($this->data['internalMsg']){
+                unset($this->data['internalMsg']);
+                $user->notify(new CustomInternalNotification($this->data, 'internalMsg'));
+            }
+            if($this->data['mailMsg']){
+                unset($this->data['mailMsg']);
+                $user->notify(new CustomInternalNotification($this->data, 'mailMsg'));
+            }
+        }
     }
 }
