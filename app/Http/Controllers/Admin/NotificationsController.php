@@ -61,9 +61,13 @@ class NotificationsController extends AdminController
             return back()->withInput()->with('danger', 'Не са открити посочените получатели');
         }
 
+        $sendTo = $users->filter(function($user)
+        {
+            return filter_var($user->email, FILTER_VALIDATE_EMAIL);
+        });
 
         try {
-            dispatch(new QueueUserInternalNotificationsJob($users, [
+            dispatch(new QueueUserInternalNotificationsJob($sendTo, [
                 'msg' => stripHtmlTagsMailContent($validated['msg'])
                 , 'subject' => $validated['subject']
                 , 'sender' => auth()->user()
