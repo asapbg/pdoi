@@ -64,7 +64,7 @@ class NotificationsController extends AdminController
 
         try {
             dispatch(new QueueUserInternalNotificationsJob($users, [
-                'msg' => $validated['msg']
+                'msg' => stripHtmlTagsMailContent($validated['msg'])
                 , 'subject' => $validated['subject']
                 , 'sender' => auth()->user()
                 , 'internalMsg' => isset($validated['db'])

@@ -524,6 +524,24 @@ if (!function_exists('stripHtmlTagsPageContent')) {
     }
 }
 
+if (!function_exists('stripHtmlTagsMailContent')) {
+
+    /**
+     * return striped html string
+     *
+     * @param string $html_string
+     * @param array $tags
+     * @return string
+     */
+    function stripHtmlTagsMailContent(string $html_string, array $tags = [])
+    {
+        $html_string = str_replace('style', 'tyle', $html_string);
+        $html_string = preg_replace('/class=\\"[^\\"]*\\"/', '', $html_string);
+        $tagsToStrip = sizeof($tags) ? $tags : ['div', 'p', 'ul', 'ol', 'li', 'b', 'i', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'a', 'button'];
+        return strip_tags($html_string, $tagsToStrip);
+    }
+}
+
 if (!function_exists('displayBytes')) {
     /**
      * Convert kilobytes to readable value
