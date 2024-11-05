@@ -84,7 +84,7 @@ class PdoiApplicationController extends Controller
         $customActivity = null;
 
 //        if(auth()->user()->hasRole(CustomRole::SUPER_USER_ROLE)){
-            $customActivity = $item->communication();
+            $customActivity = $item->communication($request);
             //For local test
 //            $customActivity = json_decode(file_get_contents("C:\Users\magdalena.mitkova\Desktop\pitay_json.json"), true);
 //            $customActivity = array_map(function ($row){ return (object)$row; }, $customActivity);

@@ -338,7 +338,7 @@
                                 </table>
                             </div>
                         @endif
-                        @if(isset($customActivity) && sizeof($customActivity))
+                        @if(isset($customActivity) && isset($customActivity['items']) && sizeof($customActivity['items']))
                             <div class="tab-pane fade" id="communication" role="tabpanel" aria-labelledby="communication-tab">
                                 <table class="table table-striped  table-sm mb-4">
                                     <thead>
@@ -352,7 +352,7 @@
                                     </tr>
                                     </thead>
                                     <thead>
-                                        @foreach($customActivity as $ca)
+                                        @foreach($customActivity['items'] as $ca)
                                             @php($jsonData = json_decode($ca->info, true))
                                             @php($jsonNotifyMsgData = in_array($ca->row_type,['notification_error', 'notification']) ? json_decode($jsonData['data'], true) : null)
                                             @php($jsonActivityPropertiesData = in_array($ca->row_type,['activity']) ? $jsonData['properties'] : null)
@@ -543,6 +543,22 @@
                                         @endforeach
                                     </thead>
                                 </table>
+                                @if(isset($customActivity) && isset($customActivity['last_page']) && isset($customActivity['last_page']) && $customActivity['last_page'] > 1)
+                                    <nav>
+                                        <ul class="pagination">
+                                            @for($i = 1; $i <= $customActivity['last_page']; $i++)
+                                                    <li class="page-item @if($customActivity['page'] == $i) active @endif" aria-current="page">
+                                                        @if($customActivity['page'] == $i)
+                                                            <span class="page-link">{{ $i }}</span>
+                                                        @endif
+                                                        @if($customActivity['page'] != $i)
+                                                                <a class="page-link" href="{{ route('admin.application.view', $item->id).'?page_c='.$i }}">{{ $i }}</a>
+                                                        @endif
+                                                    </li>
+                                            @endfor
+                                        </ul>
+                                    </nav>
+                                @endif
                             </div>
                         @endif
                     </div>
@@ -589,6 +605,12 @@
                     });
                 });
             }
+
+            @if(request()->input('page_c'))
+                if($('#communication-tab').length){
+                    $('#communication-tab').trigger('click');
+                }
+            @endif
         });
     </script>
 @endpush
