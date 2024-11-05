@@ -47,6 +47,7 @@ class SendInternalEmailNotifications extends Command
 //dd($notification->id);
         if( $notification ) {
             $messageData = json_decode($notification->data, true);
+            $messageData['msg'] .= isset($messageData['sender_name']) && !empty($messageData['sender_name']) ? '<br><p>'.$messageData['sender_name'].'</p>' : '';
             if( !$messageData ) {
                 Log::error('Send scheduled notification ID '.$notification->id. ': '.' Invalid json message data');
                 exit;
@@ -83,7 +84,6 @@ class SendInternalEmailNotifications extends Command
                     $to = config('app.env') != 'production' ? config('mail.local_to_mail') : $user->email;
 
                     try {
-                        $messageData['msg'] .= '<br><p>'.$messageData['sender_name'].'</p>';
                         $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['msg'])));
                         $myMessage = clearText($myMessage);
                         Mail::send([], [], function ($message) use ($messageData, $to, $myMessage){
