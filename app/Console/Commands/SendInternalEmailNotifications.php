@@ -4,6 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\File;
 use App\Models\PdoiApplication;
+use App\Models\ScheduledMessage;
+use App\Models\User;
+use App\Notifications\CustomInternalNotification;
 use App\Services\ApplicationService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -14,21 +17,19 @@ use Illuminate\Support\Facades\Storage;
 
 class SendInternalEmailNotifications extends Command
 {
-    const MAX_TRY = 3;
-    const EMAIL_CHANNEL= 1;
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'notification:email_internal';
+    protected $signature = 'notification:schedule';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send all notification by emails';
+    protected $description = 'Send all notification from schedule';
 
     /**
      * Execute the console command.
@@ -37,73 +38,75 @@ class SendInternalEmailNotifications extends Command
      */
     public function handle()
     {
-        Log::info("Cron run notification:email_internal");
+        Log::info("Cron run notification:schedule");
 
-        $beforeTimestamp = Carbon::now()->subHours(1);
-        $notifications = DB::table('notifications')
-            ->where('type','=', 'App\Notifications\CustomInternalNotification')
-            ->where('type_channel','=', self::EMAIL_CHANNEL)
-            ->where('cnt_send','<', self::MAX_TRY)
-            ->where('is_send','=', 0)
-            ->where(function ($q) use ($beforeTimestamp){
-                $q->where('updated_at','<=', $beforeTimestamp)
-                    ->orWhere('created_at', '>=', $beforeTimestamp);
-            })
-            ->get();
+        $notification = ScheduledMessage::where('is_send', '=', 0)
+            ->where('start_at', '<=', databaseDateTime(Carbon::now()))
+            ->orderBy('id', 'desc')
+            ->first();
+//dd($notification->id);
+        if( $notification ) {
+            $messageData = json_decode($notification->data, true);
+            if( !$messageData ) {
+                Log::error('Send scheduled notification ID '.$notification->id. ': '.' Invalid json message data');
+                exit;
+            }
 
-        if( $notifications->count() ) {
-            foreach ($notifications as $item) {
-                $messageData = json_decode($item->data, true);
-                if( !$messageData ) {
-                    Log::error('Send email notification ID '.$item->id. ': '.'Invalid json message data');
-                } else {
-                    DB::beginTransaction();
+            $usersIds = json_decode($notification->send_to);
+            if( !$usersIds ) {
+                Log::error('Send scheduled notification ID '.$notification->id. ': '.' Missing users ids');
+                exit;
+            }
+
+            $users = User::whereIn('id', $usersIds)->get();
+            if( !$users ) {
+                Log::error('Send scheduled notification ID '.$notification->id. ': '.' Missing users');
+                exit;
+            }
+
+//            $allUsers = $users->count();
+            $notReceivedByEmail = [];
+            $receivedByEmail = [];
+            $notReceivedByApp = [];
+            $receivedByApp = [];
+            foreach ($users as $user){
+                if($notification->by_app){
                     try {
-                        $to = config('app.env') != 'production' ? config('mail.local_to_mail') : ($messageData['to_email'] ?? 'pmo@asap.bg') ;
-                        if( empty($to) ) {
-                            $to = 'pmo@asap.bg';
-                        }
-
-
-
-                        $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['message'])));
-                        $myMessage = clearText($myMessage);
-                        Mail::send([], [], function ($message) use ($messageData, $to, $myMessage){
-                            $message->from($messageData['from_email'])
-                                ->to($to)
-                                ->subject($messageData['subject'])
-                                ->html($messageData['message'])
-                                ->text($messageData['message']);
-
-//                            if( isset($messageData['files']) && sizeof($messageData['files']) ) {
-//                                $files = File::whereIn('id', $messageData['files'])->get();
-//                                if( $files->count() ){
-//                                    foreach ($files as $f) {
-//                                        $message->attach(base_path().Storage::disk('local')->url('app'.DIRECTORY_SEPARATOR.$f->path));
-//                                    }
-//                                }
-//                            }
-                        });
-
-                        DB::table('notifications')
-                            ->where('id', $item->id)
-                            ->update(['is_send' => 1, 'cnt_send' => ($item->cnt_send + 1)]);
-                        DB::commit();
-                    } catch (\Exception $e) {
-                        Log::error('Send email notification ID '.$item->id.': '.$e);
-                        DB::rollBack();
-
-                        DB::table('notification_error')->insert([
-                            'notification_id' => $item->id,
-                            'content' => $e,
-                            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                        ]);
-                        DB::table('notifications')
-                            ->where('id', $item->id)
-                            ->update(['cnt_send' => ($item->cnt_send + 1)]);
+                        $user->notify(new CustomInternalNotification($messageData));
+                        $receivedByApp[] = $user->id;
+                    } catch (\Exception $e){
+                        Log::error($e);
+                        $notReceivedByApp[] = $user->id;
                     }
                 }
+                if($notification->by_email){
+                    $to = config('app.env') != 'production' ? config('mail.local_to_mail') : $user->email;
 
+                    try {
+                        $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['msg'])));
+                        $myMessage = clearText($myMessage);
+                        Mail::send([], [], function ($message) use ($messageData, $to, $myMessage){
+                            $message->from(config('mail.from.address'))
+                                ->to($to)
+                                ->subject($messageData['subject'])
+                                ->html($messageData['msg'])
+                                ->text($myMessage);
+                        });
+                        $receivedByEmail[] = $user->id;
+                        sleep(1);
+                    } catch (\Exception $e){
+                        Log::error($e);
+                        $notReceivedByEmail[] = $user->id;
+                    }
+                }
+            }
+
+            if(sizeof($receivedByApp) || sizeof($receivedByEmail)){
+                $notification->is_send = 1;
+                $notification->send_at = databaseDateTime(Carbon::now());
+                $notification->not_send_to_by_email = sizeof($notReceivedByEmail) ? json_encode($notReceivedByEmail) : null;
+                $notification->not_send_to_by_app = sizeof($notReceivedByApp) ? json_encode($notReceivedByApp) : null;
+                $notification->save();
             }
         }
     }

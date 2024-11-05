@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
          $schedule->command('notification:email')->everyFifteenMinutes();
          $schedule->command('notify:unlocked_applications')->hourly();
         $schedule->command('notify:soon_expired_applications')->daily();
-        $schedule->command('notification:email_internal')->everyThirtyMinutes();
+        $schedule->command('notification:email_internal')->hourly();
     }
 
     /**

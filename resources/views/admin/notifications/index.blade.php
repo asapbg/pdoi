@@ -17,12 +17,14 @@
                     <table class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>{{ __('custom.activity_log_date') }}</th>
-                            <th>Получател</th>
+                            <th>Относно</th>
+                            <th>Планирано на</th>
+{{--                            <th>Получател</th>--}}
                             <th>Изпратено от</th>
-                            <th>Прочетено</th>
-                            <th>Изпратено</th>
+{{--                            <th>Прочетено</th>--}}
                             <th>Тип</th>
+                            <th>Изпратено</th>
+
                             <th>{{ __('custom.actions') }}</th>
                         </tr>
                         </thead>
@@ -30,32 +32,25 @@
                         @if(isset($items) && $items->count() > 0)
                             @foreach($items as $item)
                                 <tr>
+                                    <td>{{ $item->subject }}</td>
                                     <td>{{ displayDateTime($item->created_at) }}</td>
-                                    <td>{{ $item->notifiable?->fullName() }}</td>
-                                    <td>{{ $item->internalSenderName }}</td>
+{{--                                    <td>{{ $item->notifiable?->fullName() }}</td>--}}
+                                    <td>{{ $item->sender?->fullName() }}</td>
                                     <td>
-                                        @if($item->type_channel == 0)
-                                            @if($item->unread())
-                                                <i class="fas fa-minus text-danger"></i>
-                                            @else
-                                                {{ displayDateTime($item->read_at) }}
-                                            @endif
-                                        @else
-                                            NA
+                                        @if($item->by_email == 1)
+                                            <i class="fas fa-envelope text-primary me-2"></i>
+                                        @endif
+                                        @if($item->by_app == 1)
+                                            <i class="fas fa-bell text-primary"></i>
                                         @endif
                                     </td>
                                     <td>
-                                        @if($item->type_channel == 0)
-                                            {{ displayDateTime($item->created_at) }}
+                                        @if($item->send_at)
+                                            {{ displayDateTime($item->send_at) }}
                                         @else
-                                            @if($item->is_send)
-                                                {{ displayDateTime($item->updated_at) }}
-                                            @else
-                                                <i class="fas fa-minus text-danger"></i>
-                                            @endif
+                                            ---
                                         @endif
                                     </td>
-                                    <td>@if($item->type_channel == 1) <i class="fas fa-envelope text-primary"></i> @else <i class="fas fa-bell text-primary"></i> @endif</td>
                                     <td class="text-center">
                                         @can('manage.*')
                                             <a href="{{ route( 'admin.notifications.view' , $item->id) }}"
