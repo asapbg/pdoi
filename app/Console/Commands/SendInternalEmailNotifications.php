@@ -83,6 +83,7 @@ class SendInternalEmailNotifications extends Command
                     $to = config('app.env') != 'production' ? config('mail.local_to_mail') : $user->email;
 
                     try {
+                        $messageData['msg'] .= '<br><p>'.$messageData['sender_name'].'</p>';
                         $myMessage = str_replace('\r\n', '', strip_tags(html_entity_decode($messageData['msg'])));
                         $myMessage = clearText($myMessage);
                         Mail::send([], [], function ($message) use ($messageData, $to, $myMessage){
