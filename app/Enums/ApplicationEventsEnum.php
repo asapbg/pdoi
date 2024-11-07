@@ -22,6 +22,7 @@ enum ApplicationEventsEnum: int
     case FORWARD_TO_SUB_SUBJECT = 11; //Препратено по компетентност към подчинен субект
     case FORWARD_TO_NOT_REGISTERED_SUB_SUBJECT = 12; //Препратено по компетентност към подчинен субект (извън платформата)
     case FORWARD_TO_NOT_REGISTERED_SUBJECT = 13; //Препратено по компетентност извън платформата
+    case MANUAL_REGISTER = 14; //Ръчно регистриране в процес на обработка
 
     public static function userEvents(): array
     {

@@ -108,17 +108,20 @@ class PdoiApplicationController extends Controller
         }
 
         try {
-            if(
-                $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SDES->value
-                || $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value
-                || $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SEOS->value
-            ){
-                $item->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
-                $item->registration_date = date('Y-m-d H:i:s');
-                $item->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
-                $item->status_date = date('Y-m-d H:i:s');
-                $item->save();
-            }
+//            if(
+//                $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SDES->value
+//                || $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::EMAIL->value
+//                || $item->responseSubject->delivery_method == PdoiSubjectDeliveryMethodsEnum::SEOS->value
+//            ){
+//                $item->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
+//                $item->registration_date = date('Y-m-d H:i:s');
+//                $item->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
+//                $item->status_date = date('Y-m-d H:i:s');
+//                $item->save();
+//            }
+
+            $appService = new ApplicationService($item);
+            $appService->registerEvent(ApplicationEventsEnum::MANUAL_REGISTER->value);
 
             CustomNotification::where('data', 'like', '%"application_id":'.$item->id.',%')
                 ->where('type', '=', 'App\Notifications\NotifySubjectNewApplication')

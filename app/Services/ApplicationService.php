@@ -55,7 +55,7 @@ class ApplicationService
                 })->first();
 
             if( $eventConfig ) {
-                if( $this->application->currentEvent ) {
+                if( $this->application->currentEvent && $eventType != ApplicationEventsEnum::MANUAL_REGISTER->value) {
                     $allowedNextEvents = $this->application->currentEvent->event->nextEvents->pluck('id')->toArray();
                     if(
                         ($eventConfig->app_event != ApplicationEventsEnum::GIVE_INFO->value
@@ -140,6 +140,14 @@ class ApplicationService
                         && isset($data['no_consider_reason']) ) {
                         $newEvent->no_consider_reason_id = (int)$data['no_consider_reason'];
                     }
+                }
+
+                //add decision to final event and reason refusal if this is the case
+                if ($eventConfig->app_event == ApplicationEventsEnum::MANUAL_REGISTER->value) {
+                    $this->application->status = PdoiApplicationStatusesEnum::IN_PROCESS->value;
+                    $this->application->registration_date = date('Y-m-d H:i:s');
+                    $this->application->response_end_time = Carbon::now()->addDays(PdoiApplication::DAYS_AFTER_SUBJECT_REGISTRATION)->endOfDay();
+                    $this->application->status_date = date('Y-m-d H:i:s');
                 }
 
                 $this->application->save();

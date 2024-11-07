@@ -420,6 +420,7 @@ return [
     'event.EXTEND_TERM'                         => 'Extend Term',
     'event.FINAL_DECISION'                      => 'Final Decisionе',
     'event.RENEW_PROCEDURE'                     => 'Renewed Procedure',
+    'event.MANUAL_REGISTER'                     => 'Registered in processing',
     //
     'court_decision.CANCEL'                     => 'The court cancels the refusal decision',
     'court_decision.CONFIRMS'                   => 'The court confirms the refusal decision',

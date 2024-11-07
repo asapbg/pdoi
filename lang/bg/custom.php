@@ -421,6 +421,7 @@ return [
     'event.EXTEND_TERM'                         => 'Удължаване на срока',
     'event.FINAL_DECISION'                      => 'Крайно решение',
     'event.RENEW_PROCEDURE'                     => 'Възобновена процедура',
+    'event.MANUAL_REGISTER'                     => 'Регистрирано в процес на обработка',
     //
     'court_decision.CANCEL'                     => 'Съдът отменя решението за отказ',
     'court_decision.CONFIRMS'                   => 'Съдът потвърждава решението за отказ',
