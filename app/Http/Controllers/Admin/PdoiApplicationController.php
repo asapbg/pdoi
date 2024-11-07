@@ -120,7 +120,7 @@ class PdoiApplicationController extends Controller
                 $item->save();
             }
 
-            CustomNotification::where('data', 'like', '"application_id":'.$item->id.',')
+            CustomNotification::where('data', 'like', '%"application_id":'.$item->id.',%')
                 ->where('type', '=', 'App\Notifications\NotifySubjectNewApplication')
                 ->where('cnt_send', '<>', CustomNotification::PDOI_APP_CNT_DISABLE_NUMBER)
                 ->update(['cnt_send' => CustomNotification::PDOI_APP_CNT_DISABLE_NUMBER]);
