@@ -130,7 +130,8 @@ class NotifySubjectNewApplication extends Notification
                 $communicationData['from_email'] = config('mail.from.address');
                 $communicationData['to_name'] = $notifiable->names;
                 $communicationData['to_email'] = $notifiable->email;
-                $communicationData['files']= $this->application->files ? $this->application->files->pluck('id')->toArray() : [];
+//                $communicationData['files']= $this->application->files ? $this->application->files->pluck('id')->toArray() : [];
+                $communicationData['files']= [];
         }
         return $communicationData;
     }
