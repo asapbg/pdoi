@@ -210,7 +210,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
 
     public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(PdoiApplicationEvent::class, 'pdoi_application_id', 'id');
+        return $this->hasMany(PdoiApplicationEvent::class, 'pdoi_application_id', 'id')->orderBy('created_at', 'asc');
     }
 
     public function applicant(): \Illuminate\Database\Eloquent\Relations\HasOne
