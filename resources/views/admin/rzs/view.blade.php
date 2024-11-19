@@ -108,7 +108,7 @@
                                 <div class="col-12">
                                     <div class="form-group form-group-sm col-12 mb-3">
                                         <label class="form-label me-3 fw-semibold">{{ __('validation.attributes.rzs_delivery_method') }}: <span class="required">*</span></label> <br>
-                                        {{ $item->delivery_method ? __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($item->delivery_method)) : '---'}}
+                                        {{ (int)$item->delivery_method > 0 ? __('custom.rzs.delivery_by.'.\App\Enums\PdoiSubjectDeliveryMethodsEnum::keyByValue($item->delivery_method)) : '---'}}
                                     </div>
                                 </div>
                             </div>

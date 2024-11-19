@@ -157,7 +157,7 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
      * @param array|int $ignoreId
      * @return \Illuminate\Support\Collection
      */
-    public static function optionsList(array|int $ignoreId = [], $filterByRole = false, $ignoreOnlyRedirect = false): \Illuminate\Support\Collection
+    public static function optionsList(array|int $ignoreId = [], $filterByRole = false, $ignoreOnlyRedirect = false, $withDeliveryMethod = false): \Illuminate\Support\Collection
     {
         $user = auth()->user();
         $ids = null;
@@ -181,6 +181,8 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
             })
             ->when($ignoreOnlyRedirect, function ($query) {
                 return $query->where('pdoi_response_subject.redirect_only', '=', 0);
+            })->when($withDeliveryMethod, function ($query) {
+                return $query->where('pdoi_response_subject.delivery_method', '>', 0);
             })
             ->orderBy('pdoi_response_subject.id', 'asc')
             ->orderBy('pdoi_response_subject.adm_level', 'asc')
@@ -219,6 +221,11 @@ class PdoiResponseSubject extends ModelActivityExtend implements TranslatableCon
         if( $ignoreRedirectOnly ) {
             $subjects->where('pdoi_response_subject.redirect_only', '=', 0);
         }
+        $onlyWithDelivery = $filter['only_with_delivery'] ?? 0;
+        if( $onlyWithDelivery ) {
+            $subjects->where('pdoi_response_subject.delivery_method', '>', 0);
+        }
+
 
         $allSubjectsAndSections = DB::table("rzs_section")
             ->select(['rzs_section.adm_level as id'

@@ -181,7 +181,7 @@ class PdoiApplicationController extends Controller
         $data['municipality'] = EkatteMunicipality::optionsList();
         $data['settlements'] = EkatteSettlement::optionsList();
 
-        $rzs = PdoiResponseSubject::optionsList([], false, true);
+        $rzs = PdoiResponseSubject::optionsList([], false, true, true);
         return $this->view('front.application.apply', compact('data', 'user', 'rzs', 'title', 'defaultCountry'));
     }
 
