@@ -52,7 +52,7 @@ class PdoiApplication extends ModelActivityExtend implements Feedable
             'title' => __('custom.application_system_title',
                 [
                     'user' => ($this->names_publication ? $this->names : __('custom.users.legal_form.'.$this->applicant_type) ),
-                    'subject' => $this->responseSubject->subject_name,
+                    'subject' => $this->responseSubject ? $this->responseSubject->subject_name : $this->not_registered_subject_name,
                     'apply_date' => displayDate($this->created_at)
                 ]),
             'summary' => html_entity_decode($this->request).PHP_EOL.__('custom.status').': '.$this->statusName,
