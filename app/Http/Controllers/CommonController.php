@@ -295,7 +295,8 @@ class CommonController extends Controller
         $id = $request->get('s');
         $item = PdoiResponseSubject::find((int)$id);
         if( !$item ) {
-            echo '<p class="text-danger">'.__('messages.record_not_found').'</p>';
+            $contacts = null;
+            return view('front.partials.contact_person', compact('contacts'));
         }
 
         $contacts = User::IsActive()->IsContactVisible()->where('administrative_unit', '=', $item->id)->get();
