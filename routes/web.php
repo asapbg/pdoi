@@ -59,7 +59,7 @@ Route::controller(\App\Http\Controllers\StatisticController::class)->group(funct
 Route::group(['middleware' => ['auth', 'permission:'.implode('|',\App\Models\CustomRole::WEB_ACCESS_RULE)]], function() {
 
     Route::controller(CommonController::class)->group(function () {
-        Route::get('/download/{file}', 'downloadFile')->name('download.file');
+        Route::get('/download/{file}', 'downloadFile')->name('download.file')->whereNumber('file');
     });
 
     Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
