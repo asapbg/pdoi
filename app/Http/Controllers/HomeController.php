@@ -159,7 +159,11 @@ class HomeController extends Controller
     public function downloadHelpDoc($file): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         $filepath = public_path('help/'.$file);
-        return response()->download($filepath);
+        if(file_exists(public_path('help/'.$file))){
+            return response()->download($filepath);
+        } else{
+            abort(404);
+        }
     }
 
     public function sitemap($map = 'base'): \Illuminate\Http\Response
