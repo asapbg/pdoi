@@ -303,10 +303,9 @@ class SyncIisda extends Command
                                 }
                             }
                             $newSubject->delivery_method = $newDeliveryMethod;
-                            if( !$newDeliveryMethod ) {
-                                $newSubject->active = 0;
-                                $newSubject->save();
-                            }
+                            //Always set as inactive because new subjects do not have moderators
+                            $newSubject->active = 0;
+                            $newSubject->save();
 
                             foreach (config('available_languages') as $lang) {
                                 $newSubject->translateOrNew($lang['code'])->subject_name = $newRow['subject_name'];
