@@ -279,7 +279,7 @@ class SyncIisda extends Command
                                     'region' => $addressInfo ? $addressInfo['region'] : null,
                                     'municipality' => $addressInfo ? $addressInfo['municipality'] : null,
                                     'town' => $addressInfo ? $addressInfo['town'] : null,
-                                    'delivery_method' => PdoiSubjectDeliveryMethodsEnum::EMAIL->value,
+                                    'delivery_method' => 0,
                                 );
                             }
                         }
@@ -293,14 +293,19 @@ class SyncIisda extends Command
                             $newSubject->save();
                             $newSubject->refresh();
                             //Ste delivery method
-                            $newSubject->delivery_method = 0;
+                            $newDeliveryMethod = 0;
                             if( !empty($newSubject->email) ) {
-                                $newSubject->delivery_method = PdoiSubjectDeliveryMethodsEnum::EMAIL->value;
+                                $newDeliveryMethod = PdoiSubjectDeliveryMethodsEnum::EMAIL->value;
                             }
                             if( !empty($newSubject->eik) && $newSubject->eik != 'N/A' ) {
                                 if( SsevController::getEgovProfile($newSubject->id, $newSubject->eik) ) {
-                                    $newSubject->delivery_method = PdoiSubjectDeliveryMethodsEnum::SDES->value;
+                                    $newDeliveryMethod = PdoiSubjectDeliveryMethodsEnum::SDES->value;
                                 }
+                            }
+                            $newSubject->delivery_method = $newDeliveryMethod;
+                            if( !$newDeliveryMethod ) {
+                                $newSubject->active = 0;
+                                $newSubject->save();
                             }
 
                             foreach (config('available_languages') as $lang) {
