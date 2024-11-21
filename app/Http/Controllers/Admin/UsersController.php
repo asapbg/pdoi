@@ -215,6 +215,8 @@ class  UsersController extends Controller
         DB::beginTransaction();
 
         try {
+            $oldSubject = $user->responseSubject;
+            $newSubject = isset($validated['administrative_unit']) && (int)$validated['administrative_unit'] ? $validated['administrative_unit'] : null;
             if (isset($validated['password']) && !is_null($validated['password'])) {
                 $validated['password'] = bcrypt($validated['password']);
                 $validated['pass_last_change'] = Carbon::now();
@@ -234,6 +236,13 @@ class  UsersController extends Controller
             $user->syncPermissions($permissions);
 
             $user->save();
+
+            if($oldSubject && (is_null($newSubject) || (int)$newSubject != $oldSubject->id)){
+                if($oldSubject->activeUsers->count() == 0){
+                    $oldSubject->active = 0;
+                    $oldSubject->save();
+                }
+            }
             DB::commit();
 
             return to_route('admin.users')

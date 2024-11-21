@@ -200,7 +200,7 @@ class SyncIisda extends Command
                                         }
                                     }
 
-                                    if( !$delivery || $localSubject->users->count() == 0) {
+                                    if( !$delivery || $localSubject->activeUsers->count() == 0) {
                                         //If no communication information we should ignore Iisda status
                                         $localSubject->active = 0;
                                         //$sendAdmMail = $oldStatus;
